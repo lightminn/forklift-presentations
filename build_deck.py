@@ -15,182 +15,182 @@ NAV2 = 'https://docs.nav2.org/rolling/configuration_and_development/first_time_r
 STORE = 'https://smartstore.naver.com/skybaesong/products/11789657592'
 slides = []
 
-def add(label, title, seconds, body, notes, sources, foot='개발 제안 · 구현·실험 전'):
+def add(label, title, seconds, body, notes, sources, foot='개발계획(안)'):
     slides.append(dict(label=label, title=title, seconds=seconds, body=body, notes=notes, sources=sources, foot=foot))
 
-add('프로젝트 개발 방향', '자율 지게차\n프로젝트 개발 방향', 20, '',
-'''본 프로젝트의 목표는 주변 장애물을 회피하며 팔레트의 적재, 목적지 운반, 하역을 수행하는 자율 지게차 개발이다. 개발 방향은 플랫폼 선정, 인식·주행 시스템 구성, 정량적 평가 기준으로 구분한다. 포크 삽입의 안정성을 우선 확보한 후, 접근 시나리오와 작업 범위를 단계적으로 확장한다.''',
-[(BRIEF, '과제 원문 1·6·7쪽')])
+add('개발 계획', '자율 지게차\n개발 계획', 20, '''''',
+'''본 과제에서는 주변 장애물을 회피하면서 팔레트의 적재·이송·하역을 수행하는 자율 지게차를 개발하고자 한다. 주요 개발 내용은 팔레트 인식, 접근 경로 생성, 포크 삽입 제어이다. 정면 삽입 기능을 먼저 구현한 후, 측면 접근과 후진 등 주행 조건을 추가하여 성능을 평가할 계획이다.''',
+[(BRIEF, '과제 원문 1·6·7쪽')], '개발계획(안)')
 
-add('과제 목표', '01  프로젝트 목표', 45, '''
-<h2 class="headline">장애물 회피부터 삽입·운반·하역까지의 통합 제어</h2>
+add('과제 개요', '01  과제 개요', 45, '''
+<h2 class="headline">개발 목표 및 주요 수행 내용</h2>
 <div class="split grow" style="grid-template-columns:1.12fr 1fr">
-  <figure class="stack"><div class="hero-photo"><img class="photo" src="assets/riibotics-reference.jpeg" alt="과제에서 제시한 Riibotics 지게차의 포크와 마스트 중앙 RGB-D 카메라 위치"></div><figcaption class="small muted">과제 원문의 Riibotics 참고 기체</figcaption></figure>
+  <figure class="stack"><div class="hero-photo"><img class="photo" src="assets/riibotics-reference.jpeg" alt="과제에서 제시한 Riibotics 지게차의 포크와 마스트 중앙 RGB-D 카메라 위치"></div><figcaption class="small muted">Riibotics 지게차의 카메라 설치 예시</figcaption></figure>
   <div class="stack" style="justify-content:center">
-    <p class="statement">장애물 회피 → 포켓 정렬<br>→ 삽입·적재 → 운반·하역</p>
-    <div class="rule body">삽입 중 지속적인 포켓 위치 추적을 통한<br>포크–팔레트 충돌 방지</div>
-    <p class="small muted">과제 목표: 충돌 없는 경로 중 가장 빠른 작업 수행</p>
+    <p class="statement">팔레트 인식 및 포크 삽입<br>적재·이송·하역 자동화</p>
+    <div class="rule body">삽입 중 포켓 위치를 추적하여<br>포크와 팔레트의 접촉 방지</div>
+    <p class="small muted">경로 계획 목표: 장애물 회피 및 작업 시간 최소화</p>
   </div>
 </div>
-<div class="takeaway">개발 순서: 충돌 없는 반복 성공 확보 → 동일 조건에서 작업 시간 단축</div>
+<div class="takeaway">개발 방침: 포크 삽입 기능 우선 구현 후 주행 조건별 성능 검증</div>
 ''',
-'''과제의 수행 범위는 장애물 회피, 포켓 정렬, 삽입·적재, 운반·하역으로 이어지는 전체 작업 사이클이다. 팔레트 전면에 도달하더라도 포크의 위치·방향 오차에 따라 삽입에 실패할 수 있으므로 정밀 정렬과 지속적인 포켓 추적이 필요하다. 제시된 사진은 과제 원문의 Riibotics 참고 기체이며, 카메라는 포크 상부에서 전방의 포켓을 관측한다. 최종 목표는 충돌 없는 경로 중 가장 빠른 작업 수행이다. 개발 초기에는 충돌 없이 반복 성공하는 기준 동작을 확보하고, 이후 동일한 조건에서 작업 시간의 단축 효과를 평가한다.''',
-[(BRIEF, '과제 원문 4·6·7쪽, Riibotics 그림')], '과제 원문 4·6·7쪽 · 사진은 참고 기체')
+'''개발 목표는 팔레트 인식부터 포크 삽입, 적재, 목적지 이송 및 하역까지의 작업을 자동화하는 것이다. 팔레트에 접근하는 과정에서는 주변 장애물과의 충돌을 피하고, 삽입 과정에서는 포크가 포켓의 위치와 방향에 맞도록 제어해야 한다. 이를 위해 삽입이 끝날 때까지 포켓 위치를 추적하고 오차를 보정한다. 제시된 사진은 과제 설명자료의 Riibotics 지게차로, 포크 상부에 장착된 카메라의 배치를 보여 준다. 과제의 최종 목표는 충돌 없이 작업 시간을 최소화하는 경로를 생성하는 것이다. 우선 정면 삽입의 정확도와 반복 수행 여부를 검증한 후, 주행 조건별 시험을 통해 작업 시간을 단축하고자 한다.''',
+[(BRIEF, '과제 원문 4·6·7쪽, Riibotics 그림')], '출처: 과제 설명자료 4·6·7쪽')
 
-add('플랫폼 개조', '02  플랫폼과 하드웨어', 55, '''
-<h2 class="headline">구동계 개조 가능성 및 피드백 센서 확보</h2>
+add('하드웨어 구성', '02  하드웨어 구성', 55, '''
+<h2 class="headline">소형 전동 지게차 개조 및 제어 장치 구성</h2>
 <div class="split grow" style="grid-template-columns:1.05fr 1fr">
  <div class="stack">
-  <div><div class="label">1차 검토 후보</div><p class="statement" style="margin-top:10px">판매 링크의<br>어린이용 전동 지게차</p></div>
-  <p class="body">차체·주행부·승강 기구 활용<br>자율 제어용 전장·센서 추가</p>
-  <p class="small muted">구매·모델 확정 여부 미확인<br>개조 곤란 시 기존 모바일 로봇 + 포크 검토</p>
+  <div><div class="label">제작 방안</div><p class="statement" style="margin-top:10px">소형 전동 지게차<br>개조 방식 검토</p></div>
+  <p class="body">기존 차체의 주행부·승강부 활용<br>제어 장치 및 센서 추가 장착</p>
+  <p class="small muted">검토 대상: 어린이용 전동 지게차<br>대안: 기존 이동 로봇에 포크 장착</p>
  </div>
  <div>
-  <div class="line-item"><span class="label">01</span><div><strong>주행·조향 장치의 직접 제어 가능성</strong><p class="small">모터·드라이버 접근, 조향 방식, 최소 회전반경 확인</p></div></div>
-  <div class="line-item"><span class="label">02</span><div><strong>이동량·조향각·포크 높이 측정</strong><p class="small">엔코더·조향각 피드백·승강 위치 센서 검토</p></div></div>
-  <div class="line-item"><span class="label">03</span><div><strong>전원 분리 및 비상정지 체계 구성</strong><p class="small">컴퓨팅 전원, 모터 전원, 비상정지·리미트 스위치</p></div></div>
+  <div class="line-item"><span class="label">01</span><div><strong>주행 및 조향 제어</strong><p class="small">모터 구동 방식, 외부 제어 입력, 최소 회전반경 확인</p></div></div>
+  <div class="line-item"><span class="label">02</span><div><strong>위치 및 각도 측정</strong><p class="small">주행 엔코더, 조향각 센서, 포크 높이 센서 검토</p></div></div>
+  <div class="line-item"><span class="label">03</span><div><strong>전원 및 안전 장치</strong><p class="small">제어·구동 전원 분리, 비상정지 및 리미트 스위치</p></div></div>
  </div>
 </div>
-<div class="takeaway">구조 제안: 상위 컴퓨터는 인식·계획, MCU는 구동·승강·정지 담당</div>
+<div class="takeaway">제어 장치 구성(안): 상위 컴퓨터에서 인식·경로 생성, MCU에서 주행·승강 제어</div>
 ''',
-'''프로젝트 자료에 포함된 어린이용 전동 지게차 판매 링크를 개조 후보로 검토한다. 구매 및 모델 확정 여부와 상세 사양은 미확인 상태이므로 가격, 적재량, 조향 구조를 확정값으로 적용하지 않는다. 플랫폼 선정의 첫 기준은 주행 모터와 조향 장치의 직접 제어 가능성이다. 이동량과 조향각을 확인할 엔코더·각도 센서, 포크 승강 위치를 확인할 센서와 상하단 리미트 확보도 필요하다. 개조가 어려운 경우에는 기존 모바일 로봇에 포크를 추가하는 대안을 검토한다. 상위 컴퓨터는 인식·계획을, MCU는 구동·승강 및 통신 단절 시 정지를 담당하는 구조를 제안한다. 컴퓨팅 장치는 센서 연결 방식과 처리 성능을 확인한 후 선정한다.''',
-[(BRIEF, '과제 원문 5쪽, 플랫폼 대안'),(STORE, '로컬 forklift_store_link.txt의 후보 링크; 상세 사양 미확인')])
+'''제작 방안으로는 소형 전동 지게차를 개조하여 주행부와 승강부를 활용하는 방법을 검토한다. 검토 대상은 프로젝트 폴더에 제시된 어린이용 전동 지게차이며, 구매 여부와 세부 사양은 확인이 필요하다. 차체를 선정할 때에는 주행 모터와 조향 장치에 외부 제어 신호를 입력할 수 있는지 우선 확인한다. 주행 거리와 조향각은 엔코더 및 각도 센서로 측정하고, 포크 높이와 승강 범위는 위치 센서 및 리미트 스위치로 확인하는 방안을 검토한다. 제어 장치는 상위 컴퓨터와 MCU로 나누어 구성할 계획이다. 상위 컴퓨터는 인식과 경로 생성을 담당하고, MCU는 주행·승강 제어와 통신 두절 시 정지를 담당한다. 컴퓨터 기종은 센서 연결 방식과 연산 성능을 검토하여 결정한다. 기존 차체의 개조가 어려운 경우에는 이동 로봇에 포크를 장착하는 방안을 적용한다.''',
+[(BRIEF, '과제 원문 5쪽, 플랫폼 대안'),(STORE, '로컬 forklift_store_link.txt의 후보 링크; 상세 사양 미확인')], '하드웨어 구성(안) · 세부 사양 확인 후 선정')
 
-add('전체 시스템', '03  시스템 구성', 50, '''
-<h2 class="headline">과제 수행 절차에 따른 5단계 모듈 구성</h2>
+add('전체 시스템 구성', '03  전체 시스템 구성', 50, '''
+<h2 class="headline">팔레트 인식·경로 생성·작업 제어</h2>
 <div class="pipeline grow" style="padding-top:18px">
  <div class="pipeline-step"><div class="number">01</div><h3>팔레트 인식</h3><p>RGB-D 영상<br>팔레트·포켓 검출</p></div>
- <div class="pipeline-step"><div class="number">02</div><h3>로봇 기준 위치</h3><p>포켓의 위치·방향<br>좌표계 변환</p></div>
- <div class="pipeline-step"><div class="number">03</div><h3>충돌 없는 경로</h3><p>LiDAR 장애물 지도<br>진입 자세까지 계획</p></div>
+ <div class="pipeline-step"><div class="number">02</div><h3>좌표 변환</h3><p>포켓 위치·방향 추정<br>로봇 기준 좌표 산출</p></div>
+ <div class="pipeline-step"><div class="number">03</div><h3>경로 생성</h3><p>LiDAR 장애물 지도<br>팔레트 접근 경로</p></div>
  <div class="pipeline-step"><div class="number">04</div><h3>삽입·적재</h3><p>경로 추종<br>포켓 추적·승강</p></div>
- <div class="pipeline-step"><div class="number">05</div><h3>운반·하역</h3><p>목적지 주행<br>하역·후퇴</p></div>
+ <div class="pipeline-step"><div class="number">05</div><h3>이송·하역</h3><p>목적지 주행<br>하역·후퇴</p></div>
 </div>
 <div class="io-band">
- <div><strong>모듈 간 전달 정보</strong><p class="small">위치·방향 + 신뢰도 + 측정 시각<br>경로 + 속도 + 진행 상태</p></div>
- <div><strong>공통 기록 항목</strong><p class="small">센서 영상·거리, 제어 명령, 상태 전환<br>접촉 여부와 작업 소요 시간</p></div>
+ <div><strong>단계별 입출력 정보</strong><p class="small">포켓 위치·방향, 인식 신뢰도, 측정 시각<br>이동 경로, 목표 속도, 동작 상태</p></div>
+ <div><strong>시험 기록 항목</strong><p class="small">센서 측정값, 제어 명령, 동작 상태<br>접촉 여부, 작업 소요 시간</p></div>
 </div>
 ''',
-'''소프트웨어는 과제에서 제시한 다섯 단계에 따라 구성한다. 첫 단계는 RGB-D 영상 기반 팔레트·포켓 검출이며, 두 번째 단계는 검출 결과를 로봇 기준 위치·방향으로 변환하는 과정이다. 세 번째 단계에서는 LiDAR 장애물 정보를 이용해 진입 경로를 생성한다. 네 번째 단계는 경로 추종, 지속적인 포켓 추적, 삽입 완료 후 승강을 담당한다. 마지막 단계는 목적지 운반과 하역이다. 모듈 간에는 좌표와 함께 측정 시각 및 신뢰도를 전달하여 오래되거나 불확실한 관측을 구분한다. 센서·제어·상태 전환 로그를 동일한 시간 기준으로 기록하고, 실패 원인을 인식·계획·제어 단계별로 분석한다.''',
-[(BRIEF, '과제 원문 7쪽의 모듈 순서; 인터페이스는 개발 제안')], '과제 원문 7쪽의 순서 유지 · 인터페이스는 제안')
+'''전체 시스템은 과제에서 제시한 처리 순서에 따라 다섯 단계로 구성한다. 첫째, RGB-D 영상에서 팔레트와 포켓을 검출한다. 둘째, 검출한 포켓의 위치와 방향을 로봇 기준 좌표로 변환한다. 셋째, LiDAR로 작성한 장애물 지도를 이용하여 팔레트 접근 경로를 생성한다. 넷째, 생성한 경로를 추종하면서 포켓 위치를 추적하고, 삽입 완료 후 포크를 상승시켜 적재한다. 다섯째, 목적지까지 이동하여 하역한다. 각 단계에서는 위치·방향뿐 아니라 측정 시각과 인식 신뢰도를 함께 전달한다. 측정 시각이 오래되었거나 신뢰도가 낮은 결과는 제어에 사용하기 전에 확인해야 한다. 센서 측정값, 제어 명령, 동작 상태는 같은 시간 기준으로 기록하여 오류가 발생한 단계를 분석한다.''',
+[(BRIEF, '과제 원문 7쪽의 모듈 순서; 인터페이스는 개발 제안')], '과제 설명자료 7쪽의 처리 순서 반영')
 
-add('센서와 팔레트 인식', '04  인식과 좌표 변환', 60, '''
-<h2 class="headline">RGB-D 기반 포켓 인식과 LiDAR 기반 주변 환경 인지</h2>
+add('팔레트 인식 및 위치 추정', '04  팔레트 인식 및 위치 추정', 60, '''
+<h2 class="headline">RGB-D 카메라와 LiDAR의 역할</h2>
 <div class="split grow" style="grid-template-columns:.95fr 1.05fr">
  <div class="stack" style="gap:10px">
-  <div class="sensor-row"><img src="assets/gemini-335le.jpeg" alt="과제에서 지정한 Orbbec Gemini 335Le RGB-D 카메라"><div><strong>Gemini 335Le · RGB-D</strong><p class="small muted">포켓 후보와 깊이 → 상대 위치·방향</p></div></div>
-  <div class="sensor-row"><img src="assets/rplidar-a2.jpeg" alt="과제에서 제시한 Slamtec RPLIDAR A2"><div><strong>RPLIDAR A2 · 2D LiDAR</strong><p class="small muted">자기 위치 추정과 주변 장애물 인지</p></div></div>
-  <p class="small muted">과제 제시 센서 · 실제 확보·장착 여부는 미확인</p>
+  <div class="sensor-row"><img src="assets/gemini-335le.jpeg" alt="과제에서 지정한 Orbbec Gemini 335Le RGB-D 카메라"><div><strong>Gemini 335Le · RGB-D</strong><p class="small muted">영상·깊이 정보로 포켓 위치 및 방향 추정</p></div></div>
+  <div class="sensor-row"><img src="assets/rplidar-a2.jpeg" alt="과제에서 제시한 Slamtec RPLIDAR A2"><div><strong>RPLIDAR A2 · 2D LiDAR</strong><p class="small muted">주변 장애물 인식 및 자기 위치 추정</p></div></div>
+  <p class="small muted">과제 제시 장비 · 확보 여부 확인 필요</p>
  </div>
  <div class="stack">
-  <div class="label">인식 개발 순서 제안</div>
-  <p class="body">① 규격 팔레트의 전면과 포켓 후보 검출<br>② 깊이·포켓 간격 기반 오검출 제거<br>③ 좌우 포켓 중심·진입 방향 추정</p>
-  <div class="transform"><b class="blue">카메라 좌표 → 로봇 기준 좌표</b><br><span class="small">카메라–차체 외부 보정 + 포크 높이 반영<br>승강부 이동 시 좌표 변환 갱신</span></div>
+  <div class="label">팔레트 인식 절차</div>
+  <p class="body">① 팔레트 전면 및 포켓 후보 검출<br>② 깊이와 포켓 간격으로 오검출 제거<br>③ 포켓 중심과 삽입 방향 추정</p>
+  <div class="transform"><b class="blue">카메라 좌표 → 로봇 기준 좌표</b><br><span class="small">카메라 설치 위치·방향 보정<br>승강부에 장착할 경우 포크 높이 반영</span></div>
  </div>
 </div>
-<div class="takeaway">인식 모듈의 목표 출력: 삽입 가능한 포켓의 위치·방향 및 신뢰도</div>
+<div class="takeaway">확인 사항: 근거리 인식 정확도 및 삽입 중 포켓 가림 여부</div>
 ''',
-'''과제에서 제시한 Gemini 335Le는 RGB 영상과 깊이를 이용하여 포켓의 상대 위치·방향을 추정하는 센서이다. RPLIDAR A2는 동일 높이의 평면을 스캔하며, 주변 장애물 인지와 자기 위치 추정에 활용한다. 초기 인식 개발은 규격을 정한 팔레트를 대상으로 전면과 포켓 후보를 검출하고, 깊이와 좌우 포켓 간격의 일치 여부를 검증하는 기준 방식부터 시작한다. 정교한 학습 모델의 도입은 이 기준 방식의 성능 평가 이후 검토한다. 카메라 좌표의 검출 결과는 외부 보정을 통해 로봇 기준 좌표로 변환한다. 카메라가 승강부와 함께 이동하는 경우에는 높이에 따른 변환 갱신이 필요하다. 근거리에서는 포크 가림과 깊이 측정의 불안정성이 발생할 수 있으므로, 실제 삽입 거리에서의 연속 관측 가능성을 우선 확인한다.''',
-[(BRIEF, '과제 원문 2·3·4·7쪽, 센서 이미지'),(ORBBEC, 'RGB-D 제품 설명'),(SLAMTEC, '2D 거리 스캔 설명')])
+'''팔레트 인식에는 RGB-D 카메라를, 주변 장애물 인식과 자기 위치 추정에는 2차원 LiDAR를 사용한다. 과제에서 제시한 장비는 Gemini 335Le와 RPLIDAR A2이며, 실제 확보 여부는 확인이 필요하다. 초기에는 일정한 규격의 팔레트를 대상으로 전면과 포켓 후보를 검출한다. 이후 깊이 정보와 좌우 포켓 간격을 이용하여 실제 포켓에 해당하는지 판별하고, 포켓 중심과 삽입 방향을 추정한다. 학습 모델의 적용 여부는 이 방법의 인식 성능을 평가한 후 검토한다. 카메라에서 구한 위치는 장착 위치와 방향을 보정하여 로봇 기준 좌표로 변환한다. 카메라가 승강부와 함께 이동하는 구조라면 포크 높이에 따라 좌표 변환을 갱신해야 한다. 또한 근거리에서는 포크에 의한 가림과 깊이 측정 오차가 발생할 수 있으므로, 삽입 구간에서 포켓이 계속 관측되는지 확인한다. 2차원 LiDAR의 측정 범위는 센서가 설치된 높이의 평면으로 제한된다.''',
+[(BRIEF, '과제 원문 2·3·4·7쪽, 센서 이미지'),(ORBBEC, 'RGB-D 제품 설명'),(SLAMTEC, '2D 거리 스캔 설명')], '인식 방법 및 센서 구성(안)')
 
-add('경로 계획', '05  접근 경로 계획', 60, '''
-<h2 class="headline">최소 회전반경과 포크 형상을 고려한 접근 경로 계획</h2>
+add('장애물 회피 경로 생성', '05  장애물 회피 경로 생성', 60, '''
+<h2 class="headline">차량 특성을 고려한 경로 생성</h2>
 <div class="split grow">
  <div class="stack">
-  <div class="label">경로의 종점</div>
-  <p class="statement">팔레트 전면의<br>‘삽입 준비 위치·방향’</p>
-  <p class="body">포크–포켓 정렬 상태에서의<br>최종 저속 직선 삽입 구간 확보</p>
-  <div class="rule"><div class="label">알고리즘 후보</div><p class="small" style="margin-top:10px">조향 차량 채택 시 Hybrid A* 계열 검토<br>실측 조향 모델·후진 가능 여부 우선 반영</p></div>
+  <div class="label">목표 위치 설정</div>
+  <p class="statement">팔레트 전면에서<br>포크 위치·방향 정렬</p>
+  <p class="body">접근 경로와 삽입 구간 구분<br>정렬 완료 후 저속 직선 주행</p>
+  <div class="rule"><div class="label">적용 알고리즘 검토</div><p class="small" style="margin-top:10px">조향 방식의 차체: Hybrid A* 검토<br>회전반경 및 후진 가능 여부 반영</p></div>
  </div>
  <div>
-  <div class="line-item"><span class="label">01</span><div><strong>차체·포크 전체 형상의 충돌 검사</strong><p class="small">적재 후 팔레트를 포함한 외곽 형상으로 갱신</p></div></div>
-  <div class="line-item"><span class="label">02</span><div><strong>전진·후진·방향 전환 경로 비교</strong><p class="small">제자리 회전 가능 여부는 플랫폼 실측으로 판단</p></div></div>
-  <div class="line-item"><span class="label">03</span><div><strong>전체 작업 시간 기준 경로 평가</strong><p class="small">주행 + 방향 전환 + 정렬 + 삽입 시간</p></div></div>
+  <div class="line-item"><span class="label">01</span><div><strong>차체·포크 크기 반영</strong><p class="small">적재 후에는 팔레트 크기까지 포함하여 충돌 검사</p></div></div>
+  <div class="line-item"><span class="label">02</span><div><strong>전진·후진 경로 검토</strong><p class="small">실제 조향 특성에 따라 방향 전환 방법 결정</p></div></div>
+  <div class="line-item"><span class="label">03</span><div><strong>작업 소요 시간 비교</strong><p class="small">주행, 전후진 전환, 정렬, 삽입 시간 측정</p></div></div>
  </div>
 </div>
-<div class="takeaway">충돌 여유 제약하의 작업 시간 단축 평가 · 전역 최적성은 별도 검증 대상</div>
+<div class="takeaway">평가 방법: 충돌 여부를 확인한 후 동일 조건에서 경로별 작업 시간 비교</div>
 ''',
-'''접근 경로의 종점은 포크와 포켓이 정렬된 삽입 준비 위치·방향으로 설정한다. 해당 자세까지 장애물을 회피하며 접근하고, 마지막 구간에는 저속 직선 삽입 경로를 확보한다. 점 로봇의 최단거리 경로만으로는 실제 지게차의 회전 제약이나 돌출된 포크의 충돌을 반영하기 어렵다. 따라서 조향 방식과 최소 회전반경을 실측하고, 차체와 포크가 통과하는 전체 영역에 대해 충돌 검사를 수행한다. 조향 차량으로 확정될 경우에는 회전 제약과 전후진을 고려할 수 있는 Hybrid A* 계열을 후보로 검토한다. 해당 알고리즘의 적용만으로 최소 작업 시간이 보장되는 것은 아니다. 주행, 방향 전환, 정렬, 삽입을 포함한 전체 작업 시간을 동일한 시험 조건에서 비교한다.''',
-[(BRIEF, '과제 원문 6·8–11쪽'),(NAV2, 'Hybrid A*의 회전반경·차체 형상 고려 근거; 채택은 미정')])
+'''접근 경로는 팔레트 전면에서 포크의 위치와 방향을 정렬할 수 있도록 생성한다. 정렬이 끝난 후에는 저속 직선 주행으로 포크를 삽입한다. 경로 생성 시에는 차체의 조향 방식과 최소 회전반경을 반영하고, 차체와 포크가 이동하는 전체 영역에 장애물이 있는지 검사한다. 적재 후에는 팔레트 크기도 충돌 검사에 포함한다. 조향 방식의 차체를 선정하는 경우에는 회전반경과 전후진을 고려할 수 있는 Hybrid A*를 검토한다. 다만 알고리즘을 적용하는 것만으로 작업 시간이 최소가 된다고 단정할 수는 없다. 실측한 조향 특성과 후진 가능 여부를 반영한 뒤, 같은 시험 조건에서 경로별 작업 시간을 비교한다. 평가 시간에는 주행뿐 아니라 전후진 전환, 정렬, 삽입에 소요되는 시간을 포함한다.''',
+[(BRIEF, '과제 원문 6·8–11쪽'),(NAV2, 'Hybrid A*의 회전반경·차체 형상 고려 근거; 채택은 미정')], '경로 생성 방법 검토(안)')
 
-add('검증 상황 A·B', '06  접근 시나리오 A·B', 45, '''
-<h2 class="headline">충분한 진입 공간에서의 직진·곡선 연속 접근</h2>
+add('주행 조건별 접근 방법 (1)', '06  주행 조건별 접근 방법 (1)', 45, '''
+<h2 class="headline">정면 및 측면 접근</h2>
 <div class="split grow">
- <figure class="case"><figcaption class="case-title"><span>A</span>정면에 정렬된 팔레트</figcaption><div class="case-figure"><img src="assets/case-a.png" alt="과제 A: 정면으로 정렬된 지게차가 팔레트로 바로 진입하는 전후 모습"></div><div class="case-note">직진 접근 → 저속 삽입<br><span class="muted">확인: 횡방향·방향 오차, 접촉 여부</span></div></figure>
- <figure class="case"><figcaption class="case-title"><span>B</span>횡방향 오프셋·접근 거리 충분</figcaption><div class="case-figure"><img src="assets/case-b.png" alt="과제 B: 멀리서 곡선으로 접근하여 팔레트에 정렬하는 모습"></div><div class="case-note">곡선 접근 → 정렬 → 연속 진입<br><span class="muted">확인: 불필요한 정지 없는 삽입 성공</span></div></figure>
+ <figure class="case"><figcaption class="case-title"><span>A</span>정면 접근</figcaption><div class="case-figure"><img src="assets/case-a.png" alt="과제 A: 정면으로 정렬된 지게차가 팔레트로 바로 진입하는 전후 모습"></div><div class="case-note">직진 접근 → 저속 삽입<br><span class="muted">평가: 좌우 위치·방향 오차 및 접촉 여부</span></div></figure>
+ <figure class="case"><figcaption class="case-title"><span>B</span>측면 접근 · 진입 거리 충분</figcaption><div class="case-figure"><img src="assets/case-b.png" alt="과제 B: 멀리서 곡선으로 접근하여 팔레트에 정렬하는 모습"></div><div class="case-note">곡선 접근 → 정렬 → 연속 진입<br><span class="muted">평가: 정지 없이 정렬 후 삽입 가능 여부</span></div></figure>
 </div>
 ''',
-'''과제의 네 가지 접근 상황을 공통 시험 항목으로 설정한다. A는 팔레트가 정면에 위치하고 방향이 정렬된 상황이다. 인식, 좌표 변환, 삽입 제어를 연결하여 기준 동작을 검증한다. B는 팔레트에 횡방향 오프셋이 있으나 접근 거리가 충분한 상황이다. 곡선 경로로 방향을 정렬한 후 불필요한 정지 없이 저속 삽입으로 연결하는 것이 요구된다. 제시된 그림은 과제 원문의 요구 동작이며 실험 결과는 아니다. A의 반복 성공을 확인한 후 시작 위치의 횡방향 오프셋을 변경하여 B를 시험한다. 이를 통해 삽입 제어와 접근 경로의 실패 원인을 구분한다.''',
-[(BRIEF, '과제 원문 8·9쪽의 그림 영역 추출')], '과제 원문 8·9쪽 · 그림은 요구 동작, 실험 결과 아님')
+'''접근 방법은 과제에서 제시한 A부터 D까지의 네 가지 조건으로 나누어 개발한다. A는 팔레트가 지게차 정면에 있고 포크와 포켓의 방향이 일치하는 경우이다. 직진 접근과 저속 삽입을 수행하며, 좌우 위치 오차와 방향 오차 및 접촉 여부를 확인한다. B는 팔레트가 측면에 있으나 정렬에 필요한 접근 거리가 충분한 경우이다. 곡선 주행으로 방향을 맞춘 후 정지 없이 삽입하도록 경로를 생성한다. 개발 초기에는 A 조건에서 인식, 좌표 변환, 삽입 제어를 연결하여 시험한다. 이후 시작 위치를 좌우로 변경하여 B 조건을 평가한다. 이와 같이 시험 조건을 순차적으로 추가하여 삽입 제어와 접근 경로의 오류를 구분할 계획이다. 그림은 과제 설명자료에 제시된 요구 동작이다.''',
+[(BRIEF, '과제 원문 8·9쪽의 그림 영역 추출')], '출처: 과제 설명자료 8·9쪽 · 요구 동작')
 
-add('검증 상황 C·D', '07  접근 시나리오 C·D', 60, '''
-<h2 class="headline">진입 공간 부족 및 후방 장애물에 대한 재배치</h2>
+add('주행 조건별 접근 방법 (2)', '07  주행 조건별 접근 방법 (2)', 60, '''
+<h2 class="headline">근거리 접근 및 후방 장애물 대응</h2>
 <div class="split grow" style="grid-template-columns:300px 1fr;gap:32px">
- <figure class="case"><figcaption class="case-title"><span>C</span>진입 거리 부족</figcaption><div class="case-figure"><img src="assets/case-c.png" alt="과제 C: 너무 가까운 지게차가 후진해 공간을 확보한 뒤 재진입"></div><div class="case-note">후진 → 공간 확보 → 재진입</div></figure>
- <figure class="case"><figcaption class="case-title"><span>D</span>진입 거리 부족 + 후방 장애물</figcaption><div class="case-figure"><img src="assets/case-d.png" alt="과제 D: 뒤쪽 장애물이 있을 때 위치를 바꾸거나 가능한 만큼만 후퇴하여 정렬하는 두 대안"></div><div class="case-note">위치 재배치 / 허용 거리 내 후퇴<br><span class="muted">조향 차량: 전후진 회전 조합 · 실제 구동계 제약 반영</span></div></figure>
+ <figure class="case"><figcaption class="case-title"><span>C</span>근거리 접근</figcaption><div class="case-figure"><img src="assets/case-c.png" alt="과제 C: 너무 가까운 지게차가 후진해 공간을 확보한 뒤 재진입"></div><div class="case-note">후진 → 공간 확보 → 재진입</div></figure>
+ <figure class="case"><figcaption class="case-title"><span>D</span>근거리 접근 · 후방 장애물 존재</figcaption><div class="case-figure"><img src="assets/case-d.png" alt="과제 D: 뒤쪽 장애물이 있을 때 위치를 바꾸거나 가능한 만큼만 후퇴하여 정렬하는 두 대안"></div><div class="case-note">위치 변경 후 재접근 또는 제한 거리 내 후진<br><span class="muted">유의 사항: 차체의 조향 방식과 후방 여유 공간 반영</span></div></figure>
 </div>
 ''',
-'''C는 팔레트와의 거리가 짧아 즉시 정렬하기 어려운 상황이다. 후진으로 곡선 접근에 필요한 공간을 확보한 후 재진입한다. D는 해당 후퇴 공간에도 장애물이 존재하는 상황이다. 과제는 위치 변경 후 재접근하거나 허용 거리만 후퇴하여 정렬하는 두 대안을 제시한다. 회전 동작의 실현 가능성은 실제 플랫폼의 구동계 제약에 따라 판단한다. 조향 차량의 경우에는 제자리 회전을 전제하지 않고 전진·후진을 조합한 회전으로 재배치한다. 충돌 검사는 차체 중심뿐 아니라 포크와 후미를 포함한 전체 형상에 적용한다. 허용 공간에서 실행 가능한 경로를 확보하지 못하면 안전 정지하고, 해당 결과는 삽입 성공과 구분하여 기록한다.''',
-[(BRIEF, '과제 원문 10·11쪽의 그림 영역 추출')], '과제 원문 10·11쪽 · 회전 동작은 실제 구동계 제약 반영')
+'''C는 팔레트와의 거리가 가까워 바로 정렬하기 어려운 경우이다. 우선 후진하여 필요한 공간을 확보한 후, 방향을 맞추어 다시 접근한다. D는 팔레트와의 거리가 가까우면서 후방에 장애물이 있는 경우이다. 이동 가능한 공간으로 위치를 변경한 뒤 재접근하거나, 장애물까지의 허용 거리 내에서 후진하여 정렬한다. 이때 제자리 회전 가능 여부는 실제 구동 구조에 따라 결정한다. 조향 차량은 전진과 후진을 조합하여 방향을 바꾸도록 계획한다. 차체 중심의 이동 경로뿐 아니라 돌출된 포크와 차체 후미의 충돌 가능성도 확인해야 한다. 이동 가능한 경로를 찾지 못하면 정지하도록 제어한다. 해당 정지는 안전 기능으로 평가하되 삽입 성공에는 포함하지 않는다.''',
+[(BRIEF, '과제 원문 10·11쪽의 그림 영역 추출')], '출처: 과제 설명자료 10·11쪽 · 요구 동작')
 
-add('삽입 제어와 복구', '08  포켓 추적과 삽입 제어', 70, '''
-<h2 class="headline">포켓 추적 기반 삽입 제어 및 관측 소실 시 정지</h2>
-<div class="phase-flow" aria-label="제어 상태 전환"><b>경로 추종</b><span class="arrow">→</span><b>저속 정렬</b><span class="arrow">→</span><b>포켓 추적·삽입</b><span class="arrow">→</span><b>삽입 완료 확인</b><span class="arrow">→</span><b>승강</b></div>
+add('포크 삽입 제어', '08  포크 삽입 제어', 70, '''
+<h2 class="headline">포켓 위치 추적 및 삽입 오차 보정</h2>
+<div class="phase-flow" aria-label="제어 상태 전환"><b>접근 주행</b><span class="arrow">→</span><b>저속 정렬</b><span class="arrow">→</span><b>포켓 추적·삽입</b><span class="arrow">→</span><b>삽입 완료 확인</b><span class="arrow">→</span><b>승강</b></div>
 <div class="split grow" style="padding-top:8px">
- <div class="guardrail"><h3>삽입 허용 조건</h3><p class="body">좌우·방향·높이 오차의 허용 범위 충족<br>최신 포켓 위치 및 추적 신뢰도 확보<br>포크 끝까지 충돌 여유 확보</p><p class="small muted" style="margin-top:20px">허용 오차는 포켓–포크 간극과<br>센서·제어 오차를 실측해 결정</p></div>
- <div class="guardrail"><h3>중단·복구 조건</h3><p class="body">포켓 가림·추적 소실 → 즉시 정지<br>위치 재관측 → 재정렬 또는 재계획<br>삽입 깊이 확인 후 적재 허용</p><p class="small muted" style="margin-top:20px">승강 중 주행 제한 · 상하단 리미트<br>통신 단절 시 MCU에서 구동 정지</p></div>
+ <div class="guardrail"><h3>삽입 전 확인 사항</h3><p class="body">포크의 좌우 위치·방향·높이 오차<br>포켓 측정 시각 및 추적 신뢰도<br>포크 이동 구간의 충돌 여유</p><p class="small muted" style="margin-top:20px">포켓과 포크의 간격을 측정한 후<br>센서·제어 오차를 고려하여 허용치 결정</p></div>
+ <div class="guardrail"><h3>정지 및 재개 조건</h3><p class="body">포켓 가림·추적 중단 시 즉시 정지<br>재인식 및 정렬 상태 확인 후 재개<br>삽입 깊이 확인 후 포크 상승</p><p class="small muted" style="margin-top:20px">승강 중 주행 제한, 상하단 리미트 적용<br>통신 두절 시 MCU에서 구동 정지</p></div>
 </div>
-<div class="takeaway">팔레트 구조물의 충돌 정보 유지 · 포켓의 실제 진입 가능 공간 별도 처리</div>
+<div class="takeaway">충돌 검사: 팔레트 구조물을 장애물로 유지하고 포켓 내부만 진입 허용</div>
 ''',
-'''삽입 구간은 일반 주행과 별도의 제어 상태로 구성한다. 경로 추종 후 속도를 낮추고, 좌우 위치·방향·포크 높이 오차가 허용 범위에 있는지 확인한다. 허용 오차는 실제 포켓과 포크의 간극에서 센서 오차, 제어 오차, 필요한 충돌 여유를 고려하여 결정한다. 삽입 중에는 포켓 관측을 지속적으로 갱신하며 오차를 보정한다. 포크 가림이나 추적 소실이 발생하면 즉시 정지하고, 재관측과 정렬이 확보된 경우에만 진행한다. 후퇴가 필요한 경우에는 후방 공간의 충돌 가능성도 확인한다. 승강은 삽입 깊이를 확인한 후 허용한다. 장애물 지도에서는 팔레트 구조물의 충돌 정보를 유지하면서 포켓의 실제 진입 가능 공간을 별도로 처리한다. 적재 후 경로 계획과 충돌 검사에는 팔레트를 포함한 외곽 형상을 적용한다.''',
-[(BRIEF, '과제 원문 6·7쪽의 지속 추적 요구; 상태 전환·정지 조건은 개발 제안')])
+'''포크 삽입 구간에서는 주행 속도를 낮추고, 포켓에 대한 포크의 좌우 위치·방향·높이 오차를 보정한다. 삽입을 시작하기 전에는 각 오차가 허용 범위에 있는지와 포켓 추적이 유지되는지를 확인한다. 허용 오차는 실제 포켓과 포크 사이의 간격을 측정한 후 센서 오차, 제어 오차, 충돌 여유를 고려하여 정한다. 삽입 중 포켓이 가려지거나 추적이 끊기면 즉시 정지한다. 이후 포켓을 다시 인식하고 정렬 상태를 확인한 후 주행을 재개한다. 후진이 필요한 경우에는 후방 장애물도 확인한다. 포크 상승은 삽입 깊이를 확인한 후 허용하며, 승강 중에는 주행을 제한한다. 상하단 리미트 스위치와 통신 두절 시 정지 기능도 적용할 계획이다. 충돌 지도에는 팔레트 구조물을 그대로 반영하고, 포크가 통과할 포켓 내부만 진입 공간으로 처리한다. 적재 후에는 팔레트 외곽까지 포함하여 충돌을 검사한다.''',
+[(BRIEF, '과제 원문 6·7쪽의 지속 추적 요구; 상태 전환·정지 조건은 개발 제안')], '삽입 제어 및 안전 기능 설계(안)')
 
-add('정량 검증', '09  평가 기준', 60, '''
-<h2 class="headline">네 가지 접근 상황의 반복 성공률 및 작업 시간 평가</h2>
+add('성능 평가 계획', '09  성능 평가 계획', 60, '''
+<h2 class="headline">시험 조건 및 평가 항목</h2>
 <div class="split" style="grid-template-columns:repeat(3,1fr);gap:28px">
- <div class="metric"><strong>4상황 × 10회</strong><p>상황마다 10회 반복<br><span class="small muted">1차 시험 규모 제안</span></p></div>
- <div class="metric"><strong>상황별 ≥ 9/10</strong><p>삽입·적재 성공 목표<br><span class="small muted">초기 제안 목표 · 실측 전</span></p></div>
- <div class="metric"><strong>충돌 0회</strong><p>포크·차체의 비의도 접촉<br><span class="small muted">안전 정지는 삽입 성공과 별도 집계</span></p></div>
+ <div class="metric"><strong>총 40회</strong><p>A–D 조건별 10회 반복<br><span class="small muted">초기 시험계획(안)</span></p></div>
+ <div class="metric"><strong>성공률 90% 이상</strong><p>조건별 삽입·적재 성공률<br><span class="small muted">목표치(안)</span></p></div>
+ <div class="metric"><strong>접촉 0회</strong><p>포크·차체의 의도하지 않은 접촉<br><span class="small muted">안전 정지는 성공 횟수에서 제외</span></p></div>
 </div>
 <table class="comparison grow" style="margin-top:4px"><thead><tr><th>측정 항목</th><th>기록 방법</th><th>평가 기준</th></tr></thead><tbody>
- <tr><td>삽입 오차·접촉</td><td>좌우·방향·높이 오차 + 외부 영상</td><td>포켓–포크 간극 내 삽입 여부</td></tr>
- <tr><td>실패·복구</td><td>추적 소실, 정지, 재시도 로그</td><td>정지·재개 시점의 적절성</td></tr>
- <tr><td>전체 사이클 시간</td><td>인식 시작 → 목적지 하역·후퇴 완료</td><td>동일 조건·성공률에서 시간 단축 여부</td></tr>
+ <tr><td>삽입 정확도</td><td>위치·방향·높이 오차 및 외부 영상</td><td>허용 오차 충족 및 접촉 여부</td></tr>
+ <tr><td>정지 및 재개</td><td>추적 중단, 정지, 재시도 기록</td><td>정지·재개 시점의 적절성</td></tr>
+ <tr><td>작업 소요 시간</td><td>인식 시작부터 하역 후 후퇴 완료까지</td><td>동일 조건·성공률에서 소요 시간 비교</td></tr>
 </tbody></table>
 ''',
-'''초기 시험은 A부터 D까지 상황별 10회 반복으로 구성한다. 시작 위치, 팔레트, 장애물 배치를 기록하고, 각 상황에서 10회 중 9회 이상의 삽입·적재 성공을 1차 목표로 제안한다. 이는 실측 성능이 아닌 검증 전 목표이다. 포크와 차체의 비의도 접촉이 발생하면 원인을 수정한 후 재시험한다. 위험 감지에 따른 정지는 안전 동작으로 기록하되 삽입 성공에는 포함하지 않는다. 접촉 여부는 센서·명령 로그와 함께 외부 영상으로 확인한다. 삽입 검증을 통과한 후에는 목적지 하역과 후퇴까지 포함한 전체 사이클을 반복 평가한다. 시간 단축 효과는 동일한 배치와 성공률 조건에서 기준 경로와 개선 경로를 비교하여 판단한다. 실패율이나 접촉이 증가한 결과는 성능 개선으로 인정하지 않는다.''',
-[(BRIEF, '과제 원문 6–11쪽의 작업·상황 요구; 반복 횟수·성공률은 제안')], '횟수·성공률은 초기 제안 목표 · 측정 성능 아님')
+'''초기 성능 평가는 네 가지 주행 조건에서 각각 10회씩, 총 40회 수행하는 것으로 계획한다. 조건별 삽입·적재 성공률의 목표는 90% 이상이며, 시험 횟수와 목표치는 개발 초기의 제안값이다. 시험마다 시작 위치와 팔레트·장애물 배치를 기록한다. 포크와 차체의 의도하지 않은 접촉은 0회를 목표로 하며, 접촉이 발생하면 원인을 수정한 후 다시 시험한다. 위험을 감지하여 정지한 경우는 삽입 성공과 구분하여 기록한다. 삽입 오차와 접촉 여부는 센서 기록 및 외부 촬영 영상으로 확인한다. 삽입 시험을 마친 후에는 이송, 하역, 후퇴까지 포함한 전체 작업을 평가한다. 작업 시간은 팔레트 인식 시작부터 하역 후 후퇴 완료까지 측정한다. 경로 개선 효과는 같은 배치와 성공률 조건에서 비교하며, 충돌이나 실패가 증가한 경우에는 개선으로 평가하지 않는다.''',
+[(BRIEF, '과제 원문 6–11쪽의 작업·상황 요구; 반복 횟수·성공률은 제안')], '시험 횟수 및 성능 목표는 초기 계획값')
 
-add('개발 로드맵', '10  단계별 개발 계획', 55, '''
-<h2 class="headline">정면 삽입 검증 후 접근 시나리오 단계적 확장</h2>
-<div class="label">장비 확보 후 8주 예시 · 실제 수업 일정에 따라 조정</div>
+add('개발 추진 일정', '10  개발 추진 일정', 55, '''
+<h2 class="headline">단계별 개발 내용 및 일정</h2>
+<div class="label">개발 기간(안): 장비 확보 후 8주 · 수업 일정에 따라 조정</div>
 <div class="roadmap grow">
- <article><span class="label">1–2주</span><h3>플랫폼 확인</h3><p>구동계·승강 실측<br>센서 장착·전원<br>수동 제어·비상정지</p><div class="exit"><b>완료 조건</b><br>반복 구동·정지<br>위치 피드백 확보</div></article>
- <article><span class="label">3–4주</span><h3>정면 삽입</h3><p>팔레트·포켓 인식<br>좌표 보정·높이 제어<br>A 상황 폐루프 삽입</p><div class="exit"><b>완료 조건</b><br>A 반복 삽입<br>가림 시 정지 확인</div></article>
- <article><span class="label">5–6주</span><h3>접근 확장</h3><p>장애물 지도 연결<br>곡선·후진·재배치<br>B·C·D 경로 추종</p><div class="exit"><b>완료 조건</b><br>네 상황 평가<br>실패 원인 분류</div></article>
- <article><span class="label">7–8주</span><h3>운반·통합</h3><p>적재 후 경로 갱신<br>목적지 이동·하역<br>반복 시험·시간 개선</p><div class="exit"><b>완료 조건</b><br>전체 사이클 로그<br>조건별 성능 비교</div></article>
+ <article><span class="label">1–2주</span><h3>하드웨어 점검</h3><p>주행·승강 특성 측정<br>센서 장착 및 배선<br>수동 제어·비상정지</p><div class="exit"><b>단계별 점검</b><br>구동 및 정지 동작<br>위치 센서 측정값</div></article>
+ <article><span class="label">3–4주</span><h3>정면 삽입</h3><p>팔레트·포켓 인식<br>좌표 보정·높이 제어<br>A 조건 삽입 제어</p><div class="exit"><b>단계별 점검</b><br>A 조건 반복 시험<br>포켓 가림 시 정지</div></article>
+ <article><span class="label">5–6주</span><h3>주행 기능 개발</h3><p>장애물 지도 적용<br>곡선 주행·후진<br>B·C·D 접근 시험</p><div class="exit"><b>단계별 점검</b><br>조건별 주행 성능<br>실패 원인 분석</div></article>
+ <article><span class="label">7–8주</span><h3>통합 시험</h3><p>적재 후 경로 갱신<br>목적지 이송·하역<br>반복 시험·시간 측정</p><div class="exit"><b>단계별 점검</b><br>전체 작업 기록<br>조건별 성능 비교</div></article>
 </div>
 ''',
-'''개발 계획은 플랫폼 검증, 정면 삽입, 접근 시나리오 확장, 운반·통합의 네 단계로 구성한다. 1–2주에는 조향·승강 특성을 실측하고 수동 제어, 비상정지, 위치 피드백을 확보한다. 3–4주에는 정면 팔레트에 대한 A 상황의 반복 삽입과 가림 발생 시 정지를 검증한다. 5–6주에는 장애물 지도를 연결하고 B의 곡선 접근, C의 후진, D의 재배치로 확장한다. 7–8주에는 적재 상태의 목적지 이동, 하역, 후퇴를 연결하여 전체 작업 시간을 평가한다. 제시된 8주는 장비 확보 후의 일정 예시이며 실제 수업 일정에 따라 조정한다. 기구·전장, 인식·보정, 경로·제어를 분담하되 각 단계의 완료 조건과 로그 형식을 공유한다.''',
-[(BRIEF, '과제 요구의 단계별 분해; 주차와 역할은 개발 제안')], '8주는 일정 예시 · 인원·마감·장비 확보 후 확정')
+'''개발 일정은 장비 확보 후 8주를 기준으로 작성한 예시이며, 수업 일정과 부품 수급 상황에 따라 조정한다. 1–2주에는 차체의 주행·조향·승강 특성을 측정하고, 센서 장착과 수동 제어 및 비상정지 기능을 점검한다. 3–4주에는 팔레트 인식과 좌표 보정을 수행하고, A 조건에서 포크 삽입을 반복 시험한다. 포켓 가림 시 정지 기능도 이 단계에서 확인한다. 5–6주에는 장애물 지도를 적용하여 B의 곡선 접근, C의 후진 접근, D의 장애물 회피를 시험한다. 7–8주에는 적재 상태의 이송과 하역을 연결하고, 전체 작업의 반복 시험 및 시간 측정을 수행한다. 역할은 기구·전장, 인식·보정, 경로·제어로 분담하되, 단계별 점검 항목과 기록 양식은 공통으로 사용한다.''',
+[(BRIEF, '과제 요구의 단계별 분해; 주차와 역할은 개발 제안')], '추진 일정(안) · 장비 확보 및 수업 일정에 따라 조정')
 
-add('첫 개발 목표', '11  개발 방향 정리', 20, '''
-<div class="label">1차 실물 검증 목표</div>
-<h2 class="closing">포켓 지속 관측 기반<br><span class="blue">충돌 없는 반복 삽입</span></h2>
+add('향후 추진 계획', '11  향후 추진 계획', 20, '''
+<div class="label">우선 추진 과제</div>
+<h2 class="closing">정면 삽입 기능 구현<br><span class="blue">및 반복 시험</span></h2>
 <div class="closing-steps grow" style="padding-top:28px">
- <div><span class="label">선정 항목</span><p style="margin-top:12px">플랫폼·컴퓨팅 장치<br>팔레트 규격·센서 배치</p></div>
- <div><span class="label">실측 항목</span><p style="margin-top:12px">회전반경·조향 응답<br>포크 간극·근거리 가시성</p></div>
- <div><span class="label">확장 범위</span><p style="margin-top:12px">A → B·C·D<br>삽입 → 운반·하역</p></div>
+ <div><span class="label">사양 선정</span><p style="margin-top:12px">차체 및 제어 장치<br>팔레트 규격·센서 배치</p></div>
+ <div><span class="label">구동 특성 측정</span><p style="margin-top:12px">회전반경·조향 응답<br>포크 간격·근거리 인식</p></div>
+ <div><span class="label">주행·작업 시험</span><p style="margin-top:12px">측면 접근·후진·회피<br>적재·이송·하역</p></div>
 </div>
-<div class="takeaway">개발 방향: 정밀 삽입의 반복 성공 확보 → 충돌 없는 팔레트 핸들링 및 작업 시간 단축</div>
+<div class="takeaway">최종 평가: A–D 조건별 삽입·적재 성공률 및 전체 작업 시간 측정</div>
 ''',
-'''첫 실물 검증 목표는 정면 팔레트의 포켓을 지속적으로 관측하며 충돌 없이 반복 삽입하는 것이다. 플랫폼, 컴퓨팅 장치, 팔레트 규격을 결정하고 회전반경, 포크 간극, 근거리 가시성을 측정한다. 이후 A의 기준 동작을 바탕으로 B·C·D 접근 상황과 운반·하역까지 개발 범위를 확장한다.''',
-[(BRIEF, '과제 요구에 대한 개발 방향 제안')])
+'''우선 추진할 과제는 정면 팔레트에 대한 포크 삽입 기능의 구현과 반복 시험이다. 이를 위해 차체와 제어 장치를 선정하고, 팔레트 규격 및 센서 설치 위치를 결정한다. 최소 회전반경, 조향 응답, 포크 간격과 근거리 인식 범위를 측정한 후, 측면 접근·후진·장애물 회피 시험을 진행한다. 최종적으로 이송과 하역을 포함한 전체 작업의 성능을 평가할 계획이다.''',
+[(BRIEF, '과제 요구에 대한 개발 방향 제안')], '향후 추진 계획')
 
 def build():
     assert len(slides) == 12
     assert sum(s['seconds'] for s in slides) == 600
     sections = []
-    script = ['# 자율 지게차 프로젝트 개발 방향 — 발표 원고', '', '12장 · 시간 배분 합계 10분. 실제 발표 시간은 리허설을 통해 조정한다.', '', '기준일: 2026-09-08. 요구사항, 개발 제안, 미확인 사항을 구분하여 기술한다.', '']
+    script = ['# 자율 지게차 개발 계획 — 발표 원고', '', '12장 · 시간 배분 합계 10분. 쪽별 배정 시간은 발표 연습 후 조정한다.', '', '기준일: 2026-09-08. 장비 구성과 시험 목표는 개발계획(안)이며, 실제 성능은 제작 후 시험으로 확인한다.', '']
     elapsed = 0
     for i, s in enumerate(slides, 1):
         source_lines = '\n'.join(f'{label}: {url}' for url, label in s['sources'])
@@ -205,10 +205,10 @@ def build():
         script += [f'## {i}쪽 · {s["label"]} ({elapsed//60:02d}:{elapsed%60:02d}–{end//60:02d}:{end%60:02d}, {s["seconds"]}초)', '', s['notes'], '', '[Sources]', source_lines, '[/Sources]', '']
         elapsed = end
     html = '''<!DOCTYPE html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>자율 지게차 프로젝트 개발 방향</title>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>자율 지게차 개발 계획</title>
 <link rel="icon" href="data:,">
 <script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
-<body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>자율 지게차 프로젝트 개발 방향</title>
+<body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>자율 지게차 개발 계획</title>
 <link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 ''' + '\n\n'.join(sections) + '\n</x-import></x-dc></body></html>\n'
