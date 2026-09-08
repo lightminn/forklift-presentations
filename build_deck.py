@@ -19,8 +19,8 @@ def add(label, title, seconds, body, notes, sources, foot='개발계획(안)'):
     slides.append(dict(label=label, title=title, seconds=seconds, body=body, notes=notes, sources=sources, foot=foot))
 
 add('개발 계획', '자율 지게차\n개발 계획', 20, '''''',
-'''본 과제에서는 주변 장애물을 회피하면서 팔레트의 적재·이송·하역을 수행하는 자율 지게차를 개발하고자 한다. 주요 개발 내용은 팔레트 인식, 접근 경로 생성, 포크 삽입 제어이다. 정면 삽입 기능을 먼저 구현한 후, 측면 접근과 후진 등 주행 조건을 추가하여 성능을 평가할 계획이다.''',
-[(BRIEF, '과제 원문 1·6·7쪽')], '개발계획(안)')
+'''본 과제에서는 주변 장애물을 회피하면서 팔레트의 적재·이송·하역을 수행하는 ROS 2 기반 자율 지게차를 개발하고자 한다. 2차원 LiDAR SLAM으로 작업 환경의 지도를 작성하고 지게차의 위치를 추정한다. 주요 개발 내용은 팔레트 인식, 접근 경로 생성, 포크 삽입 제어이다. 정면 삽입 기능을 먼저 구현한 후, 측면 접근과 후진 등 주행 조건을 추가하여 성능을 평가할 계획이다.''',
+[(BRIEF, '과제 원문 1·3·6·7쪽')], '개발계획(안)')
 
 add('과제 개요', '01  과제 개요', 45, '''
 <h2 class="headline">개발 목표 및 주요 수행 내용</h2>
@@ -51,34 +51,34 @@ add('하드웨어 구성', '02  하드웨어 구성', 55, '''
   <div class="line-item"><span class="label">03</span><div><strong>전원 및 안전 장치</strong><p class="small">제어·구동 전원 분리, 비상정지 및 리미트 스위치</p></div></div>
  </div>
 </div>
-<div class="takeaway">제어 장치 구성(안): 상위 컴퓨터에서 인식·경로 생성, MCU에서 주행·승강 제어</div>
+<div class="takeaway">제어 장치 구성: ROS 2에서 인식·SLAM·경로 생성, MCU에서 주행·승강 제어</div>
 ''',
-'''제작 방안으로는 소형 전동 지게차를 개조하여 주행부와 승강부를 활용하는 방법을 검토한다. 검토 대상은 프로젝트 폴더에 제시된 어린이용 전동 지게차이며, 구매 여부와 세부 사양은 확인이 필요하다. 차체를 선정할 때에는 주행 모터와 조향 장치에 외부 제어 신호를 입력할 수 있는지 우선 확인한다. 주행 거리와 조향각은 엔코더 및 각도 센서로 측정하고, 포크 높이와 승강 범위는 위치 센서 및 리미트 스위치로 확인하는 방안을 검토한다. 제어 장치는 상위 컴퓨터와 MCU로 나누어 구성할 계획이다. 상위 컴퓨터는 인식과 경로 생성을 담당하고, MCU는 주행·승강 제어와 통신 두절 시 정지를 담당한다. 컴퓨터 기종은 센서 연결 방식과 연산 성능을 검토하여 결정한다. 기존 차체의 개조가 어려운 경우에는 이동 로봇에 포크를 장착하는 방안을 적용한다.''',
-[(BRIEF, '과제 원문 5쪽, 플랫폼 대안'),(STORE, '로컬 forklift_store_link.txt의 후보 링크; 상세 사양 미확인')], '하드웨어 구성(안) · 세부 사양 확인 후 선정')
+'''제작 방안으로는 소형 전동 지게차를 개조하여 주행부와 승강부를 활용하는 방법을 검토한다. 검토 대상은 프로젝트 폴더에 제시된 어린이용 전동 지게차이며, 구매 여부와 세부 사양은 확인이 필요하다. 차체를 선정할 때에는 주행 모터와 조향 장치에 외부 제어 신호를 입력할 수 있는지 우선 확인한다. 주행 거리와 조향각은 엔코더 및 각도 센서로 측정하고, 포크 높이와 승강 범위는 위치 센서 및 리미트 스위치로 확인하는 방안을 검토한다. 제어 장치는 상위 컴퓨터와 MCU로 나누어 구성할 계획이다. 상위 컴퓨터에서는 ROS 2를 사용하여 센서 처리, 팔레트 인식, SLAM 및 경로 생성을 수행한다. MCU는 주행·승강 제어와 통신 두절 시 정지를 담당한다. 컴퓨터 기종은 센서 연결 방식과 연산 성능을 검토하여 결정한다. 기존 차체의 개조가 어려운 경우에는 이동 로봇에 포크를 장착하는 방안을 적용한다.''',
+[(BRIEF, '과제 원문 5쪽, 플랫폼 대안'), (STORE, '로컬 forklift_store_link.txt의 후보 링크; 상세 사양 미확인')], '하드웨어 구성(안) · 세부 사양 확인 후 선정')
 
 add('전체 시스템 구성', '03  전체 시스템 구성', 50, '''
-<h2 class="headline">팔레트 인식·경로 생성·작업 제어</h2>
+<h2 class="headline">ROS 2 기반 시스템 구성</h2>
 <div class="pipeline grow" style="padding-top:18px">
  <div class="pipeline-step"><div class="number">01</div><h3>팔레트 인식</h3><p>RGB-D 영상<br>팔레트·포켓 검출</p></div>
  <div class="pipeline-step"><div class="number">02</div><h3>좌표 변환</h3><p>포켓 위치·방향 추정<br>로봇 기준 좌표 산출</p></div>
- <div class="pipeline-step"><div class="number">03</div><h3>경로 생성</h3><p>LiDAR 장애물 지도<br>팔레트 접근 경로</p></div>
+ <div class="pipeline-step"><div class="number">03</div><h3>경로 생성</h3><p>SLAM 지도·자기 위치<br>장애물 회피 경로</p></div>
  <div class="pipeline-step"><div class="number">04</div><h3>삽입·적재</h3><p>경로 추종<br>포켓 추적·승강</p></div>
  <div class="pipeline-step"><div class="number">05</div><h3>이송·하역</h3><p>목적지 주행<br>하역·후퇴</p></div>
 </div>
 <div class="io-band">
- <div><strong>단계별 입출력 정보</strong><p class="small">포켓 위치·방향, 인식 신뢰도, 측정 시각<br>이동 경로, 목표 속도, 동작 상태</p></div>
- <div><strong>시험 기록 항목</strong><p class="small">센서 측정값, 제어 명령, 동작 상태<br>접촉 여부, 작업 소요 시간</p></div>
+ <div><strong>지도 작성 및 위치 추정</strong><p class="small">2D LiDAR·주행 오도메트리 → SLAM<br>환경 지도 및 로봇 위치 제공</p></div>
+ <div><strong>ROS 2 노드 간 연계</strong><p class="small">인식·경로 생성·작업 제어 노드 연동<br>좌표계 변환(TF), 측정 시각·신뢰도 전달</p></div>
 </div>
 ''',
-'''전체 시스템은 과제에서 제시한 처리 순서에 따라 다섯 단계로 구성한다. 첫째, RGB-D 영상에서 팔레트와 포켓을 검출한다. 둘째, 검출한 포켓의 위치와 방향을 로봇 기준 좌표로 변환한다. 셋째, LiDAR로 작성한 장애물 지도를 이용하여 팔레트 접근 경로를 생성한다. 넷째, 생성한 경로를 추종하면서 포켓 위치를 추적하고, 삽입 완료 후 포크를 상승시켜 적재한다. 다섯째, 목적지까지 이동하여 하역한다. 각 단계에서는 위치·방향뿐 아니라 측정 시각과 인식 신뢰도를 함께 전달한다. 측정 시각이 오래되었거나 신뢰도가 낮은 결과는 제어에 사용하기 전에 확인해야 한다. 센서 측정값, 제어 명령, 동작 상태는 같은 시간 기준으로 기록하여 오류가 발생한 단계를 분석한다.''',
-[(BRIEF, '과제 원문 7쪽의 모듈 순서; 인터페이스는 개발 제안')], '과제 설명자료 7쪽의 처리 순서 반영')
+'''전체 시스템은 ROS 2에서 센서 처리, 인식, 경로 생성 및 제어 노드를 연동하는 구조로 구성한다. 지도 작성과 자기 위치 추정에는 2차원 LiDAR SLAM을 사용한다. LiDAR 스캔과 주행 오도메트리 및 센서 좌표 변환을 입력으로 환경 지도를 작성하며, SLAM 패키지는 slam_toolbox를 검토한다. 팔레트 작업은 과제에서 제시한 다섯 단계에 따라 수행한다. 첫째, RGB-D 영상에서 팔레트와 포켓을 검출한다. 둘째, 검출한 포켓의 위치와 방향을 로봇 기준 좌표로 변환한다. 셋째, SLAM 지도와 지도상 로봇 위치를 이용하여 팔레트 접근 경로를 생성한다. 최근 LiDAR 측정값도 장애물 판단에 반영한다. 넷째, 생성한 경로를 추종하면서 포켓 위치를 추적하고, 삽입 완료 후 포크를 상승시켜 적재한다. 다섯째, 목적지까지 이동하여 하역한다. 각 단계에서는 위치·방향뿐 아니라 측정 시각과 인식 신뢰도를 함께 전달한다. 측정 시각이 오래되었거나 신뢰도가 낮은 결과는 제어에 사용하기 전에 확인해야 한다. 센서 측정값, 제어 명령, 동작 상태는 같은 시간 기준으로 기록하여 오류가 발생한 단계를 분석한다.''',
+[(BRIEF, '과제 원문 7쪽의 모듈 순서; 인터페이스는 개발 제안'), ('https://docs.nav2.org/rolling/configuration_and_development/first_time_robot_setup_guide/sensors/mapping_localization/', 'ROS 2의 2D SLAM, 오도메트리·좌표 변환 및 Nav2 연계 근거; 패키지는 검토 대상')], '과제 설명자료 7쪽의 처리 순서 반영')
 
-add('팔레트 인식 및 위치 추정', '04  팔레트 인식 및 위치 추정', 60, '''
-<h2 class="headline">RGB-D 카메라와 LiDAR의 역할</h2>
+add('SLAM 및 팔레트 인식', '04  SLAM 및 팔레트 인식', 60, '''
+<h2 class="headline">LiDAR SLAM과 RGB-D 팔레트 인식</h2>
 <div class="split grow" style="grid-template-columns:.95fr 1.05fr">
  <div class="stack" style="gap:10px">
   <div class="sensor-row"><img src="assets/gemini-335le.jpeg" alt="과제에서 지정한 Orbbec Gemini 335Le RGB-D 카메라"><div><strong>Gemini 335Le · RGB-D</strong><p class="small muted">영상·깊이 정보로 포켓 위치 및 방향 추정</p></div></div>
-  <div class="sensor-row"><img src="assets/rplidar-a2.jpeg" alt="과제에서 제시한 Slamtec RPLIDAR A2"><div><strong>RPLIDAR A2 · 2D LiDAR</strong><p class="small muted">주변 장애물 인식 및 자기 위치 추정</p></div></div>
+  <div class="sensor-row"><img src="assets/rplidar-a2.jpeg" alt="과제에서 제시한 Slamtec RPLIDAR A2"><div><strong>RPLIDAR A2 · 2D LiDAR</strong><p class="small muted">2D SLAM 지도 작성·위치 추정, 장애물 인식</p></div></div>
   <p class="small muted">과제 제시 장비 · 확보 여부 확인 필요</p>
  </div>
  <div class="stack">
@@ -87,19 +87,19 @@ add('팔레트 인식 및 위치 추정', '04  팔레트 인식 및 위치 추�
   <div class="transform"><b class="blue">카메라 좌표 → 로봇 기준 좌표</b><br><span class="small">카메라 설치 위치·방향 보정<br>승강부에 장착할 경우 포크 높이 반영</span></div>
  </div>
 </div>
-<div class="takeaway">확인 사항: 근거리 인식 정확도 및 삽입 중 포켓 가림 여부</div>
+<div class="takeaway">역할 구분: SLAM은 지도·자기 위치 추정, RGB-D는 포켓 위치·방향 추정</div>
 ''',
-'''팔레트 인식에는 RGB-D 카메라를, 주변 장애물 인식과 자기 위치 추정에는 2차원 LiDAR를 사용한다. 과제에서 제시한 장비는 Gemini 335Le와 RPLIDAR A2이며, 실제 확보 여부는 확인이 필요하다. 초기에는 일정한 규격의 팔레트를 대상으로 전면과 포켓 후보를 검출한다. 이후 깊이 정보와 좌우 포켓 간격을 이용하여 실제 포켓에 해당하는지 판별하고, 포켓 중심과 삽입 방향을 추정한다. 학습 모델의 적용 여부는 이 방법의 인식 성능을 평가한 후 검토한다. 카메라에서 구한 위치는 장착 위치와 방향을 보정하여 로봇 기준 좌표로 변환한다. 카메라가 승강부와 함께 이동하는 구조라면 포크 높이에 따라 좌표 변환을 갱신해야 한다. 또한 근거리에서는 포크에 의한 가림과 깊이 측정 오차가 발생할 수 있으므로, 삽입 구간에서 포켓이 계속 관측되는지 확인한다. 2차원 LiDAR의 측정 범위는 센서가 설치된 높이의 평면으로 제한된다.''',
-[(BRIEF, '과제 원문 2·3·4·7쪽, 센서 이미지'),(ORBBEC, 'RGB-D 제품 설명'),(SLAMTEC, '2D 거리 스캔 설명')], '인식 방법 및 센서 구성(안)')
+'''ROS 2 기반 2차원 LiDAR SLAM으로 작업 환경의 지도를 작성하고 지게차의 위치를 추정한다. 주변 장애물도 LiDAR 측정값으로 확인한다. 팔레트 포켓의 상대 위치와 방향은 RGB-D 카메라로 추정한다. 과제에서 제시한 장비는 Gemini 335Le와 RPLIDAR A2이며, 실제 확보 여부는 확인이 필요하다. 초기에는 일정한 규격의 팔레트를 대상으로 전면과 포켓 후보를 검출한다. 이후 깊이 정보와 좌우 포켓 간격을 이용하여 실제 포켓에 해당하는지 판별하고, 포켓 중심과 삽입 방향을 추정한다. 학습 모델의 적용 여부는 이 방법의 인식 성능을 평가한 후 검토한다. 카메라에서 구한 위치는 장착 위치와 방향을 보정하여 로봇 기준 좌표로 변환한다. 카메라가 승강부와 함께 이동하는 구조라면 포크 높이에 따라 좌표 변환을 갱신해야 한다. 또한 근거리에서는 포크에 의한 가림과 깊이 측정 오차가 발생할 수 있으므로, 삽입 구간에서 포켓이 계속 관측되는지 확인한다. 2차원 LiDAR의 측정 범위는 센서가 설치된 높이의 평면으로 제한된다.''',
+[(BRIEF, '과제 원문 2·3·4·7쪽, 센서 이미지'), (ORBBEC, 'RGB-D 제품 설명'), (SLAMTEC, '2D 거리 스캔 설명'), ('https://docs.nav2.org/rolling/configuration_and_development/first_time_robot_setup_guide/sensors/mapping_localization/', 'ROS 2의 2D SLAM, 오도메트리·좌표 변환 및 Nav2 연계 근거; 패키지는 검토 대상')], '인식 방법 및 센서 구성(안)')
 
 add('장애물 회피 경로 생성', '05  장애물 회피 경로 생성', 60, '''
-<h2 class="headline">차량 특성을 고려한 경로 생성</h2>
+<h2 class="headline">SLAM 지도를 이용한 장애물 회피 경로 생성</h2>
 <div class="split grow">
  <div class="stack">
   <div class="label">목표 위치 설정</div>
   <p class="statement">팔레트 전면에서<br>포크 위치·방향 정렬</p>
   <p class="body">접근 경로와 삽입 구간 구분<br>정렬 완료 후 저속 직선 주행</p>
-  <div class="rule"><div class="label">적용 알고리즘 검토</div><p class="small" style="margin-top:10px">조향 방식의 차체: Hybrid A* 검토<br>회전반경 및 후진 가능 여부 반영</p></div>
+  <div class="rule"><div class="label">적용 알고리즘 검토</div><p class="small" style="margin-top:10px">Nav2 연동 및 Hybrid A* 적용 검토<br>회전반경 및 후진 가능 여부 반영</p></div>
  </div>
  <div>
   <div class="line-item"><span class="label">01</span><div><strong>차체·포크 크기 반영</strong><p class="small">적재 후에는 팔레트 크기까지 포함하여 충돌 검사</p></div></div>
@@ -109,8 +109,8 @@ add('장애물 회피 경로 생성', '05  장애물 회피 경로 생성', 60, 
 </div>
 <div class="takeaway">평가 방법: 충돌 여부를 확인한 후 동일 조건에서 경로별 작업 시간 비교</div>
 ''',
-'''접근 경로는 팔레트 전면에서 포크의 위치와 방향을 정렬할 수 있도록 생성한다. 정렬이 끝난 후에는 저속 직선 주행으로 포크를 삽입한다. 경로 생성 시에는 차체의 조향 방식과 최소 회전반경을 반영하고, 차체와 포크가 이동하는 전체 영역에 장애물이 있는지 검사한다. 적재 후에는 팔레트 크기도 충돌 검사에 포함한다. 조향 방식의 차체를 선정하는 경우에는 회전반경과 전후진을 고려할 수 있는 Hybrid A*를 검토한다. 다만 알고리즘을 적용하는 것만으로 작업 시간이 최소가 된다고 단정할 수는 없다. 실측한 조향 특성과 후진 가능 여부를 반영한 뒤, 같은 시험 조건에서 경로별 작업 시간을 비교한다. 평가 시간에는 주행뿐 아니라 전후진 전환, 정렬, 삽입에 소요되는 시간을 포함한다.''',
-[(BRIEF, '과제 원문 6·8–11쪽'),(NAV2, 'Hybrid A*의 회전반경·차체 형상 고려 근거; 채택은 미정')], '경로 생성 방법 검토(안)')
+'''SLAM이 제공하는 지도와 자기 위치를 이용하여 팔레트 접근 경로를 생성한다. 주행 기능은 ROS 2의 Nav2 적용을 검토하되, 실제 조향 특성에 맞는 경로 생성기와 제어기를 선정한다. 접근 경로의 종점은 팔레트 전면에서 포크의 위치와 방향을 정렬할 수 있는 지점으로 정한다. 정렬이 끝난 후에는 저속 직선 주행으로 포크를 삽입한다. 경로 생성 시에는 차체의 조향 방식과 최소 회전반경을 반영하고, 차체와 포크가 이동하는 전체 영역에 장애물이 있는지 검사한다. 현재 LiDAR 측정값을 장애물 정보에 반영하여 지도 작성 이후의 환경 변화에도 대응한다. 적재 후에는 팔레트 크기도 충돌 검사에 포함한다. 조향 방식의 차체를 선정하는 경우에는 회전반경과 전후진을 고려할 수 있는 Hybrid A*를 검토한다. 다만 알고리즘을 적용하는 것만으로 작업 시간이 최소가 된다고 단정할 수는 없다. 실측한 조향 특성과 후진 가능 여부를 반영한 뒤, 같은 시험 조건에서 경로별 작업 시간을 비교한다. 평가 시간에는 주행뿐 아니라 전후진 전환, 정렬, 삽입에 소요되는 시간을 포함한다.''',
+[(BRIEF, '과제 원문 6·8–11쪽'), (NAV2, 'Hybrid A*의 회전반경·차체 형상 고려 근거; 채택은 미정'), ('https://docs.nav2.org/rolling/configuration_and_development/first_time_robot_setup_guide/sensors/mapping_localization/', 'ROS 2의 2D SLAM, 오도메트리·좌표 변환 및 Nav2 연계 근거; 패키지는 검토 대상')], '경로 생성 방법 검토(안)')
 
 add('주행 조건별 접근 방법 (1)', '06  주행 조건별 접근 방법 (1)', 45, '''
 <h2 class="headline">정면 및 측면 접근</h2>
@@ -164,24 +164,24 @@ add('개발 추진 일정', '10  개발 추진 일정', 55, '''
 <h2 class="headline">단계별 개발 내용 및 일정</h2>
 <div class="label">개발 기간(안): 장비 확보 후 8주 · 수업 일정에 따라 조정</div>
 <div class="roadmap grow">
- <article><span class="label">1–2주</span><h3>하드웨어 점검</h3><p>주행·승강 특성 측정<br>센서 장착 및 배선<br>수동 제어·비상정지</p><div class="exit"><b>단계별 점검</b><br>구동 및 정지 동작<br>위치 센서 측정값</div></article>
- <article><span class="label">3–4주</span><h3>정면 삽입</h3><p>팔레트·포켓 인식<br>좌표 보정·높이 제어<br>A 조건 삽입 제어</p><div class="exit"><b>단계별 점검</b><br>A 조건 반복 시험<br>포켓 가림 시 정지</div></article>
- <article><span class="label">5–6주</span><h3>주행 기능 개발</h3><p>장애물 지도 적용<br>곡선 주행·후진<br>B·C·D 접근 시험</p><div class="exit"><b>단계별 점검</b><br>조건별 주행 성능<br>실패 원인 분석</div></article>
+ <article><span class="label">1–2주</span><h3>하드웨어 점검</h3><p>주행·승강 특성 측정<br>센서 장착·ROS 2 연동<br>수동 제어·비상정지</p><div class="exit"><b>단계별 점검</b><br>구동 및 정지 동작<br>위치 센서 측정값</div></article>
+ <article><span class="label">3–4주</span><h3>정면 삽입</h3><p>팔레트 인식·좌표 보정<br>2D SLAM 지도 작성<br>A 조건 삽입 제어</p><div class="exit"><b>단계별 점검</b><br>지도·위치 추정 확인<br>A 조건 반복 시험</div></article>
+ <article><span class="label">5–6주</span><h3>주행 기능 개발</h3><p>Nav2 주행 연동 검토<br>곡선 주행·후진<br>B·C·D 접근 시험</p><div class="exit"><b>단계별 점검</b><br>조건별 주행 성능<br>실패 원인 분석</div></article>
  <article><span class="label">7–8주</span><h3>통합 시험</h3><p>적재 후 경로 갱신<br>목적지 이송·하역<br>반복 시험·시간 측정</p><div class="exit"><b>단계별 점검</b><br>전체 작업 기록<br>조건별 성능 비교</div></article>
 </div>
 ''',
-'''개발 일정은 장비 확보 후 8주를 기준으로 작성한 예시이며, 수업 일정과 부품 수급 상황에 따라 조정한다. 1–2주에는 차체의 주행·조향·승강 특성을 측정하고, 센서 장착과 수동 제어 및 비상정지 기능을 점검한다. 3–4주에는 팔레트 인식과 좌표 보정을 수행하고, A 조건에서 포크 삽입을 반복 시험한다. 포켓 가림 시 정지 기능도 이 단계에서 확인한다. 5–6주에는 장애물 지도를 적용하여 B의 곡선 접근, C의 후진 접근, D의 장애물 회피를 시험한다. 7–8주에는 적재 상태의 이송과 하역을 연결하고, 전체 작업의 반복 시험 및 시간 측정을 수행한다. 역할은 기구·전장, 인식·보정, 경로·제어로 분담하되, 단계별 점검 항목과 기록 양식은 공통으로 사용한다.''',
-[(BRIEF, '과제 요구의 단계별 분해; 주차와 역할은 개발 제안')], '추진 일정(안) · 장비 확보 및 수업 일정에 따라 조정')
+'''개발 일정은 장비 확보 후 8주를 기준으로 작성한 예시이며, 수업 일정과 부품 수급 상황에 따라 조정한다. 1–2주에는 차체의 주행·조향·승강 특성을 측정하고, 센서 장착과 수동 제어 및 비상정지 기능을 점검한다. ROS 2에서 LiDAR 스캔, 주행 오도메트리, 센서 좌표 변환을 연동한다. 3–4주에는 수동 주행으로 2D SLAM 지도를 작성하고, 실제 배치와 지도의 일치 여부 및 로봇 위치 추정을 확인한다. 팔레트 인식과 좌표 보정 및 포크 높이 제어도 수행하며, A 조건에서 포크 삽입을 반복 시험한다. 포켓 가림 시 정지 기능도 이 단계에서 확인한다. 5–6주에는 SLAM 지도와 Nav2의 주행 기능을 연동하는 방안을 검토하고, B의 곡선 접근, C의 후진 접근, D의 장애물 회피를 시험한다. 7–8주에는 적재 상태의 이송과 하역을 연결하고, 전체 작업의 반복 시험 및 시간 측정을 수행한다. 역할은 기구·전장, 인식·보정, 경로·제어로 분담하되, 단계별 점검 항목과 기록 양식은 공통으로 사용한다.''',
+[(BRIEF, '과제 요구의 단계별 분해; 주차와 역할은 개발 제안'), ('https://docs.nav2.org/rolling/configuration_and_development/first_time_robot_setup_guide/sensors/mapping_localization/', 'ROS 2의 2D SLAM, 오도메트리·좌표 변환 및 Nav2 연계 근거; 패키지는 검토 대상')], '추진 일정(안) · 장비 확보 및 수업 일정에 따라 조정')
 
 add('예상 주행 파이프라인', '11  예상 주행 파이프라인', 45, '''
-<h2 class="headline">센서 입력부터 차량 구동까지의 주행 흐름</h2>
+<h2 class="headline">ROS 2 기반 주행 및 차량 제어</h2>
 <div class="driving-diagram grow" aria-label="주행 파이프라인 설계안과 센서 피드백 및 작업 상태 전환">
  <div class="driving-context"><span class="label">주행 제어 설계(안)</span><span class="small muted">목표: 팔레트 전면 정렬 위치 → 적재 후 하역 위치</span></div>
  <div class="driving-flow">
   <article><span class="label">01 · 관측</span><h3>센서 입력</h3><p>RGB-D: 포켓 관측<br>LiDAR: 주변 거리<br>엔코더·조향각</p></article>
-  <article><span class="label">02 · 인식</span><h3>상태 추정</h3><p>현재 위치·방향<br>주변 장애물 지도<br>포켓 상대 위치</p></article>
+  <article><span class="label">02 · 인식</span><h3>SLAM·상태 추정</h3><p>SLAM 지도·자기 위치<br>주변 장애물 정보<br>포켓 상대 위치</p></article>
   <article><span class="label">03 · 계획</span><h3>경로 생성</h3><p>팔레트 전면 접근<br>회전반경·후진 반영<br>Hybrid A* 검토</p></article>
-  <article><span class="label">04 · 제어</span><h3>경로 추종</h3><p>위치·방향 오차 보정<br>목표 속도·조향각<br>상위 컴퓨터 → MCU</p></article>
+  <article><span class="label">04 · 제어</span><h3>경로 추종</h3><p>위치·방향 오차 보정<br>목표 속도·조향각<br>ROS 2 → MCU</p></article>
   <article><span class="label">05 · 실행</span><h3>차량 구동</h3><p>MCU 주행·조향 제어<br>엔코더·조향각 측정<br>실제 구동 상태 회신</p></article>
  </div>
  <div class="driving-feedback"><span aria-hidden="true">←</span> 위치·조향 피드백으로 상태 갱신 · 경로 차단 시 정지 후 재계획</div>
@@ -189,8 +189,8 @@ add('예상 주행 파이프라인', '11  예상 주행 파이프라인', 45, ''
 </div>
 <div class="takeaway driving-stop">정지 우선: 충돌 위험·위치 추정 상실·삽입 중 포켓 추적 상실·통신 두절</div>
 ''',
-'''예상 주행 파이프라인은 센서 입력부터 차량 구동까지 다섯 단계로 구성한다. RGB-D로 포켓을 관측하고 LiDAR와 엔코더·조향각으로 위치와 장애물 지도를 갱신한다. 팔레트 전면까지 회전반경과 후진 가능 여부를 반영해 경로를 생성하며, Hybrid A*는 검토 후보이다. 상위 컴퓨터가 목표 속도·조향각을 계산하고 MCU가 구동하며 측정값을 되돌려 준다. 경로가 막히면 정지 후 재계획한다. 정렬·높이·추적 상태를 확인한 뒤 삽입하고, 삽입 깊이 확인 후 승강한다. 적재 후에는 팔레트를 포함한 외곽으로 충돌을 검사하며 하역 위치로 이동한다. 충돌 위험, 위치·포켓 추적 상실, 통신 두절 시 정지하고 원인 해소 후 재개한다. 차체 선정과 시험을 거쳐 구체화할 설계안이다.''',
-[(BRIEF, '과제 원문 6·7쪽의 작업 흐름; 피드백·상태 전환·정지 조건은 개발 제안'),(NAV2, '계획기·제어기의 역할 분리 및 차체 특성을 고려한 알고리즘 선택 참고')], '주행 파이프라인 설계(안) · 차체 선정 및 시험 후 구체화')
+'''주행 파이프라인은 ROS 2의 센서 처리, SLAM, 경로 생성 및 경로 추종 노드와 MCU 구동 제어로 구성한다. LiDAR 스캔과 주행 오도메트리로 SLAM 지도를 작성하고 지게차의 위치를 추정한다. RGB-D로 포켓의 상대 위치를 구하고 최근 LiDAR 측정값으로 주변 장애물을 확인한다. 팔레트 전면까지 회전반경과 후진 가능 여부를 반영해 경로를 생성하며, Hybrid A*는 검토 후보이다. 상위 컴퓨터가 목표 속도·조향각을 계산하고 MCU가 구동하며 측정값을 되돌려 준다. 경로가 막히면 정지 후 재계획한다. 정렬·높이·추적 상태를 확인한 뒤 삽입하고, 삽입 깊이 확인 후 승강한다. 적재 후에는 팔레트를 포함한 외곽으로 충돌을 검사하며 하역 위치로 이동한다. 충돌 위험, 위치·포켓 추적 상실, 통신 두절 시 정지하고 원인 해소 후 재개한다. 차체 선정과 시험을 거쳐 구체화할 설계안이다.''',
+[(BRIEF, '과제 원문 6·7쪽의 작업 흐름; 피드백·상태 전환·정지 조건은 개발 제안'),(NAV2, '계획기·제어기의 역할 분리 및 차체 특성을 고려한 알고리즘 선택 참고'), ('https://docs.nav2.org/rolling/configuration_and_development/first_time_robot_setup_guide/sensors/mapping_localization/', 'ROS 2 SLAM과 주행 연계 구성 참고')], '주행 파이프라인 설계(안) · 차체 선정 및 시험 후 구체화')
 
 add('향후 추진 계획', '12  향후 추진 계획', 20, '''
 <div class="label">우선 추진 과제</div>

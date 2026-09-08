@@ -18,6 +18,8 @@ Google Slides의 TXT와 11쪽 PDF를 다시 내려받아 확인했습니다. 센
 | 8·9쪽 | 정면 직진 A, 충분한 거리에서 곡선 진입 B | 7쪽 |
 | 10·11쪽 | 공간 확보를 위한 후진 C, 후방 장애물이 있는 D | 8쪽 |
 
+2026-09-09 보완: 원문 3쪽은 LiDAR의 용도로 ROS를 이용한 2D SLAM과 주변 장애물 인식을 제시한다. ROS 2 사용은 사용자가 확인한 프로젝트의 개발 방향으로 반영하였다. 발표자료 4·5·6·11·12쪽에 지도 작성, 자기 위치 추정, 경로 생성과의 연계 및 개발 일정을 명시하였다.
+
 ## 2. 이미지
 
 다음 자료는 과제 PDF의 이미지 객체 또는 그림 영역을 추출한 것입니다. 팀이 제작한 하드웨어나 실제 실험 결과로 표현하지 않았습니다. 사진 속 상표와 원래 설명은 유지했습니다.
@@ -40,7 +42,8 @@ Google Slides의 TXT와 11쪽 PDF를 다시 내려받아 확인했습니다. 센
 
 - [Orbbec Gemini 335Le 공식 제품 자료](https://www.orbbec.com/gemini-335le/): 스테레오 RGB-D 카메라 및 Ethernet/PoE 제품 구분을 확인했습니다. 이번 발표에서 수치 사양이나 근거리 측정 성능을 실측 결과처럼 사용하지 않았습니다.
 - [SLAMTEC RPLIDAR A2 공식 자료](https://www.slamtec.com/en/lidar/a2/): 주변의 2D 거리 스캔 역할을 확인했습니다. A2 세부 모델별 차이를 고려해 거리·주파수 수치를 고정하지 않았습니다.
-- [Nav2 공식 Navigation Plugins 문서](https://docs.nav2.org/rolling/configuration_and_development/first_time_robot_setup_guide/navigation_plugins/setup_navigation_plugins/): Smac Hybrid A*가 회전반경과 차체 형상을 고려하는 계획기라는 점을 확인했습니다. 이를 조향 차량에 대한 검토 후보로 제안했으며, ROS 버전·플랫폼·시뮬레이터·최종 알고리즘을 선정하거나 구현하지 않았습니다.
+- [Nav2 공식 Navigation Plugins 문서](https://docs.nav2.org/rolling/configuration_and_development/first_time_robot_setup_guide/navigation_plugins/setup_navigation_plugins/): Smac Hybrid A*가 회전반경과 차체 형상을 고려하는 계획기라는 점을 확인하였다. ROS 2 사용을 전제로 Nav2 연동과 Hybrid A* 적용을 검토한다. ROS 2 배포판, 차체, 시뮬레이터, 최종 경로 생성기·제어기는 미정이며 로봇 구현은 수행하지 않았다.
+- [Nav2 공식 Mapping and Localization 문서](https://docs.nav2.org/rolling/configuration_and_development/first_time_robot_setup_guide/sensors/mapping_localization/): 2D LiDAR 스캔, 주행 오도메트리 및 좌표 변환을 연동하여 SLAM 지도를 작성하고 Nav2에 제공하는 구성을 참고하였다. SLAM은 지도 작성과 자기 위치 추정을 담당하고, RGB-D 인식은 팔레트 포켓의 상대 위치·방향을 담당하도록 구분하였다. `slam_toolbox`는 검토 대상이며 최종 선정이나 실행 완료를 의미하지 않는다.
 
 ## 5. 발표를 위해 작성한 개발 제안
 
@@ -50,7 +53,7 @@ Google Slides의 TXT와 11쪽 PDF를 다시 내려받아 확인했습니다. 센
 - 엔코더·조향각·포크 높이·리미트 스위치 등 추가 피드백 검토
 - 규격 팔레트의 기하·깊이 검증부터 시작하는 인식 개발 순서
 - 준비 자세까지의 경로 계획과 마지막 저속 삽입 제어의 분리
-- 12쪽 예상 주행 파이프라인: 센서 입력 → 상태 추정 → 경로 생성 → 경로 추종 → MCU 구동, 실제 구동 상태 피드백과 경로 차단 시 정지·재계획. 2026-09-09에 기존 제안을 하나의 흐름으로 구성했으며, 계획기·제어기의 역할 분리는 위 Nav2 공식 문서를 다시 확인해 참고했다. 차체·제어기·허용 오차의 최종 선정이나 구현 완료를 뜻하지 않는다.
+- 12쪽 예상 주행 파이프라인: ROS 2 센서 입력 → SLAM·상태 추정 → 경로 생성 → 경로 추종 → MCU 구동, 실제 구동 상태 피드백과 경로 차단 시 정지·재계획. 2026-09-09에 기존 제안을 하나의 흐름으로 구성했으며, 계획기·제어기의 역할 분리는 위 Nav2 공식 문서를 다시 확인해 참고했다. 차체·제어기·허용 오차의 최종 선정이나 구현 완료를 뜻하지 않는다.
 - 포켓 관측 소실 시 정지, 재관측 후 재정렬, 삽입 깊이 확인 뒤 승강
 - A–D 각각 10회, 상황별 삽입·적재 성공 ≥ 9/10, 비의도 접촉 0회라는 초기 제안 목표
 - 장비 확보 뒤 8주라는 예시 일정과 역할 분담
