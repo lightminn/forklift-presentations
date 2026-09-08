@@ -1,0 +1,55 @@
+name: Deploy presentation
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: presentation-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Generate and verify committed presentation
+        run: |
+          python build_deck.py
+          git diff --exit-code -- index.html SCRIPT.md slide-metadata.json
+      - name: Test publication contracts
+        run: python -m unittest discover -s tests -v
+      - name: Check JavaScript syntax
+        run: |
+          node --check support.js
+          node --check deck-stage.js
+      - name: Build publication bundle
+        run: python tools/build_site.py --output _site
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

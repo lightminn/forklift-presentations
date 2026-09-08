@@ -1,0 +1,221 @@
+"""Build the self-contained UOS web deck and its Korean speaker script.
+
+Run from any directory with Python 3. No third-party build dependencies.
+The robot development proposals below are not implemented robot software.
+"""
+from html import escape
+from pathlib import Path
+import json
+
+ROOT = Path(__file__).resolve().parent
+BRIEF = 'https://docs.google.com/presentation/d/1BjoJLWmwd07ZJujZp4BPZrwBhx5tsnfmBpWdLMy2YrQ/edit'
+ORBBEC = 'https://www.orbbec.com/gemini-335le/'
+SLAMTEC = 'https://www.slamtec.com/en/lidar/a2/'
+NAV2 = 'https://docs.nav2.org/rolling/configuration_and_development/first_time_robot_setup_guide/navigation_plugins/setup_navigation_plugins/'
+STORE = 'https://smartstore.naver.com/skybaesong/products/11789657592'
+slides = []
+
+def add(label, title, seconds, body, notes, sources, foot='개발 제안 · 구현·실험 전'):
+    slides.append(dict(label=label, title=title, seconds=seconds, body=body, notes=notes, sources=sources, foot=foot))
+
+add('프로젝트 개발 방향', '자율 지게차\n프로젝트 개발 방향', 20, '',
+'''저희 프로젝트의 목표는 주변 장애물을 피하면서 팔레트를 싣고, 목적지까지 운반한 뒤 내려놓는 자율 지게차를 만드는 것입니다. 오늘은 어떤 플랫폼을 준비하고, 인식과 주행을 어떻게 연결하며, 무엇을 기준으로 성공을 판단할지 말씀드리겠습니다. 핵심은 포크 삽입을 먼저 안정화하고, 접근 가능한 상황을 단계적으로 넓혀 가는 것입니다.''',
+[(BRIEF, '과제 원문 1·6·7쪽')])
+
+add('과제 목표', '01  프로젝트 목표', 45, '''
+<h2 class="headline">팔레트 앞에 도착하는 것에서 끝나지 않습니다</h2>
+<div class="split grow" style="grid-template-columns:1.12fr 1fr">
+  <figure class="stack"><div class="hero-photo"><img class="photo" src="assets/riibotics-reference.jpeg" alt="과제에서 제시한 Riibotics 지게차의 포크와 마스트 중앙 RGB-D 카메라 위치"></div><figcaption class="small muted">과제의 Riibotics 참고 기체 · 우리 팀 제작 기체 아님</figcaption></figure>
+  <div class="stack" style="justify-content:center">
+    <p class="statement">장애물 회피 → 포켓 정렬<br>→ 삽입·적재 → 운반·하역</p>
+    <div class="rule body">삽입하는 동안에도 포켓 위치를 추적해<br>포크와 팔레트의 충돌을 막습니다.</div>
+    <p class="small muted">과제 목표: 충돌 없는 경로 중 가장 빠른 작업 수행</p>
+  </div>
+</div>
+<div class="takeaway">개발 순서: 충돌 없는 반복 성공을 확보한 뒤, 작업 시간을 줄입니다.</div>
+''',
+'''과제는 단순한 자율주행이 아닙니다. 팔레트 앞까지 이동하더라도 포크의 위치나 방향이 조금 어긋나면 삽입에 실패할 수 있습니다. 왼쪽 그림은 과제에서 제공한 산업용 지게차의 참고 배치입니다. 카메라는 포크 위에서 전방을 바라보며 팔레트 포켓을 관찰합니다. 저희가 구현할 작업은 장애물 회피, 정렬, 삽입과 적재, 운반과 하역까지 이어지는 하나의 사이클입니다. 과제의 최종 목표는 가장 빠른 충돌 없는 경로지만, 먼저 충돌 없이 반복해서 성공하는 기준 동작을 만들고, 같은 조건에서 시간을 줄이는 순서로 접근하겠습니다.''',
+[(BRIEF, '과제 원문 4·6·7쪽, Riibotics 그림')], '과제 원문 4·6·7쪽 · 사진은 참고 기체')
+
+add('플랫폼 개조', '02  플랫폼과 하드웨어', 55, '''
+<h2 class="headline">개조 가능한 구동계와 피드백 센서부터 확보합니다</h2>
+<div class="split grow" style="grid-template-columns:1.05fr 1fr">
+ <div class="stack">
+  <div><div class="label">1차 검토 후보</div><p class="statement" style="margin-top:10px">판매 링크의<br>어린이용 전동 지게차</p></div>
+  <p class="body">차체·주행부·승강 기구를 활용하고,<br>자율 제어를 위한 전장과 센서를 추가합니다.</p>
+  <p class="small muted">구매·모델 확정 여부 미확인<br>제어가 어려우면 기존 모바일 로봇 + 포크로 전환</p>
+ </div>
+ <div>
+  <div class="line-item"><span class="label">01</span><div><strong>주행·조향을 직접 제어할 수 있는가</strong><p class="small">모터·드라이버 접근, 조향 방식, 최소 회전반경 확인</p></div></div>
+  <div class="line-item"><span class="label">02</span><div><strong>움직인 양과 포크 높이를 아는가</strong><p class="small">엔코더·조향각 피드백·승강 위치 센서 검토</p></div></div>
+  <div class="line-item"><span class="label">03</span><div><strong>전원과 정지 기능을 분리할 수 있는가</strong><p class="small">컴퓨팅 전원, 모터 전원, 비상정지·리미트 스위치</p></div></div>
+ </div>
+</div>
+<div class="takeaway">구조 제안: 상위 컴퓨터는 인식·계획, MCU는 구동·승강·정지 담당</div>
+''',
+'''폴더에는 어린이용 전동 지게차 판매 링크가 있습니다. 아직 이 모델을 구매하거나 확정했다는 정보는 없어서, 발표에서는 개조 후보로 두었습니다. 판매 페이지의 상세 사양도 확인하지 못했으므로 가격, 적재량, 조향 구조를 확정값으로 쓰지 않았습니다. 먼저 실제 차체에서 주행 모터와 조향 장치에 제어 신호를 넣을 수 있는지 확인하겠습니다. 다음은 피드백입니다. 명령만 내보내서는 이동량과 조향각을 알 수 없기 때문에 엔코더나 각도 센서가 필요합니다. 포크 승강도 위치와 상하단 제한을 확인해야 합니다. 상위 컴퓨터가 인식과 계획을 맡고 MCU가 모터와 승강, 통신 단절 시 정지를 맡는 구조를 제안합니다. 컴퓨터 모델은 센서 연결과 처리 속도를 확인한 뒤 정하겠습니다.''',
+[(BRIEF, '과제 원문 5쪽, 플랫폼 대안'),(STORE, '로컬 forklift_store_link.txt의 후보 링크; 상세 사양 미확인')])
+
+add('전체 시스템', '03  시스템 구성', 50, '''
+<h2 class="headline">과제의 다섯 단계를 그대로 개발 모듈로 나눕니다</h2>
+<div class="pipeline grow" style="padding-top:18px">
+ <div class="pipeline-step"><div class="number">01</div><h3>팔레트 인식</h3><p>RGB-D 영상<br>팔레트·포켓 검출</p></div>
+ <div class="pipeline-step"><div class="number">02</div><h3>로봇 기준 위치</h3><p>포켓의 위치·방향<br>좌표계 변환</p></div>
+ <div class="pipeline-step"><div class="number">03</div><h3>충돌 없는 경로</h3><p>LiDAR 장애물 지도<br>진입 자세까지 계획</p></div>
+ <div class="pipeline-step"><div class="number">04</div><h3>삽입·적재</h3><p>경로 추종<br>포켓 추적·승강</p></div>
+ <div class="pipeline-step"><div class="number">05</div><h3>운반·하역</h3><p>목적지 주행<br>내려놓기·후퇴</p></div>
+</div>
+<div class="io-band">
+ <div><strong>모듈 사이에 전달할 정보</strong><p class="small">위치·방향 + 신뢰도 + 측정 시각<br>경로 + 속도 + 진행 상태</p></div>
+ <div><strong>공통으로 기록할 정보</strong><p class="small">센서 영상·거리, 제어 명령, 상태 전환<br>접촉 여부와 작업 소요 시간</p></div>
+</div>
+''',
+'''소프트웨어는 과제에서 제시한 다섯 단계와 같은 경계로 나누겠습니다. 먼저 RGB-D 영상으로 팔레트와 포켓을 찾습니다. 그 결과를 로봇 기준 위치와 방향으로 변환한 다음, LiDAR의 장애물 정보를 이용해 진입 경로를 만듭니다. 네 번째 모듈은 경로를 따라가면서 포켓을 계속 추적하고, 삽입 뒤에 승강을 수행합니다. 마지막으로 목적지까지 운반하고 내려놓습니다. 중요한 것은 각 모듈이 단순히 좌표만 주고받지 않는 것입니다. 측정 시각과 신뢰도를 함께 전달해 오래되거나 불확실한 결과를 구분하고, 같은 시간 기준으로 로그를 남겨 인식·계획·제어 중 어느 단계에서 실패했는지 확인하겠습니다.''',
+[(BRIEF, '과제 원문 7쪽의 모듈 순서; 인터페이스는 개발 제안')], '과제 원문 7쪽의 순서 유지 · 인터페이스는 제안')
+
+add('센서와 팔레트 인식', '04  인식과 좌표 변환', 60, '''
+<h2 class="headline">카메라는 포켓을, LiDAR는 주변 공간을 봅니다</h2>
+<div class="split grow" style="grid-template-columns:.95fr 1.05fr">
+ <div class="stack" style="gap:10px">
+  <div class="sensor-row"><img src="assets/gemini-335le.jpeg" alt="과제에서 지정한 Orbbec Gemini 335Le RGB-D 카메라"><div><strong>Gemini 335Le · RGB-D</strong><p class="small muted">포켓 후보와 깊이 → 상대 위치·방향</p></div></div>
+  <div class="sensor-row"><img src="assets/rplidar-a2.jpeg" alt="과제에서 제시한 Slamtec RPLIDAR A2"><div><strong>RPLIDAR A2 · 2D LiDAR</strong><p class="small muted">자기 위치 추정과 주변 장애물 인지</p></div></div>
+  <p class="small muted">과제 제시 센서 · 실제 확보·장착 여부는 미확인</p>
+ </div>
+ <div class="stack">
+  <div class="label">인식 개발 순서 제안</div>
+  <p class="body">① 규격 팔레트의 전면과 포켓 후보 검출<br>② 깊이·두 포켓 간격으로 잘못된 후보 제거<br>③ 좌우 포켓 중심과 진입 방향을 추정</p>
+  <div class="transform"><b class="blue">카메라 좌표 → 로봇 기준 좌표</b><br><span class="small">카메라–차체 외부 보정 + 포크 높이 반영<br>마스트와 함께 움직이면 변환도 갱신</span></div>
+ </div>
+</div>
+<div class="takeaway">물체 검출의 출력은 ‘팔레트 있음’이 아니라 ‘삽입 가능한 포켓 자세’입니다.</div>
+''',
+'''두 센서는 역할이 다릅니다. 과제에서 제시한 Gemini 335Le는 RGB 영상과 깊이를 이용해 팔레트 포켓의 상대 위치를 찾는 용도입니다. RPLIDAR A2는 같은 높이의 평면을 스캔하므로 주변 장애물과 자기 위치 추정에 활용합니다. 처음부터 복잡한 학습 모델에만 의존하기보다, 규격을 정한 팔레트로 시작해 전면과 구멍 후보를 찾고, 깊이와 좌우 간격이 실제 구조와 맞는지 검증하는 기준선을 만들겠습니다. 영상 좌표는 곧바로 주행 명령이 될 수 없으므로 로봇 기준 좌표로 바꿉니다. 특히 카메라가 승강부와 함께 움직이면 높이에 따라 변환이 달라집니다. 가까워질수록 포크가 화면을 가리거나 깊이가 불안정할 수 있어, 실제 삽입 거리에서 계속 관찰 가능한지도 먼저 확인하겠습니다.''',
+[(BRIEF, '과제 원문 2·3·4·7쪽, 센서 이미지'),(ORBBEC, 'RGB-D 제품 설명'),(SLAMTEC, '2D 거리 스캔 설명')])
+
+add('경로 계획', '05  접근 경로 계획', 60, '''
+<h2 class="headline">회전반경과 포크 길이가 허용하는 경로를 찾습니다</h2>
+<div class="split grow">
+ <div class="stack">
+  <div class="label">경로의 종점</div>
+  <p class="statement">팔레트 전면의<br>‘삽입 준비 위치·방향’</p>
+  <p class="body">마지막에는 포크와 포켓이 정렬된<br>저속 직선 삽입 구간을 확보합니다.</p>
+  <div class="rule"><div class="label">알고리즘 후보</div><p class="small" style="margin-top:10px">조향 차량이면 Hybrid A* 계열 검토<br>실측한 조향 모델·후진 가능 여부를 먼저 반영</p></div>
+ </div>
+ <div>
+  <div class="line-item"><span class="label">01</span><div><strong>차체뿐 아니라 포크까지 충돌 검사</strong><p class="small">적재 후에는 팔레트를 포함한 외곽으로 갱신</p></div></div>
+  <div class="line-item"><span class="label">02</span><div><strong>전진·후진·방향 전환을 함께 비교</strong><p class="small">제자리 회전 가능 여부는 플랫폼 실측으로 판단</p></div></div>
+  <div class="line-item"><span class="label">03</span><div><strong>거리보다 전체 작업 시간으로 평가</strong><p class="small">주행 + 방향 전환 + 정렬 + 삽입 시간</p></div></div>
+ </div>
+</div>
+<div class="takeaway">충돌 여유를 제약으로 두고 시간 단축을 비교합니다. 전역 최적성은 별도 검증입니다.</div>
+''',
+'''경로의 목표는 팔레트 중심점이 아니라, 포크가 들어갈 수 있도록 정렬된 준비 위치와 방향입니다. 그 위치까지는 장애물을 피해서 접근하고, 마지막에는 저속 직선 삽입 구간을 확보합니다. 여기서 일반적인 점 로봇의 최단거리 경로를 그대로 쓰면 실제 지게차가 회전하지 못하거나, 돌출된 포크가 장애물에 걸릴 수 있습니다. 그래서 조향 방식과 최소 회전반경을 실측하고, 차체와 포크 전체가 지나가는 영역을 검사하겠습니다. 조향 차량으로 확정되면 회전 제약과 전후진을 다룰 수 있는 Hybrid A* 계열을 후보로 검토합니다. 단, 이 알고리즘을 쓰는 것만으로 최소 시간이 보장되지는 않습니다. 주행 시간뿐 아니라 방향 전환과 정렬, 삽입까지 포함한 작업 시간을 같은 시험장에서 비교하겠습니다.''',
+[(BRIEF, '과제 원문 6·8–11쪽'),(NAV2, 'Hybrid A*의 회전반경·차체 형상 고려 근거; 채택은 미정')])
+
+add('검증 상황 A·B', '06  접근 시나리오 A·B', 45, '''
+<h2 class="headline">공간이 충분하면 멈추지 않고 진입합니다</h2>
+<div class="split grow">
+ <figure class="case"><figcaption class="case-title"><span>A</span>정면에 정렬된 팔레트</figcaption><div class="case-figure"><img src="assets/case-a.png" alt="과제 A: 정면으로 정렬된 지게차가 팔레트로 바로 진입하는 전후 모습"></div><div class="case-note">직진 접근 → 저속 삽입<br><span class="muted">확인: 횡방향·방향 오차, 접촉 여부</span></div></figure>
+ <figure class="case"><figcaption class="case-title"><span>B</span>옆으로 치우쳤지만 거리 충분</figcaption><div class="case-figure"><img src="assets/case-b.png" alt="과제 B: 멀리서 곡선으로 접근하여 팔레트에 정렬하는 모습"></div><div class="case-note">곡선 접근 → 정렬 → 연속 진입<br><span class="muted">확인: 불필요한 정지 없는 삽입 성공</span></div></figure>
+</div>
+''',
+'''과제의 네 가지 접근 상황을 그대로 시험 항목으로 쓰겠습니다. A는 팔레트가 정면에 있고 방향도 맞는 가장 단순한 경우입니다. 이 상황에서 먼저 인식, 좌표 변환, 삽입 제어를 연결해 기준 동작을 만듭니다. B는 팔레트가 옆으로 치우쳤지만 거리가 충분한 경우입니다. 멀리서 곡선으로 접근해 방향을 맞추고, 불필요하게 멈추지 않은 채 저속 삽입으로 이어져야 합니다. 두 그림은 결과 영상이 아니라 과제에서 제시한 기대 동작입니다. A의 성공을 확인한 뒤 시작 위치를 옆으로 바꾸어 B를 시험하면, 실패 원인이 삽입 제어인지 접근 경로인지 구분하기 쉬워집니다.''',
+[(BRIEF, '과제 원문 8·9쪽의 그림 영역 추출')], '과제 원문 8·9쪽 · 그림은 요구 동작, 실험 결과 아님')
+
+add('검증 상황 C·D', '07  접근 시나리오 C·D', 60, '''
+<h2 class="headline">가까우면 후퇴하고, 후퇴가 막히면 공간을 다시 찾습니다</h2>
+<div class="split grow" style="grid-template-columns:300px 1fr;gap:32px">
+ <figure class="case"><figcaption class="case-title"><span>C</span>진입 거리가 부족</figcaption><div class="case-figure"><img src="assets/case-c.png" alt="과제 C: 너무 가까운 지게차가 후진해 공간을 확보한 뒤 재진입"></div><div class="case-note">후진 → 공간 확보 → 재진입</div></figure>
+ <figure class="case"><figcaption class="case-title"><span>D</span>가까운 팔레트 + 뒤쪽 장애물</figcaption><div class="case-figure"><img src="assets/case-d.png" alt="과제 D: 뒤쪽 장애물이 있을 때 위치를 바꾸거나 가능한 만큼만 후퇴하여 정렬하는 두 대안"></div><div class="case-note">공간을 찾아 위치 변경 / 허용 거리만 후퇴<br><span class="muted">조향 차량은 전후진 회전으로 재배치 · 무조건 제자리 회전 금지</span></div></figure>
+</div>
+''',
+'''C는 팔레트에 너무 가까워 바로 정렬할 수 없는 경우입니다. 무리하게 꺾어서 들어가는 대신, 먼저 뒤로 이동해 곡선을 만들 공간을 확보하고 다시 접근합니다. D에서는 그 후퇴 공간에도 장애물이 있습니다. 과제는 위치를 바꾼 뒤 다시 들어가거나, 뒤로 갈 수 있는 만큼만 이동해 정렬하는 두 대안을 제시합니다. 이 그림에 회전하는 모습이 있다고 해서 실제 플랫폼이 제자리 회전을 할 수 있다고 가정하면 안 됩니다. 조향 차량이라면 전진과 후진을 조합한 회전으로 위치를 바꿔야 합니다. 또 차체 중심이 장애물을 피하더라도 포크나 후미가 닿을 수 있으므로 전체 형상을 검사합니다. 허용되는 공간에서 경로를 찾지 못한 경우에는 안전하게 정지하고, 이를 성공적인 삽입과 구분해 기록하겠습니다.''',
+[(BRIEF, '과제 원문 10·11쪽의 그림 영역 추출')], '과제 원문 10·11쪽 · 회전 동작은 실제 구동계 제약 반영')
+
+add('삽입 제어와 복구', '08  포켓 추적과 삽입 제어', 70, '''
+<h2 class="headline">삽입 중에도 오차를 줄이고, 관측이 끊기면 멈춥니다</h2>
+<div class="phase-flow" aria-label="제어 상태 전환"><b>경로 추종</b><span class="arrow">→</span><b>저속 정렬</b><span class="arrow">→</span><b>포켓 추적·삽입</b><span class="arrow">→</span><b>삽입 완료 확인</b><span class="arrow">→</span><b>승강</b></div>
+<div class="split grow" style="padding-top:8px">
+ <div class="guardrail"><h3>삽입 허용 조건</h3><p class="body">좌우·방향·높이 오차가 허용 범위 안<br>포켓 위치가 최신이며 추적 신뢰도 충분<br>포크 끝까지 충돌 여유 확보</p><p class="small muted" style="margin-top:20px">허용 오차는 포켓–포크 간극과<br>센서·제어 오차를 실측해 결정</p></div>
+ <div class="guardrail"><h3>중단·복구 조건</h3><p class="body">포켓 가림·추적 소실 → 즉시 정지<br>위치 재관측 → 재정렬 또는 재계획<br>삽입 깊이 확인 후에만 적재 허용</p><p class="small muted" style="margin-top:20px">승강 중 주행 제한 · 상하단 리미트<br>통신 단절 시 MCU에서 구동 정지</p></div>
+</div>
+<div class="takeaway">팔레트 전체를 장애물 지도에서 지우지 않고, 포켓의 진입 가능 공간만 다룹니다.</div>
+''',
+'''삽입 구간은 일반 주행과 별도의 제어 상태로 다루겠습니다. 경로를 따라온 뒤 속도를 낮추고, 좌우 위치와 방향, 포크 높이가 허용 범위인지 확인합니다. 허용 오차를 지금 임의로 몇 밀리미터라고 정하지는 않겠습니다. 실제 포켓과 포크 사이의 간극에서 센서 오차와 제어 오차, 필요한 여유를 제외해 결정해야 합니다. 삽입 중에도 포켓 관측을 갱신하면서 작은 오차를 보정합니다. 포크가 시야를 가리거나 인식이 끊기면 마지막 좌표만 믿고 계속 전진하지 않고 멈춥니다. 다시 관측하고 정렬할 수 있을 때 진행하며, 후퇴가 필요하면 뒤쪽 공간도 확인합니다. 삽입 깊이를 확인하기 전에는 포크를 들어 올리지 않습니다. 지도에서 팔레트 전체를 지워서 접근을 허용하면 기둥과 충돌할 수 있으므로, 포켓의 실제 진입 공간을 별도로 다루겠습니다. 적재 후 이동할 때는 팔레트 외곽까지 포함해야 합니다.''',
+[(BRIEF, '과제 원문 6·7쪽의 지속 추적 요구; 상태 전환·정지 조건은 개발 제안')])
+
+add('정량 검증', '09  평가 기준', 60, '''
+<h2 class="headline">네 상황의 반복 성공과 전체 작업 시간을 함께 봅니다</h2>
+<div class="split" style="grid-template-columns:repeat(3,1fr);gap:28px">
+ <div class="metric"><strong>4상황 × 10회</strong><p>상황마다 10회 반복<br><span class="small muted">1차 시험 규모 제안</span></p></div>
+ <div class="metric"><strong>상황별 ≥ 9/10</strong><p>삽입·적재 성공 목표<br><span class="small muted">실측 결과가 아닌 제안 목표</span></p></div>
+ <div class="metric"><strong>충돌 0회</strong><p>포크·차체의 비의도 접촉<br><span class="small muted">안전 정지는 삽입 성공과 별도 집계</span></p></div>
+</div>
+<table class="comparison grow" style="margin-top:4px"><thead><tr><th>측정 항목</th><th>기록 방법</th><th>판단할 내용</th></tr></thead><tbody>
+ <tr><td>삽입 오차·접촉</td><td>좌우·방향·높이 오차 + 외부 영상</td><td>간극 안에서 삽입했는가</td></tr>
+ <tr><td>실패·복구</td><td>추적 소실, 정지, 재시도 로그</td><td>멈출 때와 다시 갈 때가 적절한가</td></tr>
+ <tr><td>전체 사이클 시간</td><td>인식 시작 → 목적지 하역·후퇴 완료</td><td>같은 조건·성공률에서 더 빨라졌는가</td></tr>
+</tbody></table>
+''',
+'''평가는 성공 영상 한 번으로 끝내지 않겠습니다. 첫 시험안은 A부터 D까지 각각 열 번씩 반복하는 것입니다. 시작 위치와 팔레트, 장애물 배치를 기록하고, 각 상황에서 열 번 중 아홉 번 이상 삽입과 적재에 성공하는 것을 1차 목표로 제안합니다. 이것은 현재 성능이 아니라 앞으로 확인할 목표입니다. 포크와 차체의 비의도 접촉은 한 번이라도 발생하면 원인을 수정하고 다시 시험합니다. 위험을 감지해 멈춘 경우는 안전 동작으로 기록하되 삽입 성공으로 세지 않습니다. 또한 센서와 명령 로그만으로 접촉이 없었다고 판단하지 않고 외부 영상으로 확인하겠습니다. 삽입 검증을 통과하면 목적지 하역과 후퇴까지 전체 사이클을 반복합니다. 시간 단축은 같은 배치와 성공률 조건에서 기준 경로와 개선 경로를 비교하고, 실패율이나 접촉이 늘어난 결과는 개선으로 보지 않겠습니다.''',
+[(BRIEF, '과제 원문 6–11쪽의 작업·상황 요구; 반복 횟수·성공률은 제안')], '횟수·성공률은 초기 제안 목표 · 측정 성능 아님')
+
+add('개발 로드맵', '10  단계별 개발 계획', 55, '''
+<h2 class="headline">직선 삽입부터 검증하고, 접근 범위를 넓혀 갑니다</h2>
+<div class="label">착수 후 8주 예시 · 장비 확보와 실제 수업 일정에 맞춰 조정</div>
+<div class="roadmap grow">
+ <article><span class="label">1–2주</span><h3>플랫폼 확인</h3><p>구동계·승강 실측<br>센서 장착·전원<br>수동 제어·비상정지</p><div class="exit"><b>완료 조건</b><br>반복 구동·정지<br>위치 피드백 확보</div></article>
+ <article><span class="label">3–4주</span><h3>정면 삽입</h3><p>팔레트·포켓 인식<br>좌표 보정·높이 제어<br>A 상황 폐루프 삽입</p><div class="exit"><b>완료 조건</b><br>A 반복 삽입<br>가림 시 정지 확인</div></article>
+ <article><span class="label">5–6주</span><h3>접근 확장</h3><p>장애물 지도 연결<br>곡선·후진·재배치<br>B·C·D 경로 추종</p><div class="exit"><b>완료 조건</b><br>네 상황 평가<br>실패 원인 분류</div></article>
+ <article><span class="label">7–8주</span><h3>운반·통합</h3><p>적재 후 경로 갱신<br>목적지 이동·하역<br>반복 시험·시간 개선</p><div class="exit"><b>완료 조건</b><br>전체 사이클 로그<br>조건별 성능 비교</div></article>
+</div>
+''',
+'''개발 순서는 장비와 제어 가능성을 확인하는 단계에서 출발합니다. 첫 두 주에는 플랫폼의 조향과 승강을 실측하고, 수동 제어와 비상정지, 피드백 센서를 확보합니다. 다음 두 주에는 다른 상황을 섞지 않고 정면의 팔레트에 반복 삽입하는 A를 완성하겠습니다. 이때 가림이 생기면 멈추는 동작도 함께 확인합니다. 그다음에는 장애물 지도를 연결해 B의 곡선 접근, C의 후진, D의 재배치로 확장합니다. 마지막 단계에서 적재한 상태로 목적지에 이동하고, 하역과 후퇴까지 연결해 전체 시간을 비교합니다. 여기에 제시한 여덟 주는 장비 확보 후의 예시이며 확정된 마감 일정은 아닙니다. 기구·전장, 인식·보정, 경로·제어는 나누어 진행하되, 매 단계의 완료 조건과 로그 형식을 공유하겠습니다.''',
+[(BRIEF, '과제 요구의 단계별 분해; 주차와 역할은 개발 제안')], '8주는 일정 예시 · 인원·마감·장비 확보 후 확정')
+
+add('첫 개발 목표', '11  개발 방향 정리', 20, '''
+<div class="label">첫 번째 실물 검증 목표</div>
+<h2 class="closing">정면의 팔레트를 계속 보면서,<br><span class="blue">충돌 없이 반복 삽입합니다.</span></h2>
+<div class="closing-steps grow" style="padding-top:28px">
+ <div><span class="label">먼저 결정</span><p style="margin-top:12px">플랫폼·컴퓨팅 장치<br>팔레트 규격·센서 배치</p></div>
+ <div><span class="label">먼저 측정</span><p style="margin-top:12px">회전반경·조향 응답<br>포크 간극·근거리 가시성</p></div>
+ <div><span class="label">그다음 확장</span><p style="margin-top:12px">A → B·C·D<br>삽입 → 운반·하역</p></div>
+</div>
+<div class="takeaway">정밀 삽입의 반복 성공을 출발점으로, 충돌 없는 빠른 팔레트 핸들링을 구현하겠습니다.</div>
+''',
+'''첫 실물 목표는 명확합니다. 정면의 팔레트를 계속 관찰하면서 충돌 없이 반복 삽입하는 것입니다. 이를 위해 플랫폼과 컴퓨팅 장치, 팔레트 규격을 결정하고 회전반경과 간극, 근거리 시야부터 측정하겠습니다. 이 기준 동작을 출발점으로 네 가지 접근 상황과 운반·하역까지 확장하겠습니다.''',
+[(BRIEF, '과제 요구에 대한 개발 방향 제안')])
+
+def build():
+    assert len(slides) == 12
+    assert sum(s['seconds'] for s in slides) == 600
+    sections = []
+    script = ['# 자율 지게차 프로젝트 개발 방향 — 발표 원고', '', '12장 · 시간 배분 합계 10분. 실제 발화 시간은 리허설로 조정합니다.', '', '기준일: 2026-09-08. 요구사항, 개발 제안, 미확인 사항을 구분했습니다.', '']
+    elapsed = 0
+    for i, s in enumerate(slides, 1):
+        source_lines = '\n'.join(f'{label}: {url}' for url, label in s['sources'])
+        notes = f"권장 {s['seconds']}초\n\n{s['notes']}\n\n[Sources]\n{source_lines}\n[/Sources]"
+        if i == 1:
+            component = f'<x-import component-from-global-scope="UOSSlideDS.TitleSlide" hint-size="100%,100%" title="{escape(s["title"], quote=True)}" subtitle="임베디드구동 및 실습 · 팔레트 핸들링 경로 생성 및 제어"></x-import>'
+        else:
+            footer = f'<div class="foot"><a href="{BRIEF}" target="_blank" rel="noopener">{escape(s["foot"])}</a><span>{i:02d} / 12</span></div>'
+            component = f'<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="{escape(s["title"], quote=True)}"><div class="slide-body">{s["body"]}{footer}</div></x-import>'
+        sections.append(f'<section data-label="{escape(s["label"], quote=True)}" data-screen-label="{i:02d}" data-duration="{s["seconds"]}" data-speaker-notes="{escape(notes, quote=True)}" style="background:#fff">\n{component}\n</section>')
+        end = elapsed+s['seconds']
+        script += [f'## {i}쪽 · {s["label"]} ({elapsed//60:02d}:{elapsed%60:02d}–{end//60:02d}:{end%60:02d}, {s["seconds"]}초)', '', s['notes'], '', '[Sources]', source_lines, '[/Sources]', '']
+        elapsed = end
+    html = '''<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>자율 지게차 프로젝트 개발 방향</title>
+<link rel="icon" href="data:,">
+<script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
+<body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>자율 지게차 프로젝트 개발 방향</title>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
+''' + '\n\n'.join(sections) + '\n</x-import></x-dc></body></html>\n'
+    (ROOT/'index.html').write_text(html, encoding='utf-8')
+    (ROOT/'SCRIPT.md').write_text('\n'.join(script), encoding='utf-8')
+    (ROOT/'slide-metadata.json').write_text(json.dumps([{k:v for k,v in s.items() if k!='body'} for s in slides], ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
+    print(f'Built {len(slides)} slides; timing {elapsed}s; Korean script {sum(len(s["notes"]) for s in slides)} characters.')
+
+if __name__ == '__main__':
+    build()
