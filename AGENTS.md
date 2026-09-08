@@ -33,6 +33,6 @@ Python 3.12 and Node are used by CI; Python has no third-party build dependencie
 
 Read `SOURCES.md` before changing technical claims. Distinguish assignment requirements, development proposals, candidate hardware, and measured results. Do not describe the reference forklift or acceptance-case figures as team-built hardware or experiment results. Keep the five assignment modules and all four A–D approach cases represented.
 
-The deck has 12 slides and a 600-second timing budget; update the publication test deliberately if that contract changes. Inspect rendered slides after content changes. Syntax checks and successful generation do not prove visual layout or robot performance. Preserve relative asset URLs so the deck works below the GitHub repository path.
+The deck has 13 slides and a 645-second timing budget; update the publication test deliberately if that contract changes. Inspect rendered slides after content changes. Syntax checks and successful generation do not prove visual layout or robot performance. Preserve relative asset URLs so the deck works below the GitHub repository path.
 
 Publication URL: https://lightminn.github.io/forklift-presentations/

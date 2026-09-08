@@ -38,8 +38,8 @@ class PublicationTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             parser = References()
             parser.feed((site / 'index.html').read_text())
-            self.assertEqual(len(parser.sections), 12)
-            self.assertEqual(sum(int(s['data-duration']) for s in parser.sections), 600)
+            self.assertEqual(len(parser.sections), 13)
+            self.assertEqual(sum(int(s['data-duration']) for s in parser.sections), 645)
             base = 'https://example.github.io/forklift-presentations/'
             references = [(base, url) for url in parser.urls]
             for css in site.rglob('*.css'):

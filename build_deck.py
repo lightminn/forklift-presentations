@@ -173,7 +173,26 @@ add('개발 추진 일정', '10  개발 추진 일정', 55, '''
 '''개발 일정은 장비 확보 후 8주를 기준으로 작성한 예시이며, 수업 일정과 부품 수급 상황에 따라 조정한다. 1–2주에는 차체의 주행·조향·승강 특성을 측정하고, 센서 장착과 수동 제어 및 비상정지 기능을 점검한다. 3–4주에는 팔레트 인식과 좌표 보정을 수행하고, A 조건에서 포크 삽입을 반복 시험한다. 포켓 가림 시 정지 기능도 이 단계에서 확인한다. 5–6주에는 장애물 지도를 적용하여 B의 곡선 접근, C의 후진 접근, D의 장애물 회피를 시험한다. 7–8주에는 적재 상태의 이송과 하역을 연결하고, 전체 작업의 반복 시험 및 시간 측정을 수행한다. 역할은 기구·전장, 인식·보정, 경로·제어로 분담하되, 단계별 점검 항목과 기록 양식은 공통으로 사용한다.''',
 [(BRIEF, '과제 요구의 단계별 분해; 주차와 역할은 개발 제안')], '추진 일정(안) · 장비 확보 및 수업 일정에 따라 조정')
 
-add('향후 추진 계획', '11  향후 추진 계획', 20, '''
+add('예상 주행 파이프라인', '11  예상 주행 파이프라인', 45, '''
+<h2 class="headline">센서 입력부터 차량 구동까지의 주행 흐름</h2>
+<div class="driving-diagram grow" aria-label="주행 파이프라인 설계안과 센서 피드백 및 작업 상태 전환">
+ <div class="driving-context"><span class="label">주행 제어 설계(안)</span><span class="small muted">목표: 팔레트 전면 정렬 위치 → 적재 후 하역 위치</span></div>
+ <div class="driving-flow">
+  <article><span class="label">01 · 관측</span><h3>센서 입력</h3><p>RGB-D: 포켓 관측<br>LiDAR: 주변 거리<br>엔코더·조향각</p></article>
+  <article><span class="label">02 · 인식</span><h3>상태 추정</h3><p>현재 위치·방향<br>주변 장애물 지도<br>포켓 상대 위치</p></article>
+  <article><span class="label">03 · 계획</span><h3>경로 생성</h3><p>팔레트 전면 접근<br>회전반경·후진 반영<br>Hybrid A* 검토</p></article>
+  <article><span class="label">04 · 제어</span><h3>경로 추종</h3><p>위치·방향 오차 보정<br>목표 속도·조향각<br>상위 컴퓨터 → MCU</p></article>
+  <article><span class="label">05 · 실행</span><h3>차량 구동</h3><p>MCU 주행·조향 제어<br>엔코더·조향각 측정<br>실제 구동 상태 회신</p></article>
+ </div>
+ <div class="driving-feedback"><span aria-hidden="true">←</span> 위치·조향 피드백으로 상태 갱신 · 경로 차단 시 정지 후 재계획</div>
+ <div class="driving-modes"><strong>작업 상태 전환</strong><div><p>접근 주행 → 저속 정렬 → 포켓 추적·삽입 → 승강 → 이송·하역</p><p class="small muted">정렬 허용 오차 충족 후 삽입 · 삽입 깊이 확인 후 승강 · 적재 후 충돌 검사 외곽 갱신</p></div></div>
+</div>
+<div class="takeaway driving-stop">정지 우선: 충돌 위험·위치 추정 상실·삽입 중 포켓 추적 상실·통신 두절</div>
+''',
+'''예상 주행 파이프라인은 센서 입력부터 차량 구동까지 다섯 단계로 구성한다. RGB-D로 포켓을 관측하고 LiDAR와 엔코더·조향각으로 위치와 장애물 지도를 갱신한다. 팔레트 전면까지 회전반경과 후진 가능 여부를 반영해 경로를 생성하며, Hybrid A*는 검토 후보이다. 상위 컴퓨터가 목표 속도·조향각을 계산하고 MCU가 구동하며 측정값을 되돌려 준다. 경로가 막히면 정지 후 재계획한다. 정렬·높이·추적 상태를 확인한 뒤 삽입하고, 삽입 깊이 확인 후 승강한다. 적재 후에는 팔레트를 포함한 외곽으로 충돌을 검사하며 하역 위치로 이동한다. 충돌 위험, 위치·포켓 추적 상실, 통신 두절 시 정지하고 원인 해소 후 재개한다. 차체 선정과 시험을 거쳐 구체화할 설계안이다.''',
+[(BRIEF, '과제 원문 6·7쪽의 작업 흐름; 피드백·상태 전환·정지 조건은 개발 제안'),(NAV2, '계획기·제어기의 역할 분리 및 차체 특성을 고려한 알고리즘 선택 참고')], '주행 파이프라인 설계(안) · 차체 선정 및 시험 후 구체화')
+
+add('향후 추진 계획', '12  향후 추진 계획', 20, '''
 <div class="label">우선 추진 과제</div>
 <h2 class="closing">정면 삽입 기능 구현<br><span class="blue">및 반복 시험</span></h2>
 <div class="closing-steps grow" style="padding-top:28px">
@@ -187,10 +206,10 @@ add('향후 추진 계획', '11  향후 추진 계획', 20, '''
 [(BRIEF, '과제 요구에 대한 개발 방향 제안')], '향후 추진 계획')
 
 def build():
-    assert len(slides) == 12
-    assert sum(s['seconds'] for s in slides) == 600
+    assert len(slides) == 13
+    assert sum(s['seconds'] for s in slides) == 645
     sections = []
-    script = ['# 자율 지게차 개발 계획 — 발표 원고', '', '12장 · 시간 배분 합계 10분. 쪽별 배정 시간은 발표 연습 후 조정한다.', '', '기준일: 2026-09-08. 장비 구성과 시험 목표는 개발계획(안)이며, 실제 성능은 제작 후 시험으로 확인한다.', '']
+    script = ['# 자율 지게차 개발 계획 — 발표 원고', '', '13장 · 시간 배분 합계 10분 45초. 쪽별 배정 시간은 발표 연습 후 조정한다.', '', '기준일: 2026-09-09. 장비 구성과 시험 목표는 개발계획(안)이며, 실제 성능은 제작 후 시험으로 확인한다.', '']
     elapsed = 0
     for i, s in enumerate(slides, 1):
         source_lines = '\n'.join(f'{label}: {url}' for url, label in s['sources'])
@@ -198,7 +217,7 @@ def build():
         if i == 1:
             component = f'<x-import component-from-global-scope="UOSSlideDS.TitleSlide" hint-size="100%,100%" title="{escape(s["title"], quote=True)}" subtitle="임베디드구동 및 실습 · 팔레트 핸들링 경로 생성 및 제어"></x-import>'
         else:
-            footer = f'<div class="foot"><a href="{BRIEF}" target="_blank" rel="noopener">{escape(s["foot"])}</a><span>{i:02d} / 12</span></div>'
+            footer = f'<div class="foot"><a href="{BRIEF}" target="_blank" rel="noopener">{escape(s["foot"])}</a><span>{i:02d} / {len(slides)}</span></div>'
             component = f'<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="{escape(s["title"], quote=True)}"><div class="slide-body">{s["body"]}{footer}</div></x-import>'
         sections.append(f'<section data-label="{escape(s["label"], quote=True)}" data-screen-label="{i:02d}" data-duration="{s["seconds"]}" data-speaker-notes="{escape(notes, quote=True)}" style="background:#fff">\n{component}\n</section>')
         end = elapsed+s['seconds']
