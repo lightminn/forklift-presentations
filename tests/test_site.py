@@ -36,12 +36,18 @@ class PublicationTests(unittest.TestCase):
             site = Path(temp) / 'site'
             result = self.run_builder(site)
             self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertTrue((site / 'week-02/index.html').is_file(), 'Week 2 needs a permanent URL')
             parser = References()
-            parser.feed((site / 'index.html').read_text())
+            parser.feed((site / 'week-02/index.html').read_text())
             self.assertEqual(len(parser.sections), 13)
             self.assertEqual(sum(int(s['data-duration']) for s in parser.sections), 645)
             base = 'https://example.github.io/forklift-presentations/'
-            references = [(base, url) for url in parser.urls]
+            references = []
+            for html in site.rglob('*.html'):
+                page = References()
+                page.feed(html.read_text())
+                page_url = urljoin(base, html.relative_to(site).as_posix())
+                references.extend((page_url, url) for url in page.urls)
             for css in site.rglob('*.css'):
                 css_url = urljoin(base, css.relative_to(site).as_posix())
                 references.extend((css_url, u) for u in re.findall(r'url\([\"\']?([^\)\"\']+)', css.read_text()))
@@ -51,11 +57,16 @@ class PublicationTests(unittest.TestCase):
                 resolved = urlsplit(urljoin(page, ref)).path
                 self.assertTrue(resolved.startswith('/forklift-presentations/'), resolved)
                 relative = unquote(resolved.removeprefix('/forklift-presentations/'))
-                self.assertTrue((site / relative).is_file(), ref)
+                target = site / relative
+                if target.is_dir():
+                    target /= 'index.html'
+                self.assertTrue(target.is_file(), ref)
             self.assertTrue((site / '.nojekyll').is_file())
             self.assertFalse((site / 'build_deck.py').exists())
             self.assertFalse((site / '.github').exists())
             self.assertFalse((site / 'tests').exists())
+            self.assertFalse((site / 'week-02/build_deck.py').exists())
+            self.assertFalse((site / 'week-02/week.json').exists())
 
     def test_nonempty_destination_is_preserved_and_rejected(self):
         with tempfile.TemporaryDirectory() as temp:

@@ -24,19 +24,19 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: '3.12'
-      - name: Generate and verify committed presentation
+      - name: Generate and verify committed weekly presentations
         run: |
           python build_deck.py
-          git diff --exit-code -- index.html SCRIPT.md slide-metadata.json
+          git diff --exit-code
+          git status --short
+          test -z "$(git status --porcelain)"
       - name: Test publication contracts
         run: python -m unittest discover -s tests -v
-      - name: Test approach animations
-        run: node tests/case_motion.test.cjs
+      - name: Test approach animations and navigation
+        run: node --test tests/*.test.cjs
       - name: Check JavaScript syntax
         run: |
-          node --check support.js
-          node --check deck-stage.js
-          node --check case-motion.js
+          find week-* -type d -name vendor -prune -o -type f -name '*.js' -print0 | xargs -0 -r -n1 node --check
       - name: Build publication bundle
         run: python tools/build_site.py --output _site
       - name: Configure Pages

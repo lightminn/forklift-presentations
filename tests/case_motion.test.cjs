@@ -2,11 +2,11 @@ const {test} = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const source = path.join(__dirname, '../case-motion.js');
+const source = path.join(__dirname, '../week-02/case-motion.js');
 const crypto = require('node:crypto');
 
 test('animations retain original forklift and pallet photography and both D alternatives', () => {
-  const html=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
+  const html=fs.readFileSync(path.join(__dirname,'../week-02/index.html'),'utf8');
   assert.ok(html.includes('assets/forklift-original.png'),'Use original forklift image');
   assert.ok(html.includes('assets/pallet-original.png'),'Use original pallet image');
   assert.ok(html.includes('data-motion-case="D1"'),'Keep rotation alternative');
@@ -16,7 +16,7 @@ test('animations retain original forklift and pallet photography and both D alte
   assert.ok(!html.includes('motion-chassis'),'Do not replace photographs with a drawn vehicle');
 });
 
-const reference=require('../assets/approach-source.json');
+const reference=require('../week-02/assets/approach-source.json');
 const {cases,sample}=require(source);
 const close=(a,b,tol=1e-7)=>Math.abs(a-b)<tol;
 const angleDelta=(a,b)=>((a-b+540)%360)-180;
@@ -26,7 +26,7 @@ test('image bytes are exactly the original Google Slides embedded assets',()=>{
     'forklift-original.png':'2c13a08c6ffaddbfb60661c7ccffba6f2c61b2904694356acc304725a36f165c',
     'pallet-original.png':'ae8bc34eb480536ba54137d8c964a99ff628981ae0b69f6f03e1e33040e2aa33'
   };
-  for(const [name,hash] of Object.entries(expected))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(__dirname,'../assets',name))).digest('hex'),hash,name);
+  for(const [name,hash] of Object.entries(expected))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(__dirname,'../week-02/assets',name))).digest('hex'),hash,name);
 });
 
 test('every source start, intermediate and insertion pose is retained',()=>{

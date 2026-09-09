@@ -7,6 +7,7 @@ if [[ ! "$port" =~ ^[0-9]+$ ]] || (( port < 1024 || port > 65535 )); then
   exit 2
 fi
 python_bin="${PYTHON:-python3}"
-echo "발표자료: http://127.0.0.1:${port}"
+echo "주차별 발표 목록: http://127.0.0.1:${port}/"
+echo "최근 발표자료: http://127.0.0.1:${port}/latest/"
 echo '종료: Ctrl+C'
 exec "$python_bin" -m http.server "$port" --bind 127.0.0.1 --directory "$deck_dir"
