@@ -44,10 +44,6 @@ h1,h2,h3,p,figure,ol { margin:0; }
 .case-title { font-size:28px; font-weight:700; line-height:1.3; }
 .case-title span { color:var(--uos-blue); margin-right:12px; }
 .motion-top { display:flex; align-items:center; justify-content:space-between; gap:20px; }
-.motion-controls { display:flex; gap:12px; flex-shrink:0; }
-.motion-controls button { font:500 20.5337px var(--uos-font); color:var(--uos-blue); background:white; border:1px solid #bbc8da; padding:8px 14px; cursor:pointer; border-radius:3px; }
-.motion-controls button:hover { background:#edf3fa; }
-.motion-controls button:focus-visible { outline:3px solid var(--uos-blue); outline-offset:3px; }
 .motion-pair { gap:32px; }
 .motion-case { gap:10px; }
 .motion-scene { width:100%; height:300px; display:block; overflow:visible; }
@@ -65,7 +61,6 @@ h1,h2,h3,p,figure,ol { margin:0; }
 .motion-caption { font-size:20.5337px; color:var(--uos-ink-muted); line-height:1.45; }
 .motion-track { height:3px; background:#e9edf2; }
 .motion-progress { height:100%; background:var(--uos-blue); transform:scaleX(0); transform-origin:left; }
-@media print { .motion-controls { visibility:hidden; } }
 .phase-flow { display:flex; align-items:center; gap:15px; background:var(--uos-surface); padding:20px 24px; font-size:24px; line-height:1.5; }
 .phase-flow b { color:var(--uos-blue); }
 .phase-flow .arrow { color:var(--uos-ink-muted); }

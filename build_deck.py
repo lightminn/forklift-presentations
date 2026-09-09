@@ -53,7 +53,7 @@ def motion_case(case, title, description, alternative=False):
 
 def motion_pair(title, figures, variants=False):
     pair_class = 'motion-pair motion-pair--variants' if variants else 'motion-pair'
-    return f'''<div class="motion-top"><h2 class="headline">{title}</h2><div class="motion-controls" role="group" aria-label="접근 시나리오 재생 제어"><button type="button" data-motion-toggle>일시정지</button><button type="button" data-motion-replay>다시 재생</button></div></div>
+    return f'''<div class="motion-top"><h2 class="headline">{title}</h2></div>
 <div class="split grow {pair_class}">{figures}</div>'''
 
 add('개발 계획', '자율 지게차\n개발 계획', 20, '''''',
@@ -179,20 +179,17 @@ add('포크 삽입 제어', '08  포크 삽입 제어', 70, '''
 [(BRIEF, '과제 원문 6·7쪽의 지속 추적 요구; 상태 전환·정지 조건은 개발 제안')], '삽입 제어 및 안전 기능 설계(안)')
 
 add('성능 평가 계획', '09  성능 평가 계획', 60, '''
-<h2 class="headline">시험 조건 및 평가 항목</h2>
-<div class="split" style="grid-template-columns:repeat(3,1fr);gap:28px">
- <div class="metric"><strong>총 40회</strong><p>A–D 조건별 10회 반복<br><span class="small muted">초기 시험계획(안)</span></p></div>
- <div class="metric"><strong>성공률 90% 이상</strong><p>조건별 삽입·적재 성공률<br><span class="small muted">목표치(안)</span></p></div>
- <div class="metric"><strong>접촉 0회</strong><p>포크·차체의 의도하지 않은 접촉<br><span class="small muted">안전 정지는 성공 횟수에서 제외</span></p></div>
-</div>
-<table class="comparison grow" style="margin-top:4px"><thead><tr><th>측정 항목</th><th>기록 방법</th><th>평가 기준</th></tr></thead><tbody>
- <tr><td>삽입 정확도</td><td>위치·방향·높이 오차 및 외부 영상</td><td>허용 오차 충족 및 접촉 여부</td></tr>
- <tr><td>정지 및 재개</td><td>추적 중단, 정지, 재시도 기록</td><td>정지·재개 시점의 적절성</td></tr>
- <tr><td>작업 소요 시간</td><td>인식 시작부터 하역 후 후퇴 완료까지</td><td>동일 조건·성공률에서 소요 시간 비교</td></tr>
+<h2 class="headline">주행 조건별 시험 및 평가 방법</h2>
+<p class="body"><strong class="blue">시험 조건</strong> · 정면 접근, 측면 접근, 근거리 접근, 후방 장애물 대응</p>
+<table class="comparison grow evaluation-table"><thead><tr><th>평가 항목</th><th>확인 및 기록 방법</th><th>판단 기준</th></tr></thead><tbody>
+ <tr><td>접근·삽입 수행</td><td>A–D 조건별 작업 완수·실패·안전 정지 기록</td><td>조건별 수행 결과 및 실패 원인 비교</td></tr>
+ <tr><td>정렬·삽입 오차</td><td>포크와 포켓의 위치·방향·높이 오차 측정</td><td>실제 포크·포켓 간격을 기준으로 허용 범위 설정</td></tr>
+ <tr><td>접촉 및 정지 동작</td><td>접촉 여부, 추적 중단 시 정지·재개 기록</td><td>삽입 중 접촉 방지 및 정지·재개의 적절성</td></tr>
+ <tr><td>전체 작업 시간</td><td>인식 시작부터 하역 후 후퇴 완료까지 측정</td><td>동일 배치·작업 완수 조건에서 소요 시간 비교</td></tr>
 </tbody></table>
 ''',
-'''초기 성능 평가는 네 가지 주행 조건에서 각각 10회씩, 총 40회 수행하는 것으로 계획한다. 조건별 삽입·적재 성공률의 목표는 90% 이상이며, 시험 횟수와 목표치는 개발 초기의 제안값이다. 시험마다 시작 위치와 팔레트·장애물 배치를 기록한다. 포크와 차체의 의도하지 않은 접촉은 0회를 목표로 하며, 접촉이 발생하면 원인을 수정한 후 다시 시험한다. 위험을 감지하여 정지한 경우는 삽입 성공과 구분하여 기록한다. 삽입 오차와 접촉 여부는 센서 기록 및 외부 촬영 영상으로 확인한다. 삽입 시험을 마친 후에는 이송, 하역, 후퇴까지 포함한 전체 작업을 평가한다. 작업 시간은 팔레트 인식 시작부터 하역 후 후퇴 완료까지 측정한다. 경로 개선 효과는 같은 배치와 성공률 조건에서 비교하며, 충돌이나 실패가 증가한 경우에는 개선으로 평가하지 않는다.''',
-[(BRIEF, '과제 원문 6–11쪽의 작업·상황 요구; 반복 횟수·성공률은 제안')], '시험 횟수 및 성능 목표는 초기 계획값')
+'''성능 평가는 과제에서 제시한 A부터 D까지의 접근 조건을 기준으로 수행한다. 시험마다 시작 위치와 팔레트 및 장애물 배치를 기록하고, 작업 완수와 실패 및 안전 정지를 구분한다. 포크와 포켓의 좌우 위치·방향·높이 오차는 센서 기록과 외부 촬영 영상으로 확인한다. 허용 범위는 실제 포크와 포켓 사이의 간격을 측정한 후 센서 오차와 제어 오차를 고려하여 정한다. 삽입 중 접촉 방지는 과제의 요구사항이며, 접촉이 발생하면 원인을 분석하고 수정한다. 포켓 추적이 중단되었을 때 정지하는지, 재관측 후 적절히 재개하는지도 확인한다. 삽입 시험 이후에는 적재·이송·하역까지 연결하여 전체 작업을 평가한다. 작업 시간은 팔레트 인식 시작부터 하역 후 후퇴 완료까지 측정하며, 같은 배치에서 작업을 완수한 경우를 비교한다. 반복 시험 횟수와 성능 목표는 예비시험 결과를 토대로 설정한다.''',
+[(BRIEF, '과제 원문 6–11쪽의 작업 요구 및 접근 조건; 평가 절차는 개발 제안')], '과제 요구에 따른 평가 방법')
 
 add('개발 추진 일정', '10  개발 추진 일정', 55, '''
 <h2 class="headline">단계별 개발 내용 및 일정</h2>

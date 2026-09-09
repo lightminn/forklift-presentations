@@ -59,8 +59,7 @@
   if(typeof module!=='undefined' && module.exports) module.exports={cases,sample};
   if(typeof document==='undefined')return;
 
-  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
-  let active=null, scenes=[],elapsed=0,last=null,frame=0,paused=reduced.matches;
+  let active=null, scenes=[],elapsed=0,last=null,frame=0;
   function renderScene(scene,seconds) {
     const id=scene.dataset.motionCase,p=sample(id,seconds);
     scene.querySelector('.motion-vehicle').setAttribute('transform',`translate(${p.x.toFixed(3)} ${p.y.toFixed(3)}) rotate(${(p.angle+180).toFixed(3)})`);
@@ -74,40 +73,24 @@
     if(scene.dataset.motionReady)return;
     scene.dataset.motionReady='true';
   }
-  function buttons() {
-    if(!active)return;
-    const b=active.querySelector('[data-motion-toggle]');
-    if(b) {b.textContent=paused?'재생':'일시정지';b.setAttribute('aria-label',paused?'접근 시나리오 재생':'접근 시나리오 일시정지');}
-  }
-  function render(){scenes.forEach(s=>renderScene(s,elapsed));buttons();}
+  function render(){scenes.forEach(s=>renderScene(s,elapsed));}
   function tick(now) {
     frame=0;
-    if(paused || document.hidden || !scenes.length)return;
+    if(document.hidden || !scenes.length)return;
     if(last!==null)elapsed+=(now-last)/1000;
     last=now;
     const end=Math.max(...scenes.map(s=>cases[s.dataset.motionCase].duration));
     if(elapsed>end+2.2)elapsed=0;
     render();frame=requestAnimationFrame(tick);
   }
-  function run(){cancelAnimationFrame(frame);last=null;if(!paused&&!document.hidden&&scenes.length)frame=requestAnimationFrame(tick);}
+  function run(){cancelAnimationFrame(frame);last=null;if(!document.hidden&&scenes.length)frame=requestAnimationFrame(tick);}
   function activate(slide) {
     if(slide===active)return;
     cancelAnimationFrame(frame);active=slide;scenes=slide?Array.from(slide.querySelectorAll('[data-motion-case]')):[];
-    scenes.forEach(prepare);elapsed=0;paused=reduced.matches;render();run();
+    scenes.forEach(prepare);elapsed=0;render();run();
   }
   document.addEventListener('slidechange',e=>activate(e.detail.slide));
-  // Delegation works after the UOS runtime mounts and across its shadow boundary.
-  document.addEventListener('click',e=>{
-    const button=e.composedPath().find(n=>n instanceof Element && n.matches('[data-motion-toggle],[data-motion-replay]'));
-    if(!button||!active||!active.contains(button))return;
-    if(button.hasAttribute('data-motion-replay')){elapsed=0;paused=false;}else paused=!paused;
-    render();run();
-  });
-  document.addEventListener('keydown',e=>{
-    if((e.key===' '||e.key==='Enter') && e.composedPath().some(n=>n instanceof Element && n.matches('[data-motion-toggle],[data-motion-replay]')))e.stopPropagation();
-  });
   document.addEventListener('visibilitychange',run);
-  reduced.addEventListener('change',()=>{paused=reduced.matches;render();run();});
   window.addEventListener('beforeprint',()=>{cancelAnimationFrame(frame);scenes.forEach(s=>renderScene(s,cases[s.dataset.motionCase].duration));});
   window.addEventListener('afterprint',()=>{render();run();});
   // Handles a cached runtime that mounted before this script was evaluated.
