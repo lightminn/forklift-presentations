@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>자율 지게차 개발 계획</title>
 <link rel="icon" href="data:,">
-<script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
+<script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script><script src="case-motion.js" defer></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>자율 지게차 개발 계획</title>
 <link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
@@ -145,34 +145,126 @@ ROS 2의 2D SLAM, 오도메트리·좌표 변환 및 Nav2 연계 근거; 패키�
 
 <section data-label="주행 조건별 접근 방법 (1)" data-screen-label="07" data-duration="45" data-speaker-notes="권장 45초
 
-접근 방법은 과제에서 제시한 A부터 D까지의 네 가지 조건으로 나누어 개발한다. A는 팔레트가 지게차 정면에 있고 포크와 포켓의 방향이 일치하는 경우이다. 직진 접근과 저속 삽입을 수행하며, 좌우 위치 오차와 방향 오차 및 접촉 여부를 확인한다. B는 팔레트가 측면에 있으나 정렬에 필요한 접근 거리가 충분한 경우이다. 곡선 주행으로 방향을 맞춘 후 정지 없이 삽입하도록 경로를 생성한다. 개발 초기에는 A 조건에서 인식, 좌표 변환, 삽입 제어를 연결하여 시험한다. 이후 시작 위치를 좌우로 변경하여 B 조건을 평가한다. 이와 같이 시험 조건을 순차적으로 추가하여 삽입 제어와 접근 경로의 오류를 구분할 계획이다. 그림은 과제 설명자료에 제시된 요구 동작이다.
+접근 방법은 과제에서 제시한 A부터 D까지의 네 가지 조건으로 나누어 개발한다. A는 팔레트가 지게차 정면에 있고 포크와 포켓의 방향이 일치하는 경우이다. 직진 접근과 저속 삽입을 수행하며, 좌우 위치 오차와 방향 오차 및 접촉 여부를 확인한다. B는 팔레트가 측면에 있으나 정렬에 필요한 접근 거리가 충분한 경우이다. 곡선 주행으로 방향을 맞춘 후 정지 없이 삽입하도록 경로를 생성한다. 개발 초기에는 A 조건에서 인식, 좌표 변환, 삽입 제어를 연결하여 시험한다. 이후 시작 위치를 좌우로 변경하여 B 조건을 평가한다. 이와 같이 시험 조건을 순차적으로 추가하여 삽입 제어와 접근 경로의 오류를 구분할 계획이다. 애니메이션은 과제 원문 8·9쪽의 요구 동작을 상면도로 재구성한 개념도이다. 실제 차체의 치수나 계산된 최적 경로를 나타내지 않는다.
 
 [Sources]
-과제 원문 8·9쪽의 그림 영역 추출: https://docs.google.com/presentation/d/1BjoJLWmwd07ZJujZp4BPZrwBhx5tsnfmBpWdLMy2YrQ/edit
+과제 원문 8·9쪽의 요구 동작을 애니메이션 개념도로 재구성: https://docs.google.com/presentation/d/1BjoJLWmwd07ZJujZp4BPZrwBhx5tsnfmBpWdLMy2YrQ/edit
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="06  주행 조건별 접근 방법 (1)"><div class="slide-body">
-<h2 class="headline">정면 및 측면 접근</h2>
-<div class="split grow">
- <figure class="case"><figcaption class="case-title"><span>A</span>정면 접근</figcaption><div class="case-figure"><img src="assets/case-a.png" alt="과제 A: 정면으로 정렬된 지게차가 팔레트로 바로 진입하는 전후 모습"></div><div class="case-note">직진 접근 → 저속 삽입<br><span class="muted">평가: 좌우 위치·방향 오차 및 접촉 여부</span></div></figure>
- <figure class="case"><figcaption class="case-title"><span>B</span>측면 접근 · 진입 거리 충분</figcaption><div class="case-figure"><img src="assets/case-b.png" alt="과제 B: 멀리서 곡선으로 접근하여 팔레트에 정렬하는 모습"></div><div class="case-note">곡선 접근 → 정렬 → 연속 진입<br><span class="muted">평가: 정지 없이 정렬 후 삽입 가능 여부</span></div></figure>
-</div>
-<div class="foot"><a href="https://docs.google.com/presentation/d/1BjoJLWmwd07ZJujZp4BPZrwBhx5tsnfmBpWdLMy2YrQ/edit" target="_blank" rel="noopener">출처: 과제 설명자료 8·9쪽 · 요구 동작</a><span>07 / 13</span></div></div></x-import>
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="06  주행 조건별 접근 방법 (1)"><div class="slide-body"><div class="motion-top"><h2 class="headline">정면 및 측면 접근</h2><div class="motion-controls" role="group" aria-label="접근 시나리오 재생 제어"><button type="button" data-motion-toggle>일시정지</button><button type="button" data-motion-replay>다시 재생</button></div></div>
+<div class="split grow motion-pair"><figure class="case motion-case" data-motion-case="A">
+ <figcaption class="case-title"><span>A</span>정면 접근</figcaption>
+ <svg class="motion-scene" viewBox="0 0 600 320" role="img" aria-label="A: 직진 접근 후 저속 삽입">
+  <title>A 접근 시나리오</title><desc>직진 접근 후 저속 삽입. 파란 경로는 전진, 주황 경로는 후진을 나타낸다.</desc>
+  <path class="motion-grid" d="M0 80H600 M0 160H600 M0 240H600 M80 0V320 M160 0V320 M240 0V320 M320 0V320 M400 0V320 M480 0V320 M560 0V320"/>
+  <g class="motion-paths"></g>
+  <circle class="motion-start" cx="85" cy="160" r="6"/>
+
+  <g class="motion-pallet" transform="translate(55 0)">
+   <text x="487" y="101" text-anchor="middle">팔레트</text>
+   <rect x="460" y="118" width="56" height="18"/><rect x="460" y="154" width="56" height="12"/><rect x="460" y="184" width="56" height="18"/><rect x="508" y="118" width="8" height="84"/>
+   <path class="motion-pocket" d="M458 137H504V153H458 M458 167H504V183H458"/>
+  </g>
+  <g class="motion-vehicle" transform="translate(85 160)">
+   <rect class="motion-wheel" x="-27" y="-31" width="20" height="8" rx="2"/><rect class="motion-wheel" x="-27" y="23" width="20" height="8" rx="2"/>
+   <rect class="motion-wheel" x="8" y="-31" width="20" height="8" rx="2"/><rect class="motion-wheel" x="8" y="23" width="20" height="8" rx="2"/>
+   <rect class="motion-fork" x="25" y="-18" width="47" height="6" rx="1"/><rect class="motion-fork" x="25" y="12" width="47" height="6" rx="1"/>
+   <rect class="motion-chassis" x="-33" y="-24" width="58" height="48" rx="9"/>
+   <rect class="motion-cabin" x="-20" y="-16" width="27" height="32" rx="3"/>
+   <path class="motion-heading-arrow" d="M-8 -7L0 0L-8 7"/>
+   <rect class="motion-mast" x="21" y="-27" width="8" height="54" rx="1"/>
+  </g>
+ </svg>
+ <div class="motion-state"><span class="motion-phase">팔레트 인식</span><span class="motion-caption">직진 접근 후 저속 삽입</span></div>
+ <div class="motion-track" aria-hidden="true"><div class="motion-progress"></div></div>
+</figure><figure class="case motion-case" data-motion-case="B">
+ <figcaption class="case-title"><span>B</span>측면 접근 · 진입 거리 충분</figcaption>
+ <svg class="motion-scene" viewBox="0 0 600 320" role="img" aria-label="B: 곡선 정렬 후 연속 진입">
+  <title>B 접근 시나리오</title><desc>곡선 정렬 후 연속 진입. 파란 경로는 전진, 주황 경로는 후진을 나타낸다.</desc>
+  <path class="motion-grid" d="M0 80H600 M0 160H600 M0 240H600 M80 0V320 M160 0V320 M240 0V320 M320 0V320 M400 0V320 M480 0V320 M560 0V320"/>
+  <g class="motion-paths"></g>
+  <circle class="motion-start" cx="85" cy="260" r="6"/>
+
+  <g class="motion-pallet" transform="translate(55 0)">
+   <text x="487" y="101" text-anchor="middle">팔레트</text>
+   <rect x="460" y="118" width="56" height="18"/><rect x="460" y="154" width="56" height="12"/><rect x="460" y="184" width="56" height="18"/><rect x="508" y="118" width="8" height="84"/>
+   <path class="motion-pocket" d="M458 137H504V153H458 M458 167H504V183H458"/>
+  </g>
+  <g class="motion-vehicle" transform="translate(85 260)">
+   <rect class="motion-wheel" x="-27" y="-31" width="20" height="8" rx="2"/><rect class="motion-wheel" x="-27" y="23" width="20" height="8" rx="2"/>
+   <rect class="motion-wheel" x="8" y="-31" width="20" height="8" rx="2"/><rect class="motion-wheel" x="8" y="23" width="20" height="8" rx="2"/>
+   <rect class="motion-fork" x="25" y="-18" width="47" height="6" rx="1"/><rect class="motion-fork" x="25" y="12" width="47" height="6" rx="1"/>
+   <rect class="motion-chassis" x="-33" y="-24" width="58" height="48" rx="9"/>
+   <rect class="motion-cabin" x="-20" y="-16" width="27" height="32" rx="3"/>
+   <path class="motion-heading-arrow" d="M-8 -7L0 0L-8 7"/>
+   <rect class="motion-mast" x="21" y="-27" width="8" height="54" rx="1"/>
+  </g>
+ </svg>
+ <div class="motion-state"><span class="motion-phase">팔레트 인식</span><span class="motion-caption">곡선 정렬 후 연속 진입</span></div>
+ <div class="motion-track" aria-hidden="true"><div class="motion-progress"></div></div>
+</figure></div>
+<div class="motion-legend"><span class="motion-forward-key">전진</span><span class="motion-reverse-key">후진</span><span class="muted">상면도 · 접근 및 삽입 동작</span></div><div class="foot"><a href="https://docs.google.com/presentation/d/1BjoJLWmwd07ZJujZp4BPZrwBhx5tsnfmBpWdLMy2YrQ/edit" target="_blank" rel="noopener">과제 설명자료 8·9쪽 기반 · 요구 동작 개념도</a><span>07 / 13</span></div></div></x-import>
 </section>
 
 <section data-label="주행 조건별 접근 방법 (2)" data-screen-label="08" data-duration="60" data-speaker-notes="권장 60초
 
-C는 팔레트와의 거리가 가까워 바로 정렬하기 어려운 경우이다. 우선 후진하여 필요한 공간을 확보한 후, 방향을 맞추어 다시 접근한다. D는 팔레트와의 거리가 가까우면서 후방에 장애물이 있는 경우이다. 이동 가능한 공간으로 위치를 변경한 뒤 재접근하거나, 장애물까지의 허용 거리 내에서 후진하여 정렬한다. 이때 제자리 회전 가능 여부는 실제 구동 구조에 따라 결정한다. 조향 차량은 전진과 후진을 조합하여 방향을 바꾸도록 계획한다. 차체 중심의 이동 경로뿐 아니라 돌출된 포크와 차체 후미의 충돌 가능성도 확인해야 한다. 이동 가능한 경로를 찾지 못하면 정지하도록 제어한다. 해당 정지는 안전 기능으로 평가하되 삽입 성공에는 포함하지 않는다.
+C는 팔레트와의 거리가 가까워 바로 정렬하기 어려운 경우이다. 우선 후진하여 필요한 공간을 확보한 후, 방향을 맞추어 다시 접근한다. D는 팔레트와의 거리가 가까우면서 후방에 장애물이 있는 경우이다. 이동 가능한 공간으로 위치를 변경한 뒤 재접근하거나, 장애물까지의 허용 거리 내에서 후진하여 정렬한다. 이때 제자리 회전 가능 여부는 실제 구동 구조에 따라 결정한다. 조향 차량은 전진과 후진을 조합하여 방향을 바꾸도록 계획한다. 차체 중심의 이동 경로뿐 아니라 돌출된 포크와 차체 후미의 충돌 가능성도 확인해야 한다. 이동 가능한 경로를 찾지 못하면 정지하도록 제어한다. 해당 정지는 안전 기능으로 평가하되 삽입 성공에는 포함하지 않는다. 애니메이션의 D는 두 대안 중 허용 거리 내에서 후진한 뒤 재접근하는 동작을 보여 준다. 경로의 치수와 회전반경은 차체 선정 후 산출한다.
 
 [Sources]
-과제 원문 10·11쪽의 그림 영역 추출: https://docs.google.com/presentation/d/1BjoJLWmwd07ZJujZp4BPZrwBhx5tsnfmBpWdLMy2YrQ/edit
+과제 원문 10·11쪽의 요구 동작을 애니메이션 개념도로 재구성: https://docs.google.com/presentation/d/1BjoJLWmwd07ZJujZp4BPZrwBhx5tsnfmBpWdLMy2YrQ/edit
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="07  주행 조건별 접근 방법 (2)"><div class="slide-body">
-<h2 class="headline">근거리 접근 및 후방 장애물 대응</h2>
-<div class="split grow" style="grid-template-columns:300px 1fr;gap:32px">
- <figure class="case"><figcaption class="case-title"><span>C</span>근거리 접근</figcaption><div class="case-figure"><img src="assets/case-c.png" alt="과제 C: 너무 가까운 지게차가 후진해 공간을 확보한 뒤 재진입"></div><div class="case-note">후진 → 공간 확보 → 재진입</div></figure>
- <figure class="case"><figcaption class="case-title"><span>D</span>근거리 접근 · 후방 장애물 존재</figcaption><div class="case-figure"><img src="assets/case-d.png" alt="과제 D: 뒤쪽 장애물이 있을 때 위치를 바꾸거나 가능한 만큼만 후퇴하여 정렬하는 두 대안"></div><div class="case-note">위치 변경 후 재접근 또는 제한 거리 내 후진<br><span class="muted">유의 사항: 차체의 조향 방식과 후방 여유 공간 반영</span></div></figure>
-</div>
-<div class="foot"><a href="https://docs.google.com/presentation/d/1BjoJLWmwd07ZJujZp4BPZrwBhx5tsnfmBpWdLMy2YrQ/edit" target="_blank" rel="noopener">출처: 과제 설명자료 10·11쪽 · 요구 동작</a><span>08 / 13</span></div></div></x-import>
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="07  주행 조건별 접근 방법 (2)"><div class="slide-body"><div class="motion-top"><h2 class="headline">근거리 접근 및 후방 장애물 대응</h2><div class="motion-controls" role="group" aria-label="접근 시나리오 재생 제어"><button type="button" data-motion-toggle>일시정지</button><button type="button" data-motion-replay>다시 재생</button></div></div>
+<div class="split grow motion-pair"><figure class="case motion-case" data-motion-case="C">
+ <figcaption class="case-title"><span>C</span>근거리 접근</figcaption>
+ <svg class="motion-scene" viewBox="0 0 600 320" role="img" aria-label="C: 후진으로 공간 확보 후 재접근">
+  <title>C 접근 시나리오</title><desc>후진으로 공간 확보 후 재접근. 파란 경로는 전진, 주황 경로는 후진을 나타낸다.</desc>
+  <path class="motion-grid" d="M0 80H600 M0 160H600 M0 240H600 M80 0V320 M160 0V320 M240 0V320 M320 0V320 M400 0V320 M480 0V320 M560 0V320"/>
+  <g class="motion-paths"></g>
+  <circle class="motion-start" cx="342" cy="236" r="6"/>
+
+  <g class="motion-pallet" transform="translate(55 0)">
+   <text x="487" y="101" text-anchor="middle">팔레트</text>
+   <rect x="460" y="118" width="56" height="18"/><rect x="460" y="154" width="56" height="12"/><rect x="460" y="184" width="56" height="18"/><rect x="508" y="118" width="8" height="84"/>
+   <path class="motion-pocket" d="M458 137H504V153H458 M458 167H504V183H458"/>
+  </g>
+  <g class="motion-vehicle" transform="translate(342 236)">
+   <rect class="motion-wheel" x="-27" y="-31" width="20" height="8" rx="2"/><rect class="motion-wheel" x="-27" y="23" width="20" height="8" rx="2"/>
+   <rect class="motion-wheel" x="8" y="-31" width="20" height="8" rx="2"/><rect class="motion-wheel" x="8" y="23" width="20" height="8" rx="2"/>
+   <rect class="motion-fork" x="25" y="-18" width="47" height="6" rx="1"/><rect class="motion-fork" x="25" y="12" width="47" height="6" rx="1"/>
+   <rect class="motion-chassis" x="-33" y="-24" width="58" height="48" rx="9"/>
+   <rect class="motion-cabin" x="-20" y="-16" width="27" height="32" rx="3"/>
+   <path class="motion-heading-arrow" d="M-8 -7L0 0L-8 7"/>
+   <rect class="motion-mast" x="21" y="-27" width="8" height="54" rx="1"/>
+  </g>
+ </svg>
+ <div class="motion-state"><span class="motion-phase">팔레트 인식</span><span class="motion-caption">후진으로 공간 확보 후 재접근</span></div>
+ <div class="motion-track" aria-hidden="true"><div class="motion-progress"></div></div>
+</figure><figure class="case motion-case" data-motion-case="D">
+ <figcaption class="case-title"><span>D</span>근거리 · 후방 장애물</figcaption>
+ <svg class="motion-scene" viewBox="0 0 600 320" role="img" aria-label="D: 허용 거리 내 후진 후 재접근">
+  <title>D 접근 시나리오</title><desc>허용 거리 내 후진 후 재접근. 파란 경로는 전진, 주황 경로는 후진을 나타낸다.</desc>
+  <path class="motion-grid" d="M0 80H600 M0 160H600 M0 240H600 M80 0V320 M160 0V320 M240 0V320 M320 0V320 M400 0V320 M480 0V320 M560 0V320"/>
+  <g class="motion-paths"></g>
+  <circle class="motion-start" cx="342" cy="236" r="6"/>
+<g class="motion-obstacle"><rect x="146" y="215" width="92" height="71" rx="3"/><path d="M152 228h80 M152 243h80 M152 258h80 M152 273h80"/><text x="192" y="308" text-anchor="middle">후방 장애물</text></g>
+  <g class="motion-pallet" transform="translate(55 0)">
+   <text x="487" y="101" text-anchor="middle">팔레트</text>
+   <rect x="460" y="118" width="56" height="18"/><rect x="460" y="154" width="56" height="12"/><rect x="460" y="184" width="56" height="18"/><rect x="508" y="118" width="8" height="84"/>
+   <path class="motion-pocket" d="M458 137H504V153H458 M458 167H504V183H458"/>
+  </g>
+  <g class="motion-vehicle" transform="translate(342 236)">
+   <rect class="motion-wheel" x="-27" y="-31" width="20" height="8" rx="2"/><rect class="motion-wheel" x="-27" y="23" width="20" height="8" rx="2"/>
+   <rect class="motion-wheel" x="8" y="-31" width="20" height="8" rx="2"/><rect class="motion-wheel" x="8" y="23" width="20" height="8" rx="2"/>
+   <rect class="motion-fork" x="25" y="-18" width="47" height="6" rx="1"/><rect class="motion-fork" x="25" y="12" width="47" height="6" rx="1"/>
+   <rect class="motion-chassis" x="-33" y="-24" width="58" height="48" rx="9"/>
+   <rect class="motion-cabin" x="-20" y="-16" width="27" height="32" rx="3"/>
+   <path class="motion-heading-arrow" d="M-8 -7L0 0L-8 7"/>
+   <rect class="motion-mast" x="21" y="-27" width="8" height="54" rx="1"/>
+  </g>
+ </svg>
+ <div class="motion-state"><span class="motion-phase">팔레트 인식</span><span class="motion-caption">허용 거리 내 후진 후 재접근</span></div>
+ <div class="motion-track" aria-hidden="true"><div class="motion-progress"></div></div>
+</figure></div>
+<div class="motion-legend"><span class="motion-forward-key">전진</span><span class="motion-reverse-key">후진</span><span class="muted">상면도 · 접근 및 삽입 동작</span></div><div class="foot"><a href="https://docs.google.com/presentation/d/1BjoJLWmwd07ZJujZp4BPZrwBhx5tsnfmBpWdLMy2YrQ/edit" target="_blank" rel="noopener">과제 설명자료 10·11쪽 기반 · 요구 동작 개념도</a><span>08 / 13</span></div></div></x-import>
 </section>
 
 <section data-label="포크 삽입 제어" data-screen-label="09" data-duration="70" data-speaker-notes="권장 70초

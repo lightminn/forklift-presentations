@@ -25,6 +25,7 @@ bash present.sh
 - `R`: 처음으로 돌아가기
 - `1`–`9`, `0`: 1–10쪽으로 이동
 - 왼쪽 썸네일을 클릭해 이동할 수 있습니다. 전체화면에서는 썸네일이 숨겨집니다.
+- 7·8쪽의 A–D 접근 시나리오는 슬라이드 진입 시 자동 재생됩니다. 오른쪽 위 **일시정지 / 재생**, **다시 재생**으로 두 동작을 함께 제어합니다. 파란 경로는 전진, 주황 경로는 후진입니다. 다른 슬라이드에서는 정지하며, 다시 진입하면 처음부터 재생합니다. 운영체제의 동작 줄이기가 설정된 경우에는 재생 버튼을 눌러 시작합니다.
 
 모든 이미지, 한국어 글꼴, React 및 UOS 런타임을 로컬에 포함했습니다. 외부 인터넷 없이 로컬 서버로 발표할 수 있습니다. 슬라이드의 출처 링크를 여는 경우에는 인터넷이 필요합니다.
 
@@ -33,6 +34,7 @@ bash present.sh
 - [`SCRIPT.md`](SCRIPT.md): 장별 한국어 발표 원고, 시간 배분, 출처. 배분 합계는 645초이며 실제 발화 시간은 리허설로 조정합니다.
 - [`build_deck.py`](build_deck.py): 슬라이드 본문과 원고의 편집 원본.
 - [`deck.css`](deck.css): 발표 본문 배치와 타이포그래피.
+- [`case-motion.js`](case-motion.js): A–D 접근 개념도의 이동 경로, 단계 표시 및 재생 제어.
 - [`index.html`](index.html): 생성된 웹 발표자료. 각 슬라이드의 `data-speaker-notes`에 원고와 `[Sources]`가 있습니다. 이 노트 속성은 호환 발표 호스트용이며, 단독 웹 화면에는 원고 패널이 없습니다. 발표자는 `SCRIPT.md`를 별도로 열어 사용합니다.
 - [`SOURCES.md`](SOURCES.md): 원문과 이미지 출처, 개발 제안과 미확인 사항의 경계.
 - [`VALIDATION.md`](VALIDATION.md): 실제 실행·시각 검증 범위.
@@ -58,6 +60,8 @@ python3 build_deck.py
 python3 -m unittest discover -s tests -v
 node --check support.js
 node --check deck-stage.js
+node --check case-motion.js
+node tests/case_motion.test.cjs
 python3 tools/build_site.py --output _site
 ```
 

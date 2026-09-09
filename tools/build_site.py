@@ -5,7 +5,7 @@ from pathlib import Path
 import shutil
 
 ROOT = Path(__file__).resolve().parents[1]
-RUNTIME_FILES = ('index.html', 'deck.css', 'support.js', 'deck-stage.js')
+RUNTIME_FILES = ('index.html', 'deck.css', 'support.js', 'deck-stage.js', 'case-motion.js')
 
 
 def build_site(output):

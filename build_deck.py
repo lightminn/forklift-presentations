@@ -18,6 +18,41 @@ slides = []
 def add(label, title, seconds, body, notes, sources, foot='개발계획(안)'):
     slides.append(dict(label=label, title=title, seconds=seconds, body=body, notes=notes, sources=sources, foot=foot))
 
+def motion_case(case, title, description):
+    x, y = (85, 160) if case == 'A' else (85, 260) if case == 'B' else (342, 236)
+    obstacle = '''<g class="motion-obstacle"><rect x="146" y="215" width="92" height="71" rx="3"/><path d="M152 228h80 M152 243h80 M152 258h80 M152 273h80"/><text x="192" y="308" text-anchor="middle">후방 장애물</text></g>''' if case == 'D' else ''
+    return f'''<figure class="case motion-case" data-motion-case="{case}">
+ <figcaption class="case-title"><span>{case}</span>{title}</figcaption>
+ <svg class="motion-scene" viewBox="0 0 600 320" role="img" aria-label="{case}: {description}">
+  <title>{case} 접근 시나리오</title><desc>{description}. 파란 경로는 전진, 주황 경로는 후진을 나타낸다.</desc>
+  <path class="motion-grid" d="M0 80H600 M0 160H600 M0 240H600 M80 0V320 M160 0V320 M240 0V320 M320 0V320 M400 0V320 M480 0V320 M560 0V320"/>
+  <g class="motion-paths"></g>
+  <circle class="motion-start" cx="{x}" cy="{y}" r="6"/>
+{obstacle}
+  <g class="motion-pallet" transform="translate(55 0)">
+   <text x="487" y="101" text-anchor="middle">팔레트</text>
+   <rect x="460" y="118" width="56" height="18"/><rect x="460" y="154" width="56" height="12"/><rect x="460" y="184" width="56" height="18"/><rect x="508" y="118" width="8" height="84"/>
+   <path class="motion-pocket" d="M458 137H504V153H458 M458 167H504V183H458"/>
+  </g>
+  <g class="motion-vehicle" transform="translate({x} {y})">
+   <rect class="motion-wheel" x="-27" y="-31" width="20" height="8" rx="2"/><rect class="motion-wheel" x="-27" y="23" width="20" height="8" rx="2"/>
+   <rect class="motion-wheel" x="8" y="-31" width="20" height="8" rx="2"/><rect class="motion-wheel" x="8" y="23" width="20" height="8" rx="2"/>
+   <rect class="motion-fork" x="25" y="-18" width="47" height="6" rx="1"/><rect class="motion-fork" x="25" y="12" width="47" height="6" rx="1"/>
+   <rect class="motion-chassis" x="-33" y="-24" width="58" height="48" rx="9"/>
+   <rect class="motion-cabin" x="-20" y="-16" width="27" height="32" rx="3"/>
+   <path class="motion-heading-arrow" d="M-8 -7L0 0L-8 7"/>
+   <rect class="motion-mast" x="21" y="-27" width="8" height="54" rx="1"/>
+  </g>
+ </svg>
+ <div class="motion-state"><span class="motion-phase">팔레트 인식</span><span class="motion-caption">{description}</span></div>
+ <div class="motion-track" aria-hidden="true"><div class="motion-progress"></div></div>
+</figure>'''
+
+def motion_pair(title, figures):
+    return f'''<div class="motion-top"><h2 class="headline">{title}</h2><div class="motion-controls" role="group" aria-label="접근 시나리오 재생 제어"><button type="button" data-motion-toggle>일시정지</button><button type="button" data-motion-replay>다시 재생</button></div></div>
+<div class="split grow motion-pair">{figures}</div>
+<div class="motion-legend"><span class="motion-forward-key">전진</span><span class="motion-reverse-key">후진</span><span class="muted">상면도 · 접근 및 삽입 동작</span></div>'''
+
 add('개발 계획', '자율 지게차\n개발 계획', 20, '''''',
 '''본 과제에서는 주변 장애물을 회피하면서 팔레트의 적재·이송·하역을 수행하는 ROS 2 기반 자율 지게차를 개발하고자 한다. 2차원 LiDAR SLAM으로 작업 환경의 지도를 작성하고 지게차의 위치를 추정한다. 주요 개발 내용은 팔레트 인식, 접근 경로 생성, 포크 삽입 제어이다. 정면 삽입 기능을 먼저 구현한 후, 측면 접근과 후진 등 주행 조건을 추가하여 성능을 평가할 계획이다.''',
 [(BRIEF, '과제 원문 1·3·6·7쪽')], '개발계획(안)')
@@ -112,25 +147,19 @@ add('장애물 회피 경로 생성', '05  장애물 회피 경로 생성', 60, 
 '''SLAM이 제공하는 지도와 자기 위치를 이용하여 팔레트 접근 경로를 생성한다. 주행 기능은 ROS 2의 Nav2 적용을 검토하되, 실제 조향 특성에 맞는 경로 생성기와 제어기를 선정한다. 접근 경로의 종점은 팔레트 전면에서 포크의 위치와 방향을 정렬할 수 있는 지점으로 정한다. 정렬이 끝난 후에는 저속 직선 주행으로 포크를 삽입한다. 경로 생성 시에는 차체의 조향 방식과 최소 회전반경을 반영하고, 차체와 포크가 이동하는 전체 영역에 장애물이 있는지 검사한다. 현재 LiDAR 측정값을 장애물 정보에 반영하여 지도 작성 이후의 환경 변화에도 대응한다. 적재 후에는 팔레트 크기도 충돌 검사에 포함한다. 조향 방식의 차체를 선정하는 경우에는 회전반경과 전후진을 고려할 수 있는 Hybrid A*를 검토한다. 다만 알고리즘을 적용하는 것만으로 작업 시간이 최소가 된다고 단정할 수는 없다. 실측한 조향 특성과 후진 가능 여부를 반영한 뒤, 같은 시험 조건에서 경로별 작업 시간을 비교한다. 평가 시간에는 주행뿐 아니라 전후진 전환, 정렬, 삽입에 소요되는 시간을 포함한다.''',
 [(BRIEF, '과제 원문 6·8–11쪽'), (NAV2, 'Hybrid A*의 회전반경·차체 형상 고려 근거; 채택은 미정'), ('https://docs.nav2.org/rolling/configuration_and_development/first_time_robot_setup_guide/sensors/mapping_localization/', 'ROS 2의 2D SLAM, 오도메트리·좌표 변환 및 Nav2 연계 근거; 패키지는 검토 대상')], '경로 생성 방법 검토(안)')
 
-add('주행 조건별 접근 방법 (1)', '06  주행 조건별 접근 방법 (1)', 45, '''
-<h2 class="headline">정면 및 측면 접근</h2>
-<div class="split grow">
- <figure class="case"><figcaption class="case-title"><span>A</span>정면 접근</figcaption><div class="case-figure"><img src="assets/case-a.png" alt="과제 A: 정면으로 정렬된 지게차가 팔레트로 바로 진입하는 전후 모습"></div><div class="case-note">직진 접근 → 저속 삽입<br><span class="muted">평가: 좌우 위치·방향 오차 및 접촉 여부</span></div></figure>
- <figure class="case"><figcaption class="case-title"><span>B</span>측면 접근 · 진입 거리 충분</figcaption><div class="case-figure"><img src="assets/case-b.png" alt="과제 B: 멀리서 곡선으로 접근하여 팔레트에 정렬하는 모습"></div><div class="case-note">곡선 접근 → 정렬 → 연속 진입<br><span class="muted">평가: 정지 없이 정렬 후 삽입 가능 여부</span></div></figure>
-</div>
-''',
-'''접근 방법은 과제에서 제시한 A부터 D까지의 네 가지 조건으로 나누어 개발한다. A는 팔레트가 지게차 정면에 있고 포크와 포켓의 방향이 일치하는 경우이다. 직진 접근과 저속 삽입을 수행하며, 좌우 위치 오차와 방향 오차 및 접촉 여부를 확인한다. B는 팔레트가 측면에 있으나 정렬에 필요한 접근 거리가 충분한 경우이다. 곡선 주행으로 방향을 맞춘 후 정지 없이 삽입하도록 경로를 생성한다. 개발 초기에는 A 조건에서 인식, 좌표 변환, 삽입 제어를 연결하여 시험한다. 이후 시작 위치를 좌우로 변경하여 B 조건을 평가한다. 이와 같이 시험 조건을 순차적으로 추가하여 삽입 제어와 접근 경로의 오류를 구분할 계획이다. 그림은 과제 설명자료에 제시된 요구 동작이다.''',
-[(BRIEF, '과제 원문 8·9쪽의 그림 영역 추출')], '출처: 과제 설명자료 8·9쪽 · 요구 동작')
+add('주행 조건별 접근 방법 (1)', '06  주행 조건별 접근 방법 (1)', 45,
+motion_pair('정면 및 측면 접근',
+    motion_case('A', '정면 접근', '직진 접근 후 저속 삽입') +
+    motion_case('B', '측면 접근 · 진입 거리 충분', '곡선 정렬 후 연속 진입')),
+'''접근 방법은 과제에서 제시한 A부터 D까지의 네 가지 조건으로 나누어 개발한다. A는 팔레트가 지게차 정면에 있고 포크와 포켓의 방향이 일치하는 경우이다. 직진 접근과 저속 삽입을 수행하며, 좌우 위치 오차와 방향 오차 및 접촉 여부를 확인한다. B는 팔레트가 측면에 있으나 정렬에 필요한 접근 거리가 충분한 경우이다. 곡선 주행으로 방향을 맞춘 후 정지 없이 삽입하도록 경로를 생성한다. 개발 초기에는 A 조건에서 인식, 좌표 변환, 삽입 제어를 연결하여 시험한다. 이후 시작 위치를 좌우로 변경하여 B 조건을 평가한다. 이와 같이 시험 조건을 순차적으로 추가하여 삽입 제어와 접근 경로의 오류를 구분할 계획이다. 애니메이션은 과제 원문 8·9쪽의 요구 동작을 상면도로 재구성한 개념도이다. 실제 차체의 치수나 계산된 최적 경로를 나타내지 않는다.''',
+[(BRIEF, '과제 원문 8·9쪽의 요구 동작을 애니메이션 개념도로 재구성')], '과제 설명자료 8·9쪽 기반 · 요구 동작 개념도')
 
-add('주행 조건별 접근 방법 (2)', '07  주행 조건별 접근 방법 (2)', 60, '''
-<h2 class="headline">근거리 접근 및 후방 장애물 대응</h2>
-<div class="split grow" style="grid-template-columns:300px 1fr;gap:32px">
- <figure class="case"><figcaption class="case-title"><span>C</span>근거리 접근</figcaption><div class="case-figure"><img src="assets/case-c.png" alt="과제 C: 너무 가까운 지게차가 후진해 공간을 확보한 뒤 재진입"></div><div class="case-note">후진 → 공간 확보 → 재진입</div></figure>
- <figure class="case"><figcaption class="case-title"><span>D</span>근거리 접근 · 후방 장애물 존재</figcaption><div class="case-figure"><img src="assets/case-d.png" alt="과제 D: 뒤쪽 장애물이 있을 때 위치를 바꾸거나 가능한 만큼만 후퇴하여 정렬하는 두 대안"></div><div class="case-note">위치 변경 후 재접근 또는 제한 거리 내 후진<br><span class="muted">유의 사항: 차체의 조향 방식과 후방 여유 공간 반영</span></div></figure>
-</div>
-''',
-'''C는 팔레트와의 거리가 가까워 바로 정렬하기 어려운 경우이다. 우선 후진하여 필요한 공간을 확보한 후, 방향을 맞추어 다시 접근한다. D는 팔레트와의 거리가 가까우면서 후방에 장애물이 있는 경우이다. 이동 가능한 공간으로 위치를 변경한 뒤 재접근하거나, 장애물까지의 허용 거리 내에서 후진하여 정렬한다. 이때 제자리 회전 가능 여부는 실제 구동 구조에 따라 결정한다. 조향 차량은 전진과 후진을 조합하여 방향을 바꾸도록 계획한다. 차체 중심의 이동 경로뿐 아니라 돌출된 포크와 차체 후미의 충돌 가능성도 확인해야 한다. 이동 가능한 경로를 찾지 못하면 정지하도록 제어한다. 해당 정지는 안전 기능으로 평가하되 삽입 성공에는 포함하지 않는다.''',
-[(BRIEF, '과제 원문 10·11쪽의 그림 영역 추출')], '출처: 과제 설명자료 10·11쪽 · 요구 동작')
+add('주행 조건별 접근 방법 (2)', '07  주행 조건별 접근 방법 (2)', 60,
+motion_pair('근거리 접근 및 후방 장애물 대응',
+    motion_case('C', '근거리 접근', '후진으로 공간 확보 후 재접근') +
+    motion_case('D', '근거리 · 후방 장애물', '허용 거리 내 후진 후 재접근')),
+'''C는 팔레트와의 거리가 가까워 바로 정렬하기 어려운 경우이다. 우선 후진하여 필요한 공간을 확보한 후, 방향을 맞추어 다시 접근한다. D는 팔레트와의 거리가 가까우면서 후방에 장애물이 있는 경우이다. 이동 가능한 공간으로 위치를 변경한 뒤 재접근하거나, 장애물까지의 허용 거리 내에서 후진하여 정렬한다. 이때 제자리 회전 가능 여부는 실제 구동 구조에 따라 결정한다. 조향 차량은 전진과 후진을 조합하여 방향을 바꾸도록 계획한다. 차체 중심의 이동 경로뿐 아니라 돌출된 포크와 차체 후미의 충돌 가능성도 확인해야 한다. 이동 가능한 경로를 찾지 못하면 정지하도록 제어한다. 해당 정지는 안전 기능으로 평가하되 삽입 성공에는 포함하지 않는다. 애니메이션의 D는 두 대안 중 허용 거리 내에서 후진한 뒤 재접근하는 동작을 보여 준다. 경로의 치수와 회전반경은 차체 선정 후 산출한다.''',
+[(BRIEF, '과제 원문 10·11쪽의 요구 동작을 애니메이션 개념도로 재구성')], '과제 설명자료 10·11쪽 기반 · 요구 동작 개념도')
 
 add('포크 삽입 제어', '08  포크 삽입 제어', 70, '''
 <h2 class="headline">포켓 위치 추적 및 삽입 오차 보정</h2>
@@ -226,7 +255,7 @@ def build():
     html = '''<!DOCTYPE html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>자율 지게차 개발 계획</title>
 <link rel="icon" href="data:,">
-<script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
+<script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script><script src="case-motion.js" defer></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>자율 지게차 개발 계획</title>
 <link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">

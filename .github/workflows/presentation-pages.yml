@@ -30,10 +30,13 @@ jobs:
           git diff --exit-code -- index.html SCRIPT.md slide-metadata.json
       - name: Test publication contracts
         run: python -m unittest discover -s tests -v
+      - name: Test approach animations
+        run: node tests/case_motion.test.cjs
       - name: Check JavaScript syntax
         run: |
           node --check support.js
           node --check deck-stage.js
+          node --check case-motion.js
       - name: Build publication bundle
         run: python tools/build_site.py --output _site
       - name: Configure Pages
