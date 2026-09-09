@@ -1,15 +1,31 @@
-/* A–D requirement illustrations; coordinates are explanatory, not robot plans. */
+/* Animate the separate image elements and poses from the original Google Slides. */
 (function () {
   'use strict';
   const line = (a,b,seconds,phase,direction=1) => ({points:[a,[a[0]+(b[0]-a[0])/3,a[1]+(b[1]-a[1])/3],[a[0]+2*(b[0]-a[0])/3,a[1]+2*(b[1]-a[1])/3],b],seconds,phase,direction});
-  const curve = (points,seconds,phase) => ({points,seconds,phase,direction:1});
-  const insert = () => line([420,160],[483,160],2.8,'저속 삽입');
-  const cases = {
-    A:{segments:[line([85,160],[420,160],4.2,'직진 접근'),insert()]},
-    B:{segments:[curve([[85,260],[205,260],[260,160],[420,160]],6,'곡선 정렬'),insert()]},
-    C:{segments:[line([342,236],[108,236],3.7,'후진 · 공간 확보',-1),curve([[108,236],[215,236],[275,160],[420,160]],5,'재접근 · 정렬'),insert()]},
-    D:{segments:[line([342,236],[280,236],2.4,'후방 확인 · 제한 후진',-1),curve([[280,236],[340,236],[360,160],[420,160]],5.4,'방향 정렬 · 재접근'),insert()]}
-  };
+  const reference=typeof module!=='undefined' && module.exports?require('./assets/approach-source.json'):JSON.parse(document.getElementById('approach-reference').textContent);
+  const curve = (points,seconds,phase,direction=1) => ({points,seconds,phase,direction});
+  const turn = (point,from,to,seconds,phase) => ({points:[point,point,point,point],angles:[from,to],seconds,phase,direction:0});
+  const xy=p=>p.slice(0,2);
+  const offset=(p,angle,distance)=>[p[0]+Math.cos(angle*Math.PI/180)*distance,p[1]+Math.sin(angle*Math.PI/180)*distance];
+  const cases={};
+  for(const [id,ref] of Object.entries(reference.scenes)) {
+    const s=xy(ref.poses.start),e=xy(ref.poses.end),v=ref.poses.via&&xy(ref.poses.via);
+    const pre=[e[0],e[1]+(id==='C'?48:id.startsWith('D')?30:35)];
+    let segments;
+    if(id==='A') segments=[{...curve([s,[s[0],s[1]-18],[pre[0],pre[1]+18],pre],3,'직진 접근'),orientation:-90}];
+    if(id==='B') {
+      const angle=ref.poses.via[2];
+      segments=[curve([s,offset(s,-90,22),offset(v,angle,-22),v],3.5,'곡선 접근'),curve([v,offset(v,angle,18),offset(pre,-90,-18),pre],2.3,'전면 정렬')];
+    }
+    if(id==='C') segments=[curve([s,[s[0],s[1]+48],[v[0],v[1]-40],v],3.6,'후진 · 공간 확보',-1),curve([v,[v[0],v[1]-35],[pre[0],pre[1]+35],pre],4,'재접근 · 정렬')];
+    if(id==='D2') segments=[curve([s,[s[0],s[1]+15],[v[0],v[1]-15],v],3,'제한 거리 후진',-1),curve([v,[v[0],v[1]-18],[pre[0],pre[1]+18],pre],2.5,'전면 정렬')];
+    if(id==='D1') {
+      const heading=Math.atan2(v[1]-s[1],v[0]-s[0])*180/Math.PI;
+      segments=[turn(s,-90,heading,1,'회전'),line(s,v,2,'위치 변경'),turn(v,heading,-180,.3,'위치 변경'),turn(v,-180,-180,.4,'위치 변경'),turn(v,-180,-90,.9,'전면 정렬'),curve([v,[v[0],v[1]-10],[pre[0],pre[1]+10],pre],1.6,'전면 정렬')];
+    }
+    segments.push(line(pre,e,2.3,'저속 삽입'));
+    cases[id]={segments};
+  }
   function pointAt(points,t) {
     const u=1-t, [a,b,c,d]=points;
     const xy=[0,1].map(k=>u*u*u*a[k]+3*u*u*t*b[k]+3*u*t*t*c[k]+t*t*t*d[k]);
@@ -33,7 +49,9 @@
   function sample(id,seconds) {
     const value=cases[id]; let remaining=Math.max(0,seconds-0.9),index=0;
     while(index<value.segments.length-1 && remaining>value.segments[index].seconds) remaining-=value.segments[index++].seconds;
-    const s=value.segments[index], f=seconds>=value.duration?1:Math.min(1,remaining/s.seconds),p=pointAt(s.points,fractionAt(s,f));
+    const s=value.segments[index], f=seconds>=value.duration?1:Math.min(1,remaining/s.seconds);
+    const p=s.angles?{x:s.points[0][0],y:s.points[0][1],angle:s.angles[0]+(((s.angles[1]-s.angles[0]+540)%360)-180)*f}:pointAt(s.points,fractionAt(s,f));
+    if(s.orientation!==undefined)p.angle=s.orientation;
     p.angle=(p.angle+(s.direction<0?180:0)+360)%360;
     if(p.angle>180)p.angle-=360;
     return {...p,index,f,direction:s.direction,phase:seconds<0.9?'팔레트 인식':seconds>=value.duration?'삽입 완료':s.phase};
@@ -45,27 +63,16 @@
   let active=null, scenes=[],elapsed=0,last=null,frame=0,paused=reduced.matches;
   function renderScene(scene,seconds) {
     const id=scene.dataset.motionCase,p=sample(id,seconds);
-    scene.querySelector('.motion-vehicle').setAttribute('transform',`translate(${p.x.toFixed(3)} ${p.y.toFixed(3)}) rotate(${p.angle.toFixed(3)})`);
+    scene.querySelector('.motion-vehicle').setAttribute('transform',`translate(${p.x.toFixed(3)} ${p.y.toFixed(3)}) rotate(${(p.angle+180).toFixed(3)})`);
     const label=scene.querySelector('.motion-phase');
     if(label.textContent!==p.phase)label.textContent=p.phase;
     const direction=p.direction<0?'reverse':'forward';
     if(scene.dataset.direction!==direction)scene.dataset.direction=direction;
-    scene.querySelectorAll('.motion-trace').forEach((path,i)=>path.setAttribute('stroke-dasharray',`${i<p.index?1:i===p.index?p.f:0} 1`));
     scene.querySelector('.motion-progress').style.transform=`scaleX(${Math.min(1,seconds/cases[id].duration)})`;
   }
   function prepare(scene) {
     if(scene.dataset.motionReady)return;
     scene.dataset.motionReady='true';
-    const ns='http://www.w3.org/2000/svg', group=scene.querySelector('.motion-paths');
-    cases[scene.dataset.motionCase].segments.forEach(s=>{
-      const [a,b,c,d]=s.points, data=`M ${a} C ${b} ${c} ${d}`;
-      for(const kind of ['motion-plan','motion-trace']) {
-        const path=document.createElementNS(ns,'path');
-        path.setAttribute('d',data);path.setAttribute('class',kind+(s.direction<0?' motion-reverse':''));path.setAttribute('pathLength','1');
-        if(kind==='motion-trace')path.setAttribute('stroke-dasharray','0 1');
-        group.appendChild(path);
-      }
-    });
   }
   function buttons() {
     if(!active)return;
