@@ -26,7 +26,11 @@ def add(label, title, seconds, body, notes, sources, foot='측정 결과'):
                        notes=notes, sources=sources, foot=foot))
 
 
-def figure(src, alt, caption, *, video=False, cls='wide'):
+def figure(src, alt, caption, *, video=None, cls='wide'):
+    # Infer the tag from the extension. Naming a clip and forgetting the flag
+    # silently produced an <img> pointing at an MP4, which renders as nothing.
+    if video is None:
+        video = src.rsplit('.', 1)[-1].lower() in {'mp4', 'webm'}
     tag = (f'<video class="media" src="assets/{src}" autoplay loop muted playsinline '
            f'aria-label="{escape(alt, quote=True)}"></video>' if video else
            f'<img class="media" src="assets/{src}" alt="{escape(alt, quote=True)}">')
