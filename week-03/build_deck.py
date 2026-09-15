@@ -41,7 +41,7 @@ def figure(src, alt, caption, *, video=None, cls='wide'):
 
 
 # ----------------------------------------------------------------- 1
-add('개발 진행 보고', '3주차\n개발 진행 보고', 20, '',
+add('개발 진행 보고', '3주차\n자율 지게차 개발', 20, '',
     """이번 주에는 팔레트의 두 포켓을 찾고, 위치와 포크 삽입 방향을 로봇 기준 좌표로 나타내는 기능을 구현하였다. 포켓은 포크가 들어가는 구멍이다. 합성 장면의 평가 결과와 한계, 다음 작업을 보고한다.""",
     [(M2, '포켓 인식 검증 기록'), (E6, 'EPAL 6 캡처와 평가')], '측정 결과 보고')
 
@@ -159,7 +159,7 @@ add('향후 추진 계획', '10  향후 추진 계획', 78, f"""
     [(MAP, '개발 로드맵의 다음 단계와 실물 조사 경로')], '출처: 개발 로드맵')
 
 
-TITLE = '3주차 개발 진행 보고'
+TITLE = '3주차 자율 지게차 개발'
 TOTAL = 598
 
 
@@ -179,7 +179,9 @@ def build():
         if i == 1:
             component = (f'<x-import component-from-global-scope="UOSSlideDS.TitleSlide" '
                          f'hint-size="100%,100%" title="{escape(s["title"], quote=True)}" '
-                         f'subtitle="임베디드구동 및 실습 · 팔레트 핸들링 경로 생성 및 제어"></x-import>')
+                         f'subtitle="임베디드구동 및 실습 · 팔레트 핸들링 경로 생성 및 제어"></x-import>'
+                         f'<img class="partner-mark" src="assets/riibotics-logo.png" '
+                         f'alt="Riibotics">')
         else:
             # 출처·쪽번호 줄은 본문 아래 한 줄을 통째로 먹으면서 화면에서는
             # 읽히지 않는다. 그 높이를 그림과 본문에 돌리고, 출처는 위의
@@ -187,8 +189,10 @@ def build():
             component = (f'<x-import component-from-global-scope="UOSSlideDS.ContentSlide" '
                          f'hint-size="100%,100%" title="{escape(s["title"], quote=True)}">'
                          f'<div class="slide-body">{s["body"]}</div></x-import>')
+        section_class = ' class="title-section"' if i == 1 else ''
         sections.append(
-            f'<section data-label="{escape(s["label"], quote=True)}" data-screen-label="{i:02d}" '
+            f'<section{section_class} '
+            f'data-label="{escape(s["label"], quote=True)}" data-screen-label="{i:02d}" '
             f'data-duration="{s["seconds"]}" data-speaker-notes="{escape(notes, quote=True)}" '
             f'style="background:#fff">\n{component}\n</section>')
         end = elapsed + s['seconds']

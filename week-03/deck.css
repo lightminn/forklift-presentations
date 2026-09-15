@@ -145,3 +145,13 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 /* Week 3: in a split, the two clips have different aspect ratios, so centring
    each one leaves their tops at different heights. Align them at the top. */
 .split > .shot { justify-content:flex-start; }
+
+/* 표지의 협업사 표기. 로고가 흰색이라 파란 대각 패널 위에만 올릴 수 있어,
+   UOS 로고 바로 왼쪽에 같은 세로 중심으로 둔다. 위치는 템플릿이 :root 에
+   내주는 로고 좌표를 그대로 참조하므로 템플릿이 바뀌면 같이 따라간다. */
+.title-section { position: relative; }
+.partner-mark {
+  position: absolute; z-index: 3; height: 64px; width: auto;
+  top: calc(var(--uos-title-logo-top) + (var(--uos-title-logo-size) - 64px) / 2);
+  right: calc(100% - var(--uos-title-logo-left) + 28px);
+}
