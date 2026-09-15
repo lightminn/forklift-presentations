@@ -184,17 +184,19 @@ def build():
     elapsed = 0
     for i, s in enumerate(slides, 1):
         source_lines = '\n'.join(f'{label}: {url}' for url, label in s['sources'])
-        notes = f"권장 {s['seconds']}초\n\n{s['notes']}\n\n[Sources]\n{source_lines}\n[/Sources]"
+        notes = (f"권장 {s['seconds']}초\n\n{s['notes']}\n\n"
+                 f"[Sources]\n{s['foot']}\n{source_lines}\n[/Sources]")
         if i == 1:
             component = (f'<x-import component-from-global-scope="UOSSlideDS.TitleSlide" '
                          f'hint-size="100%,100%" title="{escape(s["title"], quote=True)}" '
                          f'subtitle="임베디드구동 및 실습 · 팔레트 핸들링 경로 생성 및 제어"></x-import>')
         else:
-            footer = (f'<div class="foot"><span>{escape(s["foot"])}</span>'
-                      f'<span>{i:02d} / {len(slides)}</span></div>')
+            # 출처·쪽번호 줄은 본문 아래 한 줄을 통째로 먹으면서 화면에서는
+            # 읽히지 않는다. 그 높이를 그림과 본문에 돌리고, 출처는 위의
+            # 발표자 노트에 남긴다.
             component = (f'<x-import component-from-global-scope="UOSSlideDS.ContentSlide" '
                          f'hint-size="100%,100%" title="{escape(s["title"], quote=True)}">'
-                         f'<div class="slide-body">{s["body"]}{footer}</div></x-import>')
+                         f'<div class="slide-body">{s["body"]}</div></x-import>')
         sections.append(
             f'<section data-label="{escape(s["label"], quote=True)}" data-screen-label="{i:02d}" '
             f'data-duration="{s["seconds"]}" data-speaker-notes="{escape(notes, quote=True)}" '
