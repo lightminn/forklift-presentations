@@ -35,8 +35,9 @@ def figure(src, alt, caption, *, video=None, cls='wide'):
     tag = (f'<video class="media" src="assets/{src}" autoplay loop muted playsinline '
            f'aria-label="{escape(alt, quote=True)}"></video>' if video else
            f'<img class="media" src="assets/{src}" alt="{escape(alt, quote=True)}">')
-    return (f'<figure class="shot {cls}">{tag}'
-            f'<figcaption class="small muted">{caption}</figcaption></figure>')
+    # 빈 설명글도 줄 높이와 간격을 차지한다. 그림에 이미 적혀 있으면 아예 넣지 않는다.
+    cap = f'<figcaption class="small muted">{caption}</figcaption>' if caption else ''
+    return f'<figure class="shot {cls}">{tag}{cap}</figure>'
 
 
 # ----------------------------------------------------------------- 1
@@ -107,7 +108,7 @@ add('기준값 산출 방식', '06  기준값 산출 방식', 57, f"""
 # ----------------------------------------------------------------- 8
 add('접근 동작 확인', '07  접근 동작 확인', 50, f"""
 <h2 class="headline">연속 접근 구간의 포켓 검출 확인</h2>
-<div class="split grow" style="grid-template-columns:1fr 1fr">
+<div class="split grow" style="grid-template-columns:1.4fr 1fr">
 {figure('11_gazebo_approach.mp4', '카메라 시점에서 두 포켓을 계속 검출하는 연속 접근', '카메라 시점 · Gazebo Harmonic', video=True, cls='')}
 {figure('14_external_approach.mp4', '같은 접근을 3인칭에서 본 장면', '외부 시점 · MuJoCo', video=True, cls='')}
 </div>
@@ -119,9 +120,11 @@ add('접근 동작 확인', '07  접근 동작 확인', 50, f"""
 # ----------------------------------------------------------------- 9
 add('평가 결과', '08  평가 결과', 70, f"""
 <h2 class="headline">촬영 장면 100개의 인식 성능 평가</h2>
-<div class="split grow" style="grid-template-columns:1.05fr 1fr">
-{figure('03_scene_variety.png', '먼 거리, 가까운 거리, 비스듬한 자세, 가림, 유사 물체, 팔레트 없음', '촬영 장면 100개 중 6가지 조건', cls='')}
-{figure('17_targets.png', '검출률 100%, 위치 오차 p95 8.17 mm, 방향 오차 p95 0.053도', '', cls='')}
+{figure('03_scene_variety.png', '먼 거리, 가까운 거리, 비스듬한 자세, 가림, 유사 물체, 팔레트 없음', '')}
+<div class="scores">
+  <div><b>양성 검출률</b><span class="hit">100 %</span><i>목표 95 % 이상</i></div>
+  <div><b>위치 오차 p95</b><span class="hit">8.17 mm</span><i>목표 20 mm 이하</i></div>
+  <div><b>방향 오차 p95</b><span class="hit">0.053°</span><i>목표 2° 이하</i></div>
 </div>
 <div class="takeaway">평가 범위: 시뮬레이션 기준 측정값이며 실제 센서로 재측정 필요</div>
 """,
@@ -144,24 +147,24 @@ add('카메라 설치 높이', '09  카메라 설치 높이', 59, f"""
 # ----------------------------------------------------------------- 11
 add('삽입 구간 관측 한계', '10  삽입 구간 관측 한계', 66, f"""
 <h2 class="headline">삽입 구간의 팔레트 전면 관측 한계</h2>
-<div class="split grow" style="grid-template-columns:1.75fr 1fr">
-{figure('06_near_field_blind.png', '1.20 m 에서는 전면과 포켓이 관측되고 0.60 m 에서는 상판만 관측된다', '', cls='')}
-{figure('09_docking_preview.mp4', '차체 모델이 팔레트에 포크를 넣는 미리보기', '포크 삽입 구간', video=True, cls='')}
-</div>
+{figure('06_near_field_blind.png', '1.20 m 에서는 전면과 포켓이 관측되고 0.60 m 에서는 상판만 관측된다', '')}
 <div class="takeaway">필요 기능: 미관측 구간을 보완하는 포켓 위치 추적</div>
 """,
-    """팔레트에 근접하면 카메라 영상에서 전면이 사라지고 상판만 관측된다. 카메라를 바닥에서 0.5미터 높이에 설치하면 0.97미터보다 가까운 바닥은 화면에 들어오지 않으며, 팔레트 전면은 그 바닥에 접해 있다. 좌측 그림이 1.2미터와 0.6미터에서의 비교이다. 전면이 관측 범위를 벗어나면 인식 기준값을 조정하여도 검출할 수 없다. 앞 장의 1.75미터는 마스트 상단 설치 조건이며, 낮은 설치 위치에서도 접근 방식에 따라 0.8미터에서 1.3미터 사이에서 검출이 중단되었다. 포크 길이가 420밀리미터이므로 이 구간은 삽입이 완료될 때까지 이어진다. 중간 거리에서도 검출이 중단되는 구간이 확인되었다. 우측은 해당 구간의 동작을 나타낸 화면이며 접촉과 화물 하중은 반영하지 않았다. 따라서 매 영상마다 포켓을 새로 검출하는 기능에 더하여, 이전 검출 결과를 이용해 위치를 추정하는 추적 기능이 필요하다. 해당 기능은 다음 주 작업이다. 과제에서 제시한 네 가지 접근 상황 중 측면 접근과 근접 상황이 모두 이 구간에 해당한다.""",
+    """팔레트에 근접하면 카메라 영상에서 전면이 사라지고 상판만 관측된다. 카메라를 바닥에서 0.5미터 높이에 설치하면 0.97미터보다 가까운 바닥은 화면에 들어오지 않으며, 팔레트 전면은 그 바닥에 접해 있다. 좌측 그림이 1.2미터와 0.6미터에서의 비교이다. 전면이 관측 범위를 벗어나면 인식 기준값을 조정하여도 검출할 수 없다. 앞 장의 1.75미터는 마스트 상단 설치 조건이며, 낮은 설치 위치에서도 접근 방식에 따라 0.8미터에서 1.3미터 사이에서 검출이 중단되었다. 포크 길이가 420밀리미터이므로 이 구간은 삽입이 완료될 때까지 이어진다. 중간 거리에서도 검출이 중단되는 구간이 확인되었다. 따라서 매 영상마다 포켓을 새로 검출하는 기능에 더하여, 이전 검출 결과를 이용해 위치를 추정하는 추적 기능이 필요하다. 해당 기능은 다음 주 작업이다. 과제에서 제시한 네 가지 접근 상황 중 측면 접근과 근접 상황이 모두 이 구간에 해당한다.""",
     [(WK3, '카메라 0.50 m 에서 최근접 바닥 0.97 m, 그 앞뒤 판정'),
      (EV, '근접 미검출은 검출기가 아니라 카메라 화각'),
      (PLAN, '접근 방식별 검출 구간')], '화면 생성: 측정 리그 · MuJoCo')
 
 # ----------------------------------------------------------------- 12
-add('향후 추진 계획', '11  향후 추진 계획', 37, """
+add('향후 추진 계획', '11  향후 추진 계획', 37, f"""
 <h2 class="headline">향후 개발 계획 및 확인 항목</h2>
-<div class="roadmap grow"><article class="done"><h3>지금까지</h3><p>포켓 인식 구현 및 평가</p><p class="state">완료</p></article><article class="now"><h3>다음 주</h3><p>포켓 위치 추적 구현</p><p class="state">착수</p></article><article class="wait"><h3>차체 입고 후</h3><p>차체 실측 · 시험용 팔레트 제작<br>실제 센서 재측정</p><p class="state">대기</p></article><article class="wait"><h3>그 이후</h3><p>지도 작성 · 주행 제어<br>삽입 · 이송</p><p class="state">예정</p></article></div>
+<div class="split grow" style="grid-template-columns:1.15fr 1fr">
+{figure('09_docking_preview.mp4', '차체 모델이 팔레트에 포크를 넣는 미리보기', '다음 주 구현 대상 · 접촉과 하중 미반영', video=True, cls='')}
+<div class="roadmap"><article class="done"><h3>지금까지</h3><p>포켓 인식 구현 및 평가</p><p class="state">완료</p></article><article class="now"><h3>다음 주</h3><p>포켓 위치 추적 구현</p><p class="state">착수</p></article><article class="wait"><h3>차체 입고 후</h3><p>차체 실측 · 시험용 팔레트 제작<br>실제 센서 재측정</p><p class="state">대기</p></article><article class="wait"><h3>그 이후</h3><p>지도 작성 · 주행 제어<br>삽입 · 이송</p><p class="state">예정</p></article></div>
+</div>
 <div class="takeaway">다음 단계: 포켓 위치 추적 구현, 차체 입고 후 실제 센서로 재측정</div>
 """,
-    """다음 주에는 차체 없이 수행할 수 있는 포켓 위치 추적을 진행한다. 매 영상마다 새로 검출하는 대신 이전 검출 결과를 이용하여 위치를 유지하는 기능이며, 가림이나 지연으로 관측이 중단되었을 때 삽입을 중지하는 동작까지 확인한다. 카메라 설치 높이는 차체를 실측한 후 확정하고, 확정한 높이에 맞추어 장면을 다시 구성하여 촬영한다. 차체 입고 후에는 시험용 팔레트를 제작하고 실제 센서로 동일 항목을 재측정한다. 지도 작성과 주행은 그 이후 단계이다. 이번 자료의 수치는 센서 잡음을 반영하지 않은 조건의 값이므로 실제 센서로 재확인이 필요하다.""",
+    """다음 주에는 차체 없이 수행할 수 있는 포켓 위치 추적을 진행한다. 좌측은 추적 기능이 적용될 삽입 구간의 동작이며, 접촉과 화물 하중은 반영하지 않았다. 매 영상마다 새로 검출하는 대신 이전 검출 결과를 이용하여 위치를 유지하는 기능이며, 가림이나 지연으로 관측이 중단되었을 때 삽입을 중지하는 동작까지 확인한다. 카메라 설치 높이는 차체를 실측한 후 확정하고, 확정한 높이에 맞추어 장면을 다시 구성하여 촬영한다. 차체 입고 후에는 시험용 팔레트를 제작하고 실제 센서로 동일 항목을 재측정한다. 지도 작성과 주행은 그 이후 단계이다. 이번 자료의 수치는 센서 잡음을 반영하지 않은 조건의 값이므로 실제 센서로 재확인이 필요하다.""",
     [(MAP, '개발 로드맵의 다음 단계와 실물 조사 경로')], '출처: 개발 로드맵')
 
 
