@@ -102,3 +102,16 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
   flex:0 1 auto; display:block; object-fit:contain; border:1px solid var(--uos-rule); }
 .shot figcaption { flex-shrink:0; text-align:center; }
 .split > .shot { height:100%; }
+
+/* Week 3: the progress bar and the roadmap are laid out in the page rather
+   than baked into an image, so they stay crisp and stay editable. */
+.pipeline.grow, .roadmap.grow { align-content:center; }
+.pipeline-step .state, .roadmap .state { font-size:20.5px; margin-top:10px; font-weight:700; }
+.pipeline-step.done, .roadmap article.done { border-top-color:var(--uos-blue); }
+.pipeline-step.now, .roadmap article.now { border-top-color:#E0A100; }
+.pipeline-step.wait, .roadmap article.wait { border-top-color:var(--uos-rule); }
+.pipeline-step.done .state, .roadmap article.done .state { color:var(--uos-blue); }
+.pipeline-step.now .state, .roadmap article.now .state { color:#A97A00; }
+.pipeline-step.wait, .roadmap article.wait { color:var(--uos-ink-muted); }
+.roadmap article h3 { margin:12px 0 10px; }
+.roadmap article p { font-size:21px; }
