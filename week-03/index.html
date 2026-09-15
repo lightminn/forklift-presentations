@@ -95,7 +95,7 @@ EPAL 6 캡처와 평가: docs/validation/2026-09-14-epal6-capture-and-evaluation
 촬영 세트 101자세: docs/validation/2026-09-14-epal6-capture-and-evaluation.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="05  기준값 산출 방식"><div class="slide-body">
-<h2 class="headline">규격이 다른 팔레트에서 같은 코드가 동작</h2>
+<h2 class="headline">규격이 다른 팔레트에 대한 검출 기준 일반화</h2>
 <figure class="shot wide"><video class="media" src="assets/04_frozen_vs_derived.mp4" autoplay loop muted playsinline aria-label="같은 합성 접근 장면 101개를 두 설정으로 비교. 왼쪽 고정 기준 0개, 오른쪽 치수 기반 기준 97개 검출"></video><figcaption class="small muted">Gazebo 합성 접근 자세 101개 · 고정 0개 / 치수 기반 97개 검출</figcaption></figure>
 <div class="takeaway">축소 T11 합성 자세: 0/60 → 58/60 검출 | 최대 위치 오차 509.1 mm 1건</div>
 </div></x-import>
@@ -152,7 +152,7 @@ EPAL 6 모델로 만든 합성 장면 100개를 평가하였다. 포켓을 검�
 과제 원문 4쪽 — 마스트 상단 카메라: https://docs.google.com/presentation/d/1BjoJLWmwd07ZJujZp4BPZrwBhx5tsnfmBpWdLMy2YrQ/edit
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="08  카메라 설치 높이"><div class="slide-body">
-<h2 class="headline">카메라를 높일수록 가까운 포켓을 먼저 놓침</h2>
+<h2 class="headline">카메라 설치 높이에 따른 근거리 검출 성능 차이</h2>
 <figure class="shot wide"><img class="media" src="assets/13_camera_mount.png" alt="카메라 높이 0.27, 0.50, 0.90 m에서 같은 거리에 둔 팔레트와 각 높이의 수직 관측 범위"><figcaption class="small muted">적색 점이 카메라 위치</figcaption></figure>
 <div class="takeaway">합성 비교: 0.6~2.3 m 구간의 자세 35개 중 22 / 20 / 4개 검출 | 실제 설치 높이 미확정</div>
 </div></x-import>
@@ -169,7 +169,7 @@ EPAL 6 모델로 만든 합성 장면 100개를 평가하였다. 포켓을 검�
 접근 방식별 검출 구간: docs/plans/2026-09-13-pocket-evidence-restructure.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="09  삽입 구간 관측 한계"><div class="slide-body">
-<h2 class="headline">가까워지면 팔레트 앞면이 화면 아래로 사라짐</h2>
+<h2 class="headline">근접 접근 시 포켓 입구 인식 불가 구간</h2>
 <figure class="shot wide"><img class="media" src="assets/06_near_field_blind.png" alt="1.20 m 에서는 전면과 포켓이 관측되고 0.60 m 에서는 상판만 관측된다"></figure>
 <div class="takeaway">다음 작업: 이전 포켓 위치 추적과 관측 중단 시 삽입 정지 조건</div>
 </div></x-import>
