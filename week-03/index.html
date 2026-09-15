@@ -26,9 +26,9 @@ EPAL 6 캡처와 평가: docs/validation/2026-09-14-epal6-capture-and-evaluation
 개발 로드맵: docs/plans/2026-09-11-development-roadmap.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="01  개발 진행 현황"><div class="slide-body">
-<h2 class="headline">과제가 제시한 다섯 단계 중 앞의 두 단계를 완료</h2>
-<div class="pipeline grow"><article class="pipeline-step done"><h3>① 팔레트 인식</h3><p>RGB-D 카메라로 포크를 넣을 구멍을 찾는다</p><p class="state">구현·평가 완료</p></article><article class="pipeline-step done"><h3>② 로봇 기준 좌표</h3><p>찾은 구멍의 방향과 거리를 로봇 기준으로 계산</p><p class="state">구현 완료</p></article><article class="pipeline-step wait"><h3>③ 접근 경로</h3><p>장애물을 피해 팔레트 앞까지 가는 경로</p><p class="state">차체 입고 후</p></article><article class="pipeline-step now"><h3>④ 추적·삽입</h3><p>가까이서 관측을 이어가며 포크를 넣는다</p><p class="state">다음 주 착수</p></article><article class="pipeline-step wait"><h3>⑤ 이송·하역</h3><p>목적지로 옮기고 내려놓는다</p><p class="state">이후</p></article></div>
-<div class="takeaway">수행 범위: 1·2단계 구현 완료 · 3단계 이후는 차체를 받은 뒤에 착수</div>
+<h2 class="headline">다섯 단계 중 두 단계 완료</h2>
+<div class="pipeline grow"><article class="pipeline-step done"><h3>① 팔레트 인식</h3><p>포크 넣을 구멍 찾기</p><p class="state">구현·평가 완료</p></article><article class="pipeline-step done"><h3>② 로봇 기준 좌표</h3><p>구멍의 방향·거리 계산</p><p class="state">구현 완료</p></article><article class="pipeline-step wait"><h3>③ 접근 경로</h3><p>장애물 피해 접근</p><p class="state">차체 입고 후</p></article><article class="pipeline-step now"><h3>④ 추적·삽입</h3><p>보면서 포크 넣기</p><p class="state">다음 주 착수</p></article><article class="pipeline-step wait"><h3>⑤ 이송·하역</h3><p>옮기고 내려놓기</p><p class="state">이후</p></article></div>
+<div class="takeaway">3단계부터는 차체를 받은 뒤</div>
 <div class="foot"><span>출처: 과제 설명자료 7쪽</span><span>02 / 12</span></div></div></x-import>
 </section>
 
@@ -41,10 +41,9 @@ EPAL 6 캡처와 평가: docs/validation/2026-09-14-epal6-capture-and-evaluation
 SLAM·위치 추정은 M4, 차체 입고 후: docs/plans/2026-09-11-development-roadmap.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="02  2D LiDAR 관측 범위"><div class="slide-body">
-<h2 class="headline">센서 측정 높이 아래에 놓인 팔레트</h2>
-<figure class="shot wide"><img class="media" src="assets/21_lidar_plane.png" alt="옆에서 본 관측 평면과 그 높이에서 360도 방향의 반사 지점. 팔레트 반사는 0개"><figcaption class="small muted">설치 높이 0.50 m · 360° 방향의 반사 지점 계산 · MuJoCo</figcaption></figure>
-<p class="small muted">2D LiDAR는 벽·장애물을 보기 위한 센서여서 팔레트보다 높게 설치한다 · 지도 작성·로봇 위치 추정(SLAM)은 미구현</p>
-<div class="takeaway">역할 구분: 2D LiDAR는 벽·장애물 거리 측정 · RGB-D 카메라는 영상·거리로 포켓 인식</div>
+<h2 class="headline">팔레트는 LiDAR 평면 아래에 있다</h2>
+<figure class="shot wide"><img class="media" src="assets/21_lidar_plane.png" alt="옆에서 본 관측 평면과 그 높이에서 360도 방향의 반사 지점. 팔레트 반사는 0개"><figcaption class="small muted">설치 높이 0.50 m · MuJoCo</figcaption></figure>
+<div class="takeaway">LiDAR는 벽·장애물, 카메라는 팔레트</div>
 <div class="foot"><span>지도 작성·로봇 위치 추정(SLAM) 미구현</span><span>03 / 12</span></div></div></x-import>
 </section>
 
@@ -57,8 +56,8 @@ SLAM·위치 추정은 M4, 차체 입고 후: docs/plans/2026-09-11-development-
 측정 리그와 단계별 증거: docs/validation/2026-09-14-pocket-evidence-measurements.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="03  포켓 인식 처리 과정"><div class="slide-body">
-<figure class="shot wide"><img class="media" src="assets/20_pipeline_stages.png" alt="깊이 영상, 작업 영역, 평면 후보, 기둥·빈칸 격자, 포켓 자세의 다섯 단계"><figcaption class="small muted">Gazebo Harmonic 장면에서 포켓을 찾는 단계별 결과</figcaption></figure>
-<div class="takeaway">인식 방식: 팔레트 치수·모양으로 포켓 판별 · 실패한 단계와 원인 기록</div>
+<figure class="shot wide"><img class="media" src="assets/20_pipeline_stages.png" alt="깊이 영상, 작업 영역, 평면 후보, 기둥·빈칸 격자, 포켓 자세의 다섯 단계"><figcaption class="small muted">Gazebo 촬영 장면 · 단계별 중간 결과</figcaption></figure>
+<div class="takeaway">학습 없이 치수와 모양만으로 판별</div>
 <div class="foot"><span>대상 장면: 촬영 세트 s003</span><span>04 / 12</span></div></div></x-import>
 </section>
 
@@ -70,9 +69,9 @@ SLAM·위치 추정은 M4, 차체 입고 후: docs/plans/2026-09-11-development-
 팔레트 규격 결정과 무게·도달률 근거: docs/decisions/0002-test-pallet-and-geometry-generality.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="04  시험용 팔레트 선정"><div class="slide-body">
-<h2 class="headline">적재 한도 10 kg에 맞춘 시험용 팔레트 선정</h2>
-<figure class="shot wide"><img class="media" src="assets/15_pallet_choice.png" alt="포크를 넣은 채로 EPAL 6과 T11 곱하기 0.6을 나란히 비교"><figcaption class="small muted">포크 삽입 상태 · 잠정 차체 모델 (MuJoCo)</figcaption></figure>
-<div class="takeaway">선정 결과: T11 각 치수를 0.6배로 축소 · 가로 × 세로 × 높이 660 × 660 × 90 mm 제작 예정</div>
+<h2 class="headline">표준 팔레트는 무겁고 크다</h2>
+<figure class="shot wide"><img class="media" src="assets/15_pallet_choice.png" alt="포크를 넣은 채로 EPAL 6과 T11 곱하기 0.6을 나란히 비교"><figcaption class="small muted">포크를 넣은 상태 · MuJoCo</figcaption></figure>
+<div class="takeaway">T11 × 0.6 · 660 × 660 × 90 mm 제작</div>
 <div class="foot"><span>출처: ADR 0002</span><span>05 / 12</span></div></div></x-import>
 </section>
 
@@ -85,9 +84,9 @@ SLAM·위치 추정은 M4, 차체 입고 후: docs/plans/2026-09-11-development-
 고정값 적용 시 자세 125개 중 12개: docs/validation/2026-09-13-pocket-detector-m2.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="05  초기 설정의 한계"><div class="slide-body">
-<h2 class="headline">바닥 부근 측정점 제거에 따른 팔레트 인식 실패</h2>
-<figure class="shot wide"><img class="media" src="assets/22_points_lost.png" alt="같은 촬영 장면의 측정점을 옆에서 본 모습. 왼쪽은 바닥판 점이 사라지고 오른쪽은 남는다"><figcaption class="small muted">같은 장면의 측정점을 옆에서 본 모습 · 회색이 버려진 점</figcaption></figure>
-<div class="takeaway">결과: 실물 규격 모델의 시험 자세 125개 중 12개 검출 · 정면에서는 시험한 모든 거리에서 미검출</div>
+<h2 class="headline">버린 점 안에 판별 근거가 있었다</h2>
+<figure class="shot wide"><img class="media" src="assets/22_points_lost.png" alt="같은 촬영 장면의 측정점을 옆에서 본 모습. 왼쪽은 바닥판 점이 사라지고 오른쪽은 남는다"><figcaption class="small muted">옆에서 본 측정점 · 회색은 버려진 점</figcaption></figure>
+<div class="takeaway">시험 자세 125개 중 12개만 검출</div>
 <div class="foot"><span>출처: 측정 기록 2026-09-14</span><span>06 / 12</span></div></div></x-import>
 </section>
 
@@ -100,10 +99,10 @@ SLAM·위치 추정은 M4, 차체 입고 후: docs/plans/2026-09-11-development-
 측정 리그 — 촬영 세트와 비트 단위로 같은 장면: docs/validation/2026-09-14-pocket-evidence-measurements.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="06  기준값 산출 방식"><div class="slide-body">
-<h2 class="headline">팔레트 치수에 따른 인식 기준값 계산</h2>
-<figure class="shot wide"><video class="media" src="assets/04_frozen_vs_derived.mp4" autoplay loop muted playsinline aria-label="같은 주행을 종전 고정값과 규격 기반 산출값으로 나란히 재생"></video><figcaption class="small muted">측정 리그 · 동일 주행 183 프레임 중 좌측 고정값은 미검출 · 우측 계산값은 150 프레임 검출 · 하단 띠는 영상 한 장씩의 검출 여부</figcaption></figure>
-<div class="rule body">두 설정의 차이 · 바닥 제거 높이 <b>20 mm → 7.3 mm</b> · 면으로 인정할 두께 <b>20 mm → 7.8 mm</b> · 구멍으로 인정할 최소 측정점 <b>100 → 15</b><br>길이 기준은 팔레트가 작아진 비율만큼, 측정점 개수 기준은 넓이에 해당하므로 그 비율의 제곱만큼 줄인 값이다</div>
-<div class="takeaway">효과: 치수 입력으로 표준·축소 규격에 적용 · 축소 T11 시험 자세 60개 중 검출 16개 → 59개</div>
+<h2 class="headline">기준값을 치수에서 계산한다</h2>
+<figure class="shot wide"><video class="media" src="assets/04_frozen_vs_derived.mp4" autoplay loop muted playsinline aria-label="같은 주행을 종전 고정값과 규격 기반 산출값으로 나란히 재생"></video><figcaption class="small muted">같은 주행 183장 · 좌 종전 0장, 우 계산값 150장 검출 · 측정 리그</figcaption></figure>
+<div class="rule body">바닥 제거 <b>20 → 7.3 mm</b> · 면 두께 <b>20 → 7.8 mm</b> · 최소 측정점 <b>100 → 15</b></div>
+<div class="takeaway">축소 T11도 16개 → 59개 검출</div>
 <div class="foot"><span>화면 생성: 측정 리그 · 물체까지의 거리 계산 도구</span><span>07 / 12</span></div></div></x-import>
 </section>
 
@@ -116,12 +115,12 @@ Gazebo 촬영 파이프라인: docs/validation/2026-09-14-epal6-capture-and-eval
 자세 범위와 검출 판정: docs/plans/2026-09-13-pocket-evidence-restructure.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="07  접근 동작 확인"><div class="slide-body">
-<h2 class="headline">카메라와 팔레트 앞면 사이 2.95 m ~ 0.95 m 접근</h2>
+<h2 class="headline">2.95 m → 0.95 m 연속 접근</h2>
 <div class="split grow" style="grid-template-columns:1fr 1fr">
-<figure class="shot "><video class="media" src="assets/11_gazebo_approach.mp4" autoplay loop muted playsinline aria-label="카메라 시점에서 두 포켓을 계속 검출하는 연속 접근"></video><figcaption class="small muted">카메라 시점 · Gazebo Harmonic 생성 화면</figcaption></figure>
-<figure class="shot "><video class="media" src="assets/14_external_approach.mp4" autoplay loop muted playsinline aria-label="같은 접근을 3인칭에서 본 장면"></video><figcaption class="small muted">외부 시점 · 잠정 차체 모델 (MuJoCo)</figcaption></figure>
+<figure class="shot "><video class="media" src="assets/11_gazebo_approach.mp4" autoplay loop muted playsinline aria-label="카메라 시점에서 두 포켓을 계속 검출하는 연속 접근"></video><figcaption class="small muted">카메라 시점 · Gazebo</figcaption></figure>
+<figure class="shot "><video class="media" src="assets/14_external_approach.mp4" autoplay loop muted playsinline aria-label="같은 접근을 3인칭에서 본 장면"></video><figcaption class="small muted">외부 시점 · MuJoCo</figcaption></figure>
 </div>
-<div class="takeaway">검출 결과: 접근 중 시험 자세 101개 중 97개에서 포켓 검출 · 설정 위치(초록)와 계산 위치(자홍) 비교</div>
+<div class="takeaway">101개 자세 중 97개 검출</div>
 <div class="foot"><span>화면 생성: Gazebo Harmonic · MuJoCo</span><span>08 / 12</span></div></div></x-import>
 </section>
 
@@ -135,10 +134,10 @@ M2 합성 탐색 목표: docs/plans/2026-09-11-development-roadmap.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="08  평가 결과"><div class="slide-body">
 <div class="split grow" style="grid-template-columns:1.05fr 1fr">
-<figure class="shot "><img class="media" src="assets/03_scene_variety.png" alt="먼 거리, 가까운 거리, 비스듬한 자세, 가림, 유사 물체, 팔레트 없음"><figcaption class="small muted">촬영 장면 100개 중 6가지 조건 · Gazebo Harmonic 생성 화면</figcaption></figure>
-<figure class="shot "><img class="media" src="assets/17_targets.png" alt="검출률 100%, 위치 오차 p95 8.17 mm, 방향 오차 p95 0.053도"><figcaption class="small muted">개발 로드맵의 초기 목표와 이번 측정값 · p95는 오차의 95%가 이 값 이하인 경계</figcaption></figure>
+<figure class="shot "><img class="media" src="assets/03_scene_variety.png" alt="먼 거리, 가까운 거리, 비스듬한 자세, 가림, 유사 물체, 팔레트 없음"><figcaption class="small muted">100장면 중 6가지 조건 · Gazebo</figcaption></figure>
+<figure class="shot "><img class="media" src="assets/17_targets.png" alt="검출률 100%, 위치 오차 p95 8.17 mm, 방향 오차 p95 0.053도"><figcaption class="small muted">로드맵의 초기 목표와 이번 측정값</figcaption></figure>
 </div>
-<div class="takeaway">검증 범위: 컴퓨터로 만든 거리 영상 · 실제 센서·축소 T11·전체 거리 구간은 평가에 미포함</div>
+<div class="takeaway">가상 장면 기준 · 실제 센서는 아직</div>
 <div class="foot"><span>화면 생성: Gazebo Harmonic</span><span>09 / 12</span></div></div></x-import>
 </section>
 
@@ -151,9 +150,9 @@ M2 합성 탐색 목표: docs/plans/2026-09-11-development-roadmap.md
 과제 원문 4쪽 — 마스트 상단 카메라: https://docs.google.com/presentation/d/1BjoJLWmwd07ZJujZp4BPZrwBhx5tsnfmBpWdLMy2YrQ/edit
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="09  카메라 설치 높이"><div class="slide-body">
-<h2 class="headline">카메라 설치 높이에 따른 가까운 포켓의 인식 제한</h2>
-<figure class="shot wide"><img class="media" src="assets/13_camera_mount.png" alt="카메라 높이 0.27, 0.50, 0.90 m에서의 화각과 가장 가까운 검출 거리"><figcaption class="small muted">잠정 차체 모델 (MuJoCo) · 적색은 카메라 · 주황은 위아래로 볼 수 있는 범위</figcaption></figure>
-<div class="takeaway">설치 기준: 상단 설치 시 팔레트까지 1.75 m 이내 미검출 · 낮은 위치 우선 검토·차체 실측 후 확정</div>
+<h2 class="headline">높일수록 가까운 데를 먼저 잃는다</h2>
+<figure class="shot wide"><img class="media" src="assets/13_camera_mount.png" alt="카메라 높이 0.27, 0.50, 0.90 m에서의 화각과 가장 가까운 검출 거리"><figcaption class="small muted">적색 카메라 · 주황 시야 · MuJoCo</figcaption></figure>
+<div class="takeaway">마스트 상단은 1.75 m 이내를 못 본다</div>
 <div class="foot"><span>기준: 카메라에서 팔레트 전면까지의 거리</span><span>10 / 12</span></div></div></x-import>
 </section>
 
@@ -166,12 +165,12 @@ M2 합성 탐색 목표: docs/plans/2026-09-11-development-roadmap.md
 접근 방식별 검출 구간: docs/plans/2026-09-13-pocket-evidence-restructure.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="10  삽입 구간 관측 한계"><div class="slide-body">
-<h2 class="headline">카메라 화면에서 팔레트 앞면 이탈 시 인식 불가</h2>
+<h2 class="headline">삽입 직전엔 앞면이 안 보인다</h2>
 <div class="split grow" style="grid-template-columns:1fr 1fr">
-<figure class="shot "><img class="media" src="assets/06_near_field_blind.png" alt="0.60 m에서 전면이 사라지고 상판만 보이는 화면"><figcaption class="small muted">팔레트까지 0.60 m · 앞면 없이 윗판만 보이는 장면 (측정 리그)</figcaption></figure>
-<figure class="shot "><video class="media" src="assets/09_docking_preview.mp4" autoplay loop muted playsinline aria-label="차체 모델이 팔레트에 포크를 넣는 미리보기"></video><figcaption class="small muted">포크 삽입 구간 · 잠정 차체 모델 (MuJoCo) · 접촉·무게의 영향 미반영</figcaption></figure>
+<figure class="shot "><img class="media" src="assets/06_near_field_blind.png" alt="0.60 m에서 전면이 사라지고 상판만 보이는 화면"><figcaption class="small muted">0.60 m · 앞면 소실 · 측정 리그</figcaption></figure>
+<figure class="shot "><video class="media" src="assets/09_docking_preview.mp4" autoplay loop muted playsinline aria-label="차체 모델이 팔레트에 포크를 넣는 미리보기"></video><figcaption class="small muted">포크가 들어가는 구간 · MuJoCo</figcaption></figure>
 </div>
-<div class="takeaway">관측 한계: 포크 길이 420 mm · 포켓 인식이 끊기는 거리 0.8~1.3 m · 삽입 중 위치 추적 필요</div>
+<div class="takeaway">포크는 420 mm · 인식은 0.8 m에서 끊긴다</div>
 <div class="foot"><span>화면 생성: 측정 리그 · MuJoCo</span><span>11 / 12</span></div></div></x-import>
 </section>
 
@@ -183,9 +182,9 @@ M2 합성 탐색 목표: docs/plans/2026-09-11-development-roadmap.md
 로드맵 M3 이후와 H 경로: docs/plans/2026-09-11-development-roadmap.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="11  향후 추진 계획"><div class="slide-body">
-<h2 class="headline">다음 주는 포켓 추적, 그 다음은 차체 실측</h2>
-<div class="roadmap grow"><article class="done"><h3>M1 · M2</h3><p>개발 환경 정비와 포켓 인식</p><p class="state">완료 · 가상 장면 기준</p></article><article class="now"><h3>M3</h3><p>포켓 추적 — 가까이서 관측 이어가기</p><p class="state">다음 주</p></article><article class="wait"><h3>차체 입고</h3><p>실측 · 팔레트 제작 · 실제 센서로 재측정</p><p class="state">대기</p></article><article class="wait"><h3>M4 ~ M6</h3><p>지도 작성 · 주행 · 삽입 · 이송</p><p class="state">이후</p></article></div>
-<div class="takeaway">유의 사항: 이번 수치는 센서 흔들림을 넣지 않은 조건의 값 · 실제 센서로 다시 측정한다</div>
+<h2 class="headline">다음은 추적, 그 다음은 차체</h2>
+<div class="roadmap grow"><article class="done"><h3>M1 · M2</h3><p>포켓 인식</p><p class="state">완료</p></article><article class="now"><h3>M3</h3><p>포켓 추적</p><p class="state">다음 주</p></article><article class="wait"><h3>차체 입고</h3><p>실측 · 제작 · 재측정</p><p class="state">대기</p></article><article class="wait"><h3>M4 ~ M6</h3><p>지도 · 주행 · 삽입 · 이송</p><p class="state">이후</p></article></div>
+<div class="takeaway">가상 조건 값 · 실제 센서로 재측정</div>
 <div class="foot"><span>출처: 개발 로드맵</span><span>12 / 12</span></div></div></x-import>
 </section>
 </x-import></x-dc></body></html>
