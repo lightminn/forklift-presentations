@@ -118,10 +118,14 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 
 /* Week 3, slide 7: three before/after numbers read faster as a strip than as a
    sentence, and the shorter block leaves the comparison clip its full height. */
-.swap { display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; flex-shrink:0; }
-.swap > div { border-top:3px solid var(--uos-blue); padding-top:6px; }
-.swap b { display:block; font-size:17px; color:var(--uos-muted); font-weight:600; }
-.swap span { display:block; font-size:23px; font-weight:700; margin-top:1px; }
+/* Week 3, slide 7: only the threshold that decided the result stays on screen;
+   the other two derived values moved to the script. One item in a three-column
+   grid left two thirds of the slide empty, so this is a single full-width row. */
+.swap { display:flex; gap:18px; flex-shrink:0; }
+.swap > div { flex:1; border-top:3px solid var(--uos-blue); padding-top:6px;
+  display:flex; align-items:baseline; gap:14px; }
+.swap b { font-size:17px; color:var(--uos-muted); font-weight:600; }
+.swap span { font-size:23px; font-weight:700; }
 .swap i { font-style:normal; color:var(--uos-blue); padding:0 3px; }
 
 /* Week 3, slide 9: three target comparisons are a table, not a picture. Laid
