@@ -9,7 +9,7 @@
 이번 주에는 화물을 받치는 팔레트에서 포크를 넣는 구멍인 포켓을 찾고, 그 위치를 로봇 기준으로 계산하는 기능을 구현하였다. 컴퓨터로 만든 장면에서 측정한 인식 결과와 센서 설치 조건을 보고한다.
 
 [Sources]
-M2 포켓 인식 검증 기록: docs/validation/2026-09-13-pocket-detector-m2.md
+포켓 인식 검증 기록: docs/validation/2026-09-13-pocket-detector-m2.md
 EPAL 6 캡처와 평가: docs/validation/2026-09-14-epal6-capture-and-evaluation.md
 [/Sources]
 
@@ -28,7 +28,7 @@ EPAL 6 캡처와 평가: docs/validation/2026-09-14-epal6-capture-and-evaluation
 
 [Sources]
 센서 기준선 — 실시간 161회 / 32.0초, 기록 재생 일치: docs/validation/2026-09-10-gazebo-sensor-baseline.md
-SLAM·위치 추정은 M4, 차체 입고 후: docs/plans/2026-09-11-development-roadmap.md
+지도 작성·위치 추정은 차체 입고 후 단계: docs/plans/2026-09-11-development-roadmap.md
 [/Sources]
 
 ## 4쪽 · 포켓 인식 처리 과정 (01:55–02:50, 55초)
@@ -81,7 +81,7 @@ Gazebo 촬영 파이프라인: docs/validation/2026-09-14-epal6-capture-and-eval
 
 [Sources]
 dev 42/42, eval 18/18, 위치 p95 8.17 / 5.98 mm, 위양성 0: docs/validation/2026-09-14-epal6-capture-and-evaluation.md
-M2 합성 탐색 목표: docs/plans/2026-09-11-development-roadmap.md
+개발 로드맵의 초기 목표: docs/plans/2026-09-11-development-roadmap.md
 [/Sources]
 
 ## 10쪽 · 카메라 설치 높이 (07:40–08:40, 60초)
@@ -107,5 +107,5 @@ M2 합성 탐색 목표: docs/plans/2026-09-11-development-roadmap.md
 다음 주에는 차체 없이 할 수 있는 포켓 추적을 진행한다. 카메라가 매 순간 새로 찾는 대신 앞에서 본 위치를 이어서 유지하는 기능이며, 가림이나 지연으로 관측이 끊겼을 때 삽입을 중단하는 동작까지 확인한다. 카메라 높이는 차체를 실측한 뒤 확정하고, 그 높이에 맞추어 장면을 다시 만들어 촬영한다. 차체를 받으면 시험용 팔레트를 제작하고 실제 센서로 같은 항목을 다시 측정한다. 지도 작성과 주행은 그 다음 단계이다. 이번 자료의 수치는 모두 센서의 흔들림을 넣지 않은 조건에서 나온 값이므로 실제 센서로 재확인이 필요하다.
 
 [Sources]
-로드맵 M3 이후와 H 경로: docs/plans/2026-09-11-development-roadmap.md
+개발 로드맵의 다음 단계와 실물 조사 경로: docs/plans/2026-09-11-development-roadmap.md
 [/Sources]

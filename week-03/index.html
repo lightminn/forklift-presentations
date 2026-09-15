@@ -10,7 +10,7 @@
 이번 주에는 화물을 받치는 팔레트에서 포크를 넣는 구멍인 포켓을 찾고, 그 위치를 로봇 기준으로 계산하는 기능을 구현하였다. 컴퓨터로 만든 장면에서 측정한 인식 결과와 센서 설치 조건을 보고한다.
 
 [Sources]
-M2 포켓 인식 검증 기록: docs/validation/2026-09-13-pocket-detector-m2.md
+포켓 인식 검증 기록: docs/validation/2026-09-13-pocket-detector-m2.md
 EPAL 6 캡처와 평가: docs/validation/2026-09-14-epal6-capture-and-evaluation.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.TitleSlide" hint-size="100%,100%" title="3주차
@@ -38,7 +38,7 @@ EPAL 6 캡처와 평가: docs/validation/2026-09-14-epal6-capture-and-evaluation
 
 [Sources]
 센서 기준선 — 실시간 161회 / 32.0초, 기록 재생 일치: docs/validation/2026-09-10-gazebo-sensor-baseline.md
-SLAM·위치 추정은 M4, 차체 입고 후: docs/plans/2026-09-11-development-roadmap.md
+지도 작성·위치 추정은 차체 입고 후 단계: docs/plans/2026-09-11-development-roadmap.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="02  2D LiDAR 관측 범위"><div class="slide-body">
 <h2 class="headline">팔레트는 LiDAR 평면 아래에 있다</h2>
@@ -130,7 +130,7 @@ Gazebo 촬영 파이프라인: docs/validation/2026-09-14-epal6-capture-and-eval
 
 [Sources]
 dev 42/42, eval 18/18, 위치 p95 8.17 / 5.98 mm, 위양성 0: docs/validation/2026-09-14-epal6-capture-and-evaluation.md
-M2 합성 탐색 목표: docs/plans/2026-09-11-development-roadmap.md
+개발 로드맵의 초기 목표: docs/plans/2026-09-11-development-roadmap.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="08  평가 결과"><div class="slide-body">
 <div class="split grow" style="grid-template-columns:1.05fr 1fr">
@@ -179,11 +179,11 @@ M2 합성 탐색 목표: docs/plans/2026-09-11-development-roadmap.md
 다음 주에는 차체 없이 할 수 있는 포켓 추적을 진행한다. 카메라가 매 순간 새로 찾는 대신 앞에서 본 위치를 이어서 유지하는 기능이며, 가림이나 지연으로 관측이 끊겼을 때 삽입을 중단하는 동작까지 확인한다. 카메라 높이는 차체를 실측한 뒤 확정하고, 그 높이에 맞추어 장면을 다시 만들어 촬영한다. 차체를 받으면 시험용 팔레트를 제작하고 실제 센서로 같은 항목을 다시 측정한다. 지도 작성과 주행은 그 다음 단계이다. 이번 자료의 수치는 모두 센서의 흔들림을 넣지 않은 조건에서 나온 값이므로 실제 센서로 재확인이 필요하다.
 
 [Sources]
-로드맵 M3 이후와 H 경로: docs/plans/2026-09-11-development-roadmap.md
+개발 로드맵의 다음 단계와 실물 조사 경로: docs/plans/2026-09-11-development-roadmap.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="11  향후 추진 계획"><div class="slide-body">
 <h2 class="headline">다음은 추적, 그 다음은 차체</h2>
-<div class="roadmap grow"><article class="done"><h3>M1 · M2</h3><p>포켓 인식</p><p class="state">완료</p></article><article class="now"><h3>M3</h3><p>포켓 추적</p><p class="state">다음 주</p></article><article class="wait"><h3>차체 입고</h3><p>실측 · 제작 · 재측정</p><p class="state">대기</p></article><article class="wait"><h3>M4 ~ M6</h3><p>지도 · 주행 · 삽입 · 이송</p><p class="state">이후</p></article></div>
+<div class="roadmap grow"><article class="done"><h3>지금까지</h3><p>포켓 인식 구현·평가</p><p class="state">완료</p></article><article class="now"><h3>다음 주</h3><p>포켓 추적</p><p class="state">착수</p></article><article class="wait"><h3>차체 입고 후</h3><p>실측 · 팔레트 제작 · 실제 센서 재측정</p><p class="state">대기</p></article><article class="wait"><h3>그 이후</h3><p>지도 작성 · 주행 · 삽입 · 이송</p><p class="state">예정</p></article></div>
 <div class="takeaway">가상 조건 값 · 실제 센서로 재측정</div>
 <div class="foot"><span>출처: 개발 로드맵</span><span>12 / 12</span></div></div></x-import>
 </section>

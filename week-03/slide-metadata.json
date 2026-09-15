@@ -7,7 +7,7 @@
     "sources": [
       [
         "docs/validation/2026-09-13-pocket-detector-m2.md",
-        "M2 포켓 인식 검증 기록"
+        "포켓 인식 검증 기록"
       ],
       [
         "docs/validation/2026-09-14-epal6-capture-and-evaluation.md",
@@ -45,7 +45,7 @@
       ],
       [
         "docs/plans/2026-09-11-development-roadmap.md",
-        "SLAM·위치 추정은 M4, 차체 입고 후"
+        "지도 작성·위치 추정은 차체 입고 후 단계"
       ]
     ],
     "foot": "지도 작성·로봇 위치 추정(SLAM) 미구현"
@@ -143,7 +143,7 @@
       ],
       [
         "docs/plans/2026-09-11-development-roadmap.md",
-        "M2 합성 탐색 목표"
+        "개발 로드맵의 초기 목표"
       ]
     ],
     "foot": "화면 생성: Gazebo Harmonic"
@@ -190,7 +190,7 @@
     "sources": [
       [
         "docs/plans/2026-09-11-development-roadmap.md",
-        "로드맵 M3 이후와 H 경로"
+        "개발 로드맵의 다음 단계와 실물 조사 경로"
       ]
     ],
     "foot": "출처: 개발 로드맵"
