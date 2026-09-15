@@ -128,19 +128,18 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
    out in the page, the scene grid above them gets the full slide width. */
 .scores { display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; flex-shrink:0; }
 .scores > div { border-top:3px solid var(--uos-blue); padding-top:5px;
-  display:flex; align-items:baseline; gap:9px; }
+  display:grid; grid-template-columns:minmax(0,1fr) auto; column-gap:9px; align-items:baseline; }
 .scores b { font-size:19px; font-weight:600; color:var(--uos-ink); }
-.scores .hit { font-size:24px; font-weight:700; color:#1f8a4c; }
-.scores i { font-style:normal; font-size:16px; color:var(--uos-ink-muted); margin-left:auto; }
+.scores .hit { font-size:24px; font-weight:700; color:#1f8a4c; white-space:nowrap; }
+.scores i { grid-column:1/-1; text-align:right; font-style:normal; font-size:16px; color:var(--uos-ink-muted); }
 
-/* Week 3, slide 12: the roadmap sits beside the clip, so its cards stack and
-   tighten. Four cards in a column overflow at the grid sizes. */
-.split > .roadmap { display:flex; flex-direction:column; justify-content:space-between;
-  gap:6px; min-height:0; }
+/* Week 3, slide 12: four roadmap cards sit beside the clip in two rows. */
+.split > .roadmap { display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-rows:repeat(2,minmax(0,1fr)); gap:12px; min-height:0; }
 .split > .roadmap article { border-top:3px solid var(--uos-blue); padding-top:5px; }
-.split > .roadmap article h3 { font-size:22px; margin:3px 0 2px; }
-.split > .roadmap article p { font-size:17px; line-height:1.35; }
-.split > .roadmap article .state { font-size:16px; margin-top:2px; }
+.split > .roadmap article h3 { font-size:21px; margin:3px 0 2px; }
+.split > .roadmap article p { font-size:16px; line-height:1.35; }
+.split > .roadmap article .state { font-size:15px; margin-top:2px; }
 
 /* Week 3: in a split, the two clips have different aspect ratios, so centring
    each one leaves their tops at different heights. Align them at the top. */
