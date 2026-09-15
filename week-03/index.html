@@ -3,7 +3,7 @@
 <link rel="icon" href="data:,">
 <script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>3주차 개발 진행 보고</title>
-<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=1bfb95624899"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=000305c9ebc4"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 <section data-label="개발 진행 보고" data-screen-label="01" data-duration="20" data-speaker-notes="권장 20초
 
@@ -17,9 +17,9 @@ EPAL 6 캡처와 평가: docs/validation/2026-09-14-epal6-capture-and-evaluation
 개발 진행 보고" subtitle="임베디드구동 및 실습 · 팔레트 핸들링 경로 생성 및 제어"></x-import>
 </section>
 
-<section data-label="개발 진행 현황" data-screen-label="02" data-duration="40" data-speaker-notes="권장 40초
+<section data-label="개발 진행 현황" data-screen-label="02" data-duration="47" data-speaker-notes="권장 47초
 
-과제는 팔레트를 찾는 일부터 목적지에 내려놓는 일까지를 다섯 단계로 제시한다. 이번 주까지 1단계 팔레트 인식과 2단계 좌표 계산을 구현하였다. 2단계는 카메라가 찾은 구멍이 로봇 기준으로 어느 방향에 얼마나 떨어져 있는지 계산하는 일이다. 3단계부터는 실제 차체가 얼마나 돌 수 있고 얼마 만에 서는지를 알아야 하므로 차체를 받기 전에는 착수하지 않는다. 차체를 기다리는 동안 먼저 할 수 있는 일을 한 것이다. 따라서 이번 보고는 인식 성능과, 인식을 측정하면서 확인한 장비 조건으로 구성한다.
+과제는 팔레트를 찾는 일부터 목적지에 내려놓는 일까지를 다섯 단계로 제시한다. 이번 주까지 1단계 팔레트 인식과 2단계 좌표 계산을 구현하였다. 2단계는 카메라가 찾은 구멍이 로봇 기준으로 어느 방향에 얼마나 떨어져 있는지 계산하는 일이다. 3단계부터는 실제 차체가 얼마나 돌 수 있고 얼마 만에 서는지를 알아야 하므로 차체를 받기 전에는 착수하지 않는다. 차체를 기다리는 동안 먼저 할 수 있는 일을 한 것이다. 센서 쪽은 가상 실험 환경에서 컬러 영상과 거리 영상, 2D LiDAR 측정값을 32초 동안 161회 받아 기록하고 다시 재생해 같은 값이 나오는 것까지 확인해 두었다. 따라서 이번 보고는 인식 성능과, 인식을 측정하면서 확인한 장비 조건으로 구성한다.
 
 [Sources]
 과제 원문 7쪽의 다섯 단계: https://docs.google.com/presentation/d/1BjoJLWmwd07ZJujZp4BPZrwBhx5tsnfmBpWdLMy2YrQ/edit
@@ -27,14 +27,14 @@ EPAL 6 캡처와 평가: docs/validation/2026-09-14-epal6-capture-and-evaluation
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="01  개발 진행 현황"><div class="slide-body">
 <h2 class="headline">다섯 단계 중 두 단계 완료</h2>
-<div class="pipeline grow"><article class="pipeline-step done"><h3>① 팔레트 인식</h3><p>포크 넣을 구멍 찾기</p><p class="state">구현·평가 완료</p></article><article class="pipeline-step done"><h3>② 로봇 기준 좌표</h3><p>구멍의 방향·거리 계산</p><p class="state">구현 완료</p></article><article class="pipeline-step wait"><h3>③ 접근 경로</h3><p>장애물 피해 접근</p><p class="state">차체 입고 후</p></article><article class="pipeline-step now"><h3>④ 추적·삽입</h3><p>보면서 포크 넣기</p><p class="state">다음 주 착수</p></article><article class="pipeline-step wait"><h3>⑤ 이송·하역</h3><p>옮기고 내려놓기</p><p class="state">이후</p></article></div>
-<div class="takeaway">3단계부터는 차체를 받은 뒤</div>
+<div class="pipeline grow"><article class="pipeline-step done"><h3>① 팔레트 인식</h3><p>포크 넣을 구멍(포켓) 찾기</p><p class="state">구현·평가 완료</p></article><article class="pipeline-step done"><h3>② 로봇 기준 좌표</h3><p>포켓의 방향·거리 계산</p><p class="state">구현 완료</p></article><article class="pipeline-step wait"><h3>③ 접근 경로</h3><p>장애물 피해 접근</p><p class="state">차체 입고 후</p></article><article class="pipeline-step now"><h3>④ 추적·삽입</h3><p>보면서 포크 넣기</p><p class="state">다음 주 착수</p></article><article class="pipeline-step wait"><h3>⑤ 이송·하역</h3><p>옮기고 내려놓기</p><p class="state">이후</p></article></div>
+<div class="takeaway">이번 주 범위: 팔레트 인식과 좌표 계산, 3단계부터는 차체 입고 후</div>
 <div class="foot"><span>출처: 과제 설명자료 7쪽</span><span>02 / 12</span></div></div></x-import>
 </section>
 
-<section data-label="2D LiDAR 관측 범위" data-screen-label="03" data-duration="55" data-speaker-notes="권장 55초
+<section data-label="2D LiDAR 관측 범위" data-screen-label="03" data-duration="66" data-speaker-notes="권장 66초
 
-먼저 가상 실험 환경인 Gazebo에서 센서 자료를 받는 기능을 확인하였다. 컬러 영상인 RGB와 물체까지의 거리인 깊이, 2D LiDAR 거리 측정값을 로봇 프로그램 연결 도구인 ROS 2로 32초 동안 161회 수신하였다. 기록을 저장한 뒤 다시 재생하여 같은 값이 나오는 것까지 확인하였다. 다만 2D LiDAR로는 팔레트를 찾을 수 없다. 이 센서는 설치한 높이에서 수평으로 한 겹만 훑는다. 왼쪽 그림의 하늘색 면이 그 관측 평면이며, 높이 0.5미터에 설치한 경우이다. 팔레트는 전체 높이가 144밀리미터, 제작 예정인 것은 90밀리미터여서 그 면보다 훨씬 낮게 놓인다. 오른쪽은 같은 조건에서 사방으로 빛을 쏘아 되돌아온 지점을 위에서 본 것이다. 벽과 기둥, 상자에서는 298개가 되돌아오는데 팔레트에서는 한 개도 되돌아오지 않는다. 센서를 팔레트보다 낮게 다는 방법은 고려하지 않는다. 2D LiDAR는 벽과 장애물을 보고 지도를 만들기 위한 센서여서 팔레트보다 높게 설치하는 것이 당연한 조건이고, 팔레트가 관측 평면 아래 놓이는 것은 그 결과이다. 따라서 역할을 나눈다. 2D LiDAR는 지도 작성과 장애물 판단에, 팔레트와 포켓은 RGB-D 카메라에 맡긴다. 다음 장이 그 카메라 인식이다. 지도 작성과 로봇 위치 추정은 바퀴 회전으로 이동 거리를 재는 기능과 실제 주행이 있어야 하므로 차체를 받은 뒤의 단계이다.
+2D LiDAR로는 팔레트를 찾을 수 없다. 이 센서는 설치한 높이에서 수평으로 한 겹만 훑는다. 왼쪽 그림의 하늘색 면이 그 관측 평면이며, 높이 0.5미터에 설치한 경우이다. 팔레트는 전체 높이가 144밀리미터, 제작 예정인 것은 90밀리미터여서 그 면보다 훨씬 낮게 놓인다. 오른쪽은 같은 조건에서 사방으로 빛을 쏘아 되돌아온 지점을 위에서 본 것이다. 벽과 기둥, 상자에서는 298개가 되돌아오는데 팔레트에서는 한 개도 되돌아오지 않는다. 센서를 팔레트보다 낮게 다는 방법은 고려하지 않는다. 2D LiDAR는 벽과 장애물을 보고 지도를 만들기 위한 센서여서 팔레트보다 높게 설치하는 것이 당연한 조건이고, 팔레트가 관측 평면 아래 놓이는 것은 그 결과이다. 따라서 역할을 나눈다. 2D LiDAR는 지도 작성과 장애물 판단에, 팔레트와 포켓은 RGB-D 카메라에 맡긴다. 다음 장이 그 카메라 인식이다. 지도 작성과 로봇 위치 추정은 바퀴 회전으로 이동 거리를 재는 기능과 실제 주행이 있어야 하므로 차체를 받은 뒤의 단계이다.
 
 [Sources]
 센서 기준선 — 실시간 161회 / 32.0초, 기록 재생 일치: docs/validation/2026-09-10-gazebo-sensor-baseline.md
@@ -42,26 +42,27 @@ EPAL 6 캡처와 평가: docs/validation/2026-09-14-epal6-capture-and-evaluation
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="02  2D LiDAR 관측 범위"><div class="slide-body">
 <h2 class="headline">팔레트는 LiDAR 평면 아래에 있다</h2>
-<figure class="shot wide"><img class="media" src="assets/21_lidar_plane.png" alt="옆에서 본 관측 평면과 그 높이에서 360도 방향의 반사 지점. 팔레트 반사는 0개"><figcaption class="small muted">설치 높이 0.50 m · MuJoCo</figcaption></figure>
-<div class="takeaway">LiDAR는 벽·장애물, 카메라는 팔레트</div>
+<figure class="shot wide"><img class="media" src="assets/21_lidar_plane.png" alt="옆에서 본 관측 평면과 그 높이에서 360도 방향의 반사 지점. 팔레트 반사는 0개"><figcaption class="small muted"></figcaption></figure>
+<div class="takeaway">역할 구분: 2D LiDAR는 벽과 장애물, RGB-D 카메라는 팔레트</div>
 <div class="foot"><span>지도 작성·로봇 위치 추정(SLAM) 미구현</span><span>03 / 12</span></div></div></x-import>
 </section>
 
-<section data-label="포켓 인식 처리 과정" data-screen-label="04" data-duration="55" data-speaker-notes="권장 55초
+<section data-label="포켓 인식 처리 과정" data-screen-label="04" data-duration="49" data-speaker-notes="권장 49초
 
-깊이 영상은 화면의 각 지점에 카메라에서 물체까지의 거리를 기록한 영상이다. 이 영상에서 팔레트 앞면처럼 바닥에 수직으로 서 있는 평평한 면을 먼저 찾는다. 그림의 평면 잔차는 측정점과 찾은 면 사이의 거리이며, p95는 그 거리의 95퍼센트가 해당 값 이하인 경계이다. 면을 세로로 긴 칸인 격자로 나누어 기둥이 있는 칸과 빈 칸을 구분한다. 네 번째 그림에서 초록은 기둥, 자홍은 빈 칸이다. 빈 칸이 이어진 구간을 포크가 들어갈 구멍의 후보로 정한다. 구멍의 폭과 두 구멍 사이를 받치는 기둥의 폭이 규격에 맞고, 위아래 판도 함께 보일 때 포켓으로 판정한다. 많은 예시를 학습시켜 판단하는 모델은 사용하지 않았다. 학습용 자료를 모으기 전에도 동작하고, 실패한 단계와 원인을 확인할 수 있도록 치수와 모양을 이용하였다.
+거리 영상은 화면의 각 지점에 카메라에서 물체까지의 거리를 기록한 영상이다. 첫 단계가 그 영상이고, 여기서 팔레트 앞면처럼 바닥에 수직으로 서 있는 평평한 면을 찾는 것이 두 번째 단계이다. 두 번째 그림의 초록은 팔레트가 있을 만한 범위로 남긴 점이고, 주황은 그중에서 실제로 한 장의 수직면을 이루는 점이다. 세 번째 단계에서는 그 면을 세로로 긴 칸으로 잘라 팔레트를 받치는 나무 토막인 받침목이 있는 칸과 빈 칸을 구분한다. 세 번째 그림의 초록 막대가 받침목, 자홍이 빈 칸이다. 빈 칸이 이어진 구간이 포크가 들어갈 구멍의 후보가 된다. 마지막으로 구멍의 폭과 받침목의 폭이 규격에 맞고 위아래 판까지 함께 보이면 포켓으로 확정하고, 네 번째 그림처럼 좌우 구멍의 위치와 포크를 넣을 방향을 표시한다. 많은 예시를 학습시켜 판단하는 모델은 쓰지 않았다. 학습용 자료를 모으기 전에도 동작하고, 실패했을 때 어느 단계에서 왜 틀렸는지 확인할 수 있도록 치수와 모양만 이용하였다.
 
 [Sources]
 검출기 설계와 단계 정의: docs/validation/2026-09-13-pocket-detector-m2.md
 측정 리그와 단계별 증거: docs/validation/2026-09-14-pocket-evidence-measurements.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="03  포켓 인식 처리 과정"><div class="slide-body">
-<figure class="shot wide"><img class="media" src="assets/20_pipeline_stages.png" alt="깊이 영상, 작업 영역, 평면 후보, 기둥·빈칸 격자, 포켓 자세의 다섯 단계"><figcaption class="small muted">Gazebo 촬영 장면 · 단계별 중간 결과</figcaption></figure>
-<div class="takeaway">기둥·빈 칸·위아래 판이 함께 보여야 팔레트로 인정</div>
+<h2 class="headline">거리 영상에서 포켓까지, 네 단계</h2>
+<figure class="shot wide"><img class="media" src="assets/20_pipeline_stages.png" alt="거리 영상, 팔레트 앞면, 받침목과 빈 칸, 확정된 포켓의 네 단계"><figcaption class="small muted"></figcaption></figure>
+<div class="takeaway">판정 조건: 받침목·빈 칸·위아래 판이 함께 보일 것</div>
 <div class="foot"><span>대상 장면: 촬영 세트 s003</span><span>04 / 12</span></div></div></x-import>
 </section>
 
-<section data-label="시험용 팔레트 선정" data-screen-label="05" data-duration="50" data-speaker-notes="권장 50초
+<section data-label="시험용 팔레트 선정" data-screen-label="05" data-duration="47" data-speaker-notes="권장 47초
 
 시험에 사용할 팔레트 규격을 선정하였다. 조사한 국내 표준 대여 품목에는 한 변이 1000 밀리미터 미만인 규격이 없었고, 시장 전체에서도 짧은 변의 최소 길이는 740 밀리미터였다. 차체 카탈로그의 포크 적재 한도는 10 킬로그램이다. 유럽식 하프 팔레트인 EPAL 6은 자체 무게가 9에서 10 킬로그램이어서 화물을 더 실을 여유가 없다. 포크 길이도 420 밀리미터로 표준 팔레트의 절반까지 들어가지 못한다. 따라서 국내 표준 T11의 각 치수를 0.6배로 줄여, 가로·세로·높이가 660 × 660 × 90 밀리미터인 시험용 팔레트를 제작하기로 하였다. 크기만 줄이고 모양의 비율은 유지하므로, 인식 프로그램은 표준 크기와 축소 크기에서 모두 동작해야 한다.
 
@@ -71,45 +72,46 @@ EPAL 6 캡처와 평가: docs/validation/2026-09-14-epal6-capture-and-evaluation
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="04  시험용 팔레트 선정"><div class="slide-body">
 <h2 class="headline">표준 팔레트는 무겁고 크다</h2>
 <figure class="shot wide"><img class="media" src="assets/15_pallet_choice.png" alt="후보 팔레트 다섯 개를 같은 축척으로 놓고 포크 길이에서 가로선을 그은 비교"><figcaption class="small muted">같은 축척 · 갈색이 포크가 닿는 부분</figcaption></figure>
-<div class="takeaway">T11 × 0.6 · 660 × 660 × 90 mm 제작</div>
+<div class="takeaway">제작 사양: 국내 표준 T11의 0.6배, 660 × 660 × 90 mm</div>
 <div class="foot"><span>출처: ADR 0002</span><span>05 / 12</span></div></div></x-import>
 </section>
 
-<section data-label="초기 설정의 한계" data-screen-label="06" data-duration="55" data-speaker-notes="권장 55초
+<section data-label="초기 설정의 한계" data-screen-label="06" data-duration="52" data-speaker-notes="권장 52초
 
-인식 프로그램은 바닥 가까이에서 얻은 측정점을 불필요한 정보로 보고 제외하였다. 제거 범위는 바닥에서 20 밀리미터까지로 고정되어 있었다. 초기 장면의 팔레트 바닥판은 두께가 50 밀리미터여서 문제가 없었으나, 유럽 규격의 바닥판은 22 밀리미터이고 제작 예정인 축소 T11은 15 밀리미터이다. 그림의 적색 구간처럼 바닥판의 전부 또는 일부를 함께 제거하면서 인식에 필요한 정보가 사라졌다. 그 결과 실물 규격 모델의 위치와 방향을 바꾼 시험 자세 125개 중 12개에서만 포켓을 찾았다. 정면에서는 시험한 모든 거리에서 찾지 못하였다. 점들을 같은 면으로 인정할 두께 범위와 구조물을 판별할 최소 측정점 개수에도 고정된 기준을 사용하고 있었다. 그림의 초록색 유도값은 팔레트 치수에서 계산한 새 기준이며, 다음 장에서 설명한다.
+인식 프로그램은 바닥 가까이에서 얻은 측정점을 불필요한 정보로 보고 제외하였다. 제거 범위는 바닥에서 20 밀리미터까지로 고정되어 있었다. 초기 장면의 팔레트 바닥판은 두께가 50 밀리미터여서 문제가 없었으나, 유럽 규격의 바닥판은 22 밀리미터이고 제작 예정인 축소 T11은 15 밀리미터이다. 그림의 적색 구간처럼 바닥판의 전부 또는 일부를 함께 제거하면서 인식에 필요한 정보가 사라졌다. 그 결과 유럽 표준 팔레트 모델의 위치와 방향을 바꾼 시험 자세 125개 중 12개에서만 포켓을 찾았다. 정면에서는 시험한 모든 거리에서 찾지 못하였다. 점들을 같은 면으로 인정할 두께 범위와 구조물을 판별할 최소 측정점 개수에도 고정된 기준을 사용하고 있었다. 그림의 초록색 기준은 팔레트 치수에서 계산한 새 기준이며, 다음 장에서 설명한다.
 
 [Sources]
 바닥 절단 높이 20 mm 대 유도값, 검출 0/3 대 3/3: docs/validation/2026-09-14-pocket-evidence-measurements.md
 고정값 적용 시 자세 125개 중 12개: docs/validation/2026-09-13-pocket-detector-m2.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="05  초기 설정의 한계"><div class="slide-body">
-<h2 class="headline">버린 점 안에 판별 근거가 있었다</h2>
-<p class="small muted">바닥에서 반사된 점이 팔레트 점과 섞이므로 일정 높이 아래는 버린다 · 그 높이가 20 mm로 고정돼 있었고 팔레트 바닥판은 22 mm다</p>
-<figure class="shot wide"><img class="media" src="assets/22_floor_cut.png" alt="촬영한 팔레트 화면에 버리는 구간을 색으로 칠한 비교. 왼쪽은 바닥판이 그 안에 들어간다"><figcaption class="small muted">색칠한 띠가 버려지는 구간 · 노란 선이 바닥판 윗면</figcaption></figure>
-<div class="takeaway">시험 자세 125개 중 12개만 검출</div>
+<h2 class="headline">버린 측정점 안에 판별 근거가 있었다</h2>
+<p class="small muted">바닥에서 반사된 점이 팔레트 점과 섞이므로, 바닥에서 일정 높이 아래는 버린다</p>
+<figure class="shot wide"><img class="media" src="assets/22_floor_cut.png" alt="촬영한 팔레트 화면에 버리는 구간을 색으로 칠한 비교. 왼쪽은 바닥판이 그 안에 들어간다"><figcaption class="small muted"></figcaption></figure>
+<div class="takeaway">초기 결과: 시험 자세 125개 중 12개에서만 포켓 검출</div>
 <div class="foot"><span>출처: 측정 기록 2026-09-14</span><span>06 / 12</span></div></div></x-import>
 </section>
 
-<section data-label="기준값 산출 방식" data-screen-label="07" data-duration="65" data-speaker-notes="권장 65초
+<section data-label="기준값 산출 방식" data-screen-label="07" data-duration="57" data-speaker-notes="권장 57초
 
-앞 장의 고정된 기준값을 팔레트 치수에서 계산하도록 변경하였다. 길이 기준은 팔레트를 줄인 비율만큼 줄인다. 측정점 개수 기준은 보이는 면적에 맞추므로, 길이를 줄인 비율을 두 번 곱하여 적용한다. 바닥 부근의 측정점을 제거하는 높이는 바닥판 두께의 3분의 1로 정하였다. 화면은 촬영한 접근 주행 101장에 두 설정을 각각 적용한 것이다. 앞 장에서 본 버리는 구간을 색으로 칠해 두었다. 왼쪽은 그 띠가 두꺼워 바닥판을 덮고, 101장 모두에서 포켓을 찾지 못한다. 오른쪽은 띠가 얇아 바닥판이 남고, 97장에서 두 포켓을 찾는다. 아래 띠는 장면마다의 성공 여부이다. 팔레트 규격이 바뀌면 코드를 고치는 대신 새 치수를 입력할 수 있다. 제작 예정인 축소 T11 모델도 시험 자세 60개 중 검출한 자세가 16개에서 59개로 늘었다. 제작 후에는 실제로 잰 치수를 입력하여 기준값을 다시 계산한다.
+앞 장의 고정된 기준값을 팔레트 치수에서 계산하도록 변경하였다. 길이 기준은 팔레트를 줄인 비율만큼 줄인다. 측정점 개수 기준은 보이는 면적에 맞추므로, 길이를 줄인 비율을 두 번 곱하여 적용한다. 바닥 부근의 측정점을 제거하는 높이는 바닥판 두께의 3분의 1로 정하였다. 화면은 촬영한 접근 주행 101장에 두 설정을 각각 적용한 것이다. 앞 장에서 본 버리는 구간을 색으로 칠해 두었다. 왼쪽은 그 띠가 두꺼워 바닥판을 덮고, 101장 모두에서 포켓을 찾지 못한다. 오른쪽은 띠가 얇아 바닥판이 남고, 97장에서 두 포켓을 찾는다. 아래 띠는 장면마다의 성공 여부이다. 팔레트 규격이 바뀌면 코드를 고치는 대신 새 치수를 입력할 수 있다. 제작 예정인 축소 T11 모델도 시험 자세 60개 중 한 개도 찾지 못하던 것이 58개로 늘었다. 다만 받아들인 자세 가운데 위치를 500밀리미터 넘게 잘못 잡은 것이 하나 있어, 잘못 찾은 경우를 걸러내는 조건은 더 손봐야 한다. 제작 후에는 실제로 잰 치수를 입력하여 기준값을 다시 계산한다.
 
 [Sources]
-유도 공식과 기준점 선택, 자세 60개 중 16 → 59: docs/plans/2026-09-13-pocket-evidence-restructure.md
+재측정: 축소 T11 자세 60개 중 0 → 58, 최악 오위치 509 mm: docs/validation/2026-09-15-week-03-deck-measurements.md
+유도 공식과 기준점 선택: docs/plans/2026-09-13-pocket-evidence-restructure.md
 촬영 세트 101자세: docs/validation/2026-09-14-epal6-capture-and-evaluation.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="06  기준값 산출 방식"><div class="slide-body">
 <h2 class="headline">기준값을 치수에서 계산한다</h2>
-<figure class="shot wide"><video class="media" src="assets/04_frozen_vs_derived.mp4" autoplay loop muted playsinline aria-label="촬영한 같은 주행을 두 설정으로 나란히 재생. 왼쪽은 버리는 띠가 두꺼워 끝까지 못 찾는다"></video><figcaption class="small muted">색 띠가 버리는 구간 · 촬영한 같은 주행 101장 중 좌 0장, 우 97장 검출</figcaption></figure>
-<div class="rule body"><b>전에는 모든 팔레트에 같은 값</b>을 썼고, <b>이제는 그 팔레트의 치수로 계산</b>한다<br>바닥에서 버리는 높이 20 → 7.3 mm · 면으로 인정할 두께 20 → 7.8 mm · 팔레트로 인정할 최소 측정점 100 → 15</div>
-<div class="takeaway">축소 T11도 16개 → 59개 검출</div>
+<figure class="shot wide"><video class="media" src="assets/04_frozen_vs_derived.mp4" autoplay loop muted playsinline aria-label="촬영한 같은 주행을 두 설정으로 나란히 재생. 왼쪽은 버리는 띠가 두꺼워 끝까지 못 찾는다"></video><figcaption class="small muted">같은 주행 101장 · 왼쪽 0장, 오른쪽 97장 검출</figcaption></figure>
+<div class="swap"><div><b>바닥에서 버리는 높이</b><span>20 mm <i>→</i> 7.3 mm</span></div><div><b>같은 면으로 볼 두께</b><span>20 mm <i>→</i> 7.8 mm</span></div><div><b>팔레트로 인정할 점 개수</b><span>100개 <i>→</i> 15개</span></div></div>
+<div class="takeaway">적용 결과: 축소 T11도 시험 자세 60개 중 0개 → 58개</div>
 <div class="foot"><span>화면 생성: Gazebo 촬영 장면</span><span>07 / 12</span></div></div></x-import>
 </section>
 
-<section data-label="접근 동작 확인" data-screen-label="08" data-duration="60" data-speaker-notes="권장 60초
+<section data-label="접근 동작 확인" data-screen-label="08" data-duration="50" data-speaker-notes="권장 50초
 
-팔레트에 가까워지는 동안 포켓을 계속 찾을 수 있는지 확인하였다. 좌측은 Gazebo Harmonic으로 만든 카메라 시점이고, 우측은 MuJoCo의 잠정 차체 모델로 같은 접근을 보여 준 화면이다. 카메라와 팔레트 앞면 사이 거리 2.95 미터에서 시작하여 비스듬히 접근하며 방향을 맞추고 0.95 미터까지 이동하였다. 초록은 장면에 설정한 포켓 위치이고 자홍은 인식 프로그램이 계산한 위치로, 화면에서 대부분 겹쳐 보인다. 위치와 방향을 바꾼 시험 자세 101개 중 97개에서 두 포켓을 찾았다. 주황색은 카메라가 위아래로 볼 수 있는 범위이다. 접근 경로를 따라 20 밀리미터 간격으로 촬영하여 연속 영상으로 구성하였다.
+팔레트에 가까워지는 동안 포켓을 계속 찾을 수 있는지 확인하였다. 좌측은 Gazebo Harmonic으로 만든 카메라 시점이고, 우측은 MuJoCo의 잠정 차체 모델로 같은 접근을 보여 준 화면이다. 카메라와 팔레트 앞면 사이 거리 2.95 미터에서 시작하여 비스듬히 접근하며 방향을 맞추고 0.95 미터까지 이동하였다. 초록은 장면에 설정한 포켓 위치이고 자홍은 인식 프로그램이 계산한 위치로, 화면에서 대부분 겹쳐 보인다. 주황색은 카메라가 위아래로 볼 수 있는 범위이다. 접근 경로를 따라 20 밀리미터 간격으로 촬영하여 연속 영상으로 구성하였다.
 
 [Sources]
 Gazebo 촬영 파이프라인: docs/validation/2026-09-14-epal6-capture-and-evaluation.md
@@ -121,61 +123,64 @@ Gazebo 촬영 파이프라인: docs/validation/2026-09-14-epal6-capture-and-eval
 <figure class="shot "><video class="media" src="assets/11_gazebo_approach.mp4" autoplay loop muted playsinline aria-label="카메라 시점에서 두 포켓을 계속 검출하는 연속 접근"></video><figcaption class="small muted">카메라 시점 · Gazebo</figcaption></figure>
 <figure class="shot "><video class="media" src="assets/14_external_approach.mp4" autoplay loop muted playsinline aria-label="같은 접근을 3인칭에서 본 장면"></video><figcaption class="small muted">외부 시점 · MuJoCo</figcaption></figure>
 </div>
-<div class="takeaway">101개 자세 중 97개 검출</div>
+<div class="takeaway">접근 구간: 2.95 m부터 0.95 m까지 끊김 없이 포켓 유지</div>
 <div class="foot"><span>화면 생성: Gazebo Harmonic · MuJoCo</span><span>08 / 12</span></div></div></x-import>
 </section>
 
-<section data-label="평가 결과" data-screen-label="09" data-duration="60" data-speaker-notes="권장 60초
+<section data-label="평가 결과" data-screen-label="09" data-duration="70" data-speaker-notes="권장 70초
 
-실물 규격 팔레트 모델로 장면 100개를 만들어 촬영하고 평가하였다. 좌측은 여섯 가지 조건의 예이며, yaw는 좌우로 틀어진 각도이다. 포켓이 가려져 판단할 수 없는 장면은 인식 결과에서 제외해야 하며, 비슷한 물체나 팔레트가 없는 장면을 포켓으로 잘못 판단해서도 안 된다. 촬영 장면 100개를 모두 확보하였고, 포켓을 찾아야 하는 장면에서는 모두 검출하였다. 그림의 dev와 eval은 각각 개발용 장면과 평가용 장면이다. 우측은 개발 로드맵에 정한 초기 목표와 이번 측정값이다. 이 목표는 개발을 시작할 때 제안한 값이며 실물 장비의 합격 기준은 아니다. 검출률은 기준 95퍼센트에 대해 100퍼센트였다. p95는 측정 오차를 작은 순서로 놓았을 때 95퍼센트가 이 값 이하인 경계이다. 위치 오차 p95는 기준 20밀리미터에 대해 8.17밀리미터, 방향 오차 p95는 기준 2도에 대해 0.053도였다. 수치상 세 기준을 충족하였으나 실제 장비의 목표 달성으로 판단할 수는 없다. 컴퓨터가 만든 거리 영상이고, 축소 T11과 전체 거리 구간은 평가하지 않았다. 실제 센서에는 물체까지의 거리 2.5미터에서 약 50밀리미터의 거리 측정 오차가 있으며, 이번 평가에는 이 오차를 반영하지 않았다.
+지금 확보한 유럽 표준 팔레트 EPAL 6 의 치수로 장면 100개를 만들어 촬영하고 평가하였다. 좌측은 여섯 가지 조건의 예이다. 포켓이 가려져 판단할 수 없는 장면은 인식 결과에서 제외해야 하며, 비슷한 물체나 팔레트가 없는 장면을 포켓으로 잘못 판단해서도 안 된다. 촬영 장면 100개를 모두 확보하였다. 그중 포켓을 찾아야 하는 장면이 60개, 찾으면 안 되는 장면이 40개이며, 찾아야 하는 60개는 전부 검출하였다. 우측은 개발 로드맵에 정한 초기 목표와 이번 측정값이다. 이 목표는 개발을 시작할 때 제안한 값이며 실물 장비의 합격 기준은 아니다. 검출률은 기준 95퍼센트에 대해 100퍼센트였다. p95는 측정 오차를 작은 순서로 놓았을 때 95퍼센트가 이 값 이하인 경계이다. 위치 오차 p95는 기준 20밀리미터에 대해 8.17밀리미터, 방향 오차 p95는 기준 2도에 대해 0.053도였다. 수치상 세 기준을 충족하였으나 실제 장비의 목표 달성으로 판단할 수는 없다. 컴퓨터가 만든 거리 영상이고, 축소 T11과 전체 거리 구간은 평가하지 않았다. 실제 센서에는 물체까지의 거리 2.5미터에서 약 50밀리미터의 거리 측정 오차가 있으며, 이번 평가에는 이 오차를 반영하지 않았다.
 
 [Sources]
-dev 42/42, eval 18/18, 위치 p95 8.17 / 5.98 mm, 위양성 0: docs/validation/2026-09-14-epal6-capture-and-evaluation.md
+개발용 42/42, 평가용 18/18, 위치 p95 8.17 / 5.98 mm, 위양성 0: docs/validation/2026-09-14-epal6-capture-and-evaluation.md
 개발 로드맵의 초기 목표: docs/plans/2026-09-11-development-roadmap.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="08  평가 결과"><div class="slide-body">
+<h2 class="headline">표준 치수 100장면에서 목표를 모두 넘겼다</h2>
 <div class="split grow" style="grid-template-columns:1.05fr 1fr">
-<figure class="shot "><img class="media" src="assets/03_scene_variety.png" alt="먼 거리, 가까운 거리, 비스듬한 자세, 가림, 유사 물체, 팔레트 없음"><figcaption class="small muted">100장면 중 6가지 조건 · Gazebo</figcaption></figure>
-<figure class="shot "><img class="media" src="assets/17_targets.png" alt="검출률 100%, 위치 오차 p95 8.17 mm, 방향 오차 p95 0.053도"><figcaption class="small muted">로드맵의 초기 목표와 이번 측정값</figcaption></figure>
+<figure class="shot "><img class="media" src="assets/03_scene_variety.png" alt="먼 거리, 가까운 거리, 비스듬한 자세, 가림, 유사 물체, 팔레트 없음"><figcaption class="small muted">100장면 중 6가지 조건</figcaption></figure>
+<figure class="shot "><img class="media" src="assets/17_targets.png" alt="검출률 100%, 위치 오차 p95 8.17 mm, 방향 오차 p95 0.053도"><figcaption class="small muted"></figcaption></figure>
 </div>
-<div class="takeaway">가상 장면 기준 · 실제 센서는 아직</div>
+<div class="takeaway">판단 범위: 가상 장면에서만 확인, 실제 센서는 재측정 필요</div>
 <div class="foot"><span>화면 생성: Gazebo Harmonic</span><span>09 / 12</span></div></div></x-import>
 </section>
 
-<section data-label="카메라 설치 높이" data-screen-label="10" data-duration="60" data-speaker-notes="권장 60초
+<section data-label="카메라 설치 높이" data-screen-label="10" data-duration="59" data-speaker-notes="권장 59초
 
-카메라 설치 높이별로 팔레트까지의 정면 거리를 100밀리미터씩 바꾸며 포켓을 찾을 수 있는지 측정하였다. 먼 곳을 볼 수 있는 범위는 비슷하였으나, 높이 설치할수록 가까운 포켓을 먼저 놓쳤다. 마스트는 포크를 위아래로 움직이는 세로 기둥이다. 과제 설명자료처럼 그 상단에 카메라를 설치하면 팔레트까지의 거리 1.75미터 이내에서 포켓을 찾지 못하였고, 검출한 시험 지점 수도 절반으로 줄었다. 화면의 설치 조건별로 인식이 끊기는 순간 포크 끝에서 팔레트까지 남은 거리는 각각 580, 780, 1280 밀리미터이다. 카메라를 낮추면 포켓을 찾을 수 있는 가장 가까운 거리가 1.05미터로 줄었으나, 개선 폭은 0.2미터 수준이었다. 시험한 상단 설치 조건에서는 가까이 접근하는 구간의 인식이 어려워, 낮은 설치 위치를 기준으로 개발하고 있다. 최종 높이는 실제 마스트 높이와 포크가 위아래로 움직이는 범위를 측정한 후 확정한다.
+카메라 설치 높이별로 팔레트까지의 정면 거리를 100밀리미터씩 바꾸며 포켓을 찾을 수 있는지 측정하였다. 먼 곳을 볼 수 있는 범위는 비슷하였으나, 높이 설치할수록 가까운 포켓을 먼저 놓쳤다. 마스트는 포크를 위아래로 움직이는 세로 기둥이다. 과제 설명자료처럼 그 상단에 카메라를 설치하면 팔레트까지의 거리 1.75미터 이내에서 포켓을 찾지 못하였고, 검출한 시험 지점 수도 절반으로 줄었다. 화면의 설치 조건별로 인식이 끊기는 순간 포크 끝에서 팔레트까지 남은 거리는 각각 850, 1050, 1550 밀리미터이다. 카메라를 낮추면 포켓을 찾을 수 있는 가장 가까운 거리가 1.05미터로 줄었으나, 개선 폭은 0.2미터 수준이었다. 시험한 상단 설치 조건에서는 가까이 접근하는 구간의 인식이 어려워, 낮은 설치 위치를 기준으로 개발하고 있다. 최종 높이는 실제 마스트 높이와 포크가 위아래로 움직이는 범위를 측정한 후 확정한다.
 
 [Sources]
 장착 높이별 검출 구간 측정: docs/validation/2026-09-14-epal6-capture-and-evaluation.md
+포크 끝 잔여 거리 850 / 1050 / 1550 mm: docs/validation/2026-09-15-week-03-deck-measurements.md
 과제 원문 4쪽 — 마스트 상단 카메라: https://docs.google.com/presentation/d/1BjoJLWmwd07ZJujZp4BPZrwBhx5tsnfmBpWdLMy2YrQ/edit
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="09  카메라 설치 높이"><div class="slide-body">
-<h2 class="headline">높일수록 가까운 데를 먼저 잃는다</h2>
-<figure class="shot wide"><img class="media" src="assets/13_camera_mount.png" alt="카메라 높이 0.27, 0.50, 0.90 m에서의 화각과 가장 가까운 검출 거리"><figcaption class="small muted">적색 카메라 · 주황 시야 · MuJoCo</figcaption></figure>
-<div class="takeaway">마스트 상단은 1.75 m 이내를 못 본다</div>
-<div class="foot"><span>기준: 카메라에서 팔레트 전면까지의 거리</span><span>10 / 12</span></div></div></x-import>
+<h2 class="headline">카메라를 높일수록 가까운 팔레트를 놓친다</h2>
+<figure class="shot wide"><img class="media" src="assets/13_camera_mount.png" alt="카메라 높이 0.27, 0.50, 0.90 m에서의 화각과 가장 가까운 검출 거리"><figcaption class="small muted">적색 점이 카메라</figcaption></figure>
+<div class="takeaway">설치 판단: 마스트 상단은 1.75 m 이내를 못 봐 낮은 위치로 개발</div>
+<div class="foot"><span>기준: 카메라에서 팔레트 앞면까지의 거리</span><span>10 / 12</span></div></div></x-import>
 </section>
 
-<section data-label="삽입 구간 관측 한계" data-screen-label="11" data-duration="60" data-speaker-notes="권장 60초
+<section data-label="삽입 구간 관측 한계" data-screen-label="11" data-duration="66" data-speaker-notes="권장 66초
 
-팔레트에 가까워지면 카메라에는 앞면이 사라지고 윗판만 보인다. 좌측은 카메라와 팔레트 앞면 사이 거리가 0.6미터인 장면이다. 앞면이 카메라가 볼 수 있는 범위를 벗어나면 인식 기준값을 바꾸어도 보이지 않는 면을 찾을 수 없다. 접근 방식에 따라 인식이 끊기는 거리는 0.8미터에서 1.3미터였고, 포크 길이는 420밀리미터이다. 시험한 설치 높이에서는 삽입 완료 구간까지 앞면을 볼 수 없었다. 우측은 그 구간의 동작을 보여 주며 접촉과 무게의 영향은 계산하지 않았다. 중간 거리에서도 인식이 끊기는 구간이 있었다. 따라서 영상 한 장마다 포켓을 새로 찾는 기능에 더해, 이전에 찾은 위치를 이어서 추정하는 추적 기능이 필요하다. 이 기능은 다음 주 작업이며, 보이지 않는 동안에도 직접 측정할 수 있다는 뜻은 아니다. 과제의 조건 B인 측면 접근과 조건 D인 가까운 거리·후방 장애물 조건에서도 이 한계를 고려해야 한다.
+팔레트에 가까워지면 카메라에는 앞면이 사라지고 윗판만 보인다. 카메라를 바닥에서 0.5미터 높이에 두면 0.97미터보다 가까운 바닥은 화면에 들어오지 않는데, 팔레트 앞면이 바로 그 바닥에 붙어 있기 때문이다. 좌측 그림이 그 비교이다. 앞면이 카메라가 볼 수 있는 범위를 벗어나면 인식 기준값을 바꾸어도 보이지 않는 면을 찾을 수 없다. 앞 장에서 본 낮은 설치 위치에서도 접근 방식에 따라 0.8미터에서 1.3미터 사이에서 인식이 끊겼다. 앞 장의 1.75미터는 마스트 상단에 설치한 경우이므로, 낮게 달아도 끊기는 구간 자체는 남는다는 뜻이다. 포크 길이는 420밀리미터이므로 이 구간은 포크를 넣는 동안 내내 이어진다. 시험한 설치 높이에서는 삽입 완료 구간까지 앞면을 볼 수 없었다. 우측은 그 구간의 동작을 보여 주며 접촉과 무게의 영향은 계산하지 않았다. 중간 거리에서도 인식이 끊기는 구간이 있었다. 따라서 영상 한 장마다 포켓을 새로 찾는 기능에 더해, 이전에 찾은 위치를 이어서 추정하는 추적 기능이 필요하다. 이 기능은 다음 주 작업이다. 과제가 제시한 네 가지 접근 상황 가운데 옆에서 비스듬히 들어가는 경우와 팔레트가 너무 가까운 경우가 모두 이 구간에 걸린다.
 
 [Sources]
+카메라 0.50 m 에서 최근접 바닥 0.97 m, 그 앞뒤 판정: docs/validation/2026-09-15-week-03-deck-measurements.md
 근접 미검출은 검출기가 아니라 카메라 화각: docs/validation/2026-09-14-pocket-evidence-measurements.md
 접근 방식별 검출 구간: docs/plans/2026-09-13-pocket-evidence-restructure.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="10  삽입 구간 관측 한계"><div class="slide-body">
-<h2 class="headline">삽입 직전엔 앞면이 안 보인다</h2>
-<div class="split grow" style="grid-template-columns:1fr 1fr">
-<figure class="shot "><img class="media" src="assets/06_near_field_blind.png" alt="0.60 m에서 전면이 사라지고 상판만 보이는 화면"><figcaption class="small muted">0.60 m · 앞면 소실 · 측정 리그</figcaption></figure>
-<figure class="shot "><video class="media" src="assets/09_docking_preview.mp4" autoplay loop muted playsinline aria-label="차체 모델이 팔레트에 포크를 넣는 미리보기"></video><figcaption class="small muted">포크가 들어가는 구간 · MuJoCo</figcaption></figure>
+<h2 class="headline">포크를 넣기 직전에 팔레트 앞면이 시야에서 사라진다</h2>
+<div class="split grow" style="grid-template-columns:1.75fr 1fr">
+<figure class="shot "><img class="media" src="assets/06_near_field_blind.png" alt="1.20 m에서는 앞면과 포켓이 보이고 0.60 m에서는 윗판만 보인다"><figcaption class="small muted"></figcaption></figure>
+<figure class="shot "><video class="media" src="assets/09_docking_preview.mp4" autoplay loop muted playsinline aria-label="차체 모델이 팔레트에 포크를 넣는 미리보기"></video><figcaption class="small muted">포크가 들어가는 구간</figcaption></figure>
 </div>
-<div class="takeaway">포크는 420 mm · 인식은 0.8 m에서 끊긴다</div>
+<div class="takeaway">필요 기능: 안 보이는 구간을 이어 줄 포켓 추적</div>
 <div class="foot"><span>화면 생성: 측정 리그 · MuJoCo</span><span>11 / 12</span></div></div></x-import>
 </section>
 
-<section data-label="향후 추진 계획" data-screen-label="12" data-duration="40" data-speaker-notes="권장 40초
+<section data-label="향후 추진 계획" data-screen-label="12" data-duration="37" data-speaker-notes="권장 37초
 
 다음 주에는 차체 없이 할 수 있는 포켓 추적을 진행한다. 카메라가 매 순간 새로 찾는 대신 앞에서 본 위치를 이어서 유지하는 기능이며, 가림이나 지연으로 관측이 끊겼을 때 삽입을 중단하는 동작까지 확인한다. 카메라 높이는 차체를 실측한 뒤 확정하고, 그 높이에 맞추어 장면을 다시 만들어 촬영한다. 차체를 받으면 시험용 팔레트를 제작하고 실제 센서로 같은 항목을 다시 측정한다. 지도 작성과 주행은 그 다음 단계이다. 이번 자료의 수치는 모두 센서의 흔들림을 넣지 않은 조건에서 나온 값이므로 실제 센서로 재확인이 필요하다.
 
@@ -185,7 +190,7 @@ dev 42/42, eval 18/18, 위치 p95 8.17 / 5.98 mm, 위양성 0: docs/validation/2
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="11  향후 추진 계획"><div class="slide-body">
 <h2 class="headline">다음은 추적, 그 다음은 차체</h2>
 <div class="roadmap grow"><article class="done"><h3>지금까지</h3><p>포켓 인식 구현·평가</p><p class="state">완료</p></article><article class="now"><h3>다음 주</h3><p>포켓 추적</p><p class="state">착수</p></article><article class="wait"><h3>차체 입고 후</h3><p>실측 · 팔레트 제작 · 실제 센서 재측정</p><p class="state">대기</p></article><article class="wait"><h3>그 이후</h3><p>지도 작성 · 주행 · 삽입 · 이송</p><p class="state">예정</p></article></div>
-<div class="takeaway">가상 조건 값 · 실제 센서로 재측정</div>
+<div class="takeaway">다음 단계: 포켓 추적 구현, 차체 입고 후 실제 센서로 재측정</div>
 <div class="foot"><span>출처: 개발 로드맵</span><span>12 / 12</span></div></div></x-import>
 </section>
 </x-import></x-dc></body></html>

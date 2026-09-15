@@ -115,3 +115,11 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .pipeline-step.wait, .roadmap article.wait { color:var(--uos-ink-muted); }
 .roadmap article h3 { margin:12px 0 10px; }
 .roadmap article p { font-size:21px; }
+
+/* Week 3, slide 7: three before/after numbers read faster as a strip than as a
+   sentence, and the shorter block leaves the comparison clip its full height. */
+.swap { display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; flex-shrink:0; }
+.swap > div { border-top:3px solid var(--uos-blue); padding-top:9px; }
+.swap b { display:block; font-size:20px; color:var(--uos-muted); font-weight:600; }
+.swap span { display:block; font-size:27px; font-weight:700; margin-top:3px; }
+.swap i { font-style:normal; color:var(--uos-blue); padding:0 3px; }
