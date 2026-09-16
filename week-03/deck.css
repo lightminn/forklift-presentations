@@ -165,3 +165,14 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
   top: calc(var(--uos-title-logo-top) + (var(--uos-title-logo-size) - 64px) / 2);
   right: calc(100% - var(--uos-title-logo-left) + 28px);
 }
+
+/* 5쪽: 두 산출 방식을 나란히 놓고 채택한 쪽을 표시한다. '먼저 이렇게 했다가
+   바꿨다' 가 아니라 '두 방식을 비교해 골랐다' 로 읽혀야 하므로, 둘을 같은
+   크기로 두고 채택한 쪽만 파란 윤곽과 진한 글자로 구분한다. */
+.choice { display:grid; grid-template-columns:1fr 1fr; gap:20px; flex-shrink:0; }
+.choice > div { border-top:3px solid var(--uos-rule); padding-top:8px; color:var(--uos-ink-muted); }
+.choice > div.taken { border-top-color:var(--uos-blue); color:var(--uos-ink); }
+.choice b { display:block; font-size:21px; font-weight:700; margin-bottom:4px; }
+.choice span { display:block; font-size:19px; line-height:1.4; }
+.choice i { display:block; font-style:normal; font-size:19px; line-height:1.4; margin-top:4px; }
+.choice > div.taken i { color:var(--uos-blue); font-weight:600; }
