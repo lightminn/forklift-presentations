@@ -102,7 +102,17 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 
 /* Week 3: the progress bar and the roadmap are laid out in the page rather
    than baked into an image, so they stay crisp and stay editable. */
-.pipeline.grow, .roadmap.grow { align-content:center; }
+.roadmap.grow { align-content:center; }
+/* 다섯 단계가 한 줄이라 그냥 두면 위아래로 본문 높이의 40 %가 빈다. 카드를
+   세로로 늘리고 배경을 주어, 남는 높이가 슬라이드가 아니라 카드 안쪽으로
+   읽히게 한다. 여유가 큰 장이라 글자도 이 장에서만 키운다. */
+.pipeline.grow { align-content:center; }
+.pipeline.grow .pipeline-step {
+  background:var(--uos-surface); padding:18px 16px 22px; border-top-width:5px;
+}
+.pipeline.grow .pipeline-step h3 { font-size:31px; margin:4px 0 12px; }
+.pipeline.grow .pipeline-step p { font-size:24px; }
+.pipeline.grow .pipeline-step .state { font-size:22px; margin-top:14px; }
 .pipeline-step .state, .roadmap .state { font-size:20.5px; margin-top:10px; font-weight:700; }
 .pipeline-step.done, .roadmap article.done { border-top-color:var(--uos-blue); }
 .pipeline-step.now, .roadmap article.now { border-top-color:#E0A100; }
