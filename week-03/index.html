@@ -3,7 +3,7 @@
 <link rel="icon" href="data:,">
 <script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>3주차 자율 지게차 개발</title>
-<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=b41c494366bb"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=4bb9a46a9145"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 <section class="title-section" data-label="개발 진행 보고" data-screen-label="01" data-duration="20" data-speaker-notes="권장 20초
 
@@ -135,10 +135,10 @@ EPAL 6 모델로 만든 합성 장면 100개를 평가하였다. 포켓을 검�
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="07  평가 결과"><div class="slide-body">
 <h2 class="headline">EPAL 6 합성 장면의 포켓 인식 평가</h2>
-<p class="small muted">검출 대상 60장면(60/60 검출) · 비검출 대상 40장면(잘못 검출 0/40)</p>
 <figure class="shot wide"><img class="media" src="assets/03_scene_variety.png" alt="먼 거리, 가까운 거리, 비스듬한 자세, 가림, 유사 물체, 팔레트 없음"></figure>
-<div class="scores">
+<div class="scores four">
   <div><b>검출 대상 장면</b><span class="hit">100 %</span><i>초기 목표 95 % 이상</i></div>
+  <div><b>잘못 검출</b><span class="hit">0 / 40</span><i>비검출 대상 장면</i></div>
   <div><b>위치 오차 p95</b><span class="hit">8.17 mm</span><i>초기 목표 20 mm 이하</i></div>
   <div><b>방향 오차 p95</b><span class="hit">0.053°</span><i>초기 목표 2° 이하</i></div>
 </div>
@@ -156,9 +156,9 @@ EPAL 6 모델로 만든 합성 장면 100개를 평가하였다. 포켓을 검�
 과제 원문 4쪽 — 마스트 상단 카메라: https://docs.google.com/presentation/d/1BjoJLWmwd07ZJujZp4BPZrwBhx5tsnfmBpWdLMy2YrQ/edit
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="08  카메라 설치 높이"><div class="slide-body">
-<h2 class="headline">장착 높이별 근거리 검출 자세 수</h2>
+<h2 class="headline">설치 높이별 근거리 검출 자세 수</h2>
 <figure class="shot wide"><img class="media" src="assets/13_camera_mount.png" alt="카메라 높이 0.27, 0.50, 0.90 m에서 같은 거리에 둔 팔레트와 각 높이의 수직 관측 범위"><figcaption class="small muted">적색 점이 카메라 위치</figcaption></figure>
-<div class="takeaway">합성 비교: 카메라 높이 0.27 / 0.50 / 0.90 m 에서 검출 22 / 20 / 4 | 실제 설치 높이 미확정</div>
+<div class="takeaway">합성 비교: 설치 높이 0.27 / 0.50 / 0.90 m 에서 검출 22 / 20 / 4 | 실제 설치 높이 미확정</div>
 </div></x-import>
 </section>
 

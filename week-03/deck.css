@@ -176,3 +176,9 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .choice span { display:block; font-size:19px; line-height:1.4; }
 .choice i { display:block; font-style:normal; font-size:19px; line-height:1.4; margin-top:4px; }
 .choice > div.taken i { color:var(--uos-blue); font-weight:600; }
+
+/* 평가 결과: 잘못 검출이 네 번째 칸으로 들어와 3칸에서 4칸이 되었다. */
+.scores.four { grid-template-columns:repeat(4, 1fr); gap:14px; }
+.scores.four b { font-size:18px; }
+.scores.four .hit { font-size:24px; }
+.scores.four i { font-size:16px; }
