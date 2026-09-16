@@ -179,7 +179,7 @@ def build():
         if i == 1:
             component = (f'<x-import component-from-global-scope="UOSSlideDS.TitleSlide" '
                          f'hint-size="100%,100%" title="{escape(s["title"], quote=True)}" '
-                         f'subtitle="임베디드구동 및 실습 · 팔레트 핸들링 경로 생성 및 제어"></x-import>'
+                         f'subtitle="팔레트 핸들링 경로 생성 및 제어"></x-import>'
                          f'<img class="partner-mark" src="assets/riibotics-logo.png" '
                          f'alt="Riibotics">')
         else:
