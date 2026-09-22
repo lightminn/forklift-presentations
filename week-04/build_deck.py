@@ -146,49 +146,59 @@ MOUNT_CASES = """
 </g></svg>
 """
 
-MOUNT_ITEMS = """<ol class="marklist cand">
-<li><span class="mk">①</span><span><b>산업용 팔레트 인식 카메라</b><br>바닥에서 23~36 cm 높이, 팔레트 정면을 똑바로 보게 단다</span></li>
-<li><span class="mk">②</span><span><b>지게차 제조사 특허</b><br>포크와 함께 오르내리는 판에 달아, 포크 끝이 화면 아래쪽에 보이게 한다</span></li>
-<li><span class="mk">③</span><span><b>자율 지게차 연구</b><br>포크 뒤 짐받이 위에 넓게 보는 카메라를 달아, 포크와 함께 움직인다</span></li>
-<li><span class="mk">④</span><span><b>자율 지게차 연구</b><br>멀리서는 카메라로 찾고, 마지막 접근은 가까운 거리 전용 센서가 맡는다</span></li></ol>"""
+MOUNT_ITEMS = """<table class="comparison cases">
+<tr><th></th><th>이름</th><th>장착</th><th>특징</th></tr>
+<tr><td><span class="mk">①</span></td><td>ifm PDS</td><td>바닥 위 23~36 cm<br>정면 수직</td><td>팔레트 인식 전용 3D 카메라</td></tr>
+<tr><td><span class="mk">②</span></td><td>Crown 특허</td><td>포크 캐리지</td><td>포크와 함께 승강<br>포크 끝이 화면 아래쪽</td></tr>
+<tr><td><span class="mk">③</span></td><td>Toyota·AIST</td><td>백레스트</td><td>어안 카메라<br>포크와 함께 이동</td></tr>
+<tr><td><span class="mk">④</span></td><td>ADAPT</td><td>카메라와<br>근거리 센서 분리</td><td>마지막 접근은<br>근거리 센서</td></tr></table>"""
 
 
-# Top view of the last approach, animated with CSS (deck.css .nf-*). Scale
-# 0.35 px/mm. Camera at the fork root; face 800 mm. The lit part of the face
-# uses the baseline-corrected half width d*tan(43.5 deg) - 25 mm, so 448 mm puts
-# all 800 mm in view. Keyframes follow a constant speed from 1200 mm to 60 mm
-# (= 420 - 360): 448 mm at 52.8 %, 280 mm at 64.6 %, 60 mm at 80 %.
-def _near_field():
-    return """
-<svg class="diagram grow" viewBox="0 0 800 470" role="img" aria-label="위에서 본 도식: 카메라가 포크 뿌리에 달린 채 팔레트로 다가가면 전면 800 mm 중 화각에 들어오는 부분이 줄고 280 mm 안쪽에서는 깊이를 잴 수 없게 된다">
-<defs><clipPath id="nf-clip"><rect x="0" y="0" width="560" height="470"/></clipPath></defs>
+# Concept of the blind-zone insertion, animated with CSS (deck.css .ins-*):
+# observe once while stopped, keep the pocket estimate fixed in the world,
+# then drive in on the robot's own pose without looking again. 10 s loop:
+# 0-25 % observe, 25-78 % approach, 78-92 % insert, hold.
+INSERT_FLOW = """
+<svg class="diagram grow" viewBox="0 0 800 420" role="img" aria-label="위에서 본 개념도: 멈춰서 관측해 포켓 위치를 추정하고, 카메라를 다시 보지 않고 그 추정 위치로 이동해 포크를 넣는다">
 <g font-family="var(--uos-font)">
-<g clip-path="url(#nf-clip)"><g class="nf-move">
-<polygon class="nf-cone" points="140,230 1000,-586 1000,1046" fill="#2f74c0" opacity="0.18"/>
-<polygon class="nf-cone-dead" points="140,230 1000,-586 1000,1046" fill="#8c959e" opacity="0"/>
-</g></g>
-<rect x="560" y="90" width="230" height="280" fill="#f1ede6" stroke="#b98b54" stroke-width="2"/>
-<g fill="#e3d6c3"><rect x="560" y="160" width="230" height="46"/><rect x="560" y="254" width="230" height="46"/></g>
-<line x1="560" y1="90" x2="560" y2="370" stroke="#c0392b" stroke-width="7" stroke-dasharray="10 8"/>
-<line class="nf-lit" x1="560" y1="90" x2="560" y2="370" stroke="#0b3c8c" stroke-width="9"/>
-<g class="nf-move">
-<rect x="116" y="150" width="24" height="160" fill="#6b747d"/>
-<rect x="140" y="176" width="147" height="14" fill="#3d444b"/><rect x="140" y="270" width="147" height="14" fill="#3d444b"/>
-<rect x="128" y="218" width="16" height="24" rx="3" fill="#0b3c8c"/>
-<text x="126" y="140" text-anchor="middle" font-size="18" fill="#0b3c8c" font-weight="700">카메라</text>
-<text x="213" y="170" text-anchor="middle" font-size="16" fill="#44505c">포크 420 mm</text></g>
-<line x1="140" y1="430" x2="560" y2="430" stroke="#8c959e" stroke-width="2"/>
-<g stroke="#44505c" stroke-width="2"><line x1="403.2" y1="420" x2="403.2" y2="440"/><line x1="462" y1="420" x2="462" y2="440"/></g>
-<g font-size="17" fill="#44505c" text-anchor="middle"><text x="403" y="462">448 mm</text><text x="470" y="462">280</text><text x="560" y="462">전면</text></g>
-<text x="675" y="80" text-anchor="middle" font-size="18" fill="#6b4f2c" font-weight="700">팔레트 · 전면 800 mm</text>
-<g font-size="21" font-weight="700">
-<text class="nf-s1" x="20" y="40" fill="#0b3c8c">전면 전체가 화각 안</text>
-<text class="nf-s2" x="20" y="40" fill="#b85c00">448 mm 안쪽 — 전면 일부만 보임</text>
-<text class="nf-s3" x="20" y="40" fill="#c0392b">280 mm 안쪽 — 깊이 측정 불가</text>
+<rect x="600" y="100" width="170" height="220" fill="#f1ede6" stroke="#b98b54" stroke-width="2"/>
+<g fill="#e3d6c3"><rect x="600" y="140" width="170" height="44"/><rect x="600" y="236" width="170" height="44"/></g>
+<g class="ins-est" fill="none" stroke="#d61fb4" stroke-width="5"><rect x="600" y="140" width="40" height="44"/><rect x="600" y="236" width="40" height="44"/></g>
+<text class="ins-est" x="685" y="92" text-anchor="middle" font-size="18" fill="#b0128f" font-weight="700">저장한 추정 위치</text>
+<polygon class="ins-cone" points="150,210 600,60 600,360" fill="#2f74c0" opacity="0.2"/>
+<g class="ins-move">
+<rect x="30" y="130" width="100" height="160" rx="10" fill="#c9cfd6"/>
+<rect x="130" y="130" width="16" height="160" fill="#6b747d"/>
+<rect x="146" y="152" width="140" height="20" fill="#3d444b"/><rect x="146" y="248" width="140" height="20" fill="#3d444b"/>
+<rect x="138" y="198" width="16" height="24" rx="3" fill="#0b3c8c"/>
+<circle cx="80" cy="210" r="9" fill="none" stroke="#0b3c8c" stroke-width="3"/><line x1="66" y1="210" x2="94" y2="210" stroke="#0b3c8c" stroke-width="3"/><line x1="80" y1="196" x2="80" y2="224" stroke="#0b3c8c" stroke-width="3"/>
+<text x="80" y="315" text-anchor="middle" font-size="17" fill="#0b3c8c" font-weight="700">자기 위치</text>
+</g>
+<g font-size="22" font-weight="700">
+<text class="ins-s1" x="20" y="400" fill="#0b3c8c">① 멈춰서 관측 · 포켓 위치 추정</text>
+<text class="ins-s2" x="20" y="400" fill="#b0128f">② 카메라 없이 자기 위치로 추정 위치까지 이동</text>
+<text class="ins-s3" x="20" y="400" fill="#1d7a3a">③ 목표 깊이까지 삽입</text>
 </g></g></svg>"""
 
 
-NEAR_FIELD = _near_field()
+# Error budget of the blind insertion, from this run. Scale 0-50 mm at
+# 16 px/mm from x=170. Lateral margin 45 mm is EPAL 6's inner clearance on
+# the provisional fork model (ADR 0003 §2.2).
+ERROR_BUDGET = """
+<svg class="budget" viewBox="0 0 1180 96" role="img" aria-label="오차 예산: 관측 추정 1.3 mm와 경로 추종 7.7 mm에 실물의 자기 위치 오차가 더해져 포켓 좌우 여유 45 mm 안에 들어야 한다">
+<g font-family="var(--uos-font)">
+<text x="0" y="50" font-size="21" font-weight="700" fill="#1b1f24">오차 예산</text>
+<rect x="170" y="30" width="800" height="30" fill="#f3f4f6"/>
+<rect x="170" y="30" width="21" height="30" fill="#d61fb4"/>
+<rect x="191" y="30" width="123" height="30" fill="#0b3c8c"/>
+<rect x="314" y="30" width="576" height="30" fill="none" stroke="#6b747d" stroke-width="2" stroke-dasharray="8 6"/>
+<line x1="890" y1="18" x2="890" y2="72" stroke="#c0392b" stroke-width="4"/>
+<g font-size="17">
+<text x="170" y="90" fill="#b0128f">관측 추정 1.3</text>
+<text x="258" y="22" fill="#0b3c8c">추종 7.7 mm</text>
+<text x="602" y="51" text-anchor="middle" fill="#44505c">실물 자기 위치 오차가 쓸 수 있는 몫 약 36 mm</text>
+<text x="890" y="90" text-anchor="middle" fill="#c0392b" font-weight="700">포켓 좌우 여유 45 mm</text>
+</g></g></svg>"""
 
 
 # ----------------------------------------------------------------- 1
@@ -232,15 +242,15 @@ add('기존 전장과 조작 축', '03  기존 전장과 조작 축', 60, f"""
     '화면 생성: 실물 사진 2026-09-23')
 
 # ----------------------------------------------------------------- 5
-add('카메라 장착 사례', '04  카메라 장착 사례', 60, f"""
+add('카메라 장착 사례', '04  카메라 장착 사례', 65, f"""
 <h2 class="headline">실제 지게차의 팔레트 인식 카메라 장착 위치</h2>
-<div class="split grow" style="grid-template-columns:1.45fr 1fr">
+<div class="split grow" style="grid-template-columns:1.15fr 1fr">
 {MOUNT_CASES}
 {MOUNT_ITEMS}
 </div>
 <div class="takeaway">공통점: 포켓 높이 가까이 · 포크와 함께 움직이는 자리</div>
 """,
-    """3주차에 실제 지게차는 카메라를 어디에 다는지 확인하고 우리 차체에 맞추어 보라는 지적을 받았다. 그림은 지게차 옆모습에 사례별 위치를 표시한 것이다. 첫째, 팔레트 인식용으로 판매되는 산업용 카메라는 바닥에서 23에서 36센티미터 높이에, 팔레트 정면을 똑바로 보도록 달게 되어 있다. 둘째, 한 지게차 제조사의 특허는 포크와 함께 오르내리는 판에 카메라를 달아 포크 끝이 화면 아래쪽에 보이게 한다. 셋째, 자율 지게차 연구에서는 포크 뒤 짐받이 위에 넓게 보는 카메라를 달아 카메라가 포크와 함께 움직이게 했다. 넷째, 다른 연구는 멀리서는 카메라로 팔레트를 찾고 마지막 접근은 가까운 거리 전용 센서에 맡긴다. 공통점은 포켓 높이 가까이, 포크와 함께 움직이는 자리에 단다는 것이다.""",
+    """3주차에 실제 지게차는 카메라를 어디에 다는지 확인하고 우리 차체에 맞추어 보라는 지적을 받았다. 그림은 지게차 옆모습에 사례별 위치를 표시한 것이다. 첫째, ifm의 팔레트 인식 전용 3차원 카메라 PDS는 바닥에서 23에서 36센티미터 높이에 정면을 수직으로 보도록 단다. 둘째, 지게차 제조사 Crown의 특허는 포크 캐리지에 카메라를 달아 포크와 함께 오르내리게 하고, 포크 끝이 화면 아래쪽에 보이게 한다. 셋째, 도요타와 일본 산업기술종합연구소의 자율 지게차는 포크 뒤 백레스트에 어안 카메라를 달아 포크와 함께 움직이게 했다. 넷째, 자율 지게차 연구 ADAPT는 멀리서는 카메라로 찾고 마지막 접근은 근거리 전용 센서에 맡긴다. 공통점은 포켓 높이 가까이, 포크와 함께 움직이는 자리에 단다는 것이다.""",
     [(IFM, 'ifm 팔레트 검출 시스템 통합 안내 — 지면 위 23~36 cm, 바닥·팔레트면에 수직'),
      (CROWN, 'Crown 특허 US9990535B2 — 포크 캐리지 장착, 포크를 시야 하단에'),
      (AIST, 'AIST·도요타 리치트럭 (Sensors 2026) — 백레스트 어안 장착, 카메라와 포크는 강체'),
@@ -248,100 +258,69 @@ add('카메라 장착 사례', '04  카메라 장착 사례', 60, f"""
     '출처: 제조사 안내 · 특허 · 논문')
 
 # ----------------------------------------------------------------- 6
-add('설치 높이 조건', '05  설치 높이 조건', 55, """
-<h2 class="headline">팔레트 높이와 카메라 설치 높이</h2>
-<svg class="height-chart grow" viewBox="0 0 1160 430" role="img" aria-label="팔레트 높이, 산업용 카메라 권장 높이, 3주차 측정 리그의 카메라 높이별 포켓 검출 수 비교">
-<rect x="120" y="254" width="1000" height="52" fill="#e2f0fc"/>
-<line x1="120" y1="18" x2="120" y2="398" stroke="#666" stroke-width="2"/>
-<line x1="120" y1="398" x2="1120" y2="398" stroke="#666" stroke-width="2"/>
-<g fill="#555" font-size="17" font-family="var(--uos-font)">
-<text x="75" y="403">0</text><text x="69" y="323">200</text><text x="69" y="243">400</text><text x="69" y="163">600</text><text x="69" y="83">800</text><text x="67" y="29">mm</text>
-</g>
-<g stroke="#888" stroke-width="1"><line x1="112" y1="318" x2="120" y2="318"/><line x1="112" y1="238" x2="120" y2="238"/><line x1="112" y1="158" x2="120" y2="158"/><line x1="112" y1="78" x2="120" y2="78"/></g>
-<rect x="205" y="340.4" width="155" height="57.6" fill="#d8dce1" stroke="#8c959e"/>
-<rect x="410" y="362" width="155" height="36" fill="#d8dce1" stroke="#8c959e"/>
-<g fill="#222" font-size="19" font-family="var(--uos-font)"><text x="215" y="333">EPAL 6 · 144 mm</text><text x="410" y="354">축소 T11 · 90 mm</text><text x="220" y="277">산업용 카메라 권장 높이 23~36 cm</text></g>
-<g fill="var(--uos-blue)" font-size="20" font-family="var(--uos-font)">
-<circle cx="825" cy="290" r="7"/><text x="846" y="297">0.27 m · 22/35</text>
-<circle cx="825" cy="198" r="7"/><text x="846" y="205">0.50 m · 20/35</text>
-<circle cx="825" cy="38" r="7"/><text x="846" y="45">0.90 m · 4/35</text>
-</g>
-<text x="140" y="417" fill="#444" font-size="17" font-family="var(--uos-font)">3주차 측정 · 카메라 높이별로 0.6~2.3 m 구간에서 포켓을 검출한 자세 수(35개 중)</text>
-</svg>
-<div class="takeaway">낮을수록 가까운 포켓을 오래 봄 | 설치 높이는 캐리지 실측 후 포켓 높이 가까운 후보로 시험</div>
-""",
-    """이 사례를 우리 조건에 비추어 보았다. 팔레트는 차체와 함께 줄지 않아서, EPAL 6은 높이 144밀리미터, 축소 T11은 90밀리미터이다. 앞 장의 산업용 카메라가 권장하는 23에서 36센티미터는 그 제품의 화각과 측정 거리에 맞춘 값이어서 우리 카메라에 그대로 옮기지는 않는다. 다만 방향은 3주차 측정과 같다. 같은 장면에서 카메라를 0.27, 0.50, 0.90미터 높이에 두고 0.6에서 2.3미터 구간을 훑었을 때, 35개 자세 중 포켓을 검출한 수는 22, 20, 4개였다. 낮을수록 가까운 포켓을 오래 본다. 그래서 설치 높이는 포크 캐리지의 장착점을 실측한 뒤, 포켓 높이에 가까운 후보를 시험하여 정한다.""",
-    [(EPAL, 'EPAL 6 전체 높이 144 mm'), (T11, '축소 T11 전체 높이 90 mm'),
-     (IFM, 'ifm 설치 안내 — 23~36 cm'), (W3M, '설치 높이별 구간 검출 수 22 / 20 / 4')],
-    '화면 생성: 규격 치수와 3주차 측정 리그 결과로 그린 도식')
-
-# ----------------------------------------------------------------- 7
-add('근거리 측정 한계', '06  근거리 측정 한계', 65, f"""
-<h2 class="headline">D435i 근거리 측정 한계와 포크 길이</h2>
-<div class="split grow" style="grid-template-columns:1.6fr 1fr">
-{NEAR_FIELD}
-{figure('11_perception_near.mp4', '시뮬레이션 인식 카메라 영상: 팔레트에 다가가면 포켓 표시와 팔레트가 화면 아래로 빠져나간다', 'Isaac Sim 인식 카메라 · 높이 0.5 m · 2배속', cls='')}
-</div>
-<div class="swap"><div><b>포크 끝 접촉 시</b><span>약 420 mm &lt; 448 mm</span></div><div><b>360 mm 삽입 시</b><span>약 60 mm &lt; 280 mm</span></div></div>
-<div class="takeaway">카메라를 포크 캐리지에 달 때: 마지막 삽입 구간은 카메라 하나로 끝까지 보지 못함</div>
-""",
-    """거리 조건은 센서가 정하므로 차체를 줄여도 함께 줄지 않는다. D435i는 280밀리미터보다 가까우면 깊이를 내지 못하고, 폭 800밀리미터인 EPAL 6 전면이 화면에 모두 들어오려면 448밀리미터 이상 떨어져야 한다. 카메라를 포크 뿌리 쪽 캐리지에 달면, 포크 끝이 팔레트에 닿는 순간 카메라와 팔레트 사이는 포크 길이인 약 420밀리미터여서 전면 전체가 보이지 않는다. 포크를 360밀리미터 넣으면 거리는 약 60밀리미터로 깊이를 잴 수 없다. 따라서 마지막 삽입 구간은 카메라 하나로 끝까지 볼 수 없으며, 앞서 본 근거리 전용 센서 사례가 다루는 문제와 같다. 오른쪽은 시뮬레이션 안의 인식 카메라 영상이다. 이 카메라는 차체 0.5미터 높이에 있어서, 다가갈수록 팔레트가 화면 아래로 빠져나가고 삽입 직전에는 보이지 않는다. 이 구간을 잇는 방법은 장착점을 잰 뒤 정한다.""",
-    [(D435I, 'Intel RealSense D435i 공식 사양 — 깊이 화각 87° × 58°, 권장 범위 0.3~3 m'),
-     (RSTUNE, 'RealSense 튜닝 문서 — 해상도별 최소 측정 거리, 깊이 오차는 거리의 제곱에 비례'),
-     (ADR3, '잠정 모델의 포크 길이 420 mm와 사용 가능 삽입량 406 mm'),
-     (INTAKE, '카메라 장착을 위해 먼저 재야 할 항목'), (VIEWS, '인식 카메라 영상 — Isaac Sim 다중 시점 녹화')],
-    '화면 생성: 공식 사양으로 그린 움직이는 도식 · 오른쪽은 Isaac Sim 인식 카메라')
-
-# ----------------------------------------------------------------- 8
-add('관측과 경로 계획', '07  관측과 경로 계획', 60, f"""
+add('관측과 경로 계획', '05  관측과 경로 계획', 55, f"""
 <h2 class="headline">깊이 영상 포켓 검출에서 경로 계획까지</h2>
-{figure('12_observe_plan.mp4', '왼쪽은 인식 카메라의 컬러·깊이 영상, 오른쪽은 쿼터뷰. 관측 지점에 멈춰 촬영하면 포켓이 자홍색으로 표시되고 곧이어 접근·운반 경로선이 나타난다', 'Isaac Sim · 1.5배속 · 마지막 장면 3초 정지', cls='grow')}
+{figure('12_observe_plan.mp4', '왼쪽은 인식 카메라의 컬러·깊이 영상, 오른쪽은 탑뷰. 관측 지점에 멈춰 촬영하면 포켓이 자홍색으로 표시되고 곧이어 접근·운반 경로선이 나타난다', '', cls='grow')}
 <div class="phase-flow"><b>① 관측 지점에 정지해 촬영</b><span class="arrow">→</span><b>② 깊이 영상에서 포켓 검출</b><span>(자홍색)</span><span class="arrow">→</span><b>③ 접근·운반 경로 계획</b><span>(파랑 · 노랑)</span></div>
 """,
-    """지게차가 관측 지점까지 가서 멈추고 사진을 찍는 장면이다. 왼쪽은 차체에 달린 인식 카메라의 컬러 영상과 깊이 영상이고, 오른쪽은 같은 순간을 비스듬한 위쪽에서 본 화면이다. 멈춰서 찍은 깊이 영상에서 팔레트 전면과 두 포켓을 찾으면 왼쪽에 자홍색 사각형이 나타난다. 이 위치를 로봇 기준 좌표로 바꾸어 목표로 삼고, 장애물을 피하는 경로를 계획한다. 오른쪽에 나타나는 파란 선이 팔레트로 가는 접근 경로, 노란 선이 팔레트를 든 뒤 목적지로 가는 운반 경로이다.""",
+    """지게차가 관측 지점까지 가서 멈추고 사진을 찍는 장면이다. 왼쪽은 차체에 달린 인식 카메라의 컬러 영상과 깊이 영상이고, 오른쪽은 같은 순간을 위에서 내려다본 화면이다. 멈춰서 찍은 깊이 영상에서 팔레트 전면과 두 포켓을 찾으면 왼쪽에 자홍색 사각형이 나타난다. 이 위치를 로봇 기준 좌표로 바꾸어 목표로 삼고, 장애물을 피하는 경로를 계획한다. 오른쪽에 나타나는 파란 선이 팔레트로 가는 접근 경로, 노란 선이 팔레트를 든 뒤 목적지로 가는 운반 경로이다.""",
     [(VIEWS, '관측 캡처와 계획 경로 — Isaac Sim 다중 시점 녹화'), (STATUS, '관측·계획 단계의 구성')],
-    '화면 생성: Isaac Sim 인식 카메라 · 쿼터뷰, 같은 실행의 같은 프레임')
+    '화면 생성: Isaac Sim 인식 카메라 · 탑뷰, 같은 실행의 같은 프레임')
 
-# ----------------------------------------------------------------- 9
-add('운반 임무', '08  운반 임무', 70, f"""
+# ----------------------------------------------------------------- 7
+add('삽입 추정', '06  삽입 추정', 80, f"""
+<h2 class="headline">마지막 관측 추정 위치를 이어 쓰는 삽입</h2>
+<div class="split grow" style="grid-template-columns:1.55fr 1fr">
+{INSERT_FLOW}
+{figure('11_perception_near.mp4', '인식 카메라 화면에 저장한 포켓 추정 위치를 매 순간 로봇 위치로 옮겨 그린 영상. 팔레트가 화면 밖으로 나갈 때까지 자홍색 표시가 포켓에 맞게 따라간다', '', cls='')}
+</div>
+{ERROR_BUDGET}
+""",
+    """3주차에 가까워지면 카메라가 포켓을 볼 수 없다는 점을 확인하고, 마지막 관측을 이어 쓰는 방법을 다음 목표로 잡았다. 지금 방식은 멀리서 멈춰 한 번 관측한 포켓 위치를 작업장 좌표에 고정하고, 그 뒤로는 카메라를 다시 보지 않고 로봇 자기 위치만으로 그 목표까지 경로를 따라가 포크를 넣는 것이다. 왼쪽 그림이 그 흐름이다. 오른쪽은 인식 카메라 화면에 저장한 추정 위치를 매 순간 로봇 위치로 옮겨 그린 것으로, 팔레트가 화면 밖으로 나갈 때까지 자홍색 표시가 포켓에 맞게 따라간다. 이번 사례에서 약 3미터 거리에서 잰 관측 추정 오차는 1.3밀리미터, 경로 추종 오차는 7.7밀리미터였다. 다만 지금은 로봇 자기 위치를 시뮬레이터가 알려 주므로 그 오차가 0이다. 실물에서는 바퀴와 관성 센서로 자기 위치를 추정해야 하고, 그 오차까지 더한 합이 포켓 좌우 여유 45밀리미터 안에 들어야 하므로, 자기 위치 오차가 쓸 수 있는 몫은 약 36밀리미터이다. 이 자기 위치 오차를 재는 것이 다음 과제이다.""",
+    [(VIEWS, '추정 오차 1.3 mm · 종점 오차 7.67 mm, 실행 20260923T0515Z_views2_seed2'),
+     (ADR3, '무관측 구간 삽입의 오차 예산 — EPAL 6 좌우 여유 45 mm (잠정 모델)'),
+     (STATUS, '삽입 중 재관측 없음, 로봇 위치는 시뮬레이터 값')],
+    '화면 생성: 움직이는 개념도 · Isaac Sim 인식 카메라 · 오차 막대는 측정값')
+
+# ----------------------------------------------------------------- 8
+add('운반 임무', '07  운반 임무', 65, f"""
 <h2 class="headline">카메라 추정 위치를 목표로 관측부터 하역까지</h2>
 <div class="split grow" style="grid-template-columns:1.9fr 1fr">
-{figure('10_mission_quarter.mp4', '비스듬한 위쪽 시점에서 지게차가 관측·접근·삽입·들기·운반·하역을 수행하는 영상, 왼쪽 위에 현재 단계 표시', 'Isaac Sim · 3배속', cls='')}
+{figure('10_mission_quarter.mp4', '작업장 앞쪽 위 시점에서 지게차가 관측·접근·삽입·들기·운반·하역을 수행하는 영상, 왼쪽 위에 현재 단계 표시', '', cls='')}
 <div class="stack" style="gap:14px">
 <table class="comparison"><tr><th>입력</th><th>출처</th></tr>
 <tr><td style="white-space:nowrap">팔레트 위치</td><td class="blue"><b>카메라 추정</b></td></tr>
 <tr><td style="white-space:nowrap">로봇 위치</td><td>시뮬레이터</td></tr>
 <tr><td style="white-space:nowrap">장애물</td><td>시뮬레이터</td></tr>
 <tr><td>목적지</td><td>시뮬레이터</td></tr></table>
-<div class="metric"><strong>75.3초</strong>임무 시간</div>
 </div>
 </div>
 """,
-    """임무 전체를 작업장 앞쪽 위에서 내려다본 시점으로, 3배속으로 보인다. 계획한 경로 전체가 한 화면에 들어온다. 왼쪽 위 표시가 현재 단계이다. 관측 지점에서 포켓을 찾은 뒤 계획한 경로를 따라 접근하고, 포크를 360밀리미터 넣어 들어 올린다. 팔레트를 든 채 후진해 빠져나온 뒤 초록 원의 목적지로 운반해 내려놓고 포크를 뺀다. 임무 시간은 75.3초였다. 오른쪽 표처럼 카메라가 추정하는 것은 팔레트 위치이고, 로봇 위치와 장애물, 목적지는 시뮬레이터 값을 쓴다. 이 부분은 실물 단계에서 2D LiDAR로 바꾼다.""",
-    [(VIEWS, '임무 실행 — 75.3초, 다중 시점 녹화'), (STATUS, '삽입 깊이 360 mm와 사용 입력의 구분')],
+    """임무 전체를 작업장 앞쪽 위에서 내려다본 시점으로, 3배속으로 보인다. 계획한 경로 전체가 한 화면에 들어온다. 왼쪽 위 표시가 현재 단계이다. 관측 지점에서 포켓을 찾은 뒤 계획한 경로를 따라 접근하고, 포크를 360밀리미터 넣어 들어 올린다. 팔레트를 든 채 후진해 빠져나온 뒤 초록 원의 목적지로 운반해 내려놓고 포크를 뺀다. 오른쪽 표처럼 카메라가 추정하는 것은 팔레트 위치이고, 로봇 위치와 장애물, 목적지는 시뮬레이터 값을 쓴다. 이 부분은 실물 단계에서 2D LiDAR로 바꾼다.""",
+    [(VIEWS, '임무 실행 — 다중 시점 녹화'), (STATUS, '삽입 깊이 360 mm와 사용 입력의 구분')],
     '화면 생성: Isaac Sim 쿼터뷰 · 전 구간을 3배속으로')
 
-# ----------------------------------------------------------------- 10
-add('향후 추진 계획', '09  향후 추진 계획', 70, """
+# ----------------------------------------------------------------- 9
+add('향후 추진 계획', '08  향후 추진 계획', 70, """
 <h2 class="headline">차체 실측과 카메라 장착 확정</h2>
-<div class="roadmap grow"><article class="now"><h3>차체 실측</h3><p>치수·무게·승강 범위<br>캐리지 장착점 좌표·기울기<br>카메라 시야 가림 확인</p><p class="state">다음 주</p></article><article class="now"><h3>제어 구조 조사</h3><p>배선·제어기 신호 형식<br>모터 정격<br>속도·조향각·포크 높이 신호</p><p class="state">다음 주</p></article><article class="now"><h3>시뮬레이션</h3><p>여러 조건 임무 재실행<br>성공률과 실패 원인 정리<br>근접 포켓 추적 · 관측 소실 시 정지</p><p class="state">다음 주 → 그다음</p></article><article class="now"><h3>3주차 피드백 후속</h3><p>지게차 표준 운용 방법<br>시험용 팔레트 제작 방법<br>동봉 팔레트 실측·대조</p><p class="state">다음 주 보고</p></article></div>
+<div class="roadmap grow"><article class="now"><h3>차체 실측</h3><p>치수·무게·승강 범위<br>캐리지 장착점 좌표·기울기<br>카메라 시야 가림 확인</p><p class="state">다음 주</p></article><article class="now"><h3>제어 구조 조사</h3><p>배선·제어기 신호 형식<br>모터 정격<br>속도·조향각·포크 높이 신호</p><p class="state">다음 주</p></article><article class="now"><h3>시뮬레이션</h3><p>여러 조건 임무 재실행<br>성공률과 실패 원인 정리<br>삽입 구간 자기 위치 오차 측정</p><p class="state">다음 주</p></article><article class="now"><h3>3주차 피드백 후속</h3><p>지게차 표준 운용 방법<br>시험용 팔레트 제작 방법<br>동봉 팔레트 실측·대조</p><p class="state">다음 주 보고</p></article></div>
 <div class="takeaway">장착점 실측 → 카메라 위치 확정 → 좌표 변환과 시뮬레이션 장면에 반영</div>
 """,
-    """다음 작업은 네 갈래이다. 첫째, 차체의 치수와 무게, 승강 범위를 재고, 포크 캐리지에서 카메라를 달 자리의 좌표와 기울기를 잰다. 포크나 차체가 카메라 시야를 가리는지도 이때 확인한다. 캐리지에 달면 포크 높이에 따라 카메라 위치가 바뀌므로 좌표 변환도 함께 만든다. 둘째, 배선을 따라가 제어기의 신호 형식과 모터 정격을 확인하고, 속도와 조향각, 포크 높이를 알려 주는 신호가 있는지 찾는다. 셋째, 시뮬레이션에서 여러 조건의 임무를 다시 돌려 성공률과 실패 원인을 정리하고, 이어서 삽입 중 포켓을 계속 보며 위치를 갱신하고 관측이 끊기면 멈추는 기능을 만든다. 넷째, 3주차에 받은 나머지 두 지적인 지게차의 표준 운용 방법과 시험용 팔레트 제작 방법을 조사하고, 동봉 팔레트를 재어 두 시험 규격과 비교하여 보고한다.""",
+    """다음 작업은 네 갈래이다. 첫째, 차체의 치수와 무게, 승강 범위를 재고, 포크 캐리지에서 카메라를 달 자리의 좌표와 기울기를 잰다. 포크나 차체가 카메라 시야를 가리는지도 이때 확인한다. 캐리지에 달면 포크 높이에 따라 카메라 위치가 바뀌므로 좌표 변환도 함께 만든다. 둘째, 배선을 따라가 제어기의 신호 형식과 모터 정격을 확인하고, 속도와 조향각, 포크 높이를 알려 주는 신호가 있는지 찾는다. 셋째, 시뮬레이션에서 여러 조건의 임무를 다시 돌려 성공률과 실패 원인을 정리하고, 삽입 구간의 자기 위치 추정 오차를 재어 앞의 오차 예산에 넣는다. 넷째, 3주차에 받은 나머지 두 지적인 지게차의 표준 운용 방법과 시험용 팔레트 제작 방법을 조사하고, 동봉 팔레트를 재어 두 시험 규격과 비교하여 보고한다.""",
     [(MAP, '로드맵의 다음 단계와 실물 조사 경로'),
      (INTAKE, '다음 조사 항목'), (STATUS, '권장 작업 순서')],
     '출처: 개발 로드맵')
 
 TITLE = '4주차 자율 지게차 개발'
-TOTAL = 560
+TOTAL = 515
 
 
 def build():
-    assert len(slides) == 10, len(slides)
+    assert len(slides) == 9, len(slides)
     assert sum(s['seconds'] for s in slides) == TOTAL, sum(s['seconds'] for s in slides)
     sections = []
     script = [f'# {TITLE} · 발표 원고', '',
-              f'10장 · 시간 배분 합계 {TOTAL//60}분 {TOTAL%60}초. 쪽별 배정 시간은 발표 연습 후 조정한다.', '',
+              f'9장 · 시간 배분 합계 {TOTAL//60}분 {TOTAL%60}초. 쪽별 배정 시간은 발표 연습 후 조정한다.', '',
               '기준일: 2026-09-23. 사진은 입고한 실물을 찍은 것이고, 수치는 모두 컴퓨터로 만든 장면에서 '
               '측정한 값이다. 실제 장비의 성능은 별도 시험이 필요하다. 각 쪽의 발표자 노트에 그 화면을 '
               '만든 것(실물 사진 · Isaac Sim · 측정값 도식)을 표기하였다.', '']

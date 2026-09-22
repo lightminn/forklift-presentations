@@ -242,3 +242,25 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .pipeline-step .step-thumb { display:block; width:100%; aspect-ratio:16/9; object-fit:cover; margin:6px 0 10px; border:1px solid var(--uos-rule); }
 .comparison.facts td:first-child { width:88px; white-space:nowrap; } .comparison.facts { font-size:20px; }
 .shot.grow .media { max-height:100%; }
+
+/* Mounting cases table. */
+.comparison.cases { font-size:19px; line-height:1.35; align-self:center; }
+.comparison.cases td, .comparison.cases th { padding:10px 10px; }
+.comparison.cases td:first-child { width:44px; }
+.comparison.cases td:nth-child(2) { font-weight:700; white-space:nowrap; }
+.comparison.cases .mk { display:inline-flex; width:30px; height:30px; border-radius:50%; align-items:center; justify-content:center; background:#d9822b; color:#fff; font-weight:700; font-size:17px; }
+
+/* Blind-zone insertion concept (slide 삽입 추정). 10 s loop. */
+.budget { width:100%; height:auto; display:block; flex-shrink:0; }
+.ins-move, .ins-cone, .ins-est, .ins-s1, .ins-s2, .ins-s3 { animation-duration:10s; animation-iteration-count:infinite; }
+.ins-move { animation-name:ins-move; animation-timing-function:linear; }
+@keyframes ins-move { 0%, 25% { transform:translateX(0); } 78% { transform:translateX(314px); } 92%, 100% { transform:translateX(410px); } }
+.ins-cone { animation-name:ins-cone; animation-timing-function:step-end; }
+@keyframes ins-cone { 0% { opacity:0.2; } 25% { opacity:0; } 100% { opacity:0; } }
+.ins-est { animation-name:ins-est; animation-timing-function:step-end; }
+@keyframes ins-est { 0% { opacity:0; } 12% { opacity:1; } 100% { opacity:1; } }
+.ins-s1, .ins-s2, .ins-s3 { opacity:0; animation-timing-function:step-end; }
+.ins-s1 { animation-name:ins-s1; } .ins-s2 { animation-name:ins-s2; } .ins-s3 { animation-name:ins-s3; }
+@keyframes ins-s1 { 0% { opacity:1; } 25% { opacity:0; } 100% { opacity:0; } }
+@keyframes ins-s2 { 0% { opacity:0; } 25% { opacity:1; } 78% { opacity:0; } 100% { opacity:0; } }
+@keyframes ins-s3 { 0% { opacity:0; } 78% { opacity:1; } 100% { opacity:1; } }
