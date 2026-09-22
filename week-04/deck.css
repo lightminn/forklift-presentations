@@ -1,0 +1,208 @@
+body { margin:0; background:#202225; font-family:var(--uos-font); word-break:keep-all; overflow-wrap:normal; }
+* { box-sizing:border-box; }
+h1,h2,h3,p,figure,ol { margin:0; }
+.slide-body { width:100%; height:100%; padding:0 4px 4px; display:flex; flex-direction:column; gap:11px; }
+.slide-body > :not(.grow) { flex-shrink:0; }
+.headline { font-size:33px; font-weight:700; line-height:1.22; letter-spacing:-1px; }
+.lead { font-size:26.667px; line-height:1.55; }
+.body { font-size:24px; line-height:1.6; }
+.small { font-size:20.5337px; line-height:1.5; }
+.muted { color:var(--uos-ink-muted); }
+.blue { color:var(--uos-blue); }
+.label { font-size:20.5337px; font-weight:700; color:var(--uos-blue); line-height:1.4; }
+.grow { flex:1; min-height:0; }
+.split { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.stack { display:flex; flex-direction:column; gap:20px; min-width:0; min-height:0; }
+.rule { border-top:2px solid var(--uos-rule); padding-top:16px; }
+.takeaway { padding:12px 22px; color:var(--uos-on-blue); background:var(--uos-blue); font-size:22px; line-height:1.4; }
+.photo { width:100%; height:100%; display:block; object-fit:contain; }
+.hero-photo { background:#202225; height:310px; }
+.statement { font-size:32px; line-height:1.5; font-weight:700; }
+.number { font-size:48px; color:var(--uos-blue); font-weight:700; line-height:1.1; font-variant-numeric:tabular-nums; }
+.line-item { display:grid; grid-template-columns:40px 1fr; gap:16px; align-items:start; padding:15px 0; border-top:1px solid var(--uos-rule); }
+.line-item strong { display:block; font-size:26.667px; margin-bottom:5px; line-height:1.35; }
+.comparison { width:100%; border-collapse:collapse; font-size:22px; line-height:1.45; }
+.comparison th { padding:12px 16px; text-align:left; color:var(--uos-blue); border-bottom:2px solid var(--uos-blue); font-weight:700; }
+.comparison td { padding:16px; border-bottom:1px solid var(--uos-rule); vertical-align:top; }
+.comparison td:first-child { width:24%; font-weight:700; }
+.comparison tr:last-child td { border-bottom:0; }
+.pipeline { display:grid; grid-template-columns:repeat(5,1fr); gap:18px; }
+.pipeline-step { border-top:4px solid var(--uos-blue); padding-top:18px; position:relative; }
+.pipeline-step h3 { font-size:26.667px; line-height:1.4; margin:14px 0 12px; }
+.pipeline-step p { font-size:22px; line-height:1.5; }
+.pipeline-step:not(:last-child)::after { content:'→'; position:absolute; right:-17px; top:17px; font-size:28px; color:var(--uos-ink-muted); }
+.io-band { display:grid; grid-template-columns:1fr 1fr; gap:32px; background:var(--uos-surface); padding:22px 24px; }
+.io-band strong { display:block; margin-bottom:8px; font-size:24px; }
+.sensor-row { display:grid; grid-template-columns:170px 1fr; gap:20px; align-items:center; padding:12px 0 16px; border-bottom:1px solid var(--uos-rule); }
+.sensor-row img { width:170px; height:114px; object-fit:contain; }
+.sensor-row strong { font-size:24px; line-height:1.45; }
+.transform { background:var(--uos-surface); padding:20px 24px; font-size:24px; line-height:1.65; }
+.case { display:flex; flex-direction:column; gap:14px; min-height:0; }
+.case-title { font-size:28px; font-weight:700; line-height:1.3; }
+.case-title span { color:var(--uos-blue); margin-right:12px; }
+.motion-top { display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.motion-pair { gap:32px; }
+.motion-case { gap:10px; }
+.motion-scene { width:100%; height:300px; display:block; overflow:visible; }
+.motion-d-group { display:flex; flex-direction:column; gap:10px; min-width:0; }
+.motion-d-options { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.motion-pair--variants { grid-template-columns:1fr 2fr; gap:24px; }
+.motion-alternative-title { font-size:20.5337px; font-weight:500; line-height:1.4; }
+.motion-pair--variants .motion-scene { height:265px; }
+.motion-pair--variants > .motion-case .motion-scene { margin-top:38.75px; }
+.motion-obstacle rect { fill:#eee; stroke:#595959; stroke-width:.75; }
+.motion-obstacle text { font:16px var(--uos-font); fill:#111; }
+.motion-state { border-top:1px solid var(--uos-rule); padding-top:12px; display:flex; flex-direction:column; gap:3px; }
+.motion-phase { font-size:24px; font-weight:700; color:var(--uos-blue); line-height:1.4; }
+[data-direction="reverse"] .motion-phase { color:#a85b08; }
+.motion-caption { font-size:20.5337px; color:var(--uos-ink-muted); line-height:1.45; }
+.motion-track { height:3px; background:#e9edf2; }
+.motion-progress { height:100%; background:var(--uos-blue); transform:scaleX(0); transform-origin:left; }
+.phase-flow { display:flex; align-items:center; gap:15px; background:var(--uos-surface); padding:20px 24px; font-size:24px; line-height:1.5; }
+.phase-flow b { color:var(--uos-blue); }
+.phase-flow .arrow { color:var(--uos-ink-muted); }
+.guardrail { border-left:5px solid var(--uos-blue); padding:10px 0 10px 23px; }
+.guardrail h3 { font-size:28px; margin-bottom:12px; }
+.metric { border-top:2px solid var(--uos-blue); padding-top:18px; }
+.metric strong { display:block; font-size:37.333px; color:var(--uos-blue); margin-bottom:12px; line-height:1.2; }
+.metric p { font-size:24px; line-height:1.5; }
+.roadmap { display:grid; grid-template-columns:repeat(4,1fr); gap:26px; }
+.roadmap article { border-top:4px solid var(--uos-blue); padding-top:16px; }
+.roadmap h3 { font-size:28px; margin:12px 0 18px; }
+.roadmap p { font-size:22px; line-height:1.6; }
+.roadmap .exit { border-top:1px solid var(--uos-rule); margin-top:22px; padding-top:15px; font-size:22px; }
+.closing { font-size:48px; line-height:1.5; font-weight:700; margin:30px 0 10px; }
+.closing-steps { display:grid; grid-template-columns:repeat(3,1fr); gap:30px; }
+.closing-steps div { border-top:2px solid var(--uos-rule); padding-top:20px; font-size:26.667px; line-height:1.5; }
+a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
+
+.driving-diagram { display:flex; flex-direction:column; gap:8px; }
+.driving-context { display:flex; justify-content:space-between; align-items:center; gap:20px; }
+.driving-flow { display:grid; grid-template-columns:repeat(5,1fr); gap:24px; }
+.driving-flow article { position:relative; border-top:4px solid var(--uos-blue); background:var(--uos-surface); padding:10px 12px 12px; }
+.driving-flow h3 { font-size:26.667px; line-height:1.4; margin:6px 0 6px; }
+.driving-flow p { font-size:20.5337px; line-height:1.5; }
+.driving-flow article:not(:last-child)::after { content:'→'; position:absolute; right:-23px; top:80px; font-size:26px; color:var(--uos-blue); }
+.driving-feedback { border-bottom:2px solid var(--uos-blue); padding:0 12px 8px; color:var(--uos-blue); font-size:20.5337px; line-height:1.4; text-align:center; }
+.driving-feedback > span { margin-right:12px; }
+.driving-modes { display:grid; grid-template-columns:155px 1fr; gap:18px; align-items:start; padding-top:4px; font-size:22px; line-height:1.5; }
+.driving-modes strong { color:var(--uos-blue); }
+.driving-modes .small { margin-top:8px; }
+.driving-stop { font-size:22px; padding:15px 20px; }
+
+/* Week 3: measured figures and clips. Every shot names the renderer that made
+   it in its caption, so a reader can tell Gazebo from the measurement rig.
+   The media box hugs the image so its border never floats around empty space. */
+.shot { display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:5px; min-width:0; min-height:0; flex:1; }
+.shot .media { width:auto; height:auto; max-width:100%; max-height:100%; min-height:0;
+  flex:0 1 auto; display:block; object-fit:contain; border:1px solid var(--uos-rule); }
+.shot figcaption { flex-shrink:0; text-align:center; font-size:17px; line-height:1.3; }
+.split > .shot { height:100%; }
+
+/* Week 3: the progress bar and the roadmap are laid out in the page rather
+   than baked into an image, so they stay crisp and stay editable. */
+.roadmap.grow { align-content:center; }
+/* 다섯 단계가 한 줄이라 그냥 두면 위아래로 본문 높이의 40 %가 빈다. 카드를
+   세로로 늘리고 배경을 주어, 남는 높이가 슬라이드가 아니라 카드 안쪽으로
+   읽히게 한다. 여유가 큰 장이라 글자도 이 장에서만 키운다. */
+.pipeline.grow { align-content:center; }
+.pipeline.grow .pipeline-step {
+  background:var(--uos-surface); padding:18px 16px 22px; border-top-width:5px;
+}
+.pipeline.grow .pipeline-step h3 { font-size:31px; margin:4px 0 12px; }
+.pipeline.grow .pipeline-step p { font-size:24px; }
+.pipeline.grow .pipeline-step .state { font-size:22px; margin-top:14px; }
+.pipeline-step .state, .roadmap .state { font-size:20.5px; margin-top:10px; font-weight:700; }
+.pipeline-step.done, .roadmap article.done { border-top-color:var(--uos-blue); }
+.pipeline-step.now, .roadmap article.now { border-top-color:#E0A100; }
+.pipeline-step.wait, .roadmap article.wait { border-top-color:var(--uos-rule); }
+.pipeline-step.done .state, .roadmap article.done .state { color:var(--uos-blue); }
+.pipeline-step.now .state, .roadmap article.now .state { color:#A97A00; }
+.pipeline-step.wait, .roadmap article.wait { color:var(--uos-ink-muted); }
+.roadmap article h3 { margin:12px 0 10px; }
+.roadmap article p { font-size:21px; }
+
+/* Week 3, slide 7: three before/after numbers read faster as a strip than as a
+   sentence, and the shorter block leaves the comparison clip its full height. */
+/* Week 3, slide 7: only the threshold that decided the result stays on screen;
+   the other two derived values moved to the script. One item in a three-column
+   grid left two thirds of the slide empty, so this is a single full-width row. */
+.swap { display:flex; gap:18px; flex-shrink:0; }
+.swap > div { flex:1; border-top:3px solid var(--uos-blue); padding-top:6px;
+  display:flex; align-items:baseline; gap:14px; }
+.swap b { font-size:18px; color:var(--uos-muted); font-weight:600; }
+.swap span { font-size:25px; font-weight:700; }
+.swap i { font-style:normal; color:var(--uos-blue); padding:0 3px; }
+
+/* Week 3, slide 9: three target comparisons are a table, not a picture. Laid
+   out in the page, the scene grid above them gets the full slide width. */
+.scores { display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; flex-shrink:0; }
+.scores > div { border-top:3px solid var(--uos-blue); padding-top:5px;
+  display:grid; grid-template-columns:minmax(0,1fr) auto; column-gap:9px; align-items:baseline; }
+.scores b { font-size:20px; font-weight:600; color:var(--uos-ink); }
+.scores .hit { font-size:26px; font-weight:700; color:#1f8a4c; white-space:nowrap; }
+.scores i { grid-column:1/-1; text-align:right; font-style:normal; font-size:17px; color:var(--uos-ink-muted); }
+
+/* Week 3, slide 12: four roadmap cards sit beside the clip in two rows. */
+.split > .roadmap { display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-rows:repeat(2,minmax(0,1fr)); gap:12px; min-height:0; }
+.split > .roadmap article { border-top:3px solid var(--uos-blue); padding-top:5px; }
+.split > .roadmap article h3 { font-size:22px; margin:3px 0 2px; }
+.split > .roadmap article p { font-size:17px; line-height:1.35; }
+.split > .roadmap article .state { font-size:16px; margin-top:2px; }
+
+/* Week 3: in a split, the two clips have different aspect ratios, so centring
+   each one leaves their tops at different heights. Align them at the top. */
+.split > .shot { justify-content:flex-start; }
+
+/* 표지의 협업사 표기. 로고가 흰색이라 파란 대각 패널 위에만 올릴 수 있어,
+   UOS 로고 바로 왼쪽에 같은 세로 중심으로 둔다. 위치는 템플릿이 :root 에
+   내주는 로고 좌표를 그대로 참조하므로 템플릿이 바뀌면 같이 따라간다. */
+.title-section { position: relative; }
+.partner-mark {
+  position: absolute; z-index: 3; height: 64px; width: auto;
+  top: calc(var(--uos-title-logo-top) + (var(--uos-title-logo-size) - 64px) / 2);
+  right: calc(100% - var(--uos-title-logo-left) + 28px);
+}
+
+/* 5쪽: 두 산출 방식을 나란히 놓고 채택한 쪽을 표시한다. '먼저 이렇게 했다가
+   바꿨다' 가 아니라 '두 방식을 비교해 골랐다' 로 읽혀야 하므로, 둘을 같은
+   크기로 두고 채택한 쪽만 파란 윤곽과 진한 글자로 구분한다. */
+.choice { display:grid; grid-template-columns:1fr 1fr; gap:20px; flex-shrink:0; }
+.choice > div { border-top:3px solid var(--uos-rule); padding-top:8px; color:var(--uos-ink-muted); }
+.choice > div.taken { border-top-color:var(--uos-blue); color:var(--uos-ink); }
+.choice b { display:block; font-size:21px; font-weight:700; margin-bottom:4px; }
+.choice span { display:block; font-size:19px; line-height:1.4; }
+.choice i { display:block; font-style:normal; font-size:19px; line-height:1.4; margin-top:4px; }
+.choice > div.taken i { color:var(--uos-blue); font-weight:600; }
+
+/* 평가 결과: 잘못 검출이 네 번째 칸으로 들어와 3칸에서 4칸이 되었다. */
+.scores.four { grid-template-columns:repeat(4, 1fr); gap:14px; }
+.scores.four b { font-size:18px; }
+.scores.four .hit { font-size:24px; }
+.scores.four i { font-size:16px; }
+
+/* Week 4: some slides are a table or a band rather than a picture, and those
+   were leaving the lower third of the canvas empty. A table that is the body
+   of its slide stretches its rows; the scope band centres its two columns
+   inside the height it is given. */
+.comparison.grow { height:100%; }
+.io-band.grow { align-content:center; }
+
+/* Week 4 시각 검토 반영. 투사 거리에서 읽히도록 가장 작던 글자를 올리고,
+   로드맵 칸의 상태 라벨을 칸 바닥으로 내려 한 줄로 읽히게 한다. */
+.shot figcaption { font-size:19px; }
+.swap b { font-size:20px; }
+.choice span, .choice i { font-size:22px; }
+.roadmap.grow article { display:flex; flex-direction:column; }
+.roadmap.grow article .state { margin-top:auto; }
+/* 카드 줄이 띠 한가운데 떠서 위아래가 비었다. 띠를 채우게 하고, 상태 라벨은
+   위의 margin-top:auto 로 카드 바닥에 모여 한 줄로 읽힌다. */
+.pipeline.grow, .roadmap.grow { align-content:stretch; }
+.pipeline.grow .pipeline-step { display:flex; flex-direction:column; }
+.pipeline.grow .pipeline-step .state { margin-top:auto; }
+/* 5쪽 표는 첫 열 낱말이 길어 기본 24 % 로는 어절 중간에서 꺾인다.
+   인라인 폭은 이 규칙을 이기지 못하므로 전용 수식자를 둔다. */
+.comparison.wide-key th:first-child,
+.comparison.wide-key td:first-child { width:30%; }
