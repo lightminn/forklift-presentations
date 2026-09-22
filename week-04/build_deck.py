@@ -181,24 +181,32 @@ INSERT_FLOW = """
 </g></g></svg>"""
 
 
-# Error budget of the blind insertion, from this run. Scale 0-50 mm at
-# 16 px/mm from x=170. Lateral margin 45 mm is EPAL 6's inner clearance on
-# the provisional fork model (ADR 0003 §2.2).
+# Fork-tip error at the end of insertion in this run, split along the
+# insertion axis (Codex cross-check 2026-09-23): lateral -1.34 (estimate)
+# -0.78 (rear axle) -3.58 (yaw 2.77 mrad x 1.29 m rear axle to fork tip)
+# = -5.70 mm; depth 7.54 mm short of the 360 mm target. Lateral scale
+# 0-50 mm at 14 px/mm from x=230; depth scale 300-420 mm at 5.8 px/mm.
 ERROR_BUDGET = """
-<svg class="budget" viewBox="0 0 1180 96" role="img" aria-label="오차 예산: 관측 추정 1.3 mm와 경로 추종 7.7 mm에 실물의 자기 위치 오차가 더해져 포켓 좌우 여유 45 mm 안에 들어야 한다">
+<svg class="budget" viewBox="0 0 1180 150" role="img" aria-label="삽입이 끝났을 때 포크 끝 오차: 좌우 5.7 mm로 포켓 간격 45 mm 안, 깊이는 목표 360 mm보다 7.5 mm 덜 들어감">
 <g font-family="var(--uos-font)">
-<text x="0" y="50" font-size="21" font-weight="700" fill="#1b1f24">오차 예산</text>
-<rect x="170" y="30" width="800" height="30" fill="#f3f4f6"/>
-<rect x="170" y="30" width="21" height="30" fill="#d61fb4"/>
-<rect x="191" y="30" width="123" height="30" fill="#0b3c8c"/>
-<rect x="314" y="30" width="576" height="30" fill="none" stroke="#6b747d" stroke-width="2" stroke-dasharray="8 6"/>
-<line x1="890" y1="18" x2="890" y2="72" stroke="#c0392b" stroke-width="4"/>
-<g font-size="17">
-<text x="170" y="90" fill="#b0128f">관측 추정 1.3</text>
-<text x="258" y="22" fill="#0b3c8c">추종 7.7 mm</text>
-<text x="602" y="51" text-anchor="middle" fill="#44505c">실물 자기 위치 오차가 쓸 수 있는 몫 약 36 mm</text>
-<text x="890" y="90" text-anchor="middle" fill="#c0392b" font-weight="700">포켓 좌우 여유 45 mm</text>
-</g></g></svg>"""
+<text x="0" y="44" font-size="20" font-weight="700" fill="#1b1f24">좌우 편차</text>
+<rect x="230" y="22" width="700" height="30" fill="#f3f4f6"/>
+<rect x="230" y="22" width="19" height="30" fill="#d61fb4"/>
+<rect x="249" y="22" width="11" height="30" fill="#0b3c8c"/>
+<rect x="260" y="22" width="50" height="30" fill="#2f74c0"/>
+<line x1="860" y1="12" x2="860" y2="62" stroke="#c0392b" stroke-width="4"/>
+<text x="320" y="44" font-size="18" fill="#1b1f24"><tspan font-weight="700">5.7 mm</tspan> = 카메라 추정 1.3 + 주행 위치 0.8 + 차체 방향 3.6</text>
+<text x="860" y="82" text-anchor="middle" font-size="17" fill="#c0392b" font-weight="700">포켓 벽까지 45 mm</text>
+<text x="0" y="124" font-size="20" font-weight="700" fill="#1b1f24">삽입 깊이</text>
+<rect x="230" y="102" width="700" height="30" fill="#f3f4f6"/>
+<rect x="230" y="102" width="306" height="30" fill="#0b3c8c"/>
+<line x1="578" y1="94" x2="578" y2="140" stroke="#1d7a3a" stroke-width="4"/>
+<line x1="845" y1="94" x2="845" y2="140" stroke="#c0392b" stroke-width="4"/>
+<text x="526" y="124" font-size="18" fill="#fff" text-anchor="end" font-weight="700">약 352 mm</text>
+<text x="230" y="148" font-size="14" fill="#6b747d">300 mm부터 표시</text>
+<text x="590" y="124" font-size="17" fill="#1d7a3a" font-weight="700">목표 360</text>
+<text x="857" y="124" font-size="17" fill="#c0392b" font-weight="700">캐리지 한계 406</text>
+</g></svg>"""
 
 
 # ----------------------------------------------------------------- 1
@@ -276,11 +284,11 @@ add('삽입 추정', '06  삽입 추정', 80, f"""
 </div>
 {ERROR_BUDGET}
 """,
-    """3주차에 가까워지면 카메라가 포켓을 볼 수 없다는 점을 확인하고, 마지막 관측을 이어 쓰는 방법을 다음 목표로 잡았다. 지금 방식은 멀리서 멈춰 한 번 관측한 포켓 위치를 작업장 좌표에 고정하고, 그 뒤로는 카메라를 다시 보지 않고 로봇 자기 위치만으로 그 목표까지 경로를 따라가 포크를 넣는 것이다. 왼쪽 그림이 그 흐름이다. 오른쪽은 인식 카메라 화면에 저장한 추정 위치를 매 순간 로봇 위치로 옮겨 그린 것으로, 팔레트가 화면 밖으로 나갈 때까지 자홍색 표시가 포켓에 맞게 따라간다. 이번 사례에서 약 3미터 거리에서 잰 관측 추정 오차는 1.3밀리미터, 경로 추종 오차는 7.7밀리미터였다. 다만 지금은 로봇 자기 위치를 시뮬레이터가 알려 주므로 그 오차가 0이다. 실물에서는 바퀴와 관성 센서로 자기 위치를 추정해야 하고, 그 오차까지 더한 합이 포켓 좌우 여유 45밀리미터 안에 들어야 하므로, 자기 위치 오차가 쓸 수 있는 몫은 약 36밀리미터이다. 이 자기 위치 오차를 재는 것이 다음 과제이다.""",
-    [(VIEWS, '추정 오차 1.3 mm · 종점 오차 7.67 mm, 실행 20260923T0515Z_views2_seed2'),
-     (ADR3, '무관측 구간 삽입의 오차 예산 — EPAL 6 좌우 여유 45 mm (잠정 모델)'),
+    """3주차에 가까워지면 카메라가 포켓을 볼 수 없다는 점을 확인하고, 마지막 관측을 이어 쓰는 방법을 다음 목표로 잡았다. 지금 방식은 멀리서 멈춰 한 번 관측한 포켓 위치를 작업장 좌표에 고정하고, 그 뒤로는 카메라를 다시 보지 않고 로봇 자기 위치만으로 그 목표까지 경로를 따라가 포크를 넣는 것이다. 왼쪽 그림이 그 흐름이다. 오른쪽은 인식 카메라 화면에 저장한 추정 위치를 매 순간 로봇 위치로 옮겨 그린 것으로, 팔레트가 화면 밖으로 나갈 때까지 자홍색 표시가 포켓에 맞게 따라간다. 아래 막대는 삽입이 끝났을 때 포크 끝의 오차이다. 좌우로는 약 5.7밀리미터 벗어났는데, 카메라 추정이 1.3, 주행 위치가 0.8, 차체 방향이 조금 틀어진 영향이 3.6밀리미터이다. 포크와 포켓 벽 사이는 45밀리미터이므로 여유가 있다. 깊이로는 목표 360밀리미터보다 약 7.5밀리미터 덜 들어갔다. 다만 지금은 로봇 자기 위치를 시뮬레이터가 알려 주므로 그 오차가 0이다. 실물에서는 바퀴와 관성 센서로 자기 위치를 추정해야 하고 그 오차가 여기에 더해지므로, 실물에서 이 오차를 재는 것이 다음 과제이다.""",
+    [(VIEWS, '실행 20260923T0515Z_views2_seed2 — 삽입 끝 포크 끝 오차: 좌우 5.7 mm(추정 1.3 · 후륜축 0.8 · 방향 2.77 mrad × 1.29 m = 3.6), 깊이 7.5 mm 부족'),
+     (ADR3, 'EPAL 6 포켓 벽까지 45 mm · 캐리지 한계 406 mm (잠정 차체 모델)'),
      (STATUS, '삽입 중 재관측 없음, 로봇 위치는 시뮬레이터 값')],
-    '화면 생성: 움직이는 개념도 · Isaac Sim 인식 카메라 · 오차 막대는 측정값')
+    '화면 생성: 움직이는 개념도 · Isaac Sim 인식 카메라 · 막대는 이 실행의 측정값, 45 mm·406 mm는 잠정 모델')
 
 # ----------------------------------------------------------------- 8
 add('운반 임무', '07  운반 임무', 65, f"""
