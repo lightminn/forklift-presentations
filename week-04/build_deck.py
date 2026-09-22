@@ -159,26 +159,22 @@ MOUNT_ITEMS = """<table class="comparison cases">
 # then drive in on the robot's own pose without looking again. 10 s loop:
 # 0-25 % observe, 25-78 % approach, 78-92 % insert, hold.
 INSERT_FLOW = """
-<svg class="diagram grow" viewBox="0 0 800 420" role="img" aria-label="위에서 본 개념도: 멈춰서 관측해 포켓 위치를 추정하고, 카메라를 다시 보지 않고 그 추정 위치로 이동해 포크를 넣는다">
+<svg class="diagram grow" viewBox="0 0 800 340" role="img" aria-label="위에서 본 개념도: 멈춰서 관측해 포켓 위치를 추정하고, 카메라를 다시 보지 않고 그 추정 위치로 이동해 포크를 넣는다">
 <g font-family="var(--uos-font)">
 <rect x="600" y="100" width="170" height="220" fill="#f1ede6" stroke="#b98b54" stroke-width="2"/>
 <g fill="#e3d6c3"><rect x="600" y="140" width="170" height="44"/><rect x="600" y="236" width="170" height="44"/></g>
 <g class="ins-est" fill="none" stroke="#d61fb4" stroke-width="5"><rect x="600" y="140" width="40" height="44"/><rect x="600" y="236" width="40" height="44"/></g>
-<text class="ins-est" x="685" y="92" text-anchor="middle" font-size="18" fill="#b0128f" font-weight="700">저장한 추정 위치</text>
-<polygon class="ins-cone" points="150,210 600,60 600,360" fill="#2f74c0" opacity="0.2"/>
+<text class="ins-est" x="685" y="90" text-anchor="middle" font-size="21" fill="#b0128f" font-weight="700">저장한 포켓 위치</text>
+<polygon class="ins-cone" points="150,210 600,70 600,350" fill="#2f74c0" opacity="0.2"/>
 <g class="ins-move">
 <rect x="30" y="130" width="100" height="160" rx="10" fill="#c9cfd6"/>
 <rect x="130" y="130" width="16" height="160" fill="#6b747d"/>
 <rect x="146" y="152" width="140" height="20" fill="#3d444b"/><rect x="146" y="248" width="140" height="20" fill="#3d444b"/>
 <rect x="138" y="198" width="16" height="24" rx="3" fill="#0b3c8c"/>
 <circle cx="80" cy="210" r="9" fill="none" stroke="#0b3c8c" stroke-width="3"/><line x1="66" y1="210" x2="94" y2="210" stroke="#0b3c8c" stroke-width="3"/><line x1="80" y1="196" x2="80" y2="224" stroke="#0b3c8c" stroke-width="3"/>
-<text x="80" y="315" text-anchor="middle" font-size="17" fill="#0b3c8c" font-weight="700">자기 위치</text>
+<text x="80" y="318" text-anchor="middle" font-size="20" fill="#0b3c8c" font-weight="700">차 위치</text>
 </g>
-<g font-size="22" font-weight="700">
-<text class="ins-s1" x="20" y="400" fill="#0b3c8c">① 멈춰서 관측 · 포켓 위치 추정</text>
-<text class="ins-s2" x="20" y="400" fill="#b0128f">② 카메라 없이 자기 위치로 추정 위치까지 이동</text>
-<text class="ins-s3" x="20" y="400" fill="#1d7a3a">③ 목표 깊이까지 삽입</text>
-</g></g></svg>"""
+</g></svg>"""
 
 
 # Fork-tip error at the end of insertion in this run, split along the
@@ -187,28 +183,23 @@ INSERT_FLOW = """
 # = -5.70 mm; depth 7.54 mm short of the 360 mm target. Lateral scale
 # 0-50 mm at 14 px/mm from x=230; depth scale 300-420 mm at 5.8 px/mm.
 ERROR_BUDGET = """
-<svg class="budget" viewBox="0 0 1180 196" role="img" aria-label="삽입이 끝났을 때: 포크 끝이 옆으로 빗나간 거리 5.7 mm로 구멍 벽까지 45 mm 안, 포크가 들어간 깊이 352 mm로 목표 360 mm보다 조금 덜 들어감">
+<svg class="budget" viewBox="0 0 1180 160" role="img" aria-label="삽입이 끝났을 때: 포크 끝이 옆으로 빗나간 거리 5.7 mm로 구멍 벽까지 45 mm 안, 포크가 들어간 깊이 352 mm로 목표 360 mm보다 조금 덜 들어감">
 <g font-family="var(--uos-font)">
-<text x="0" y="26" font-size="21" font-weight="700" fill="#1b1f24">포크 끝이 옆으로 빗나간 거리 <tspan fill="#0b3c8c">5.7 mm</tspan></text>
+<text x="0" y="26" font-size="21" font-weight="700" fill="#1b1f24">포크 끝이 포켓 중심에서 옆으로 빗나간 거리 <tspan fill="#0b3c8c">5.7 mm</tspan></text>
 <rect x="0" y="38" width="700" height="28" fill="#f3f4f6"/>
 <rect x="0" y="38" width="19" height="28" fill="#d61fb4"/>
 <rect x="19" y="38" width="11" height="28" fill="#0b3c8c"/>
 <rect x="30" y="38" width="50" height="28" fill="#2f74c0"/>
 <line x1="630" y1="30" x2="630" y2="74" stroke="#c0392b" stroke-width="4"/>
-<text x="640" y="58" font-size="18" fill="#c0392b" font-weight="700">구멍 벽까지 45 mm</text>
-<g font-size="17" fill="#1b1f24">
-<rect x="0" y="80" width="14" height="14" fill="#d61fb4"/><text x="20" y="93">카메라가 잰 팔레트 위치 1.3</text>
-<rect x="255" y="80" width="14" height="14" fill="#0b3c8c"/><text x="275" y="93">차가 멈춘 자리 0.8</text>
-<rect x="445" y="80" width="14" height="14" fill="#2f74c0"/><text x="465" y="93">차가 살짝 비스듬히 서서 1.3 m 앞 포크 끝이 밀린 거리 3.6</text>
-</g>
-<text x="0" y="136" font-size="21" font-weight="700" fill="#1b1f24">포크가 팔레트에 들어간 깊이 <tspan fill="#0b3c8c">352 mm</tspan></text>
-<rect x="0" y="148" width="1030" height="28" fill="#f3f4f6"/>
-<rect x="0" y="148" width="857" height="28" fill="#0b3c8c"/>
-<line x1="876" y1="142" x2="876" y2="178" stroke="#1d7a3a" stroke-width="4"/>
-<line x1="988" y1="142" x2="988" y2="178" stroke="#c0392b" stroke-width="4"/>
-<text x="876" y="137" text-anchor="middle" font-size="16" fill="#1d7a3a" font-weight="700">목표 360</text>
-<text x="1000" y="168" font-size="16" fill="#c0392b" font-weight="700">최대 406</text>
-<text x="1180" y="196" text-anchor="end" font-size="15" fill="#c0392b">최대 = 더 넣으면 포크 뿌리가 팔레트에 닿는 깊이</text>
+<text x="640" y="58" font-size="19" fill="#c0392b" font-weight="700">포켓 벽까지 45 mm</text>
+<text x="0" y="92" font-size="21" font-weight="700" fill="#1b1f24">포크가 팔레트에 들어간 깊이 <tspan fill="#0b3c8c">352 mm</tspan></text>
+<rect x="0" y="104" width="1030" height="28" fill="#f3f4f6"/>
+<rect x="0" y="104" width="857" height="28" fill="#0b3c8c"/>
+<line x1="876" y1="98" x2="876" y2="134" stroke="#1d7a3a" stroke-width="4"/>
+<line x1="988" y1="98" x2="988" y2="134" stroke="#c0392b" stroke-width="4"/>
+<text x="876" y="93" text-anchor="middle" font-size="18" fill="#1d7a3a" font-weight="700">목표 360</text>
+<text x="988" y="93" text-anchor="middle" font-size="18" fill="#c0392b" font-weight="700">최대 406</text>
+<text x="1180" y="152" text-anchor="end" font-size="17" fill="#c0392b">최대 406 mm: 더 넣으면 포크 뿌리가 팔레트에 닿음</text>
 </g></svg>"""
 
 
@@ -271,30 +262,48 @@ add('카메라 장착 사례', '04  카메라 장착 사례', 65, f"""
 # ----------------------------------------------------------------- 6
 add('관측과 경로 계획', '05  관측과 경로 계획', 55, f"""
 <h2 class="headline">깊이 영상 포켓 검출에서 경로 계획까지</h2>
-{figure('12_observe_plan.mp4', '왼쪽은 인식 카메라의 컬러·깊이 영상, 오른쪽은 탑뷰. 관측 지점에 멈춰 촬영하면 포켓이 자홍색으로 표시되고 곧이어 접근·운반 경로선이 나타난다', '', cls='grow')}
+{figure('12_camera_top.mp4', '왼쪽은 지게차 카메라의 컬러·깊이 영상, 오른쪽은 탑뷰. 관측 지점에 멈춰 촬영하면 포켓이 자홍색으로 표시되고 곧이어 접근·운반 경로선이 나타난다', '', cls='grow')}
 <div class="phase-flow"><b>① 관측 지점에 정지해 촬영</b><span class="arrow">→</span><b>② 깊이 영상에서 포켓 검출</b><span>(자홍색)</span><span class="arrow">→</span><b>③ 접근·운반 경로 계획</b><span>(파랑 · 노랑)</span></div>
 """,
-    """지게차가 관측 지점까지 가서 멈추고 사진을 찍는 장면이다. 왼쪽은 차체에 달린 인식 카메라의 컬러 영상과 깊이 영상이고, 오른쪽은 같은 순간을 위에서 내려다본 화면이다. 멈춰서 찍은 깊이 영상에서 팔레트 전면과 두 포켓을 찾으면 왼쪽에 자홍색 사각형이 나타난다. 이 위치를 로봇 기준 좌표로 바꾸어 목표로 삼고, 장애물을 피하는 경로를 계획한다. 오른쪽에 나타나는 파란 선이 팔레트로 가는 접근 경로, 노란 선이 팔레트를 든 뒤 목적지로 가는 운반 경로이다.""",
+    """지게차가 관측 지점까지 가서 멈추고 사진을 찍는 장면이다. 왼쪽은 지게차에 달린 카메라의 컬러 영상과 깊이 영상이고, 오른쪽은 같은 순간을 위에서 내려다본 화면이다. 멈춰서 찍은 깊이 영상에서 팔레트 전면과 두 포켓을 찾으면 왼쪽에 자홍색 사각형이 나타난다. 이 위치를 로봇 기준 좌표로 바꾸어 목표로 삼고, 장애물을 피하는 경로를 계획한다. 오른쪽에 나타나는 파란 선이 팔레트로 가는 접근 경로, 노란 선이 팔레트를 든 뒤 목적지로 가는 운반 경로이다.""",
     [(VIEWS, '관측 캡처와 계획 경로 — Isaac Sim 다중 시점 녹화'), (STATUS, '관측·계획 단계의 구성')],
     '화면 생성: Isaac Sim 인식 카메라 · 탑뷰, 같은 실행의 같은 프레임')
 
 # ----------------------------------------------------------------- 7
-add('삽입 추정', '06  삽입 추정', 80, f"""
-<h2 class="headline">마지막 관측 추정 위치를 이어 쓰는 삽입</h2>
+add('삽입 추정', '06  삽입 추정', 60, f"""
+<h2 class="headline">한 번 찾은 포켓 위치를 저장해 끝까지 넣는 삽입</h2>
 <div class="split grow" style="grid-template-columns:1.55fr 1fr">
 {INSERT_FLOW}
-{figure('11_perception_near.mp4', '인식 카메라 화면에 저장한 포켓 추정 위치를 매 순간 로봇 위치로 옮겨 그린 영상. 팔레트가 화면 밖으로 나갈 때까지 자홍색 표시가 포켓에 맞게 따라간다', '', cls='')}
+{figure('11_camera_view.mp4', '지게차 카메라 화면에 저장한 포켓 위치를 매 순간 차 위치에 맞춰 옮겨 그린 영상. 팔레트가 화면 밖으로 나갈 때까지 자홍색 표시가 포켓에 맞게 따라간다', '', cls='')}
 </div>
-{ERROR_BUDGET}
+<div class="phase-flow steps3"><b class="ins-s1">① 멈춰서 보고 포켓 위치 저장</b><span class="arrow">→</span><b class="ins-s2">② 카메라 없이 차 위치만으로 이동</b><span class="arrow">→</span><b class="ins-s3">③ 목표 깊이까지 삽입</b></div>
 """,
-    """3주차에 가까워지면 카메라가 포켓을 볼 수 없다는 점을 확인하고, 마지막 관측을 이어 쓰는 방법을 다음 목표로 잡았다. 지금 방식은 멀리서 멈춰 한 번 관측한 포켓 위치를 작업장 좌표에 고정하고, 그 뒤로는 카메라를 다시 보지 않고 로봇 자기 위치만으로 그 목표까지 경로를 따라가 포크를 넣는 것이다. 왼쪽 그림이 그 흐름이다. 오른쪽은 인식 카메라 화면에 저장한 추정 위치를 매 순간 로봇 위치로 옮겨 그린 것으로, 팔레트가 화면 밖으로 나갈 때까지 자홍색 표시가 포켓에 맞게 따라간다. 아래 막대는 삽입이 끝난 순간의 결과이다. 먼저 포크 끝이 팔레트 구멍 중심에서 옆으로 빗나간 거리는 5.7밀리미터였다. 카메라가 팔레트 위치를 잘못 잰 만큼이 1.3, 차가 멈춘 자리가 옆으로 벗어난 만큼이 0.8, 그리고 차가 아주 살짝 비스듬히 서 있어서 1.3미터 앞에 있는 포크 끝이 옆으로 밀린 만큼이 3.6밀리미터이다. 포크와 구멍 벽 사이는 45밀리미터이므로 닿지 않는다. 다음으로 포크는 팔레트 안으로 352밀리미터 들어가, 목표 360밀리미터보다 조금 덜 들어갔다. 406밀리미터보다 더 넣으면 포크가 붙어 있는 뿌리 부분이 팔레트에 닿는다. 다만 지금은 로봇 자기 위치를 시뮬레이터가 알려 주므로 그 오차가 0이다. 실물에서는 바퀴와 관성 센서로 자기 위치를 추정해야 하고 그 오차가 여기에 더해지므로, 실물에서 이 오차를 재는 것이 다음 과제이다.""",
+    """3주차에 가까워지면 카메라가 포켓을 볼 수 없다는 점을 확인하고, 마지막 관측을 이어 쓰는 방법을 다음 목표로 잡았다. 지금 방식은 멀리서 멈춰 한 번 관측한 포켓 위치를 작업장 좌표에 고정하고, 그 뒤로는 카메라를 다시 보지 않고 차 위치만으로 그 목표까지 경로를 따라가 포크를 넣는 것이다. 왼쪽 그림이 그 흐름이다. 오른쪽은 지게차 카메라 화면에 저장한 포켓 위치를 매 순간 차 위치에 맞춰 옮겨 그린 것으로, 팔레트가 화면 밖으로 나갈 때까지 자홍색 표시가 포켓에 맞게 따라간다. 차 위치는 지금은 시뮬레이터가 알려 준다. 결과와 오차는 다음 장에서 본다.""",
     [(VIEWS, '실행 20260923T0515Z_views2_seed2 — 삽입 끝 포크 끝 오차: 좌우 5.7 mm(추정 1.3 · 후륜축 0.8 · 방향 2.77 mrad × 1.29 m = 3.6), 깊이 7.5 mm 부족'),
      (ADR3, 'EPAL 6 포켓 벽까지 45 mm · 캐리지 한계 406 mm (잠정 차체 모델)'),
      (STATUS, '삽입 중 재관측 없음, 로봇 위치는 시뮬레이터 값')],
     '화면 생성: 움직이는 개념도 · Isaac Sim 인식 카메라 · 막대는 이 실행의 측정값, 45 mm·406 mm는 잠정 모델')
 
+# ----------------------------------------------------------------- 7b
+add('삽입 결과', '07  삽입 결과와 오차 원인', 60, f"""
+<h2 class="headline">삽입이 끝난 순간의 포크 끝 오차와 그 원인</h2>
+{ERROR_BUDGET}
+<table class="comparison causes">
+<tr><th>오차 항목</th><th>크기</th><th>원인</th></tr>
+<tr><td><span class="sw" style="background:#d61fb4"></span>카메라가 잰 팔레트 위치</td><td>1.3 mm</td><td>깊이 영상의 점 간격 단위로 포켓 가장자리를 찾으며 생긴 차이</td></tr>
+<tr><td><span class="sw" style="background:#0b3c8c"></span>차가 멈춘 자리</td><td>0.8 mm</td><td>계획한 경로를 따라가다 멈춘 자리가 옆으로 조금 벗어남</td></tr>
+<tr><td><span class="sw" style="background:#2f74c0"></span>차가 비스듬히 선 각도</td><td>3.6 mm</td><td>차가 0.16° 비스듬히 멈춰, 1.3 m 앞 포크 끝에서는 옆으로 3.6 mm가 됨</td></tr>
+<tr><td><span class="sw" style="background:#9aa3ad"></span>덜 들어간 깊이</td><td>7.5 mm</td><td>목표까지 8 mm 안에 들면 도착으로 보도록 설정해 두어, 감속하다 그 안에서 멈춤</td></tr></table>
+<div class="takeaway">시뮬레이션 한 번의 결과 · 실물에서는 차가 자기 위치를 스스로 계산하며 생기는 오차가 더해짐</div>
+""",
+    """삽입이 끝난 순간 포크 끝의 오차와 그 원인이다. 포크 끝은 팔레트 구멍 중심에서 옆으로 5.7밀리미터 빗나갔다. 이 가운데 1.3밀리미터는 카메라가 팔레트 위치를 잰 차이로, 깊이 영상의 점 간격 단위로 포켓 가장자리를 찾으면서 생긴다. 0.8밀리미터는 차가 계획한 경로를 따라가며 멈춘 자리가 옆으로 조금 벗어난 것이다. 가장 큰 3.6밀리미터는 차가 0.16도쯤 비스듬히 선 채 멈추어, 1.3미터 앞에 있는 포크 끝이 옆으로 밀린 것이다. 포크와 포켓 벽 사이가 45밀리미터이므로 닿지는 않는다. 깊이는 목표보다 7.5밀리미터 덜 들어갔는데, 목표까지 8밀리미터 안에 들면 도착으로 보도록 설정해 두었고, 끝에서 감속하다 그 안에서 멈추었기 때문이다. 이것은 시뮬레이션 한 번의 결과이고, 차 위치를 시뮬레이터가 알려 주므로 그 오차가 빠져 있다. 실물에서는 차가 바퀴와 관성 센서로 자기 위치를 스스로 계산해야 하므로 그 오차가 더해진다.""",
+    [(VIEWS, '실행 20260923T0515Z_views2_seed2 — 포크 끝 좌우 5.7 mm(추정 1.3 · 후륜축 0.8 · 방향 2.77 mrad × 1.29 m = 3.6), 깊이 7.5 mm 부족'),
+     (ADR3, 'EPAL 6 구멍 벽까지 45 mm · 포크 뿌리 한계 406 mm (잠정 차체 모델)'),
+     (STATUS, '삽입 도착 판정 8 mm · 로봇 위치는 시뮬레이터 값')],
+    '화면 생성: 이 실행의 측정값 · 원인은 코드와 실행 기록으로 확인(Codex 교차검증)')
+
 # ----------------------------------------------------------------- 8
-add('운반 임무', '07  운반 임무', 65, f"""
+add('운반 임무', '08  운반 임무', 65, f"""
 <h2 class="headline">카메라 추정 위치를 목표로 관측부터 하역까지</h2>
 <div class="split grow" style="grid-template-columns:1.9fr 1fr">
 {figure('10_mission_quarter.mp4', '작업장 앞쪽 위 시점에서 지게차가 관측·접근·삽입·들기·운반·하역을 수행하는 영상, 왼쪽 위에 현재 단계 표시', '', cls='')}
@@ -312,7 +321,7 @@ add('운반 임무', '07  운반 임무', 65, f"""
     '화면 생성: Isaac Sim 쿼터뷰 · 전 구간을 3배속으로')
 
 # ----------------------------------------------------------------- 9
-add('향후 추진 계획', '08  향후 추진 계획', 70, """
+add('향후 추진 계획', '09  향후 추진 계획', 70, """
 <h2 class="headline">실 차체 기반 하드웨어 구축</h2>
 <div class="roadmap grow"><article class="now"><h3>차체 파라미터 실측</h3><p>치수·무게·축간 거리<br>포크 치수·승강 범위<br>최소 회전 반경</p></article><article class="now"><h3>제어 회로 분석</h3><p>배선·제어기 신호 형식<br>모터 정격·구동 방식<br>속도·조향각·포크 높이 신호</p></article><article class="wait"><h3>자율주행용 개조</h3><p>컴퓨터 명령 입력 경로<br>주행·조향·승강 상태 피드백<br>전원·배선 정리</p></article><article class="wait"><h3>센서 부착</h3><p>RGB-D 카메라 장착점·브래킷<br>2D LiDAR 장착 위치·높이<br>센서 좌표 변환 보정</p></article></div>
 <div class="takeaway">실측한 차체와 센서 위치를 시뮬레이션 모델과 좌표 변환에 반영</div>
@@ -323,15 +332,15 @@ add('향후 추진 계획', '08  향후 추진 계획', 70, """
     '출처: 개발 로드맵')
 
 TITLE = '4주차 자율 지게차 개발'
-TOTAL = 515
+TOTAL = 555
 
 
 def build():
-    assert len(slides) == 9, len(slides)
+    assert len(slides) == 10, len(slides)
     assert sum(s['seconds'] for s in slides) == TOTAL, sum(s['seconds'] for s in slides)
     sections = []
     script = [f'# {TITLE} · 발표 원고', '',
-              f'9장 · 시간 배분 합계 {TOTAL//60}분 {TOTAL%60}초. 쪽별 배정 시간은 발표 연습 후 조정한다.', '',
+              f'10장 · 시간 배분 합계 {TOTAL//60}분 {TOTAL%60}초. 쪽별 배정 시간은 발표 연습 후 조정한다.', '',
               '기준일: 2026-09-23. 사진은 입고한 실물을 찍은 것이고, 수치는 모두 컴퓨터로 만든 장면에서 '
               '측정한 값이다. 실제 장비의 성능은 별도 시험이 필요하다. 각 쪽의 발표자 노트에 그 화면을 '
               '만든 것(실물 사진 · Isaac Sim · 측정값 도식)을 표기하였다.', '']
