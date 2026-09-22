@@ -206,3 +206,6 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
    인라인 폭은 이 규칙을 이기지 못하므로 전용 수식자를 둔다. */
 .comparison.wide-key th:first-child,
 .comparison.wide-key td:first-child { width:30%; }
+
+/* Week 4: common-scale pallet and camera mounting height diagram. */
+.height-chart { width:100%; height:100%; max-height:440px; min-height:0; display:block; }
