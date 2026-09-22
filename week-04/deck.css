@@ -209,3 +209,34 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 
 /* Week 4: common-scale pallet and camera mounting height diagram. */
 .height-chart { width:100%; height:100%; max-height:440px; min-height:0; display:block; }
+
+/* Week 4 visuals: annotated photographs, schematic diagrams, numbered lists. */
+.annot { position:relative; height:100%; max-width:100%; margin:0 auto; }
+.annot img { display:block; width:100%; height:100%; border:1px solid var(--uos-rule); }
+.annot svg { position:absolute; inset:0; width:100%; height:100%; }
+.diagram { width:100%; height:100%; min-height:0; display:block; }
+.marklist { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; justify-content:center; gap:10px; font-size:22px; line-height:1.4; }
+.marklist li { display:grid; grid-template-columns:40px 1fr; gap:12px; align-items:start; padding:6px 0; border-bottom:1px solid var(--uos-rule); }
+.marklist li:last-child { border-bottom:0; }
+.marklist .mk { display:inline-flex; width:34px; height:34px; border-radius:50%; align-items:center; justify-content:center; border:3px solid var(--uos-blue); color:var(--uos-blue); font-weight:700; font-size:19px; }
+.marklist.cand .mk { background:#d9822b; border-color:#d9822b; color:#fff; }
+.marklist.cand { font-size:20px; gap:4px; }
+
+/* Near-field approach animation (slide 근거리 측정 한계). 8 s loop; see
+   build_deck.py _near_field for the keyframe derivation. */
+.nf-move, .nf-lit, .nf-cone, .nf-cone-dead, .nf-s1, .nf-s2, .nf-s3 { animation-duration:8s; animation-iteration-count:infinite; }
+.nf-move { animation-name:nf-move; animation-timing-function:linear; }
+@keyframes nf-move { 0% { transform:translateX(0); } 80% { transform:translateX(399px); } 100% { transform:translateX(399px); } }
+.nf-lit { transform-box:view-box; transform-origin:560px 230px; animation-name:nf-lit; animation-timing-function:linear; }
+@keyframes nf-lit { 0%, 52.8% { transform:scaleY(1); } 64.6% { transform:scaleY(0.601); } 80%, 100% { transform:scaleY(0.08); } }
+.nf-cone { animation-name:nf-cone; animation-timing-function:step-end; }
+@keyframes nf-cone { 0% { opacity:0.18; } 64.6% { opacity:0; } 100% { opacity:0; } }
+.nf-cone-dead { animation-name:nf-dead; animation-timing-function:step-end; }
+@keyframes nf-dead { 0% { opacity:0; } 64.6% { opacity:0.25; } 100% { opacity:0.25; } }
+.nf-s1, .nf-s2, .nf-s3 { animation-timing-function:step-end; opacity:0; }
+.nf-s1 { animation-name:nf-s1; } .nf-s2 { animation-name:nf-s2; } .nf-s3 { animation-name:nf-s3; }
+@keyframes nf-s1 { 0% { opacity:1; } 52.8% { opacity:0; } 100% { opacity:0; } }
+@keyframes nf-s2 { 0% { opacity:0; } 52.8% { opacity:1; } 64.6% { opacity:0; } 100% { opacity:0; } }
+@keyframes nf-s3 { 0% { opacity:0; } 64.6% { opacity:1; } 100% { opacity:1; } }
+.split.grow { grid-template-rows:minmax(0,1fr); }
+.pipeline-step .step-thumb { display:block; width:100%; aspect-ratio:16/9; object-fit:cover; margin:6px 0 10px; border:1px solid var(--uos-rule); }
