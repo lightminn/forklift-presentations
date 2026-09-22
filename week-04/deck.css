@@ -240,3 +240,5 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 @keyframes nf-s3 { 0% { opacity:0; } 64.6% { opacity:1; } 100% { opacity:1; } }
 .split.grow { grid-template-rows:minmax(0,1fr); }
 .pipeline-step .step-thumb { display:block; width:100%; aspect-ratio:16/9; object-fit:cover; margin:6px 0 10px; border:1px solid var(--uos-rule); }
+.comparison.facts td:first-child { width:88px; white-space:nowrap; } .comparison.facts { font-size:20px; }
+.shot.grow .media { max-height:100%; }
