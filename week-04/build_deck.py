@@ -187,25 +187,28 @@ INSERT_FLOW = """
 # = -5.70 mm; depth 7.54 mm short of the 360 mm target. Lateral scale
 # 0-50 mm at 14 px/mm from x=230; depth scale 300-420 mm at 5.8 px/mm.
 ERROR_BUDGET = """
-<svg class="budget" viewBox="0 0 1180 150" role="img" aria-label="삽입이 끝났을 때 포크 끝 오차: 좌우 5.7 mm로 포켓 간격 45 mm 안, 깊이는 목표 360 mm보다 7.5 mm 덜 들어감">
+<svg class="budget" viewBox="0 0 1180 196" role="img" aria-label="삽입이 끝났을 때: 포크 끝이 옆으로 빗나간 거리 5.7 mm로 구멍 벽까지 45 mm 안, 포크가 들어간 깊이 352 mm로 목표 360 mm보다 조금 덜 들어감">
 <g font-family="var(--uos-font)">
-<text x="0" y="44" font-size="20" font-weight="700" fill="#1b1f24">좌우 편차</text>
-<rect x="230" y="22" width="700" height="30" fill="#f3f4f6"/>
-<rect x="230" y="22" width="19" height="30" fill="#d61fb4"/>
-<rect x="249" y="22" width="11" height="30" fill="#0b3c8c"/>
-<rect x="260" y="22" width="50" height="30" fill="#2f74c0"/>
-<line x1="860" y1="12" x2="860" y2="62" stroke="#c0392b" stroke-width="4"/>
-<text x="320" y="44" font-size="18" fill="#1b1f24"><tspan font-weight="700">5.7 mm</tspan> = 카메라 추정 1.3 + 주행 위치 0.8 + 차체 방향 3.6</text>
-<text x="860" y="82" text-anchor="middle" font-size="17" fill="#c0392b" font-weight="700">포켓 벽까지 45 mm</text>
-<text x="0" y="124" font-size="20" font-weight="700" fill="#1b1f24">삽입 깊이</text>
-<rect x="230" y="102" width="700" height="30" fill="#f3f4f6"/>
-<rect x="230" y="102" width="306" height="30" fill="#0b3c8c"/>
-<line x1="578" y1="94" x2="578" y2="140" stroke="#1d7a3a" stroke-width="4"/>
-<line x1="845" y1="94" x2="845" y2="140" stroke="#c0392b" stroke-width="4"/>
-<text x="526" y="124" font-size="18" fill="#fff" text-anchor="end" font-weight="700">약 352 mm</text>
-<text x="230" y="148" font-size="14" fill="#6b747d">300 mm부터 표시</text>
-<text x="590" y="124" font-size="17" fill="#1d7a3a" font-weight="700">목표 360</text>
-<text x="857" y="124" font-size="17" fill="#c0392b" font-weight="700">캐리지 한계 406</text>
+<text x="0" y="26" font-size="21" font-weight="700" fill="#1b1f24">포크 끝이 옆으로 빗나간 거리 <tspan fill="#0b3c8c">5.7 mm</tspan></text>
+<rect x="0" y="38" width="700" height="28" fill="#f3f4f6"/>
+<rect x="0" y="38" width="19" height="28" fill="#d61fb4"/>
+<rect x="19" y="38" width="11" height="28" fill="#0b3c8c"/>
+<rect x="30" y="38" width="50" height="28" fill="#2f74c0"/>
+<line x1="630" y1="30" x2="630" y2="74" stroke="#c0392b" stroke-width="4"/>
+<text x="640" y="58" font-size="18" fill="#c0392b" font-weight="700">구멍 벽까지 45 mm</text>
+<g font-size="17" fill="#1b1f24">
+<rect x="0" y="80" width="14" height="14" fill="#d61fb4"/><text x="20" y="93">카메라가 잰 팔레트 위치 1.3</text>
+<rect x="255" y="80" width="14" height="14" fill="#0b3c8c"/><text x="275" y="93">차가 멈춘 자리 0.8</text>
+<rect x="445" y="80" width="14" height="14" fill="#2f74c0"/><text x="465" y="93">차가 살짝 비스듬히 서서 1.3 m 앞 포크 끝이 밀린 거리 3.6</text>
+</g>
+<text x="0" y="136" font-size="21" font-weight="700" fill="#1b1f24">포크가 팔레트에 들어간 깊이 <tspan fill="#0b3c8c">352 mm</tspan></text>
+<rect x="0" y="148" width="1030" height="28" fill="#f3f4f6"/>
+<rect x="0" y="148" width="857" height="28" fill="#0b3c8c"/>
+<line x1="876" y1="142" x2="876" y2="178" stroke="#1d7a3a" stroke-width="4"/>
+<line x1="988" y1="142" x2="988" y2="178" stroke="#c0392b" stroke-width="4"/>
+<text x="876" y="137" text-anchor="middle" font-size="16" fill="#1d7a3a" font-weight="700">목표 360</text>
+<text x="1000" y="168" font-size="16" fill="#c0392b" font-weight="700">최대 406</text>
+<text x="1180" y="196" text-anchor="end" font-size="15" fill="#c0392b">최대 = 더 넣으면 포크 뿌리가 팔레트에 닿는 깊이</text>
 </g></svg>"""
 
 
@@ -284,7 +287,7 @@ add('삽입 추정', '06  삽입 추정', 80, f"""
 </div>
 {ERROR_BUDGET}
 """,
-    """3주차에 가까워지면 카메라가 포켓을 볼 수 없다는 점을 확인하고, 마지막 관측을 이어 쓰는 방법을 다음 목표로 잡았다. 지금 방식은 멀리서 멈춰 한 번 관측한 포켓 위치를 작업장 좌표에 고정하고, 그 뒤로는 카메라를 다시 보지 않고 로봇 자기 위치만으로 그 목표까지 경로를 따라가 포크를 넣는 것이다. 왼쪽 그림이 그 흐름이다. 오른쪽은 인식 카메라 화면에 저장한 추정 위치를 매 순간 로봇 위치로 옮겨 그린 것으로, 팔레트가 화면 밖으로 나갈 때까지 자홍색 표시가 포켓에 맞게 따라간다. 아래 막대는 삽입이 끝났을 때 포크 끝의 오차이다. 좌우로는 약 5.7밀리미터 벗어났는데, 카메라 추정이 1.3, 주행 위치가 0.8, 차체 방향이 조금 틀어진 영향이 3.6밀리미터이다. 포크와 포켓 벽 사이는 45밀리미터이므로 여유가 있다. 깊이로는 목표 360밀리미터보다 약 7.5밀리미터 덜 들어갔다. 다만 지금은 로봇 자기 위치를 시뮬레이터가 알려 주므로 그 오차가 0이다. 실물에서는 바퀴와 관성 센서로 자기 위치를 추정해야 하고 그 오차가 여기에 더해지므로, 실물에서 이 오차를 재는 것이 다음 과제이다.""",
+    """3주차에 가까워지면 카메라가 포켓을 볼 수 없다는 점을 확인하고, 마지막 관측을 이어 쓰는 방법을 다음 목표로 잡았다. 지금 방식은 멀리서 멈춰 한 번 관측한 포켓 위치를 작업장 좌표에 고정하고, 그 뒤로는 카메라를 다시 보지 않고 로봇 자기 위치만으로 그 목표까지 경로를 따라가 포크를 넣는 것이다. 왼쪽 그림이 그 흐름이다. 오른쪽은 인식 카메라 화면에 저장한 추정 위치를 매 순간 로봇 위치로 옮겨 그린 것으로, 팔레트가 화면 밖으로 나갈 때까지 자홍색 표시가 포켓에 맞게 따라간다. 아래 막대는 삽입이 끝난 순간의 결과이다. 먼저 포크 끝이 팔레트 구멍 중심에서 옆으로 빗나간 거리는 5.7밀리미터였다. 카메라가 팔레트 위치를 잘못 잰 만큼이 1.3, 차가 멈춘 자리가 옆으로 벗어난 만큼이 0.8, 그리고 차가 아주 살짝 비스듬히 서 있어서 1.3미터 앞에 있는 포크 끝이 옆으로 밀린 만큼이 3.6밀리미터이다. 포크와 구멍 벽 사이는 45밀리미터이므로 닿지 않는다. 다음으로 포크는 팔레트 안으로 352밀리미터 들어가, 목표 360밀리미터보다 조금 덜 들어갔다. 406밀리미터보다 더 넣으면 포크가 붙어 있는 뿌리 부분이 팔레트에 닿는다. 다만 지금은 로봇 자기 위치를 시뮬레이터가 알려 주므로 그 오차가 0이다. 실물에서는 바퀴와 관성 센서로 자기 위치를 추정해야 하고 그 오차가 여기에 더해지므로, 실물에서 이 오차를 재는 것이 다음 과제이다.""",
     [(VIEWS, '실행 20260923T0515Z_views2_seed2 — 삽입 끝 포크 끝 오차: 좌우 5.7 mm(추정 1.3 · 후륜축 0.8 · 방향 2.77 mrad × 1.29 m = 3.6), 깊이 7.5 mm 부족'),
      (ADR3, 'EPAL 6 포켓 벽까지 45 mm · 캐리지 한계 406 mm (잠정 차체 모델)'),
      (STATUS, '삽입 중 재관측 없음, 로봇 위치는 시뮬레이터 값')],
