@@ -82,38 +82,35 @@ CHASSIS_ITEMS = [
 # Signal path of the delivered chassis. Solid = observed on the part labels and
 # the remote; dotted = the cockpit controls, whose wiring is not traced yet.
 CONTROL_PATH = """
-<svg class="diagram grow" viewBox="0 0 640 470" role="img" aria-label="무선 조종기의 신호를 제어기가 받아 주행·조향·승강을 구동하는 현재 신호 경로">
-<defs><marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#44505c"/></marker></defs>
+<svg class="diagram grow" viewBox="0 0 720 520" role="img" aria-label="무선 조종기의 신호를 좌석 아래 제어기가 받아 주행·조향·승강을 구동하는 현재 신호 경로. 배터리는 12V 표기">
+<defs><marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#44505c"/></marker></defs>
 <g font-family="var(--uos-font)" fill="#1b1f24">
-<rect x="10" y="20" width="190" height="150" rx="10" fill="#fff" stroke="#8c959e" stroke-width="2"/>
-<image href="assets/05_remote.jpg" x="18" y="28" width="174" height="104" preserveAspectRatio="xMidYMid slice"/>
-<text x="105" y="158" text-anchor="middle" font-size="19" font-weight="700">무선 조종기</text>
-<rect x="245" y="130" width="175" height="170" rx="10" fill="#eef3fa" stroke="#0b3c8c" stroke-width="3"/>
-<image href="assets/04_controller_label.jpg" x="255" y="140" width="155" height="92" preserveAspectRatio="xMidYMid slice"/>
-<text x="332" y="262" text-anchor="middle" font-size="19" font-weight="700">제어기</text>
-<text x="332" y="287" text-anchor="middle" font-size="16" fill="#555">J6 D-CC-12V</text>
-<rect x="265" y="370" width="135" height="56" rx="10" fill="#fff" stroke="#8c959e" stroke-width="2"/>
-<text x="332" y="405" text-anchor="middle" font-size="18" font-weight="700">배터리 12V</text>
-<g font-size="20" font-weight="700" text-anchor="middle">
-<rect x="480" y="60" width="148" height="64" rx="10" fill="#fff" stroke="#0b3c8c" stroke-width="2"/><text x="554" y="99">주행</text>
-<rect x="480" y="183" width="148" height="64" rx="10" fill="#fff" stroke="#0b3c8c" stroke-width="2"/><text x="554" y="222">조향</text>
-<rect x="480" y="306" width="148" height="64" rx="10" fill="#fff" stroke="#0b3c8c" stroke-width="2"/><text x="554" y="345">승강</text>
+<rect x="10" y="4" width="320" height="284" rx="12" fill="#fff" stroke="#8c959e" stroke-width="2"/>
+<image href="assets/05_remote.jpg" x="22" y="14" width="296" height="164" preserveAspectRatio="xMidYMid slice"/>
+<text x="170" y="210" text-anchor="middle" font-size="25" font-weight="700">무선 조종기 T07D-DGN</text>
+<text x="170" y="240" text-anchor="middle" font-size="18" fill="#44505c">전진·후진 · 상승·하강</text>
+<text x="170" y="266" text-anchor="middle" font-size="18" fill="#44505c">좌·우회전 · 속도 조절 · 제동</text>
+<rect x="10" y="330" width="320" height="184" rx="12" fill="#eef3fa" stroke="#0b3c8c" stroke-width="3"/>
+<image href="assets/04_controller_label.jpg" x="22" y="340" width="296" height="112" preserveAspectRatio="xMidYMid slice"/>
+<text x="170" y="482" text-anchor="middle" font-size="25" font-weight="700">제어기 J6 D-CC-12V</text>
+<text x="170" y="506" text-anchor="middle" font-size="18" fill="#44505c">좌석 아래</text>
+<rect x="372" y="446" width="150" height="62" rx="12" fill="#fff" stroke="#8c959e" stroke-width="2"/>
+<text x="447" y="486" text-anchor="middle" font-size="23" font-weight="700">배터리 12V</text>
+<g font-size="30" font-weight="700" text-anchor="middle">
+<rect x="540" y="60" width="170" height="80" rx="12" fill="#fff" stroke="#0b3c8c" stroke-width="3"/><text x="625" y="111">주행</text>
+<rect x="540" y="190" width="170" height="80" rx="12" fill="#fff" stroke="#0b3c8c" stroke-width="3"/><text x="625" y="241">조향</text>
+<rect x="540" y="320" width="170" height="80" rx="12" fill="#fff" stroke="#0b3c8c" stroke-width="3"/><text x="625" y="371">승강</text>
 </g>
-<g stroke="#44505c" stroke-width="3" fill="none">
-<path d="M200,95 C230,95 230,170 245,180" stroke-dasharray="3 7" stroke-linecap="round" marker-end="url(#ah4)"/>
-<path d="M332,370 L332,302" marker-end="url(#ah4)"/>
-<path d="M420,190 C450,190 450,92 478,92" marker-end="url(#ah4)"/>
-<path d="M420,215 L478,215" marker-end="url(#ah4)"/>
-<path d="M420,240 C450,240 450,338 478,338" marker-end="url(#ah4)"/>
+<g stroke="#44505c" stroke-width="4" fill="none">
+<path d="M170,290 L170,326" stroke-dasharray="4 8" stroke-linecap="round" marker-end="url(#ah4)"/>
+<path d="M332,360 C440,360 440,100 536,100" marker-end="url(#ah4)"/>
+<path d="M332,380 C440,380 440,230 536,230" marker-end="url(#ah4)"/>
+<path d="M332,400 C440,400 440,360 536,360" marker-end="url(#ah4)"/>
+<path d="M370,477 L334,477" marker-end="url(#ah4)"/>
 </g>
-<text x="206" y="84" font-size="16" fill="#555">무선</text>
+<text x="184" y="316" font-size="19" fill="#44505c" font-weight="700">무선</text>
 </g></svg>
 """
-
-CONTROL_ITEMS = """<table class="comparison facts">
-<tr><td>제어기</td><td>J6 D-CC-12V 표기 · 좌석 아래</td></tr>
-<tr><td>배터리</td><td>12V 표기</td></tr>
-<tr><td>조종기</td><td>전진·후진 · 상승·하강 · 좌·우회전 · 속도 조절 · 제동</td></tr></table>"""
 
 
 # Side-view concept of a counterbalance forklift with the mounting cases.
@@ -235,9 +232,9 @@ add('차체 입고', '02  차체 입고', 55, f"""
 # ----------------------------------------------------------------- 4
 add('기존 전장과 조작 축', '03  기존 전장과 조작 축', 60, f"""
 <h2 class="headline">주행 · 조향 · 승강 모두 무선 조종기 입력</h2>
-<div class="split grow" style="grid-template-columns:0.62fr 1.38fr">
+<div class="split grow" style="grid-template-columns:0.9fr 1.1fr">
 {figure('03_electronics_bay.jpg', '좌석 아래에 나란히 고정된 제어기와 12V 표기가 있는 배터리, 백색 커넥터로 연결된 하네스', '좌석 아래 — 왼쪽이 제어기, 오른쪽이 배터리', cls='')}
-<div class="stack" style="gap:8px">{CONTROL_PATH}{CONTROL_ITEMS}</div>
+{CONTROL_PATH}
 </div>
 """,
     """좌석 아래에 제어기와 배터리가 나란히 고정되어 있고, 색으로 구분한 심선이 백색 커넥터로 연결된다. 제어기 라벨은 J6 D-CC-12V이고 배터리에도 12볼트 표기가 있다. 함께 들어 있는 무선 조종기 T07D-DGN에는 전진과 후진, 상승과 하강, 좌회전과 우회전, 속도 조절과 제동 버튼이 있다. 조종기의 무선 신호를 제어기가 받아 주행과 조향, 승강 세 축을 움직이는 구조이다. 다음 주에는 배선을 따라가 제어기의 신호 형식과 모터 정격을 확인한다.""",
