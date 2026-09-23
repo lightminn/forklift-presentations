@@ -154,12 +154,13 @@ MOUNT_ITEMS = """<table class="comparison cases">
 <tr><td><span class="mk">④</span></td><td>ADAPT</td><td>카메라와<br>근거리 센서 분리</td><td>마지막 접근은<br>근거리 센서</td></tr></table>"""
 
 
-# Concept of the blind-zone insertion, animated with CSS (deck.css .ins-*):
-# observe once while stopped, keep the pocket estimate fixed in the world,
-# then drive in on the robot's own pose without looking again. 10 s loop:
-# 0-25 % observe, 25-78 % approach, 78-92 % insert, hold.
+# Concept of the blind-zone insertion: observe once while stopped, keep the
+# pocket estimate fixed in the world, then drive in on the robot's own pose
+# without looking again. insert-sync.js drives it from 11_insert_view.mp4 via
+# data-sync (clip seconds: estimate shown, approach, insertion, end); the CSS
+# keyframes in deck.css are the same timeline over the clip's 15.53 s loop.
 INSERT_FLOW = """
-<svg class="diagram grow" viewBox="0 0 800 340" role="img" aria-label="위에서 본 개념도: 멈춰서 관측해 포켓 위치를 추정하고, 카메라를 다시 보지 않고 그 추정 위치로 이동해 포크를 넣는다">
+<svg class="diagram grow" data-sync="0.99,2.49,9.83,14.32" viewBox="0 0 800 340" role="img" aria-label="위에서 본 개념도: 멈춰서 관측해 포켓 위치를 추정하고, 카메라를 다시 보지 않고 그 추정 위치로 이동해 포크를 넣는다">
 <g font-family="var(--uos-font)">
 <rect x="600" y="100" width="170" height="220" fill="#f1ede6" stroke="#b98b54" stroke-width="2"/>
 <g fill="#e3d6c3"><rect x="600" y="140" width="170" height="44"/><rect x="600" y="236" width="170" height="44"/></g>
@@ -274,7 +275,7 @@ add('삽입 추정', '06  삽입 추정', 60, f"""
 <h2 class="headline">한 번 찾은 포켓 위치를 저장해 끝까지 넣는 삽입</h2>
 <div class="split grow" style="grid-template-columns:1.55fr 1fr">
 {INSERT_FLOW}
-{figure('11_camera_view.mp4', '지게차 카메라 화면에 저장한 포켓 위치를 매 순간 차 위치에 맞춰 옮겨 그린 영상. 팔레트가 화면 밖으로 나갈 때까지 자홍색 표시가 포켓에 맞게 따라간다', '', cls='')}
+{figure('11_insert_view.mp4', '지게차 카메라 화면에 저장한 포켓 위치를 매 순간 차 위치에 맞춰 옮겨 그린 영상. 팔레트가 화면 밖으로 나갈 때까지 자홍색 표시가 포켓에 맞게 따라간다', '', cls='')}
 </div>
 <div class="phase-flow steps3"><b class="ins-s1">① 멈춰서 보고 포켓 위치 저장</b><span class="arrow">→</span><b class="ins-s2">② 카메라 없이 차 위치만으로 이동</b><span class="arrow">→</span><b class="ins-s3">③ 목표 깊이까지 삽입</b></div>
 """,
@@ -375,13 +376,14 @@ def build():
     html = f'''<!DOCTYPE html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{TITLE}</title>
 <link rel="icon" href="data:,">
-<script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
+<script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script><script src="insert-sync.js" defer></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>{TITLE}</title>
 <link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 ''' + '\n\n'.join(sections) + '\n</x-import></x-dc></body></html>\n'
-    revision = sha256((ROOT/'deck.css').read_bytes()).hexdigest()[:12]
-    html = html.replace('"deck.css"', f'"deck.css?v={revision}"')
+    for name in ('deck.css', 'insert-sync.js'):
+        revision = sha256((ROOT/name).read_bytes()).hexdigest()[:12]
+        html = html.replace(f'"{name}"', f'"{name}?v={revision}"')
     (ROOT/'index.html').write_text(html, encoding='utf-8')
     (ROOT/'SCRIPT.md').write_text('\n'.join(script), encoding='utf-8')
     (ROOT/'slide-metadata.json').write_text(

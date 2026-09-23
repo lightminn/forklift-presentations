@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>4주차 자율 지게차 개발</title>
 <link rel="icon" href="data:,">
-<script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
+<script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script><script src="insert-sync.js?v=1b7e44eec7e0" defer></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>4주차 자율 지게차 개발</title>
-<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=b2f6dbd70db4"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=01d52631f0e6"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 <section class="title-section" data-label="개발 진행 보고" data-screen-label="01" data-duration="20" data-speaker-notes="권장 20초
 
@@ -183,7 +183,7 @@ EPAL 6 포켓 벽까지 45 mm · 캐리지 한계 406 mm (잠정 차체 모델):
 <h2 class="headline">한 번 찾은 포켓 위치를 저장해 끝까지 넣는 삽입</h2>
 <div class="split grow" style="grid-template-columns:1.55fr 1fr">
 
-<svg class="diagram grow" viewBox="0 0 800 340" role="img" aria-label="위에서 본 개념도: 멈춰서 관측해 포켓 위치를 추정하고, 카메라를 다시 보지 않고 그 추정 위치로 이동해 포크를 넣는다">
+<svg class="diagram grow" data-sync="0.99,2.49,9.83,14.32" viewBox="0 0 800 340" role="img" aria-label="위에서 본 개념도: 멈춰서 관측해 포켓 위치를 추정하고, 카메라를 다시 보지 않고 그 추정 위치로 이동해 포크를 넣는다">
 <g font-family="var(--uos-font)">
 <rect x="600" y="100" width="170" height="220" fill="#f1ede6" stroke="#b98b54" stroke-width="2"/>
 <g fill="#e3d6c3"><rect x="600" y="140" width="170" height="44"/><rect x="600" y="236" width="170" height="44"/></g>
@@ -199,7 +199,7 @@ EPAL 6 포켓 벽까지 45 mm · 캐리지 한계 406 mm (잠정 차체 모델):
 <text x="80" y="318" text-anchor="middle" font-size="20" fill="#0b3c8c" font-weight="700">차 위치</text>
 </g>
 </g></svg>
-<figure class="shot "><video class="media" src="assets/11_camera_view.mp4" autoplay loop muted playsinline aria-label="지게차 카메라 화면에 저장한 포켓 위치를 매 순간 차 위치에 맞춰 옮겨 그린 영상. 팔레트가 화면 밖으로 나갈 때까지 자홍색 표시가 포켓에 맞게 따라간다"></video></figure>
+<figure class="shot "><video class="media" src="assets/11_insert_view.mp4" autoplay loop muted playsinline aria-label="지게차 카메라 화면에 저장한 포켓 위치를 매 순간 차 위치에 맞춰 옮겨 그린 영상. 팔레트가 화면 밖으로 나갈 때까지 자홍색 표시가 포켓에 맞게 따라간다"></video></figure>
 </div>
 <div class="phase-flow steps3"><b class="ins-s1">① 멈춰서 보고 포켓 위치 저장</b><span class="arrow">→</span><b class="ins-s2">② 카메라 없이 차 위치만으로 이동</b><span class="arrow">→</span><b class="ins-s3">③ 목표 깊이까지 삽입</b></div>
 </div></x-import>
