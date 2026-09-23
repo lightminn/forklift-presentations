@@ -271,3 +271,8 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 /* insert-sync.js drives these from the clip once it runs; stop the CSS clock. */
 .ins-synced .ins-move, .ins-synced .ins-cone, .ins-synced .ins-est,
 .ins-synced .ins-s1, .ins-synced .ins-s2, .ins-synced .ins-s3 { animation:none !important; }
+.comparison.causes { font-size:19px; line-height:1.35; }
+.comparison.causes td, .comparison.causes th { padding:8px 12px; }
+.comparison.causes td:first-child { width:30%; white-space:nowrap; }
+.comparison.causes td:nth-child(2) { width:10%; white-space:nowrap; font-weight:700; color:var(--uos-blue); }
+.comparison.causes .sw { display:inline-block; width:14px; height:14px; margin-right:8px; vertical-align:-1px; }
