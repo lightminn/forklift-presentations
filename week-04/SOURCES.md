@@ -34,7 +34,7 @@
 | 내용 | 출처 |
 |---|---|
 | 팔레트 검출 카메라를 **지면 위 23~36 cm, 바닥·팔레트면에 수직**으로 장착. ifm 자사 센서 안내이며 D435i 에 직접 적용하지 않는다. PDS 는 ifm O3D 시리즈 3D ToF(PMD) 카메라에 내장된 팔레트 인식 기능이다(같은 페이지, LiDAR 아님) | ifm PDS 통합 안내 <https://www.ifm.com/gb/en/shared/technologies/o3d/pallet-detection-system-pds/integration-of-the-pds> |
-| 포크 캐리지 장착, 포크가 시야 하단에 오도록 | Crown 특허 US9990535B2 <https://patents.google.com/patent/US9990535B2/en> |
+| 3D ToF 카메라를 포크 캐리지 프레임 하단에 장착(실시예는 포크 아래). 포크와 함께 좌우 이동(사이드 시프트)하되 기울기는 따르지 않아도 됨. 포크를 시야 하단에 두어 팔레트를 일찍 봄. 보조 조명 선택 | Crown 특허 US9990535B2 <https://patents.google.com/patent/US9990535B2/en> |
 | 백레스트(캐리지 일체) 장착, 카메라와 포크는 강체 관계 | Kita & Kato, *Sensors* 2026 <https://pmc.ncbi.nlm.nih.gov/articles/PMC12788346/> |
 | 팔레트 검출은 스테레오 깊이 카메라(ZED2i), 마지막 접근은 포크 높이에 단 2D LiDAR(Sick picoScan150)로 정밀 위치 맞춤 | ADAPT 자율 지게차 <https://arxiv.org/html/2503.14331v1> |
 | 깊이 화각 87° × 58°, 권장 범위 0.3~3 m | Intel RealSense D435i 제품 사양 <https://www.realsenseai.com/products/depth-camera-d435i/> |
