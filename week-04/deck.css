@@ -276,3 +276,4 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .comparison.causes td:first-child { width:30%; white-space:nowrap; }
 .comparison.causes td:nth-child(2) { width:10%; white-space:nowrap; font-weight:700; color:var(--uos-blue); }
 .comparison.causes .sw { display:inline-block; width:14px; height:14px; margin-right:8px; vertical-align:-1px; }
+.comparison.cases td:nth-child(3), .comparison.cases td:nth-child(4) { white-space:nowrap; }

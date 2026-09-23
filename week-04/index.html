@@ -3,7 +3,7 @@
 <link rel="icon" href="data:,">
 <script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script><script src="insert-sync.js?v=1b7e44eec7e0" defer></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>4주차 자율 지게차 개발</title>
-<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=0bd63b4f31e9"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=c82c230fd162"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 <section class="title-section" data-label="개발 진행 보고" data-screen-label="01" data-duration="20" data-speaker-notes="권장 20초
 
@@ -103,7 +103,7 @@
 
 <section data-label="카메라 장착 사례" data-screen-label="05" data-duration="65" data-speaker-notes="권장 65초
 
-3주차에 실제 지게차는 카메라를 어디에 다는지 확인하고 우리 차체에 맞추어 보라는 지적을 받았다. 그림은 지게차 옆모습에 사례별 위치를 표시한 것이다. 첫째, ifm의 팔레트 인식 전용 3차원 카메라 PDS는 바닥에서 23에서 36센티미터 높이에 정면을 수직으로 보도록 단다. 둘째, 지게차 제조사 Crown의 특허는 포크 캐리지에 카메라를 달아 포크와 함께 오르내리게 하고, 포크 끝이 화면 아래쪽에 보이게 한다. 셋째, 도요타와 일본 산업기술종합연구소의 자율 지게차는 포크 뒤 백레스트에 어안 카메라를 달아 포크와 함께 움직이게 했다. 넷째, 자율 지게차 연구 ADAPT는 멀리서는 카메라로 찾고 마지막 접근은 근거리 전용 센서에 맡긴다. 공통점은 포켓 높이 가까이, 포크와 함께 움직이는 자리에 단다는 것이다.
+3주차에 실제 지게차는 카메라를 어디에 다는지 확인하고 우리 차체에 맞추어 보라는 지적을 받았다. 그림은 지게차 옆모습에 사례별 위치를 표시한 것이다. 첫째, ifm의 PDS는 빛이 돌아오는 시간으로 거리를 재는 ToF 카메라로 팔레트를 인식하며, 바닥에서 23에서 36센티미터 높이에 정면을 수직으로 보도록 단다. 둘째, 지게차 제조사 Crown의 특허는 포크 캐리지에 카메라를 달아 포크와 함께 오르내리게 하고, 포크 끝이 화면 아래쪽에 보이게 한다. 셋째, 도요타와 일본 산업기술종합연구소의 자율 지게차는 포크 뒤 백레스트에 어안 카메라를 달아 포크와 함께 움직이게 했다. 넷째, 자율 지게차 연구 ADAPT는 멀리서는 카메라로 찾고 마지막 접근은 근거리 전용 센서에 맡긴다. 공통점은 포켓 높이 가까이, 포크와 함께 움직이는 자리에 단다는 것이다.
 
 [Sources]
 출처: 제조사 안내 · 특허 · 논문
@@ -114,7 +114,7 @@ ADAPT 자율 지게차 (arXiv 2503.14331) — 최종 접근은 근거리 전용 
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="04  카메라 장착 사례"><div class="slide-body">
 <h2 class="headline">실제 지게차의 팔레트 인식 카메라 장착 위치</h2>
-<div class="split grow" style="grid-template-columns:1.15fr 1fr">
+<div class="split grow" style="grid-template-columns:1fr 1.05fr">
 
 <svg class="diagram grow" viewBox="0 0 800 430" role="img" aria-label="지게차 측면 개념도 위에 실제 사례의 팔레트 검출 카메라 장착 위치를 번호로 표시">
 <g font-family="var(--uos-font)">
@@ -143,7 +143,7 @@ ADAPT 자율 지게차 (arXiv 2503.14331) — 최종 접근은 근거리 전용 
 
 <table class="comparison cases">
 <tr><th></th><th>이름</th><th>장착</th><th>특징</th></tr>
-<tr><td><span class="mk">①</span></td><td>ifm PDS</td><td>바닥 위 23~36 cm<br>정면 수직</td><td>팔레트 인식 전용 3D 카메라</td></tr>
+<tr><td><span class="mk">①</span></td><td>ifm PDS</td><td>바닥 위 23~36 cm<br>정면 수직</td><td>ToF 카메라로<br>팔레트 인식</td></tr>
 <tr><td><span class="mk">②</span></td><td>Crown 특허</td><td>포크 캐리지</td><td>포크와 함께 승강<br>포크 끝이 화면 아래쪽</td></tr>
 <tr><td><span class="mk">③</span></td><td>Toyota·AIST</td><td>백레스트</td><td>어안 카메라<br>포크와 함께 이동</td></tr>
 <tr><td><span class="mk">④</span></td><td>ADAPT</td><td>카메라와<br>근거리 센서 분리</td><td>마지막 접근은<br>근거리 센서</td></tr></table>

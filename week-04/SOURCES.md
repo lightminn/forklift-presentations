@@ -33,7 +33,7 @@
 
 | 내용 | 출처 |
 |---|---|
-| 팔레트 검출 카메라를 **지면 위 23~36 cm, 바닥·팔레트면에 수직**으로 장착. ifm 자사 센서 안내이며 D435i 에 직접 적용하지 않는다 | ifm PDS 통합 안내 <https://www.ifm.com/gb/en/shared/technologies/o3d/pallet-detection-system-pds/integration-of-the-pds> |
+| 팔레트 검출 카메라를 **지면 위 23~36 cm, 바닥·팔레트면에 수직**으로 장착. ifm 자사 센서 안내이며 D435i 에 직접 적용하지 않는다. PDS 는 ifm O3D 시리즈 3D ToF(PMD) 카메라에 내장된 팔레트 인식 기능이다(같은 페이지, LiDAR 아님) | ifm PDS 통합 안내 <https://www.ifm.com/gb/en/shared/technologies/o3d/pallet-detection-system-pds/integration-of-the-pds> |
 | 포크 캐리지 장착, 포크가 시야 하단에 오도록 | Crown 특허 US9990535B2 <https://patents.google.com/patent/US9990535B2/en> |
 | 백레스트(캐리지 일체) 장착, 카메라와 포크는 강체 관계 | Kita & Kato, *Sensors* 2026 <https://pmc.ncbi.nlm.nih.gov/articles/PMC12788346/> |
 | 최종 접근은 근거리 전용 센서가 담당 | ADAPT 자율 지게차 <https://arxiv.org/html/2503.14331v1> |
