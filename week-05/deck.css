@@ -338,3 +338,16 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .phase-flow.flow5 b, .phase-flow.flow5 span { white-space:nowrap; }
 .qcols.grow ul { font-size:22px; line-height:1.55; }
 .roadmap.next { flex-shrink:0; }
+/* Slide 7: labels for the two panels of the cropped clip, set in the page. */
+/* The labels sit on the clip itself, one per panel. The box has exactly the
+   clip's aspect ratio (1250 x 580), so each label stays over its own panel
+   however far the video is scaled, with no letterbox bars. */
+.pair { display:flex; justify-content:center; min-height:0; }
+.pair-box { position:relative; height:100%; aspect-ratio:1250/580; max-width:100%; }
+.pair-video { width:100%; height:100%; display:block; border:1px solid var(--uos-rule); }
+.pair-tag { position:absolute; top:10px; transform:translateX(-50%); padding:5px 14px; border-radius:4px;
+  background:rgba(255,255,255,0.92); font-size:21px; font-weight:700; color:var(--uos-blue); white-space:nowrap; }
+.pair-tag.left { left:24.8%; } .pair-tag.right { left:75.2%; }
+.pair-tag i { font-style:normal; font-weight:400; font-size:17px; color:#44505c; margin-left:6px; }
+.pair-labels span { font-size:22px; font-weight:700; color:var(--uos-blue); text-align:center; }
+.pair-labels i { font-style:normal; font-weight:400; font-size:19px; color:var(--uos-ink-muted); margin-left:8px; }

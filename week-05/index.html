@@ -3,7 +3,7 @@
 <link rel="icon" href="data:,">
 <script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>5주차 자율 지게차 개발</title>
-<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=7ecd1913fe35"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=1405f757acbb"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 <section class="title-section" data-label="개발 진행 보고" data-screen-label="01" data-duration="20" data-speaker-notes="권장 20초
 
@@ -20,11 +20,11 @@
 
 <section data-label="계획서상 위치" data-screen-label="02" data-duration="45" data-speaker-notes="권장 45초
 
-개발 계획서의 순서를 먼저 확인한다. 위 줄이 주 경로이다. 차체를 실측하고 전장과 신호를 조사하는 H0와 H1을 이번 주에 시작하였다. 그다음이 컴퓨터가 명령을 넣고 상태를 읽는 하위 제어, 실측 차체로 만든 모델의 검증, 그리고 미리 만든 고정 지도로 위치를 추정하고 장애물 지도를 만드는 단계이다. 지도를 만들며 동시에 위치를 추정하는 온라인 SLAM은 별도 조건으로 평가한다. 아래 줄은 시뮬레이션이다. 4주차까지 인식부터 운반까지를 연결하였고, 이번 주에는 넓은 공장 작업장과 2D LiDAR 지도 작성을 붙여 보았다. 이것은 계획서의 M4에 필요한 기술을 미리 확인한 실증이며, 실제 구성은 실물 센서와 차체로 M4에서 다시 정한다.
+개발 계획서의 순서를 먼저 확인한다. 위 줄이 주 경로이다. 차체를 실측하고 전장과 신호를 조사하는 첫 단계를 이번 주에 시작하였다. 그다음이 컴퓨터가 명령을 넣고 상태를 읽는 하위 제어, 실측 차체로 만든 모델의 검증, 그리고 미리 만든 고정 지도로 위치를 추정하고 장애물 지도를 만드는 단계이다. 지도를 만들며 동시에 위치를 추정하는 온라인 SLAM은 별도 조건으로 평가한다. 아래 줄은 시뮬레이션이다. 4주차까지 인식부터 운반까지를 연결하였고, 이번 주에는 넓은 공장 작업장과 2D LiDAR 지도 작성을 붙여 보았다. 이것은 위치 추정 단계에 필요한 기술을 미리 확인한 실증이며, 실제 구성은 그 단계에서 실물 센서와 차체로 다시 정한다.
 
 [Sources]
 출처: 개발 로드맵
-로드맵 H0–H4, M4–M6: docs/plans/2026-09-11-development-roadmap.md
+로드맵 H0–H4, M4–M6 (발표에서는 단계 이름으로 표기): docs/plans/2026-09-11-development-roadmap.md
 현재 진행 상태: docs/plans/2026-09-17-project-status-and-next-steps.md
 이번 주 시뮬레이션 실증: docs/validation/2026-09-26-factory-hall-and-isaac-slam.md
 [/Sources]" style="background:#fff">
@@ -33,19 +33,19 @@
 <div class="lanes grow">
 <div class="lane-name main">실물<br>개발 경로</div>
 <div class="lane">
-<article class="now"><h3>H0·H1</h3><p>차체 실측<br>전장·신호 조사</p><p class="state">이번 주 시작</p></article>
-<article class="wait"><h3>H3</h3><p>하위 제어<br>명령·상태 연결</p></article>
-<article class="wait"><h3>H4</h3><p>실측 차체 모델<br>주행 특성 검증</p></article>
-<article class="wait"><h3>M4</h3><p>고정 지도 위치 추정<br>장애물 지도</p></article>
-<article class="wait"><h3>M5–M6</h3><p>삽입<br>적재·운반·하역</p></article>
+<article class="now"><h3>차체 조사</h3><p>치수 실측<br>전장·신호 조사</p><p class="state">이번 주 시작</p></article>
+<article class="wait"><h3>하위 제어</h3><p>컴퓨터 명령 입력<br>주행 상태 읽기</p></article>
+<article class="wait"><h3>모델 검증</h3><p>실측 차체 모델<br>주행 특성 비교</p></article>
+<article class="wait"><h3>위치 추정</h3><p>미리 만든 지도로<br>위치 추정·장애물 지도</p></article>
+<article class="wait"><h3>삽입·운반</h3><p>포크 삽입<br>적재·운반·하역</p></article>
 </div>
 <div class="lane-name demo">시뮬레이션<br>기술 실증</div>
 <div class="lane demo">
 <article class="done span2"><h3>~4주차</h3><p>인식 → 경로 → 삽입 → 운반</p><p class="state">Isaac Sim</p></article>
-<article class="now span2"><h3>이번 주</h3><p>공장 규모 작업장 · 2D LiDAR 지도 작성</p><p class="state">M4 기술을 미리 확인</p></article>
+<article class="now span2"><h3>이번 주</h3><p>공장 규모 작업장 · 2D LiDAR 지도 작성</p><p class="state">위치 추정 기술을 미리 확인</p></article>
 </div>
 </div>
-<div class="takeaway">실증 결과는 실물 경로의 M4에서 실제 센서·차체로 다시 정한다</div>
+<div class="takeaway">실증 결과는 실물의 위치 추정 단계에서 실제 센서·차체로 다시 정한다</div>
 </div></x-import>
 </section>
 
@@ -89,12 +89,13 @@
 
 <section data-label="공장 규모 작업장" data-screen-label="05" data-duration="40" data-speaker-notes="권장 40초
 
-이번 주 시뮬레이션 실증은 넓은 공장 작업장에서 시작한다. NVIDIA 창고 장면의 남쪽 홀, 약 30 곱하기 31미터를 적재 팔레트와 작업장 물품으로 채웠다. 배치는 seed마다 새로 만들어지므로 같은 절차를 여러 배치에서 반복해 볼 수 있다. 4주차까지 쓰던 작은 운반 구역은 이 홀 안에 그대로 두었다. 이 장면은 실제 시험장을 본뜬 것이 아니라, 긴 경로와 지도 작성을 시험하기 위한 합성 환경이다.
+이번 주 시뮬레이션 실증은 넓은 공장 작업장에서 시작한다. NVIDIA 창고 장면의 남쪽 홀, 약 30 곱하기 31미터를 적재 팔레트와 작업장 물품으로 채웠다. 배치는 seed마다 새로 만들어지므로 같은 절차를 여러 배치에서 반복해 볼 수 있다. 4주차까지 쓰던 작은 운반 구역은 이 홀 안에 그대로 두었다. 영상 속 파란 선은 조사 경로로, 홀을 한 바퀴 도는 경유점 14개를 미리 정해 두고, 이웃한 경유점 사이를 경로 계획기가 장애물을 피해 자동으로 이어 만든 116미터 경로이다. 지게차는 시뮬레이터가 알려 주는 위치로 이 경로를 따라간다. 이 장면은 실제 시험장을 본뜬 것이 아니라, 긴 경로와 지도 작성을 시험하기 위한 합성 환경이다.
 
 [Sources]
 화면 생성: Isaac Sim 조감 녹화 8배속 (20260926_factory_slam_v3 seed 0)
 §1 공장 배치 — seed 0–19 팔레트 55–63 · 상자 394–563 · 작업장 물품 23: docs/validation/2026-09-26-factory-hall-and-isaac-slam.md
 홀 계획 경계 x −25.6~4.7, y −22.9~8.3 m (30.3 × 31.2 m): docs/plans/2026-09-26-factory-hall-and-isaac-slam.md
+survey_route 경유점 14개 — plan_survey_route 가 이웃 경유점을 Hybrid A* 로 연결: config/factory_south_hall.yaml
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="04  [실증] 공장 규모 작업장"><div class="slide-body">
 <h2 class="headline">넓은 작업장에서 경로 계획과 지도 작성을 시험하는 장면</h2>
@@ -106,7 +107,8 @@
 <tr><td>팔레트 적재</td><td>55–63 개</td></tr>
 <tr><td>적재 상자</td><td>394–563 개</td></tr>
 <tr><td>작업장 물품</td><td>23 개</td></tr>
-<tr><td>배치</td><td>seed마다 새로 생성</td></tr></table>
+<tr><td>배치</td><td>seed마다 새로 생성</td></tr>
+<tr><td>조사 경로</td><td>정한 경유점 14개를<br>경로 계획기가 연결</td></tr></table>
 </div>
 <div class="demo-tag"><b>기술 실증</b> · Isaac Sim 합성 장면 · 로봇 제어는 시뮬레이터 정답 위치</div>
 </div></x-import>
@@ -151,16 +153,20 @@ LiDAR 장착 위치 미확정: docs/hardware.md
 
 <section data-label="지도 작성" data-screen-label="07" data-duration="65" data-speaker-notes="권장 65초
 
-Isaac에서 지게차가 116미터 조사 경로를 달리며 LiDAR 스캔과 바퀴 회전, 조향각을 기록한다. 이 기록을 ROS 2에서 재생해, 널리 쓰이는 공개 SLAM 패키지인 slam_toolbox가 지도를 만들고 매 순간 자기 위치를 추정하게 했다. 왼쪽은 위에서 본 실제 움직임, 가운데는 그 시각까지 만들어진 지도와 추정 경로, 오른쪽은 지게차 카메라 화면이다. 이 지도와 위치는 기록을 다시 재생해 얻은 것이고, 주행 자체는 시뮬레이터가 알려 주는 정답 위치로 하였다. 즉 SLAM 결과로 차를 움직인 것은 아니다.
+Isaac에서 지게차가 116미터 조사 경로를 달리며 LiDAR 스캔과 바퀴 회전, 조향각을 기록한다. 이 기록을 ROS 2에서 재생해, 널리 쓰이는 공개 SLAM 패키지인 slam_toolbox가 지도를 만들고 매 순간 자기 위치를 추정하게 했다. 왼쪽은 위에서 본 실제 움직임이고, 오른쪽은 그 시각까지 만들어진 지도와 추정 경로이다. 지게차가 돌수록 오른쪽 지도가 넓어지고, 빨간 추정 위치가 파란 실제 경로 위를 따라간다. 이 지도와 위치는 기록을 다시 재생해 얻은 것이고, 주행 자체는 시뮬레이터가 알려 주는 정답 위치로 하였다. 즉 SLAM 결과로 차를 움직인 것은 아니다.
 
 [Sources]
-화면 생성: Isaac Sim 기록 + ROS 2 slam_toolbox 재생 20260928_week05_replay, 8배속
+화면 생성: Isaac Sim 기록 + ROS 2 slam_toolbox 재생 20260928_week05_replay, 3분할 영상에서 조감·지도 두 칸만 잘라 8배속
 §3 기록 · §4 재생 · §6 3분할 영상: docs/validation/2026-09-26-factory-hall-and-isaac-slam.md
 합성 LiDAR 1,600빔 · 10 Hz · 0.2–12 m (A2M12 카탈로그 값, 실측 아님): config/isaac_slam_lidar.yaml
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="06  [실증] 저장한 주행 기록으로 지도 만들기"><div class="slide-body">
 <h2 class="headline">주행 기록을 재생해 slam_toolbox로 지도와 위치를 추정</h2>
-<figure class="shot grow"><video class="media" src="assets/21_slam_three_panel.mp4" autoplay loop muted playsinline aria-label="왼쪽 조감, 가운데 slam_toolbox가 만든 지도와 추정 경로, 오른쪽 지게차 카메라 컬러·깊이. 아래는 시간에 따른 위치 오차 그래프"></video><figcaption class="small muted">8배속 · 가운데 파랑 = 실제 경로, 빨강 = SLAM 추정 · 아래 그래프 빨강 = SLAM, 주황 = 바퀴만</figcaption></figure>
+<div class="pair grow"><div class="pair-box">
+<span class="pair-tag left">실제 움직임 <i>빨간 점 = LiDAR가 닿은 곳</i></span>
+<span class="pair-tag right">SLAM이 만든 지도 <i>파랑 = 실제 · 빨강 = 추정</i></span>
+<video class="pair-video" src="assets/21_slam_map_pair.mp4" autoplay loop muted playsinline aria-label="왼쪽은 공장 홀을 위에서 본 지게차의 실제 움직임, 오른쪽은 같은 순간까지 slam_toolbox가 만든 지도와 추정 경로"></video>
+</div></div>
 <div class="phase-flow flow5"><b>Isaac 주행 기록</b><span>스캔·바퀴·조향</span><span class="arrow">→</span><b>ROS 2 재생</b><span class="arrow">→</span><b>slam_toolbox</b><span class="arrow">→</span><b>지도 · 추정 위치</b><span class="arrow">→</span><b>정답과 비교</b></div>
 <div class="demo-tag"><b>기술 실증</b> · Isaac Sim 합성 장면 · 로봇 제어는 시뮬레이터 정답 위치</div>
 </div></x-import>
@@ -168,7 +174,7 @@ Isaac에서 지게차가 116미터 조사 경로를 달리며 LiDAR 스캔과 �
 
 <section data-label="위치 추정 오차" data-screen-label="08" data-duration="55" data-speaker-notes="권장 55초
 
-같은 주행을 다섯 가지 배치에서, 잡음 없이 한 번, 합성 잡음을 넣어 한 번씩 모두 열 번 재생하였다. 점 하나가 재생 한 번의 위치 오차로, 출발 자세만 맞춘 뒤 주행 전체에서 구한 제곱평균제곱근이다. 바퀴 회전과 조향각만으로 위치를 계산하면 116미터를 달리는 동안 평균 0.8미터쯤 벗어났다. 달린 거리는 정답과 0.05퍼센트 안에서 맞았는데, 회전한 양을 조금씩 다르게 세어 방향이 어긋난 것이 원인이다. LiDAR 스캔을 지도와 맞추는 SLAM은 같은 주행에서 평균 5센티미터 안쪽이었다. 다만 이것은 시뮬레이터의 관절 값과 합성 센서에서 나온 결과이다. 엔코더 분해능을 시험한 것이 아니며, 실물에서 방향 오차가 얼마나 쌓이는지는 바퀴와 조향 신호를 측정해 확인한다.
+같은 주행을 다섯 가지 배치에서, 잡음 없이 한 번, 합성 잡음을 넣어 한 번씩 모두 열 번 재생하였다. 두 줄은 같은 0 기준 축 위에 있고, 막대는 열 번의 평균, 점 하나는 재생 한 번의 위치 오차이다. 출발 자세만 맞춘 뒤 주행 전체에서 구한 제곱평균제곱근이다. 바퀴 회전과 조향각만으로 위치를 계산하면 116미터를 달리는 동안 평균 0.8미터쯤 벗어났다. 달린 거리는 정답과 0.05퍼센트 안에서 맞았는데, 회전한 양을 조금씩 다르게 세어 방향이 어긋난 것이 원인이다. LiDAR 스캔을 지도와 맞추는 SLAM은 같은 주행에서 평균 5센티미터 안쪽이었다. 다만 이것은 시뮬레이터의 관절 값과 합성 센서에서 나온 결과이다. 엔코더 분해능을 시험한 것이 아니며, 실물에서 방향 오차가 얼마나 쌓이는지는 바퀴와 조향 신호를 측정해 확인한다.
 
 [Sources]
 화면 생성: 재생 평가 수치 도식 (2026-09-28 재실행에서 같은 값 확인)
@@ -178,10 +184,10 @@ Isaac에서 지게차가 116미터 조사 경로를 달리며 LiDAR 스캔과 �
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="07  [실증] 위치 추정 오차"><div class="slide-body">
 <h2 class="headline">바퀴만으로는 방향 오차가 쌓이고, 지도와 맞춰 보면 수 cm로 줄어든다</h2>
-<svg class="budget" viewBox="0 0 1200 272" role="img" aria-label="116 m 조사 주행 재생 10회의 위치 오차. SLAM은 0.03~0.08 m, 바퀴만 쓴 추정은 0.58~0.87 m"><g font-family="var(--uos-font)"><circle cx="170" cy="16" r="8" fill="#5d6670"/><text x="186" y="23" font-size="19" fill="#44505c">잡음 없음</text><circle cx="300" cy="16" r="7" fill="#fff" stroke="#5d6670" stroke-width="3"/><text x="316" y="23" font-size="19" fill="#44505c">합성 잡음(가정값)</text><text x="1180" y="23" text-anchor="end" font-size="19" fill="#44505c">점 하나 = 재생 한 번의 위치 오차 RMSE (출발 자세만 맞춤)</text><line x1="170.0" y1="40" x2="170.0" y2="236" stroke="#e3e6ea" stroke-width="1.5"/><text x="170.0" y="262" text-anchor="middle" font-size="19" fill="#44505c">0.0 m</text><line x1="394.4" y1="40" x2="394.4" y2="236" stroke="#e3e6ea" stroke-width="1.5"/><text x="394.4" y="262" text-anchor="middle" font-size="19" fill="#44505c">0.2 m</text><line x1="618.9" y1="40" x2="618.9" y2="236" stroke="#e3e6ea" stroke-width="1.5"/><text x="618.9" y="262" text-anchor="middle" font-size="19" fill="#44505c">0.4 m</text><line x1="843.3" y1="40" x2="843.3" y2="236" stroke="#e3e6ea" stroke-width="1.5"/><text x="843.3" y="262" text-anchor="middle" font-size="19" fill="#44505c">0.6 m</text><line x1="1067.8" y1="40" x2="1067.8" y2="236" stroke="#e3e6ea" stroke-width="1.5"/><text x="1067.8" y="262" text-anchor="middle" font-size="19" fill="#44505c">0.8 m</text><text x="150" y="102" text-anchor="end" font-size="23" font-weight="700" fill="#1b1f24">SLAM</text><circle cx="198.1" cy="82" r="8" fill="#2f74c0" stroke="#fff" stroke-width="2"/><circle cx="214.9" cy="82" r="8" fill="#2f74c0" stroke="#fff" stroke-width="2"/><circle cx="213.8" cy="82" r="8" fill="#2f74c0" stroke="#fff" stroke-width="2"/><circle cx="221.6" cy="82" r="8" fill="#2f74c0" stroke="#fff" stroke-width="2"/><circle cx="222.7" cy="82" r="8" fill="#2f74c0" stroke="#fff" stroke-width="2"/><circle cx="239.6" cy="108" r="7" fill="#fff" stroke="#2f74c0" stroke-width="3"/><circle cx="226.1" cy="108" r="7" fill="#fff" stroke="#2f74c0" stroke-width="3"/><circle cx="205.9" cy="108" r="7" fill="#fff" stroke="#2f74c0" stroke-width="3"/><circle cx="264.3" cy="108" r="7" fill="#fff" stroke="#2f74c0" stroke-width="3"/><circle cx="220.5" cy="108" r="7" fill="#fff" stroke="#2f74c0" stroke-width="3"/><text x="282.3" y="102" text-anchor="start" font-size="22" font-weight="700" fill="#1b1f24">10회 평균 0.05 m</text><text x="150" y="206" text-anchor="end" font-size="23" font-weight="700" fill="#1b1f24">바퀴만</text><circle cx="816.4" cy="186" r="8" fill="#c26a1a" stroke="#fff" stroke-width="2"/><circle cx="1074.5" cy="186" r="8" fill="#c26a1a" stroke="#fff" stroke-width="2"/><circle cx="1075.6" cy="186" r="8" fill="#c26a1a" stroke="#fff" stroke-width="2"/><circle cx="1144.1" cy="186" r="8" fill="#c26a1a" stroke="#fff" stroke-width="2"/><circle cx="1074.5" cy="186" r="8" fill="#c26a1a" stroke="#fff" stroke-width="2"/><circle cx="900.6" cy="212" r="7" fill="#fff" stroke="#c26a1a" stroke-width="3"/><circle cx="1019.5" cy="212" r="7" fill="#fff" stroke="#c26a1a" stroke-width="3"/><circle cx="1103.7" cy="212" r="7" fill="#fff" stroke="#c26a1a" stroke-width="3"/><circle cx="1127.3" cy="212" r="7" fill="#fff" stroke="#c26a1a" stroke-width="3"/><circle cx="1088.0" cy="212" r="7" fill="#fff" stroke="#c26a1a" stroke-width="3"/><text x="798.4" y="206" text-anchor="end" font-size="22" font-weight="700" fill="#1b1f24">10회 평균 0.78 m</text></g></svg>
+<svg class="budget" viewBox="0 0 1200 290" role="img" aria-label="116 m 조사 주행 재생 10회의 위치 오차. 같은 0 기준 축에서 SLAM 평균 0.05 m, 바퀴만 쓴 추정 평균 0.78 m"><g font-family="var(--uos-font)"><text x="170" y="24" font-size="19" fill="#44505c">막대 = 10회 평균 · 점 = 재생 한 번의 위치 오차 RMSE (출발 자세만 맞춤, 배치 5종 × 잡음 없음·합성 잡음)</text><line x1="170.0" y1="44" x2="170.0" y2="256" stroke="#e3e6ea" stroke-width="1.5"/><text x="170.0" y="280" text-anchor="middle" font-size="19" fill="#44505c">0.0 m</text><line x1="387.8" y1="44" x2="387.8" y2="256" stroke="#e3e6ea" stroke-width="1.5"/><text x="387.8" y="280" text-anchor="middle" font-size="19" fill="#44505c">0.2 m</text><line x1="605.6" y1="44" x2="605.6" y2="256" stroke="#e3e6ea" stroke-width="1.5"/><text x="605.6" y="280" text-anchor="middle" font-size="19" fill="#44505c">0.4 m</text><line x1="823.3" y1="44" x2="823.3" y2="256" stroke="#e3e6ea" stroke-width="1.5"/><text x="823.3" y="280" text-anchor="middle" font-size="19" fill="#44505c">0.6 m</text><line x1="1041.1" y1="44" x2="1041.1" y2="256" stroke="#e3e6ea" stroke-width="1.5"/><text x="1041.1" y="280" text-anchor="middle" font-size="19" fill="#44505c">0.8 m</text><line x1="170" y1="44" x2="170" y2="256" stroke="#44505c" stroke-width="2.5"/><text x="150" y="100" text-anchor="end" font-size="23" font-weight="700" fill="#1b1f24">SLAM</text><rect x="170" y="56" width="51.2" height="72" rx="4" fill="#2f74c0" opacity="0.28"/><line x1="221.2" y1="54" x2="221.2" y2="130" stroke="#2f74c0" stroke-width="3"/><circle cx="197.2" cy="92" r="6" fill="#2f74c0" stroke="#fff" stroke-width="1.5"/><circle cx="204.8" cy="81" r="6" fill="#2f74c0" stroke="#fff" stroke-width="1.5"/><circle cx="212.5" cy="92" r="6" fill="#2f74c0" stroke="#fff" stroke-width="1.5"/><circle cx="213.6" cy="103" r="6" fill="#2f74c0" stroke="#fff" stroke-width="1.5"/><circle cx="219.0" cy="81" r="6" fill="#2f74c0" stroke="#fff" stroke-width="1.5"/><circle cx="220.1" cy="70" r="6" fill="#2f74c0" stroke="#fff" stroke-width="1.5"/><circle cx="221.2" cy="114" r="6" fill="#2f74c0" stroke="#fff" stroke-width="1.5"/><circle cx="224.4" cy="59" r="6" fill="#2f74c0" stroke="#fff" stroke-width="1.5"/><circle cx="237.5" cy="92" r="6" fill="#2f74c0" stroke="#fff" stroke-width="1.5"/><circle cx="261.5" cy="92" r="6" fill="#2f74c0" stroke="#fff" stroke-width="1.5"/><text x="279.5" y="100" text-anchor="start" font-size="22" font-weight="700" fill="#1b1f24">평균 0.05 m</text><text x="150" y="218" text-anchor="end" font-size="23" font-weight="700" fill="#1b1f24">바퀴만</text><rect x="170" y="174" width="846.5" height="72" rx="4" fill="#c26a1a" opacity="0.28"/><line x1="1016.5" y1="172" x2="1016.5" y2="248" stroke="#c26a1a" stroke-width="3"/><circle cx="797.2" cy="210" r="6" fill="#c26a1a" stroke="#fff" stroke-width="1.5"/><circle cx="878.9" cy="210" r="6" fill="#c26a1a" stroke="#fff" stroke-width="1.5"/><circle cx="994.3" cy="210" r="6" fill="#c26a1a" stroke="#fff" stroke-width="1.5"/><circle cx="1047.6" cy="210" r="6" fill="#c26a1a" stroke="#fff" stroke-width="1.5"/><circle cx="1047.6" cy="199" r="6" fill="#c26a1a" stroke="#fff" stroke-width="1.5"/><circle cx="1048.7" cy="221" r="6" fill="#c26a1a" stroke="#fff" stroke-width="1.5"/><circle cx="1060.7" cy="210" r="6" fill="#c26a1a" stroke="#fff" stroke-width="1.5"/><circle cx="1076.0" cy="210" r="6" fill="#c26a1a" stroke="#fff" stroke-width="1.5"/><circle cx="1098.8" cy="210" r="6" fill="#c26a1a" stroke="#fff" stroke-width="1.5"/><circle cx="1115.2" cy="210" r="6" fill="#c26a1a" stroke="#fff" stroke-width="1.5"/><text x="1016.5" y="168" text-anchor="middle" font-size="22" font-weight="700" fill="#1b1f24">평균 0.78 m</text></g></svg>
 <div class="split" style="grid-template-columns:1fr 1fr">
 <div class="fact-box"><b>바퀴만 쓴 추정</b><span>달린 거리는 정답과 0.05 % 안에서 일치 · 회전량을 9.54 대 9.43 rad로 다르게 세어 위치가 벌어짐</span></div>
-<div class="fact-box"><b>조건</b><span>116 m 조사 주행 · 0.5 m/s · 배치 5종 × 잡음 2조건 · 출발 자세만 맞춘 오차</span></div>
+<div class="fact-box"><b>조건</b><span>116 m 조사 주행 · 0.5 m/s · 합성 잡음은 가정값</span></div>
 </div>
 <div class="takeaway">실물의 바퀴·조향 신호로 방향 오차가 얼마나 쌓이는지 확인한다</div>
 <div class="demo-tag"><b>기술 실증</b> · Isaac Sim 합성 장면 · 로봇 제어는 시뮬레이터 정답 위치</div>
@@ -193,15 +199,15 @@ Isaac에서 지게차가 116미터 조사 경로를 달리며 LiDAR 스캔과 �
 4주차에 보인 찾기, 집기, 운반, 하역, 복귀 임무를 넓은 공장에서 수행하고, 최고속도 설정을 시속 8킬로미터까지 올려 보았다. 고른 두 사례이며 성공률이 아니다. 최고속도에는 닿았지만 1미터 매초를 넘게 달린 시간은 두 사례 모두 10초가 안 되었고, 나머지는 곡선과 후진 구간을 느리게 달렸다. 빠른 설정은 최고속도 말고도 가속과 도착 허용 오차를 함께 바꾼 것이고, seed 5는 운반 경로 길이도 달랐다. 그래서 이 표는 속도만 바꾼 비교가 아니라, 고른 두 실행에서 관측한 시간이다. 또 seed 16의 빠른 직선 구간에서, 기록을 재생해 추정한 위치 오차가 3센티미터에서 0.9미터까지 커졌다가 돌아왔다. 원인은 아직 가르지 않았다. 8 km/h는 시뮬레이터 설정일 뿐 실제 차체의 속도가 아니며, 실물에서는 속도 상한과 센서 주기를 함께 정해야 한다.
 
 [Sources]
-화면 생성: Isaac Sim 조감 + slam_toolbox 재생 정보 패널, seed 16 4배속
+화면 생성: 정보 패널 영상에서 Isaac 조감과 단계·속도 표시만 잘라 4배속 (seed 16)
 §7 기본 속도 임무 220.8 / 175.4 s · §7a 8 km/h 설정 213.8 / 118.2 s, 1 m/s 초과 6.9 / 8.8 s: docs/validation/2026-09-26-factory-hall-and-isaac-slam.md
 §7a seed 16 SLAM 재생 오차 60–66 s 구간 0.9 m, 원인 미분리: docs/validation/2026-09-26-factory-hall-and-isaac-slam.md
 팔레트 위치만 카메라 추정 · 로봇 자세·충돌 지도·목적지는 정답 · 조향·바퀴 속도는 합성 값: docs/validation/2026-09-26-factory-hall-and-isaac-slam.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="08  [실증] 넓은 작업장에서의 임무와 속도"><div class="slide-body">
 <h2 class="headline">최고 8 km/h 설정에서도 빠르게 달린 시간은 몇 초뿐이었다</h2>
-<div class="split grow" style="grid-template-columns:1.45fr 1fr">
-<figure class="shot "><video class="media" src="assets/22_mission_panels_seed16.mp4" autoplay loop muted playsinline aria-label="seed 16 임무 정보 패널. 조감, SLAM 지도, 지게차 카메라와 단계·속도·오차 표시"></video><figcaption class="small muted">seed 16 · 4배속 · 속도·단계·오차는 패널 왼쪽 아래</figcaption></figure>
+<div class="split grow" style="grid-template-columns:0.85fr 1.15fr">
+<figure class="shot "><video class="media" src="assets/22_mission_overview_seed16.mp4" autoplay loop muted playsinline aria-label="seed 16 임무를 위에서 본 영상과 아래의 현재 단계·속도 표시"></video><figcaption class="small muted">seed 16 · 4배속 · 아래 = 현재 단계와 속도</figcaption></figure>
 <table class="comparison facts2">
 <tr><th>고른 두 사례</th><th>seed 5</th><th>seed 16</th></tr>
 <tr><td>기본 설정 임무 시간</td><td>220.8 s</td><td>175.4 s</td></tr>
@@ -257,10 +263,10 @@ ADAPT — 근거리 전용 센서: https://arxiv.org/html/2503.14331v1
 <article><h3>함께 정할 조건</h3><ul><li>운용 환경 · 시험 공간</li><li>허용 속도 상한</li><li>시험 팔레트 (EPAL 6 · 축소 T11 · 동봉품)</li></ul></article>
 </div>
 <div class="roadmap next">
-<article class="now"><h3>H1 신호 분석</h3><p>버튼별 신호 형식<br>모터 구동 방식</p></article>
-<article class="wait"><h3>H3 하위 제어</h3><p>컴퓨터 명령 입력<br>속도·조향·승강 상태</p></article>
-<article class="wait"><h3>H4 모델 검증</h3><p>실측 차체 모델<br>주행 특성 비교</p></article>
-<article class="wait"><h3>M4 위치 추정</h3><p>고정 지도 위치 추정<br>병행: H2 센서 장착·보정</p></article>
+<article class="now"><h3>신호 분석</h3><p>버튼별 신호 형식<br>모터 구동 방식</p></article>
+<article class="wait"><h3>하위 제어</h3><p>컴퓨터 명령 입력<br>속도·조향·승강 상태</p></article>
+<article class="wait"><h3>모델 검증</h3><p>실측 차체 모델<br>주행 특성 비교</p></article>
+<article class="wait"><h3>위치 추정</h3><p>미리 만든 지도로 위치 추정<br>병행: 센서 장착·보정</p></article>
 </div>
 </div></x-import>
 </section>
