@@ -282,7 +282,7 @@ add('개발 단계와 이번 주 위치', '01  개발 단계와 이번 주 위�
 <div class="lane-name demo">시뮬레이션<br>기술 실증</div>
 <div class="lane demo">
 <article class="done span3"><h3>~4주차</h3><p>인식 → 경로 → 삽입 → 운반</p><p class="state">Isaac Sim</p></article>
-<article class="now feeds"><h3>이번 주</h3><p>공장 작업장<br>2D LiDAR 지도 작성</p><p class="state">↑ 미리 확인</p></article>
+<article class="now feeds"><h3>이번 주 <small class="new-tag">NEW</small></h3><p>2D LiDAR SLAM<br>공장 지도·자기 위치</p><p class="state">↑ 위치 추정 단계 미리 확인</p></article>
 </div>
 </div>
 <div class="takeaway">시뮬레이션 결과: 위치 추정 단계의 참고 자료 · 최종 방식은 실물 센서·차체로 결정</div>
@@ -330,27 +330,26 @@ add('포크·팔레트·배선', '03  포크 · 팔레트 · 배선', 60, f"""
     '화면 생성: 실물 사진 (작성 예정)')
 
 # ----------------------------------------------------------------- 5 demo
-add('공장 규모 작업장', '04  공장 규모 작업장', 40, f"""
-<h2 class="headline">팔레트 60여 개를 배치한 가상 공장 작업장 {badge()}</h2>
-<div class="split grow" style="grid-template-columns:1.55fr 1fr">
-{figure('20_factory_quarter.mp4', '공장 작업장을 비스듬히 내려다본 영상. 적재 팔레트 줄 사이로 지게차가 계획 경로를 따라 목적지까지 이동한다', 'Isaac Sim 비스듬한 시점 · 4배속 · 노란 선: 계획 경로 · 초록 원: 목적지', cls='')}
-<div class="stat-col">
-<div class="stat"><b>30 × 31 m</b><span>작업장 크기</span></div>
-<div class="stat"><b>55–63개</b><span>적재 팔레트</span></div>
-<div class="stat"><b>116 m</b><span>지도 작성 경로 · 경유점 14개 자동 연결</span></div>
-<div class="stat"><b>번호별 배치</b><span>팔레트·적재 높이를 자동 생성</span></div>
-</div>
+add('이번 주 추가 기능', '04  4주차 대비 추가 기능', 55, f"""
+<h2 class="headline">2D LiDAR로 공장 지도 작성·자기 위치 추정 {badge('신규 · 기술 실증')}</h2>
+<div class="versus grow">
+<article class="was"><h3>4주차 · 카메라 <small>작은 운반 구역</small></h3>
+<video class="vs-media" src="assets/24_week4_mission.mp4" poster="assets/24_week4_mission_poster.jpg" autoplay loop muted playsinline aria-label="4주차 운반 임무 조감 영상"></video>
+<ul><li><b>알아낸 것</b>팔레트 위치</li><li><b>로봇 위치·지도</b>시뮬레이터 값</li></ul></article>
+<div class="vs-arrow"><span>+ 2D LiDAR</span><i>→</i></div>
+<article class="now"><h3>5주차 · 카메라 + 2D LiDAR <small>30 × 31 m 공장</small></h3>
+<video class="vs-media" src="assets/23_map_growth.mp4" poster="assets/23_map_growth_poster.jpg" autoplay loop muted playsinline aria-label="LiDAR 스캔으로 공장 지도가 채워지는 애니메이션. 파란 선은 지게차가 달린 경로"></video>
+<ul><li><b>알아낸 것</b>팔레트 위치 <em>+ 지도·자기 위치</em></li><li><b>로봇 위치·지도</b>시뮬레이터 값 <em>+ LiDAR 추정</em></li></ul><p class="vs-note">LiDAR 위치 오차 약 5 cm · 임무 주행은 시뮬레이터 값</p></article>
 </div>
 """,
-    """이번 주 시뮬레이션 실증은 넓은 공장 작업장에서 시작한다. NVIDIA 창고 장면의 남쪽 홀, 약 30 곱하기 31미터에 적재 팔레트 60여 개와 작업장 물품을 배치하였다. 배치는 번호마다 자동으로 바뀌므로 같은 절차를 여러 배치에서 반복해 볼 수 있다. 지도 작성 경로는 경유점 14개를 정해 두고 그 사이를 경로 계획기가 이어 만든 116미터 경로이다. 영상은 이 작업장을 비스듬히 내려다본 모습이다. 실제 시험장을 본뜬 것이 아니라 긴 경로와 지도 작성을 시험하기 위한 가상 환경이다.""",
-    [(FACTORY, '§1 공장 배치 — seed 0–19 팔레트 55–63 · 상자 394–563 · 작업장 물품 23'),
-     (FACTORY_PLAN, '홀 계획 경계 x −25.6~4.7, y −22.9~8.3 m (30.3 × 31.2 m)'),
-     ('config/factory_south_hall.yaml', 'survey_route 경유점 14개 — plan_survey_route 가 이웃 경유점을 Hybrid A* 로 연결')],
-    '화면 생성: Isaac Sim 조감 녹화 8배속 (20260926_factory_slam_v3 seed 0)')
+    """4주차와 비교해 이번 주에 새로 더한 것은 2D LiDAR이다. 왼쪽은 4주차의 작은 운반 구역으로, 카메라로 팔레트 위치만 알아내고 로봇 위치와 지도는 시뮬레이터 값을 썼다. 오른쪽은 이번 주의 30 곱하기 31미터 공장이다. 지게차가 달리며 LiDAR로 주변을 스캔하면 흰 빈 공간과 파란 물체 윤곽으로 이루어진 지도가 채워지고, 동시에 지도 안에서 자기 위치를 추정한다. 이 기능이 앞으로 시뮬레이터 값을 대신할 기술이며, 이어지는 세 쪽에서 장착 높이, 지도 작성, 위치 정확도를 차례로 보인다.""",
+    [(FACTORY, '§4·§6 재생 · map_history — slam_toolbox 가 만든 지도의 갱신 254회'),
+     ('forklift-presentations/week-04/SOURCES.md', '4주차 운반 임무 영상')],
+    '화면 생성: 4주차 임무 영상(재사용) · slam_toolbox 지도 갱신 기록을 prepare_data.py 로 영상화')
 
 # ----------------------------------------------------------------- 6 demo
 add('LiDAR 장착 높이', '05  2D LiDAR 장착 높이', 45, f"""
-<h2 class="headline">LiDAR 장착 높이에 따른 관측 범위 차이 {badge('기술 실증 · 잠정 모델 계산')}</h2>
+<h2 class="headline">LiDAR 장착 높이에 따른 관측 범위 차이 {badge('신규 · LiDAR 장착 검토')}</h2>
 <div class="split grow" style="grid-template-columns:1fr 1fr">
 {LIDAR_CONCEPT}
 {occlusion_chart()}
@@ -365,7 +364,7 @@ add('LiDAR 장착 높이', '05  2D LiDAR 장착 높이', 45, f"""
 
 # ----------------------------------------------------------------- 7 demo
 add('지도 작성', '06  주행 기록 기반 지도 작성', 65, f"""
-<h2 class="headline">기록 재생으로 만든 공장 지도와 추정 경로 {badge()}</h2>
+<h2 class="headline">기록 재생으로 만든 공장 지도와 추정 경로 {badge('신규 · LiDAR SLAM 실증')}</h2>
 <div class="pair grow"><div class="pair-box">
 <span class="pair-tag left">Isaac 주행 <i>빨간 점: LiDAR 측정점</i></span>
 <span class="pair-tag right">SLAM 지도 <i>파랑(정답)과 빨강(SLAM)이 거의 겹침</i></span>
@@ -380,7 +379,7 @@ add('지도 작성', '06  주행 기록 기반 지도 작성', 65, f"""
 
 # ----------------------------------------------------------------- 8 demo
 add('위치 추정 오차', '07  위치 추정 오차', 50, f"""
-<h2 class="headline">지도와 맞춘 위치 오차 약 5 cm · 바퀴·조향만으로는 약 78 cm {badge()}</h2>
+<h2 class="headline">LiDAR 지도와 맞춘 위치 오차 약 5 cm · 바퀴·조향만으로는 약 78 cm {badge('신규 · LiDAR SLAM 실증')}</h2>
 <div class="split grow" style="grid-template-columns:1fr 1.05fr">
 <div class="traj-box">{trajectory_anim()}
 <div class="legend"><span><i style="background:#c9ced4"></i>정답 경로</span><span><i style="background:#2f74c0"></i>SLAM 추정</span><span><i style="background:#c26a1a"></i>바퀴·조향 추정</span></div></div>
@@ -401,21 +400,21 @@ add('위치 추정 오차', '07  위치 추정 오차', 50, f"""
 # ----------------------------------------------------------------- 9 demo
 add('공장 임무', '08  공장 규모 자율 임무', 50, f"""
 <h2 class="headline">카메라로 팔레트를 찾아 운반·하역·복귀까지 이어진 공장 임무 {badge()}</h2>
-<div class="split grow" style="grid-template-columns:1.1fr 1fr">
-{figure('22_mission_side_seed16.mp4', '16번 배치 임무를 지게차 옆 위에서 따라가며 본 영상. 팔레트에 접근해 포크를 넣고 들어 올린 뒤 운반해 초록 원 목적지에 내려놓는다', 'Isaac Sim 추적 시점 · 16번 배치 · 구간별 3–8배속', cls='')}
+<div class="split grow" style="grid-template-columns:1fr 1fr">
+{figure('22_mission_side_seed16.mp4', '16번 배치 임무를 지게차 옆 위에서 따라가며 본 영상. 팔레트에 접근해 포크를 넣고 들어 올린 뒤 운반해 초록 원 목적지에 내려놓는다', 'Isaac Sim 추적 시점 · 16번 배치 · 임무 주행은 시뮬레이터 위치 사용', cls='')}
 <div class="stack" style="justify-content:center;gap:16px">
 <div class="flow-chips"><span>관측</span><i>→</i><span>접근·삽입</span><i>→</i><span>들기</span><i>→</i><span>운반</span><i>→</i><span>하역</span><i>→</i><span>복귀</span></div>
 <table class="comparison auto">
-<tr><th>입력</th><th>현재</th><th>다음 단계</th></tr>
-<tr><td>팔레트 위치</td><td class="ok">카메라 추정</td><td>—</td></tr>
-<tr><td>로봇 위치</td><td>시뮬레이터 값</td><td>LiDAR 위치 추정</td></tr>
-<tr><td>장애물 지도</td><td>시뮬레이터 값</td><td>LiDAR 장애물 지도</td></tr>
-<tr><td>목적지</td><td>지정값</td><td>—</td></tr></table>
+<tr><th>임무 주행 입력</th><th>4주차</th><th>5주차</th></tr>
+<tr><td>팔레트 위치</td><td class="ok">카메라</td><td class="ok">카메라</td></tr>
+<tr><td>로봇 위치</td><td>시뮬레이터</td><td>시뮬레이터</td></tr>
+<tr><td>장애물 지도</td><td>시뮬레이터</td><td>시뮬레이터</td></tr></table>
+<p class="vs-note">5주차 추가: LiDAR 위치 추정·지도 작성을 별도 기록 재생으로 실증 (앞 쪽)</p>
 </div>
 </div>
-<div class="takeaway">다음 목표: 로봇 위치·장애물 지도를 센서로 대체해 시뮬레이터 정답 없이 임무 수행</div>
+<div class="takeaway">시뮬레이션 다음 단계: LiDAR로 추정한 위치·지도로 임무 주행 시험</div>
 """,
-    """4주차에 작은 구역에서 보인 임무를 넓은 공장 작업장으로 옮겨 수행하였다. 지게차는 카메라로 팔레트를 찾아 접근해 포크를 넣고 들어 올린 뒤, 출하장까지 운반해 내려놓고 출발 자리로 돌아온다. 오른쪽 표는 이 임무가 무엇을 스스로 알아내고 무엇을 시뮬레이터에 기대는지를 정리한 것이다. 팔레트 위치는 카메라로 추정하지만, 로봇 위치와 장애물 지도는 아직 시뮬레이터 값을 쓴다. 이 두 가지를 LiDAR 위치 추정과 장애물 지도로 바꾸는 것이 다음 목표이며, 앞의 두 쪽이 그 기술을 미리 확인한 실증이다. 고른 사례 하나이며 성공률이 아니다.""",
+    """4주차에 작은 구역에서 보인 임무를 넓은 공장 작업장으로 옮겨 수행하였다. 지게차는 카메라로 팔레트를 찾아 접근해 포크를 넣고 들어 올린 뒤, 출하장까지 운반해 내려놓고 출발 자리로 돌아온다. 오른쪽 표는 입력별로 4주차와 이번 주를 비교한 것이다. 팔레트 위치는 4주차부터 카메라로 추정하였고, 이번 주에는 로봇 위치와 장애물 지도를 LiDAR로 만들 수 있음을 기록 재생으로 실증하였다. 다만 영상 속 임무 주행에는 아직 시뮬레이터 값을 쓴다. 시뮬레이션에서의 다음 단계는 LiDAR로 추정한 위치와 지도로 임무를 주행해 보는 것이며, 실물 적용 방식은 차체와 센서를 갖춘 뒤 정한다. 고른 사례 하나이며 성공률이 아니다.""",
     [(FACTORY, '§7 공장 모드 인식 임무 — 16번 배치 완주, 팔레트 위치만 카메라 추정'),
      (STATUS, '현재 운반 코드가 사용하는 입력')],
     '화면 생성: Isaac Sim 추적 시점, 기본 속도 설정 재렌더 (ws1 20260928_week05_viewsD, 카메라 3.2 m 뒤·3.2 m 옆·2.6 m 위) · 관측~들기 4배속, 운반 8배속, 하역 3배속 편집')
@@ -440,7 +439,7 @@ add('피드백 대응', '09  4주차 피드백 대응', 75, f"""
     '출처: 4주차 측정값 · 제조사 사양 · 팀 검토')
 
 # ----------------------------------------------------------------- 11
-add('미팅 확인 사항과 다음 작업', '10  중간 미팅 확인 사항과 다음 작업', 80, """
+add('미팅 확인 사항과 다음 작업', '10  중간 미팅 확인 사항과 다음 작업', 65, """
 <h2 class="headline">중간 미팅 확인 사항과 다음 작업</h2>
 <div class="spread grow"><div class="qcols">
 <article><h3>확인 사항</h3><ul><li>시연 장소·바닥 상태 (실내·실외)</li><li>평가 기준 (성공률 · 시간 · 정밀도)</li><li>시험 팔레트 치수·적재 하중</li><li>다우테크놀로지 사례 공유</li></ul></article>

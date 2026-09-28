@@ -420,3 +420,27 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .flow-chips { flex-wrap:nowrap; gap:6px; font-size:19px; }
 .flow-chips span { padding:4px 9px; }
 .comparison.auto td:first-child { white-space:nowrap; width:26%; }
+/* Slide 5: week 4 against week 5, the new sensor in between. */
+.versus { display:grid; grid-template-columns:1fr 150px 1fr; gap:14px; min-height:0; }
+.versus article { display:flex; flex-direction:column; gap:10px; min-height:0; padding:14px 18px; background:var(--uos-surface); border-top:5px solid var(--uos-rule); }
+.versus article.now { border-top-color:#E0A100; background:#fff8e6; }
+.versus h3 { font-size:25px; }
+.versus article.was h3 { color:#44505c; }
+.versus article.now h3 { color:#8a5a00; }
+.vs-media { flex:1; min-height:0; width:100%; object-fit:contain; background:#d6dae0; border:1px solid var(--uos-rule); }
+.versus ul { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px; font-size:21px; }
+.versus li b { display:inline-block; width:140px; color:#44505c; font-weight:600; }
+.versus li em { font-style:normal; font-weight:700; color:#b36b00; }
+.vs-arrow { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; color:#b36b00; font-weight:700; }
+.vs-arrow span { font-size:22px; text-align:center; }
+.vs-arrow i { font-style:normal; font-size:54px; line-height:1; }
+.comparison.auto td.new { color:#b36b00; font-weight:700; }
+.comparison.auto td, .comparison.auto th { padding:11px 10px; }
+.new-tag { display:inline-block; margin-left:8px; padding:1px 8px; font-size:15px; font-weight:700; color:#fff; background:#E0A100; border-radius:3px; vertical-align:4px; }
+.versus h3 small { font-size:18px; font-weight:600; color:#6b7785; margin-left:8px; }
+.vs-note { font-size:18px; color:#6b4a00; background:#fdeec8; padding:6px 10px; border-radius:4px; }
+.comparison.auto td .new { color:#b36b00; font-weight:700; }
+.comparison.auto td:nth-child(3) { white-space:normal; }
+.versus li b { width:176px; }
+.versus { grid-template-columns:1fr 120px 1.1fr; }
+.vs-arrow span { font-size:20px; }
