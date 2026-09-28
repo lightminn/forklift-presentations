@@ -351,3 +351,7 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .pair-tag i { font-style:normal; font-weight:400; font-size:17px; color:#44505c; margin-left:6px; }
 .pair-labels span { font-size:22px; font-weight:700; color:var(--uos-blue); text-align:center; }
 .pair-labels i { font-style:normal; font-weight:400; font-size:19px; color:var(--uos-ink-muted); margin-left:8px; }
+/* Slide 11: questions and the next-work strip share the body height evenly
+   instead of the question cards stretching into empty grey. */
+.spread { display:flex; flex-direction:column; justify-content:space-around; gap:18px; min-height:0; }
+.spread .qcols ul { font-size:22px; line-height:1.55; }
