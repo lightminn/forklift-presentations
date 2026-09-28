@@ -268,26 +268,18 @@ add('개발 진행 보고', '5주차\n자율 지게차 개발', 20, '',
     [(MAP, '개발 로드맵'), (FACTORY, '공장 홀과 LiDAR 지도 작성 실증')], '진행 보고')
 
 # ----------------------------------------------------------------- 2
-add('개발 단계와 이번 주 위치', '01  개발 단계와 이번 주 위치', 55, """
-<h2 class="headline">실물 중심 개발 · 시뮬레이션 기술 실증 병행</h2>
-<div class="lanes grow">
-<div class="lane-name main">실물<br>개발 경로</div>
-<div class="lane">
-<article class="now"><h3>차체 조사</h3><p>치수 실측<br>전장·신호 조사</p><p class="state">진행 중</p></article>
-<article class="wait"><h3>하위 제어</h3><p>컴퓨터 명령 입력<br>주행 상태 읽기</p></article>
-<article class="wait"><h3>모델 검증</h3><p>실측 차체 모델<br>주행 특성 비교</p></article>
-<article class="wait target"><h3>위치 추정</h3><p>고정 지도 기반 위치 추정<br>주변 장애물 지도 생성</p></article>
-<article class="wait"><h3>삽입·운반</h3><p>포크 삽입<br>적재·운반·하역</p></article>
+add('개발 단계와 이번 주 위치', '01  개발 단계와 이번 주 위치', 45, """
+<h2 class="headline">실물 개발 단계와 이번 주 위치</h2>
+<div class="pipeline grow">
+<article class="pipeline-step now"><h3>① 차체 조사</h3><img class="step-thumb" src="assets/t1_chassis.jpg" alt=""><p>치수 실측<br>전장·신호 조사</p><p class="state">진행 중</p></article>
+<article class="pipeline-step wait"><h3>② 하위 제어</h3><img class="step-thumb" src="assets/t2_remote.jpg" alt=""><p>컴퓨터 명령 입력<br>주행 상태 읽기</p><p class="state">예정</p></article>
+<article class="pipeline-step wait"><h3>③ 모델 검증</h3><img class="step-thumb" src="assets/t3_model.jpg" alt=""><p>실측 차체 모델<br>주행 특성 비교</p><p class="state">예정</p></article>
+<article class="pipeline-step demo"><h3>④ 위치 추정</h3><img class="step-thumb" src="assets/t4_map.jpg" alt=""><p>지도 기반<br>자기 위치 추정</p><p class="state">시뮬레이션 실증 <small class="new-tag">NEW</small></p></article>
+<article class="pipeline-step wait"><h3>⑤ 삽입·운반</h3><img class="step-thumb" src="assets/t5_carry.jpg" alt=""><p>포크 삽입<br>적재·운반·하역</p><p class="state">예정</p></article>
 </div>
-<div class="lane-name demo">시뮬레이션<br>기술 실증</div>
-<div class="lane demo">
-<article class="done span3"><h3>~4주차</h3><p>인식 → 경로 → 삽입 → 운반</p><p class="state">Isaac Sim</p></article>
-<article class="now feeds"><h3>이번 주 <small class="new-tag">NEW</small></h3><p>2D LiDAR SLAM<br>공장 지도·자기 위치</p><p class="state">↑ 위치 추정 단계 미리 확인</p></article>
-</div>
-</div>
-<div class="takeaway">시뮬레이션 결과: 위치 추정 단계의 참고 자료 · 최종 방식은 실물 센서·차체로 결정</div>
+<div class="takeaway">이번 주: 차체 실측 시작 · ④ 위치 추정용 2D LiDAR SLAM을 시뮬레이션으로 미리 확인</div>
 """,
-    """개발 계획서의 순서를 먼저 확인한다. 위 줄이 주 경로이다. 첫 단계인 차체 조사는 4주차 입고 조사에 이어 이번 주에 실측과 배선 조사를 진행하였다. 그다음이 컴퓨터가 명령을 넣고 상태를 읽는 하위 제어, 실측 차체로 만든 모델의 검증, 그리고 미리 만든 고정 지도로 위치를 추정하고 장애물 지도를 만드는 단계이다. 지도를 만들며 동시에 위치를 추정하는 온라인 SLAM은 별도 조건으로 평가한다. 아래 줄은 시뮬레이션이다. 4주차까지 인식부터 운반까지를 연결하였고, 이번 주에는 넓은 공장 작업장과 2D LiDAR 지도 작성을 붙여 보았다. 이것은 위치 추정 단계에 필요한 기술을 미리 확인한 실증이며, 실제 구성은 그 단계에서 실물 센서와 차체로 다시 정한다.""",
+    """개발 계획서의 실물 개발 단계이다. 첫 단계인 차체 조사는 4주차 입고 조사에 이어 이번 주에 치수 실측과 전장·신호 조사를 진행하였다. 그다음이 컴퓨터가 명령을 넣고 상태를 읽는 하위 제어, 실측 차체 모델의 검증, 지도를 이용한 위치 추정, 그리고 포크 삽입과 운반이다. 이번 주에는 이 가운데 네 번째 단계인 위치 추정에 필요한 2D LiDAR SLAM을 시뮬레이션에서 미리 확인하였다. 이것은 실증이며, 실제 구성은 그 단계에서 실물 센서와 차체로 정한다.""",
     [(MAP, '로드맵 H0–H4, M4–M6 (발표에서는 단계 이름으로 표기)'), (STATUS, '현재 진행 상태'), (FACTORY, '이번 주 시뮬레이션 실증')],
     '출처: 개발 로드맵')
 
@@ -420,7 +412,7 @@ add('공장 임무', '08  공장 규모 자율 임무', 50, f"""
     '화면 생성: Isaac Sim 추적 시점, 기본 속도 설정 재렌더 (ws1 20260928_week05_viewsD, 카메라 3.2 m 뒤·3.2 m 옆·2.6 m 위) · 관측~들기 4배속, 운반 8배속, 하역 3배속 편집')
 
 # ----------------------------------------------------------------- 10
-add('피드백 대응', '09  4주차 피드백 대응', 75, f"""
+add('피드백 대응', '09  4주차 피드백 대응', 85, f"""
 <h2 class="headline">포크 끝 오차는 여유의 약 13 % · 가장 큰 원인은 차체 방향</h2>
 <div class="fb-top"><b>포크 끝 오차 구성 (4주차 피드백: 오차를 비율로)</b>{margin_bar()}<span class="fb-note">4주차 시뮬레이션 1회 · 잠정 포크 치수 · 차 위치는 정답 사용</span></div>
 <div class="fb-cards grow">

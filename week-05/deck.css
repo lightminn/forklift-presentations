@@ -444,3 +444,7 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .versus li b { width:176px; }
 .versus { grid-template-columns:1fr 120px 1.1fr; }
 .vs-arrow span { font-size:20px; }
+/* Slide 2: one row like week 4; the stage previewed in simulation is marked. */
+.pipeline-step.demo { border-top-color:#E0A100; }
+.pipeline-step.demo .state { color:#A97A00; }
+.pipeline-step.wait .state { color:var(--uos-ink-muted); }
