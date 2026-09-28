@@ -239,34 +239,6 @@ def ate_compact():
             f'바퀴·조향 추정 평균 0.78 m"><g font-family="var(--uos-font)">{"".join(parts)}</g></svg>')
 
 
-def speed_profiles():
-    """Speed over the whole mission for the two chosen layouts, same time axis;
-    only the part above 1 m/s is dark."""
-    d = _data('data_fast_speed.json')
-    tmax, left, width, h = 220.0, 150, 560, 70
-    def x(t):
-        return left + t / tmax * width
-    parts = []
-    for row, seed in enumerate(('5', '16')):
-        s = d[seed]
-        base = 70 + row * 120
-        parts.append(f'<text x="{left - 16}" y="{base - 20}" text-anchor="end" font-size="22" font-weight="700" fill="#1b1f24">{seed}번 배치</text>')
-        parts.append(f'<line x1="{left}" y1="{base}" x2="{x(s["total_s"]):.1f}" y2="{base}" stroke="#8c959e" stroke-width="1.5"/>')
-        one = base - h / 2.2
-        parts.append(f'<line x1="{left}" y1="{one:.1f}" x2="{left + width}" y2="{one:.1f}" stroke="#c0392b" stroke-width="1.2" stroke-dasharray="5 5"/>')
-        for i, v in enumerate(s['speed_mps']):
-            bh = min(v, 2.2) / 2.2 * h
-            fill = SLAM_BLUE if v > 1.0 else '#b8c4d2'
-            parts.append(f'<rect x="{x(i * s["bin_s"]):.1f}" y="{base - bh:.1f}" width="{width / tmax * s["bin_s"] + 0.3:.2f}" height="{bh:.1f}" fill="{fill}"/>')
-        share = round(100 * s['over_1mps_s'] / s['total_s'])
-        parts.append(f'<text x="{x(s["total_s"]) + 12:.1f}" y="{base - 6}" font-size="20" fill="#1b1f24">{s["total_s"]:.0f} s 중 <tspan font-weight="700" fill="{SLAM_BLUE}">{share} %</tspan></text>')
-    parts.append(f'<text x="{left + width}" y="{one - 8:.1f}" text-anchor="end" font-size="17" fill="#c0392b">1 m/s</text>')
-    for t in (0, 60, 120, 180):
-        parts.append(f'<text x="{x(t):.1f}" y="222" text-anchor="middle" font-size="18" fill="#44505c">{t} s</text>')
-    return (f'<svg class="diagram" viewBox="0 0 860 232" role="img" aria-label="빠른 설정 임무의 속도 변화. 1 m/s를 넘는 구간은 '
-            f'5번 배치 3 %, 16번 배치 7 %"><g font-family="var(--uos-font)">{"".join(parts)}</g></svg>')
-
-
 def margin_bar():
     """Week 4 fork-tip lateral error inside the 45 mm pocket margin."""
     left, width, full = 20, 1140, 45.0
@@ -427,22 +399,26 @@ add('위치 추정 오차', '07  위치 추정 오차', 50, f"""
     '화면 생성: 재생 평가 수치 도식 (2026-09-28 재실행: 12개 값 중 11개가 소수 셋째 자리까지 일치, 1개는 0.001 m 차)')
 
 # ----------------------------------------------------------------- 9 demo
-add('공장 임무', '08  공장 규모 임무와 주행 속도', 50, f"""
-<h2 class="headline">최고 8 km/h로 올려도 고속 구간은 임무 시간의 3–7 % {badge()}</h2>
-<div class="split grow" style="grid-template-columns:1fr 1.15fr">
-{figure('22_mission_chase_seed16.mp4', '16번 배치 임무를 지게차 뒤에서 따라가며 본 영상. 노란 선은 계획 경로, 초록 원은 하역 목적지', 'Isaac Sim 추적 시점 · 16번 배치 · 4배속', cls='')}
-<div class="stack" style="justify-content:center;gap:6px">
-<p class="chart-cap">속도 변화 (선택 사례 2건 · 진한 막대 = 1 m/s 초과)</p>
-{speed_profiles()}
+add('공장 임무', '08  공장 규모 자율 임무', 50, f"""
+<h2 class="headline">카메라로 팔레트를 찾아 운반·하역·복귀까지 이어진 공장 임무 {badge()}</h2>
+<div class="split grow" style="grid-template-columns:1.1fr 1fr">
+{figure('22_mission_chase_seed16.mp4', '16번 배치 임무를 지게차 뒤에서 따라가며 본 영상', 'Isaac Sim 추적 시점 · 16번 배치', cls='')}
+<div class="stack" style="justify-content:center;gap:16px">
+<div class="flow-chips"><span>관측</span><i>→</i><span>접근·삽입</span><i>→</i><span>들기</span><i>→</i><span>운반</span><i>→</i><span>하역</span><i>→</i><span>복귀</span></div>
+<table class="comparison auto">
+<tr><th>입력</th><th>현재</th><th>다음 단계</th></tr>
+<tr><td>팔레트 위치</td><td class="ok">카메라 추정</td><td>—</td></tr>
+<tr><td>로봇 위치</td><td>시뮬레이터 값</td><td>LiDAR 위치 추정</td></tr>
+<tr><td>장애물 지도</td><td>시뮬레이터 값</td><td>LiDAR 장애물 지도</td></tr>
+<tr><td>목적지</td><td>지정값</td><td>—</td></tr></table>
 </div>
 </div>
-<div class="takeaway">실물: 차체 최고속도 실측 후 속도 상한과 센서 주기를 함께 결정</div>
+<div class="takeaway">다음 목표: 로봇 위치·장애물 지도를 센서로 대체해 시뮬레이터 정답 없이 임무 수행</div>
 """,
-    """넓은 공장에서 찾기부터 하역, 복귀까지의 임무를 최고속도 시속 8킬로미터 설정으로 수행하였다. 왼쪽은 지게차를 따라가며 녹화한 장면이다. 오른쪽 그래프는 고른 두 사례의 속도 변화이며, 진한 부분이 초속 1미터를 넘은 구간이다. 최고속도에는 닿았지만 그 구간은 임무의 3에서 7퍼센트였다. 곡선과 후진 구간의 속도 제한 때문에 나머지 구간은 천천히 달렸다. 8 km/h는 시뮬레이터 설정일 뿐이므로, 실물에서는 차체 최고속도를 잰 뒤 속도 상한과 센서 주기를 함께 정한다.""",
-    [(FACTORY, '§7 기본 속도 임무 220.8 / 175.4 s · §7a 8 km/h 설정 213.8 / 118.2 s, 1 m/s 초과 6.9 / 8.8 s'),
-     (FACTORY, '§7a seed 16 SLAM 재생 오차 60–66 s 구간 0.9 m, 원인 미분리'),
-     (FACTORY, '팔레트 위치만 카메라 추정 · 로봇 자세·충돌 지도·목적지는 정답 · 조향·바퀴 속도는 합성 값')],
-    '화면 생성: Isaac Sim 추적 시점 재렌더(20260928_week05_viewsB, 16번 배치 빠른 설정, 카메라 5.0 m 뒤·2.8 m 위) 4배속 · 속도 도표는 원 실행의 slam_log.npz')
+    """4주차에 작은 구역에서 보인 임무를 넓은 공장 작업장으로 옮겨 수행하였다. 지게차는 카메라로 팔레트를 찾아 접근해 포크를 넣고 들어 올린 뒤, 출하장까지 운반해 내려놓고 출발 자리로 돌아온다. 오른쪽 표는 이 임무가 무엇을 스스로 알아내고 무엇을 시뮬레이터에 기대는지를 정리한 것이다. 팔레트 위치는 카메라로 추정하지만, 로봇 위치와 장애물 지도는 아직 시뮬레이터 값을 쓴다. 이 두 가지를 LiDAR 위치 추정과 장애물 지도로 바꾸는 것이 다음 목표이며, 앞의 두 쪽이 그 기술을 미리 확인한 실증이다. 고른 사례 하나이며 성공률이 아니다.""",
+    [(FACTORY, '§7 공장 모드 인식 임무 — 16번 배치 완주, 팔레트 위치만 카메라 추정'),
+     (STATUS, '현재 운반 코드가 사용하는 입력')],
+    '화면 생성: Isaac Sim 추적 시점 재렌더 (ws1 20260928_week05_viewsB)')
 
 # ----------------------------------------------------------------- 10
 add('피드백 대응', '09  4주차 피드백 대응', 75, f"""

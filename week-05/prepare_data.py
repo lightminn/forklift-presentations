@@ -73,30 +73,11 @@ def trajectories(record, replay, clock_offset=10.0, keep=400):
     }
 
 
-def speed_timeline(record, bin_s=0.5):
-    """Planar speed of base_link in bins, and the mission stage boundaries."""
-    with np.load(record / 'slam_log.npz') as d:
-        t, base = d['joint_stamps_s'], d['base_pose_world'].astype(float)
-    result = json.loads((record / 'result.json').read_text())
-    v = np.hypot(*np.diff(base[:, :2], axis=0).T) / np.diff(t)
-    edges = np.arange(0, t[-1] + bin_s, bin_s)
-    idx = np.digitize(t[1:], edges) - 1
-    speed = [float(np.round(v[idx == i].mean(), 3)) if np.any(idx == i) else 0.0 for i in range(len(edges) - 1)]
-    fast_s = float(np.sum(np.diff(t)[v > 1.0]))
-    return {'bin_s': bin_s, 'speed_mps': speed, 'total_s': float(round(result['simulated_time_s'], 1)),
-            'over_1mps_s': round(fast_s, 1),
-            'transitions': [(x['to'], round(x['time_s'], 2)) for x in result['transitions']]}
-
-
 def main():
     art = Path(sys.argv[1])
     survey = trajectories(art / '20260926_factory_slam_v3/survey_seed_0',
                           art / '20260928_week05_replay/survey_seed_0_clean')
     (HERE / 'assets/data_survey_seed0.json').write_text(json.dumps(survey, separators=(',', ':')))
-    speeds = {s: speed_timeline(art / f'20260926_factory_fast_mission_v6/seed_{s}') for s in (5, 16)}
-    (HERE / 'assets/data_fast_speed.json').write_text(json.dumps(speeds, separators=(',', ':')))
-    for s, d in speeds.items():
-        print(f"seed {s}: total {d['total_s']} s, >1 m/s {d['over_1mps_s']} s, max {max(d['speed_mps']):.2f} m/s")
     print('survey points', len(survey['truth']), 'final errors', survey['slam_error_m'][-1], survey['odom_error_m'][-1])
 
 

@@ -410,3 +410,13 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 @keyframes traj-end { 0% { opacity:0; } 42% { opacity:1; } 100% { opacity:1; } }
 /* Slide 11: cards and the next-step strip sit together in the middle. */
 .spread { justify-content:center; gap:36px; }
+/* Slide 9: mission stages and what is autonomous so far. */
+.flow-chips { display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:21px; }
+.flow-chips span { padding:5px 12px; background:var(--uos-surface); border-radius:4px; font-weight:600; color:var(--uos-blue); }
+.flow-chips i { font-style:normal; color:#8c959e; }
+.comparison.auto { font-size:21px; }
+.comparison.auto td, .comparison.auto th { padding:12px 14px; }
+.comparison.auto td.ok { color:var(--uos-blue); font-weight:700; }
+.flow-chips { flex-wrap:nowrap; gap:6px; font-size:19px; }
+.flow-chips span { padding:4px 9px; }
+.comparison.auto td:first-child { white-space:nowrap; width:26%; }
