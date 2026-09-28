@@ -202,14 +202,14 @@ Isaac에서 지게차가 116미터 지도 작성 경로를 달리며 LiDAR 스�
 4주차에 작은 구역에서 보인 임무를 넓은 공장 작업장으로 옮겨 수행하였다. 지게차는 카메라로 팔레트를 찾아 접근해 포크를 넣고 들어 올린 뒤, 출하장까지 운반해 내려놓고 출발 자리로 돌아온다. 오른쪽 표는 이 임무가 무엇을 스스로 알아내고 무엇을 시뮬레이터에 기대는지를 정리한 것이다. 팔레트 위치는 카메라로 추정하지만, 로봇 위치와 장애물 지도는 아직 시뮬레이터 값을 쓴다. 이 두 가지를 LiDAR 위치 추정과 장애물 지도로 바꾸는 것이 다음 목표이며, 앞의 두 쪽이 그 기술을 미리 확인한 실증이다. 고른 사례 하나이며 성공률이 아니다.
 
 [Sources]
-화면 생성: Isaac Sim 추적 시점 재렌더 (ws1 20260928_week05_viewsB)
+화면 생성: Isaac Sim 추적 시점, 기본 속도 설정 재렌더 (ws1 20260928_week05_viewsD, 카메라 3.2 m 뒤·3.2 m 옆·2.6 m 위) · 관측~들기 4배속, 운반 8배속, 하역 3배속 편집
 §7 공장 모드 인식 임무 — 16번 배치 완주, 팔레트 위치만 카메라 추정: docs/validation/2026-09-26-factory-hall-and-isaac-slam.md
 현재 운반 코드가 사용하는 입력: docs/plans/2026-09-17-project-status-and-next-steps.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="08  공장 규모 자율 임무"><div class="slide-body">
 <h2 class="headline">카메라로 팔레트를 찾아 운반·하역·복귀까지 이어진 공장 임무 <span class="badge">기술 실증 · Isaac Sim</span></h2>
 <div class="split grow" style="grid-template-columns:1.1fr 1fr">
-<figure class="shot "><video class="media" src="assets/22_mission_chase_seed16.mp4" poster="assets/22_mission_chase_poster.jpg" autoplay loop muted playsinline aria-label="16번 배치 임무를 지게차 뒤에서 따라가며 본 영상"></video><figcaption class="small muted">Isaac Sim 추적 시점 · 16번 배치</figcaption></figure>
+<figure class="shot "><video class="media" src="assets/22_mission_side_seed16.mp4" poster="assets/22_mission_side_poster.jpg" autoplay loop muted playsinline aria-label="16번 배치 임무를 지게차 옆 위에서 따라가며 본 영상. 팔레트에 접근해 포크를 넣고 들어 올린 뒤 운반해 초록 원 목적지에 내려놓는다"></video><figcaption class="small muted">Isaac Sim 추적 시점 · 16번 배치 · 구간별 3–8배속</figcaption></figure>
 <div class="stack" style="justify-content:center;gap:16px">
 <div class="flow-chips"><span>관측</span><i>→</i><span>접근·삽입</span><i>→</i><span>들기</span><i>→</i><span>운반</span><i>→</i><span>하역</span><i>→</i><span>복귀</span></div>
 <table class="comparison auto">
