@@ -295,7 +295,7 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .comparison.measure { font-size:19px; line-height:1.3; align-self:center; }
 .comparison.measure td, .comparison.measure th { padding:8px 12px; }
 .comparison.measure td:first-child { width:36%; white-space:nowrap; }
-.comparison.measure td.pending { color:#9aa3ad; font-style:italic; width:20%; }
+.comparison.measure td.pending { color:#5d6670; font-style:italic; width:20%; }
 .comparison.facts2 { font-size:21px; line-height:1.35; align-self:center; }
 .comparison.facts2 td, .comparison.facts2 th { padding:10px 12px; }
 .comparison.facts2 td:first-child { width:auto; white-space:nowrap; }
