@@ -12,6 +12,9 @@
 | **Isaac 기록 + slam_toolbox 재생** | 지도 만들기(조감·지도 두 칸, 8배속) · 넓은 작업장 임무(seed 16 조감·단계·속도, 4배속) | 2026-09-26 Isaac 기록을 2026-09-28 ws1 에서 다시 재생(`20260928_week05_replay`)하고 `tools/compose_slam_video.py` 로 합성. 제어는 시뮬레이터 정답 자세 |
 | 개념도 | LiDAR 장착 높이(왼쪽) | 축척 아님 |
 | 수치 도표 | LiDAR 장착 높이(오른쪽) · 위치 추정 오차 | `build_deck.py` 안의 기록값으로 그린다 |
+| **데이터 도표** | 위치 추정 오차(경로 애니메이션) · 공장 임무(속도 변화) | `prepare_data.py` 가 `slam_log.npz`·`slam_trajectory.csv`·`odometry.csv`·`result.json` 에서 뽑은 `assets/data_*.json` 으로 그린다. 경로는 출발 자세만 맞춘 세계 좌표(평가 도구와 같은 방식) |
+| **배치 썸네일** | 공장 규모 작업장 | `20260926_factory_slam_v3/survey_seed_{0,1,3}/start.png` 를 홀 영역으로 자름 |
+| **추적 시점 영상** | 공장 임무 | 2026-09-26 빠른 설정 16번 배치 임무를 같은 설정으로 다시 렌더하며 `--extra-views chase` 로 녹화(ws1 `20260928_week05_views2`, 스냅숏 = 로봇 저장소 main `442e5fe`) |
 
 ## 수치
 

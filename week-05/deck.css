@@ -355,3 +355,58 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
    instead of the question cards stretching into empty grey. */
 .spread { display:flex; flex-direction:column; justify-content:space-around; gap:18px; min-height:0; }
 .spread .qcols ul { font-size:22px; line-height:1.55; }
+
+/* Week 5 visual pass (2026-09-28): fewer words, more pictures. */
+.badge { display:inline-block; margin-left:14px; padding:3px 12px; font-size:18px; font-weight:600;
+  letter-spacing:0; vertical-align:7px; color:#44505c; background:#eef0f3; border-radius:4px; }
+/* Slide 2: the demo card points up to the stage it previews. */
+.lane article.target { outline:3px dashed #E0A100; outline-offset:-3px; }
+.lane article.feeds .state { color:#A97A00; }
+/* Slide 5: three big numbers and layout thumbnails instead of a table. */
+.stat-col { display:flex; flex-direction:column; justify-content:center; gap:14px; min-height:0; }
+.stat { border-left:5px solid var(--uos-blue); padding:4px 0 4px 16px; }
+.stat b { display:block; font-size:40px; line-height:1.15; color:var(--uos-blue); }
+.stat span { font-size:20px; color:#44505c; }
+.thumbs { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:6px; }
+.thumbs img { width:100%; display:block; border:1px solid var(--uos-rule); }
+.thumb-cap { font-size:18px; color:#44505c; text-align:center; }
+/* Slide 7: the pipeline as small chips under the clip. */
+.chips { display:flex; align-items:center; justify-content:center; gap:10px; flex-shrink:0; font-size:20px; }
+.chips span { padding:5px 12px; background:var(--uos-surface); border-radius:4px; font-weight:600; color:var(--uos-blue); }
+.chips i { font-style:normal; color:#8c959e; }
+.chips em { font-style:normal; margin-left:16px; font-size:18px; color:#44505c; }
+/* Slide 8: the three paths draw themselves together, hold, and restart. */
+.traj-box { display:flex; flex-direction:column; align-items:center; gap:6px; min-height:0; }
+.traj { max-height:100%; }
+.traj .draw { stroke-dasharray:1; stroke-dashoffset:1; animation:traj-draw 12s linear infinite; }
+.traj .endmark { opacity:0; animation:traj-end 12s step-end infinite; }
+@keyframes traj-draw { 0% { stroke-dashoffset:1; } 75%, 100% { stroke-dashoffset:0; } }
+@keyframes traj-end { 0% { opacity:0; } 75% { opacity:1; } 100% { opacity:1; } }
+.legend { display:flex; gap:22px; font-size:19px; color:#1b1f24; flex-shrink:0; }
+.legend i { display:inline-block; width:22px; height:6px; margin-right:6px; vertical-align:5px; border-radius:3px; }
+.chart-cap { font-size:19px; color:#44505c; line-height:1.4; }
+/* Slide 10: one picture for the ratio question, four short cards for the rest. */
+.fb-top { flex-shrink:0; display:flex; flex-direction:column; gap:4px; }
+.fb-top > b { font-size:22px; color:var(--uos-blue); }
+.fb-note { font-size:17px; color:#44505c; }
+.fb-cards { display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:14px; }
+.fb-cards article { background:var(--uos-surface); border-top:4px solid var(--uos-blue); padding:12px 18px; display:flex; flex-direction:column; justify-content:center; }
+.fb-cards h3 { font-size:23px; margin-bottom:6px; }
+.fb-cards h3 small { font-size:16px; font-weight:600; color:#8a4a10; margin-left:8px; }
+.fb-cards p { font-size:21px; line-height:1.5; color:#1b1f24; }
+.fb-cards p b { color:var(--uos-blue); }
+/* Slide 11: the next steps as one arrow strip that echoes slide 2. */
+.next-strip { display:flex; align-items:center; gap:12px; flex-shrink:0; font-size:22px; padding:14px 18px; background:var(--uos-surface); }
+.next-strip > b { color:var(--uos-blue); margin-right:8px; }
+.next-strip span { padding:6px 14px; border-radius:4px; background:#fff; border:2px solid var(--uos-rule); font-weight:600; }
+.next-strip span.now { border-color:#E0A100; }
+.next-strip i { font-style:normal; color:#8c959e; }
+.next-strip em { font-style:normal; margin-left:auto; font-size:19px; color:#44505c; }
+.lane article.span3 { grid-column:span 3; }
+/* Slide 8: draw in 6 s, then hold the finished paths while the result is explained. */
+.traj .draw { animation-duration:14s; }
+.traj .endmark { animation-duration:14s; }
+@keyframes traj-draw { 0% { stroke-dashoffset:1; } 42%, 100% { stroke-dashoffset:0; } }
+@keyframes traj-end { 0% { opacity:0; } 42% { opacity:1; } 100% { opacity:1; } }
+/* Slide 11: cards and the next-step strip sit together in the middle. */
+.spread { justify-content:center; gap:36px; }
