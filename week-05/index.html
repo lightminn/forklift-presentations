@@ -3,7 +3,7 @@
 <link rel="icon" href="data:,">
 <script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>5주차 자율 지게차 개발</title>
-<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=0a1eb106bcbe"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=69ded3ae8794"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 <section class="title-section" data-label="개발 진행 보고" data-screen-label="01" data-duration="20" data-speaker-notes="권장 20초
 
@@ -18,28 +18,29 @@
 자율 지게차 개발" subtitle="팔레트 핸들링 경로 생성 및 제어"></x-import><img class="partner-mark" src="assets/riibotics-logo.png" alt="Riibotics">
 </section>
 
-<section data-label="차체 실측" data-screen-label="02" data-duration="45" data-speaker-notes="권장 45초
+<section data-label="차체 실측" data-screen-label="02" data-duration="65" data-speaker-notes="권장 65초
 
-[작성 예정] 차체 실측 결과를 보인다. 측정 대상과 기준점, 측정값을 표로 정리하고, 지금까지 시뮬레이션에 쓴 잠정 모델 값과 비교한다. 잠정 모델은 상품 사진과 카탈로그로 만든 것이므로 실측값으로 바꾼다. 최소 회전 반경은 주행 시험이 필요해 정적 실측과 따로 표시한다.
+차체를 직접 잰 결과를, 지금까지 시뮬레이션에 쓴 잠정 모델과 비교한 표이다. 잠정 모델은 상품 사진과 카탈로그로 만든 것이다. 축간 거리와 윤거, 바퀴 반지름은 1에서 2센티미터 차이로 잠정값과 비슷했다. 가장 큰 차이는 최대 조향각이다. 실측은 15도로 잠정 모델의 약 26도보다 훨씬 작다. 축간 거리 0.66미터를 이 각도로 나누어 계산하면 최소 회전 반경이 약 2.5미터로, 잠정 모델의 약 1.3미터의 두 배 가까이 된다. 그래서 팔레트에 비스듬히 다가가거나 가까이서 방향을 바꾸는 경로가 훨씬 넓은 공간을 필요로 하며, 접근과 후진 경로를 실측값으로 다시 계획한다. 포크는 길이 36센티미터로 잠정값보다 6센티미터 짧고, 두 포크의 간격을 5.5에서 38센티미터까지 조절할 수 있다. 회전 반경은 계산값이므로 주행 시험으로 확인하고, 전장과 질량, 승강 범위는 이어서 잰다.
 
 [Sources]
-화면 생성: 실물 사진(2026-09-30, EXIF 제거) · 실측 표(작성 예정)
-잠정 모델 치수 — 카탈로그 값과 사진 비례 추정: sim/models/dls08_provisional/parameters.yaml
-입고 때 미측정 항목: docs/validation/2026-09-23-chassis-intake.md
+화면 생성: 실물 사진(2026-09-30, EXIF 제거) · 팀 실측값
+윤거 53 cm, 축간 거리 66 cm, 바퀴 반지름 12.5 cm, 포크 길이 36 · 폭 5.5 · 두께 2.5 cm, 포크 중심 간격 최대 38 · 최소 5.5 cm(중간 공간 없음), 최대 조향각 15°: 팀 실측 (2026-09-30)
+잠정 모델 — steering_limit_rad 0.45, fork_spacing 0.29 m, wheel_track 0.51 m, wheel_radius 0.135 m: sim/models/dls08_provisional/parameters.yaml
+최소 회전 반경 = L / tan δ: 0.66 / tan 15° = 2.46 m, 잠정 0.64 / tan 0.45 = 1.32 m (뒤차축 중심, 자전거 모델): 계산
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="01  차체 실측"><div class="slide-body">
-<h2 class="headline">차체 실측값과 잠정 모델 비교 <span class="draft">작성 중</span></h2>
+<h2 class="headline">최대 조향각 15° → 최소 회전 반경 약 2.5 m, 잠정 모델의 약 2배</h2>
 <div class="split grow" style="grid-template-columns:0.8fr 1.2fr">
 <figure class="shot "><img class="media" src="assets/30_chassis_pallet.jpg" alt="입고한 지게차 차체와 앞에 놓인 동봉 플라스틱 팔레트"><figcaption class="small muted">차체와 동봉 팔레트 (2026-09-30 촬영)</figcaption></figure>
-<table class="comparison measure"><tr><th>항목</th><th>실측 (예정)</th><th>잠정 모델</th></tr><tr><td>전장 × 전폭 × 전고</td><td class="pending">—</td><td class="muted">1.46 × 0.63 × 1.01 m (카탈로그)</td></tr><tr><td>질량</td><td class="pending">—</td><td class="muted">24 kg (카탈로그)</td></tr><tr><td>축간 거리 · 윤거</td><td class="pending">—</td><td class="muted">0.64 · 0.51 m (사진 추정)</td></tr><tr><td>바퀴 반지름</td><td class="pending">—</td><td class="muted">0.135 m (사진 추정)</td></tr><tr><td>포크 길이 · 폭 · 두께</td><td class="pending">—</td><td class="muted">420 · 55 · 24 mm (사진 추정)</td></tr><tr><td>포크 중심 간격</td><td class="pending">—</td><td class="muted">290 mm (사진 추정)</td></tr><tr><td>승강 범위</td><td class="pending">—</td><td class="muted">280 mm (사진 추정)</td></tr><tr><td>최소 회전 반경</td><td class="pending">—</td><td class="muted">— (주행 시험 필요)</td></tr></table>
+<div class="stack" style="gap:8px;justify-content:center"><table class="comparison measure chassis"><tr><th>항목</th><th>실측</th><th>잠정 모델</th></tr><tr><td>축간 거리 · 윤거</td><td><b>0.66 · 0.53 m</b></td><td class="muted">0.64 · 0.51 m (사진 추정)</td></tr><tr><td>바퀴 반지름</td><td><b>0.125 m</b></td><td class="muted">0.135 m (사진 추정)</td></tr><tr class="hot"><td>최대 조향각</td><td><b>15°</b></td><td class="muted">25.8° (0.45 rad, 추정)</td></tr><tr class="hot"><td>최소 회전 반경 (계산)</td><td><b>약 2.5 m</b></td><td class="muted">약 1.3 m</td></tr><tr><td>포크 길이 · 폭 · 두께</td><td><b>360 · 55 · 25 mm</b></td><td class="muted">420 · 55 · 24 mm (사진 추정)</td></tr><tr><td>포크 중심 간격</td><td><b>55–380 mm 조절</b></td><td class="muted">290 mm 고정 (사진 추정)</td></tr><tr><td>전장 × 전폭 × 전고 · 질량</td><td><b>측정 예정</b></td><td class="muted">1.46 × 0.63 × 1.01 m · 24 kg (카탈로그)</td></tr><tr><td>승강 범위</td><td><b>측정 예정</b></td><td class="muted">280 mm (사진 추정)</td></tr></table><p class="chart-cap">회전 반경 = 축간 거리 ÷ tan(최대 조향각), 뒤차축 중심 기준 계산값</p></div>
 </div>
-<div class="takeaway">반영 계획: 실측값으로 시뮬레이션 모델·좌표 변환 갱신</div>
+<div class="takeaway">반영: 실측값으로 시뮬레이션 모델 갱신 · 회전 반경 증가로 접근·후진 경로 다시 계획</div>
 </div></x-import>
 </section>
 
 <section data-label="포크·동봉 팔레트" data-screen-label="03" data-duration="40" data-speaker-notes="권장 40초
 
-차체와 함께 온 플라스틱 팔레트를 줄자로 쟀다. 외형은 약 42 곱하기 30센티미터이고, 전체 높이는 약 8.5센티미터, 상판 두께는 약 2센티미터이다. 따라서 포크가 들어갈 수 있는 높이는 바닥에서 상판 아래까지 약 6.5센티미터이다. 다리는 3 곱하기 3으로 아홉 개라 네 방향 어디서든 포크를 넣을 수 있다. 왼쪽처럼 포크 위에 올려 크기를 맞춰 보았다. 포크의 폭과 두께, 간격은 이어서 재어 삽입 여유를 계산한다.
+차체와 함께 온 플라스틱 팔레트를 줄자로 쟀다. 외형은 약 42 곱하기 30센티미터이고, 전체 높이는 약 8.5센티미터, 상판 두께는 약 2센티미터이다. 따라서 포크가 들어갈 수 있는 높이는 바닥에서 상판 아래까지 약 6.5센티미터이다. 다리는 3 곱하기 3으로 아홉 개라 네 방향 어디서든 포크를 넣을 수 있다. 왼쪽처럼 포크 위에 올려 크기를 맞춰 보았다. 포크는 폭 5.5센티미터, 두께 2.5센티미터라 진입 높이 6.5센티미터에 대해 위아래로 약 4센티미터의 여유가 있다. 두 포크의 간격은 5.5에서 38센티미터까지 조절되므로 팔레트 다리 사이에 맞춰 정한다.
 
 [Sources]
 화면 생성: 실물 사진(2026-09-30, EXIF 제거)
@@ -51,9 +52,9 @@
 <div class="split grow" style="grid-template-columns:0.95fr 1.05fr">
 <figure class="shot "><img class="media" src="assets/32_pallet_on_forks.jpg" alt="포크 위에 올린 동봉 팔레트"><figcaption class="small muted">포크 위에 올린 동봉 팔레트</figcaption></figure>
 <div class="stack" style="gap:10px">
-<table class="comparison select pallet"><tr><th>항목</th><th>값</th><th>비고</th></tr><tr><td class="step">외형 (길이 × 폭)</td><td><b>약 42 × 30 cm</b></td><td class="muted">길이는 다리 바깥 기준</td></tr><tr><td class="step">전체 높이</td><td><b>약 8.5 cm</b></td><td class="muted"></td></tr><tr><td class="step">상판 두께</td><td><b>약 2 cm</b></td><td class="muted"></td></tr><tr><td class="step">포크 진입 높이</td><td><b>약 6.5 cm</b></td><td class="muted">바닥 ~ 상판 아래</td></tr><tr><td class="step">구조</td><td><b>다리 9개 (3 × 3)</b></td><td class="muted">네 방향 진입</td></tr><tr><td class="step">포크 폭·두께·간격</td><td><b>측정 예정</b></td><td class="muted"></td></tr></table>
+<table class="comparison select pallet"><tr><th>항목</th><th>값</th><th>비고</th></tr><tr><td class="step">외형 (길이 × 폭)</td><td><b>약 42 × 30 cm</b></td><td class="muted">길이는 다리 바깥 기준</td></tr><tr><td class="step">전체 높이</td><td><b>약 8.5 cm</b></td><td class="muted"></td></tr><tr><td class="step">상판 두께</td><td><b>약 2 cm</b></td><td class="muted"></td></tr><tr><td class="step">포크 진입 높이</td><td><b>약 6.5 cm</b></td><td class="muted">바닥 ~ 상판 아래</td></tr><tr><td class="step">구조</td><td><b>다리 9개 (3 × 3)</b></td><td class="muted">네 방향 진입</td></tr><tr><td class="step">포크 폭 · 두께</td><td><b>5.5 · 2.5 cm</b></td><td class="muted">진입 높이 대비 상하 여유 약 4 cm</td></tr><tr><td class="step">포크 중심 간격</td><td><b>5.5–38 cm 조절</b></td><td class="muted"></td></tr></table>
 <div class="thumbs"><img src="assets/33_pallet_length.jpg" alt="줄자로 잰 팔레트 길이"><img src="assets/34_pallet_height.jpg" alt="줄자로 잰 팔레트 높이"><img src="assets/35_pallet_width.jpg" alt="줄자로 잰 팔레트 폭"></div>
-<p class="chart-cap">값은 줄자 사진 눈금 판독 · 포크 치수는 측정 예정</p>
+<p class="chart-cap">팔레트 값은 줄자 사진 눈금 판독 · 포크는 팀 실측</p>
 </div>
 </div>
 </div></x-import>
@@ -194,7 +195,7 @@ AS5600 — 12 bit, 시스템 INL ±1°: https://files.seeedstudio.com/wiki/Grove
 </div></x-import>
 </section>
 
-<section data-label="표준 운용 절차 대조" data-screen-label="10" data-duration="90" data-speaker-notes="권장 90초
+<section data-label="표준 운용 절차 대조" data-screen-label="10" data-duration="80" data-speaker-notes="권장 80초
 
 4주차에 사람이 운전하는 방식과 비슷하게 움직여야 보는 사람이 덜 불안하다는 피드백을 받았다. 지금까지 우리가 정한 임무 절차는 팀이 임의로 정한 것이어서, 한국산업안전보건공단 교육자료와 산업안전보건기준에 있는 표준 운용 절차를 찾아 단계별로 대조하였다. 팔레트 앞에서 멈춰 정렬한 뒤 천천히 넣는 접근과, 작업 종료 때 포크를 내리는 것은 표준과 같다. 그리고 운반 중 포크 높이와 속도 상한은 맞지만 마스트 후경과 감속 구역이 빠져 있다. 나머지 세 단계는 다르다. 표준은 백레스트에 닿을 때까지 끝까지 넣지만, 우리는 팔레트 깊이의 60퍼센트와 차체 한계 가운데 작은 값인 360밀리미터만 넣는다. 표준은 조금 들어 당겼다가 내리고 다시 끝까지 넣은 뒤 드는데, 우리는 한 번에 20센티미터를 든다. 또 표준은 사람과 부딪힐 위험이 있으면 후진경보기와 경광등, 또는 후방감지기로 뒤를 확인하도록 하는데, 우리 임무에는 후방 확인 수단이 없다. 오른쪽 열처럼 삽입 깊이 기준, 재삽입 단계, 마스트 후경, 감속 구역과 경고음, 후방 확인 수단을 임무 절차에 반영할지 검토한다. 표준 수치는 실제 지게차 기준이므로 우리 차체에 줄여 적용할 비율은 실측 후 정한다.
 
@@ -214,7 +215,7 @@ KOSHA 지게차 교육자료 — 감속·일단 정지, 정면 삽입, 5–10 cm
 </div></x-import>
 </section>
 
-<section data-label="리보틱스 미팅 질문" data-screen-label="11" data-duration="50" data-speaker-notes="권장 50초
+<section data-label="리보틱스 미팅 질문" data-screen-label="11" data-duration="40" data-speaker-notes="권장 40초
 
 마지막으로 리보틱스와의 중간 미팅에서 확인할 사항이다. 먼저 최종 시연 장소와 바닥 상태, 평가 기준이 성공률과 시간, 정밀도 가운데 무엇인지, 시험 팔레트와 적재 하중을 확인하고, 추천받은 다우테크놀로지 사례의 작업 공간과 험지 여부를 묻는다. 요청할 자료는 모터 사양서와 정격 전압·전류, 실제 지게차의 운용 영상과 데이터이다. 특히 모터 전류는 오늘 본 모터 드라이버의 전류 제한과 방열 설계에 필요하다. 함께 정할 것은 기존 제어기를 DRV8244 기반 새 제어기로 바꾸는 것에 대한 승인, 리프트 높이를 어느 범위와 정밀도로 조절해야 하는지, 시험 공간과 허용 속도, 비상정지와 기울기·과적 감지 같은 안전 정지 요구, 그리고 동봉 팔레트의 활용이다.
 

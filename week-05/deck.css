@@ -520,3 +520,6 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .comparison.select.pallet { font-size:19px; }
 .comparison.select.pallet td { padding:6px 10px; white-space:nowrap; }
 .comparison.select.pallet td.step { font-weight:700; color:#44505c; }
+.comparison.measure.chassis { font-size:19px; }
+.comparison.measure.chassis td { padding:7px 10px; }
+.comparison.measure.chassis tr.hot td { background:#fdeec8; }
