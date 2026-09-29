@@ -153,7 +153,7 @@ LiDAR 장착 위치 미확정: docs/hardware.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="06  2D LiDAR 지도 작성"><div class="slide-body">
 <h2 class="headline">2D LiDAR 기록 재생으로 만든 30 × 31 m 공장 지도와 자기 위치</h2>
-<div class="delta"><span class="was"><b>4주차</b>카메라: 팔레트 위치</span><i>→</i><span class="now"><b>5주차</b>+ 2D LiDAR: 지도·자기 위치 (기록 재생)</span><em>임무 주행은 여전히 시뮬레이터 위치</em></div>
+<div class="delta"><span class="was"><b>4주차</b>카메라: 팔레트 위치</span><i>→</i><span class="now"><b>5주차</b>+ 2D LiDAR: 지도·자기 위치 (기록 재생)</span></div>
 <div class="pair grow"><div class="pair-box">
 <span class="pair-tag left">Isaac 주행 <i>빨간 점: LiDAR 측정점</i></span>
 <span class="pair-tag right">SLAM 지도 <i>빨강 SLAM 추정이 파랑 정답과 거의 겹침</i></span>
@@ -205,15 +205,14 @@ LiDAR 장착 위치 미확정: docs/hardware.md
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="08  공장 규모 자율 임무"><div class="slide-body">
 <h2 class="headline">카메라로 팔레트를 찾아 운반·하역·복귀까지 이어진 공장 임무</h2>
 <div class="split grow" style="grid-template-columns:1fr 1fr">
-<figure class="shot "><video class="media" src="assets/22_mission_side_seed16.mp4" poster="assets/22_mission_side_poster.jpg" autoplay loop muted playsinline aria-label="16번 배치 임무를 지게차 옆 위에서 따라가며 본 영상. 팔레트에 접근해 포크를 넣고 들어 올린 뒤 운반해 초록 원 목적지에 내려놓는다"></video><figcaption class="small muted">Isaac Sim 추적 시점 · 16번 배치 사례 1건 · 임무 주행은 시뮬레이터 위치 사용</figcaption></figure>
+<figure class="shot "><video class="media" src="assets/22_mission_side_seed16.mp4" poster="assets/22_mission_side_poster.jpg" autoplay loop muted playsinline aria-label="16번 배치 임무를 지게차 옆 위에서 따라가며 본 영상. 팔레트에 접근해 포크를 넣고 들어 올린 뒤 운반해 초록 원 목적지에 내려놓는다"></video><figcaption class="small muted">Isaac Sim 추적 시점 · 16번 배치 사례 1건</figcaption></figure>
 <div class="stack" style="justify-content:center;gap:16px">
 <div class="flow-chips"><span>관측</span><i>→</i><span>접근·삽입</span><i>→</i><span>들기</span><i>→</i><span>운반</span><i>→</i><span>하역</span><i>→</i><span>복귀</span></div>
 <table class="comparison auto">
 <tr><th>임무 주행 입력</th><th>4주차</th><th>5주차</th></tr>
 <tr><td>팔레트 위치</td><td class="ok">카메라</td><td class="ok">카메라</td></tr>
-<tr><td>로봇 위치</td><td>시뮬레이터</td><td>시뮬레이터 <small>(LiDAR 실증 별도)</small></td></tr>
-<tr><td>장애물 지도</td><td>시뮬레이터</td><td>시뮬레이터 <small>(LiDAR 실증 별도)</small></td></tr></table>
-<p class="vs-note">5주차 추가: LiDAR 위치 추정·지도 작성을 별도 기록 재생으로 실증 (06–07)</p>
+<tr><td>로봇 위치</td><td>시뮬레이터</td><td>시뮬레이터</td></tr>
+<tr><td>장애물 지도</td><td>시뮬레이터</td><td>시뮬레이터</td></tr></table>
 </div>
 </div>
 <div class="takeaway">시뮬레이션 다음 단계: LiDAR로 추정한 위치·지도로 임무 주행 시험</div>
