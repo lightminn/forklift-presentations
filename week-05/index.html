@@ -7,7 +7,7 @@
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 <section class="title-section" data-label="개발 진행 보고" data-screen-label="01" data-duration="20" data-speaker-notes="권장 20초
 
-이번 주에는 하드웨어를 다룬다. 입고한 차체와 포크, 동봉 팔레트를 실측하고, 4주차 피드백에 따라 조종기 버튼별 신호를 로직 애널라이저로 측정해 기존 제어 신호를 역으로 분석하였다. 이어서 컴퓨터가 차체를 직접 구동하고 상태를 읽기 위한 부품으로 모터 드라이버와 엔코더를 선정한 근거를 보인다. 끝으로 우리 임무 절차를 지게차 표준 운용 절차와 대조하고, 리보틱스 중간 미팅 질문을 정리한다.
+이번 주에는 하드웨어를 다룬다. 입고한 차체와 포크, 동봉 팔레트를 실측하고, 4주차 피드백에 따라 조종기와 제어기를 로직 애널라이저로 역분석하여, 기존 제어기가 릴레이로 모터를 켜고 끄기만 한다는 것을 확인하였다. 이어서 컴퓨터가 차체를 직접 구동하고 상태를 읽기 위한 부품으로 모터 드라이버와 엔코더를 선정한 근거를 보인다. 끝으로 우리 임무 절차를 지게차 표준 운용 절차와 대조하고, 리보틱스 중간 미팅 질문을 정리한다.
 
 [Sources]
 진행 보고
@@ -18,7 +18,7 @@
 자율 지게차 개발" subtitle="팔레트 핸들링 경로 생성 및 제어"></x-import><img class="partner-mark" src="assets/riibotics-logo.png" alt="Riibotics">
 </section>
 
-<section data-label="차체 실측" data-screen-label="02" data-duration="55" data-speaker-notes="권장 55초
+<section data-label="차체 실측" data-screen-label="02" data-duration="45" data-speaker-notes="권장 45초
 
 [작성 예정] 차체 실측 결과를 보인다. 측정 대상과 기준점, 측정값을 표로 정리하고, 지금까지 시뮬레이션에 쓴 잠정 모델 값과 비교한다. 잠정 모델은 상품 사진과 카탈로그로 만든 것이므로 실측값으로 바꾼다. 최소 회전 반경은 주행 시험이 필요해 정적 실측과 따로 표시한다.
 
@@ -37,7 +37,7 @@
 </div></x-import>
 </section>
 
-<section data-label="포크·동봉 팔레트" data-screen-label="03" data-duration="50" data-speaker-notes="권장 50초
+<section data-label="포크·동봉 팔레트" data-screen-label="03" data-duration="40" data-speaker-notes="권장 40초
 
 [작성 예정] 포크의 폭과 두께, 두 포크의 간격, 최저·최고 높이를 잰 결과를 보인다. 오른쪽은 차체와 함께 온 팔레트의 외형과 포켓 개구이다. 포크 치수와 포켓 개구의 차이가 삽입할 때의 좌우·상하 여유가 되므로, 이 값이 시험 팔레트 제작과 삽입 목표의 기준이 된다.
 
@@ -56,75 +56,82 @@
 </div></x-import>
 </section>
 
-<section data-label="조종기 측정 구성" data-screen-label="04" data-duration="50" data-speaker-notes="권장 50초
+<section data-label="측정 구성" data-screen-label="04" data-duration="50" data-speaker-notes="권장 50초
 
-[작성 예정] 측정 대상은 무선 조종기와 좌석 아래 제어기이다. 조종기의 무선 신호를 제어기가 받아 주행, 조향, 승강 모터를 구동한다. 오른쪽은 로직 애널라이저를 연결한 모습으로, 어느 지점에 탐침을 대고 채널을 어떻게 나눴는지, 샘플링 속도는 얼마로 했는지 보인다. 버튼을 하나씩 누르며 각 채널의 신호가 어떻게 바뀌는지 기록하였다.
+4주차 피드백에 따라 조종기와 제어기를 역으로 분석하였다. 장비는 DSLogic Pro 로직 애널라이저와 멀티미터이다. 로직 애널라이저는 1메가헤르츠로 두 채널을 기록했고, 주행은 앞과 뒤, 승강은 상승과 하강, 조향은 왼쪽과 오른쪽을 번갈아 두 번씩 눌렀다. 제어기에는 무선 수신 회로까지 모두 한 보드에 들어 있다.
 
 [Sources]
-화면 생성: 실물 사진(2026-09-23 입고) · 측정 구성 사진(작성 예정)
+화면 생성: 실물 사진(2026-09-23 입고) · 팀 측정 기록
 조종기·제어기 표기와 사진: docs/validation/2026-09-23-chassis-intake.md
-§2 로직 애널라이저로 버튼별 신호 측정: docs/references/week4_feedback.md
+§2 로직 애널라이저로 버튼별 신호 측정, 리버스 엔지니어링: docs/references/week4_feedback.md
+DSLogic 캡처 3개 (1 MHz, 2채널) — prepare_la.py 로 추출: forklift-presentations/week-05/assets/data_la_edges.json
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="03  조종기 신호 측정 구성"><div class="slide-body">
-<h2 class="headline">무선 조종기 → 제어기 신호를 로직 애널라이저로 측정 <span class="draft">작성 중</span></h2>
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="03  조종기·제어기 리버스 엔지니어링"><div class="slide-body">
+<h2 class="headline">무선 조종기·제어기 신호를 로직 애널라이저로 측정</h2>
 <div class="split grow" style="grid-template-columns:0.9fr 0.9fr 1.2fr">
-<figure class="shot "><img class="media" src="assets/05_remote.jpg" alt="무선 조종기 T07D-DGN. 전진·후진, 상승·하강, 좌회전·우회전, 속도 조절과 제동 버튼"><figcaption class="small muted">무선 조종기 T07D-DGN</figcaption></figure>
-<figure class="shot "><img class="media" src="assets/04_controller_label.jpg" alt="좌석 아래 제어기의 라벨 J6 D-CC-12V"><figcaption class="small muted">제어기 J6 D-CC-12V</figcaption></figure>
-<div class="placeholder grow"><b>측정 구성 사진</b><span>탐침 연결 지점 · 채널 배정 · 샘플링 속도</span></div>
+<figure class="shot "><img class="media" src="assets/05_remote.jpg" alt="무선 조종기 T07D-DGN"><figcaption class="small muted">무선 조종기 T07D-DGN</figcaption></figure>
+<figure class="shot "><img class="media" src="assets/04_controller_label.jpg" alt="좌석 아래 제어기의 라벨 J6 D-CC-12V"><figcaption class="small muted">제어기(메인보드) J6 D-CC-12V</figcaption></figure>
+<table class="comparison select setup"><tr><th colspan="2">측정 구성</th></tr>
+<tr><td>장비</td><td>DSLogic Pro · 멀티미터</td></tr>
+<tr><td>샘플링</td><td>1 MHz · 2채널 (CH0 · CH1)</td></tr>
+<tr><td>주행</td><td>앞 → 뒤 → 앞 → 뒤</td></tr>
+<tr><td>승강</td><td>상승 → 하강 → 상승 → 하강</td></tr>
+<tr><td>조향</td><td>왼쪽 → 오른쪽 → 왼쪽 → 오른쪽</td></tr></table>
 </div>
-<div class="takeaway">측정: 버튼을 하나씩 눌러 제어기 입력·모터 출력 신호를 기록</div>
+<div class="takeaway">4주차 피드백: 버튼별 신호를 로직 애널라이저로 측정 · 기존 제어기 리버스 엔지니어링</div>
 </div></x-import>
 </section>
 
-<section data-label="주행·조향 파형" data-screen-label="05" data-duration="60" data-speaker-notes="권장 60초
+<section data-label="명령별 파형" data-screen-label="05" data-duration="70" data-speaker-notes="권장 70초
 
-[작성 예정] 주행과 조향 버튼을 하나씩 눌렀을 때의 파형이다. 모든 파형은 같은 시간축에 채널별로 한 줄씩 놓아, 버튼에 따라 어느 채널이 어떻게 바뀌는지 비교한다. 전진과 후진에서 신호가 방향만 바뀌는지, 속도가 듀티로 표현되는지, 조향이 좌우 두 신호로 나뉘는지를 확인한다.
+세 번의 측정 파형이다. 주행에서는 앞 버튼을 누르면 CH0가, 뒤 버튼을 누르면 CH1이 켜지고, 버튼을 누른 시간만큼 켜져 있다. 승강도 같은 구조로 상승은 CH1, 하강은 CH0이다. 즉 두 선 가운데 어느 쪽에 전압을 거느냐로 모터의 회전 방향이 바뀐다. 조향 파일은 내보낸 구간에 왼쪽 명령 한 번만 들어 있어 나머지 명령은 다시 확인한다.
 
 [Sources]
-화면 생성: 로직 애널라이저 캡처 (작성 예정)
-§2 버튼별 신호 측정: docs/references/week4_feedback.md
+화면 생성: DSLogic 캡처 엣지로 그린 파형 (명령 옆 숫자 = 켜진 시간)
+엣지 목록 — 주행 19 · 승강 28 · 조향 31개, 조향 CSV 는 7.72–16.69 s 구간만 포함: forklift-presentations/week-05/assets/data_la_edges.json
+DSLogic CSV → 엣지 추출: forklift-presentations/week-05/prepare_la.py
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="04  버튼별 파형 · 주행 · 조향"><div class="slide-body">
-<h2 class="headline">주행·조향 버튼별 로직 애널라이저 파형 <span class="draft">작성 중</span></h2>
-<div class="stack grow">
-<div class="placeholder grow"><b>전진 · 후진</b><span>같은 시간축에 채널별 파형을 한 줄씩 · 버튼 누름 구간 표시</span></div>
-<div class="placeholder grow"><b>좌회전 · 우회전</b><span>같은 시간축 · 방향에 따라 바뀌는 채널 강조</span></div>
-</div>
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="04  명령별 로직 애널라이저 파형"><div class="slide-body">
+<h2 class="headline">명령마다 한 채널만 켜짐: 방향은 채널, 동작 시간은 누른 시간</h2>
+<svg class="diagram grow" viewBox="0 0 1180 484" role="img" aria-label="주행·승강·조향 명령별 두 채널의 로직 애널라이저 파형. 명령마다 한 채널만 켜지고, 누르는 동안 신호가 바뀌지 않는다"><g font-family="var(--uos-font)"><text x="0" y="26" font-size="21" font-weight="700" fill="#1b1f24">주행 · 앞 → 뒤 → 앞 → 뒤</text><text x="136" y="78" text-anchor="end" font-size="17" fill="#1f5fae">CH0</text><polyline points="150.0,84 150.0,84 353.9,84 353.9,62 354.3,62 354.3,84 354.3,84 354.3,62 457.9,62 457.9,84 457.9,84 457.9,84 491.7,84 491.7,62 492.0,62 492.0,84 492.0,84 492.0,84 618.7,84 618.7,62 618.7,62 618.7,84 707.8,84 707.8,62 708.1,62 708.1,84 708.1,84 708.1,62 787.6,62 787.6,84 848.2,84 848.2,62 848.5,62 848.5,84 848.5,84 848.5,84 1093.7,84 1093.7,84 1170.0,84" fill="none" stroke="#1f5fae" stroke-width="2.5"/><text x="136" y="130" text-anchor="end" font-size="17" fill="#c26a1a">CH1</text><polyline points="150.0,136 150.0,136 353.9,136 353.9,114 354.3,114 354.3,136 354.3,136 354.3,136 457.9,136 457.9,114 457.9,114 457.9,136 491.7,136 491.7,114 492.0,114 492.0,136 492.0,136 492.0,114 618.7,114 618.7,136 618.7,136 618.7,136 707.8,136 707.8,114 708.1,114 708.1,136 708.1,136 708.1,136 787.6,136 787.6,136 848.2,136 848.2,114 848.5,114 848.5,136 848.5,136 848.5,114 1093.7,114 1093.7,136 1170.0,136" fill="none" stroke="#c26a1a" stroke-width="2.5"/><text x="406.1" y="57" text-anchor="middle" font-size="16" font-weight="700" fill="#1f5fae">앞 1.02 s</text><text x="555.3" y="109" text-anchor="middle" font-size="16" font-weight="700" fill="#c26a1a">뒤 1.24 s</text><text x="747.9" y="57" text-anchor="middle" font-size="16" font-weight="700" fill="#1f5fae">앞 0.78 s</text><text x="971.1" y="109" text-anchor="middle" font-size="16" font-weight="700" fill="#c26a1a">뒤 2.40 s</text><text x="0" y="184" font-size="21" font-weight="700" fill="#1b1f24">승강 · 상승 → 하강 → 상승 → 하강</text><text x="136" y="236" text-anchor="end" font-size="17" fill="#1f5fae">CH0</text><polyline points="150.0,242 150.0,242 300.0,242 300.0,242 392.0,242 392.0,220 392.0,220 392.0,220 392.0,220 392.0,220 392.0,220 392.0,220 392.0,220 392.0,242 480.8,242 480.8,220 480.8,220 480.8,220 575.4,220 575.4,220 575.4,220 575.4,220 575.4,220 575.4,220 575.4,220 575.4,242 575.4,242 575.4,220 575.4,220 575.4,242 575.4,242 575.4,242 664.4,242 664.4,220 664.4,220 664.4,242 762.6,242 762.6,220 762.6,220 762.6,220 762.6,220 762.6,220 762.6,220 762.6,242 842.5,242 842.5,220 923.8,220 923.8,220 923.8,220 923.8,242 923.8,242 923.8,220 923.8,220 923.8,242 923.8,242 923.8,242 1170.0,242" fill="none" stroke="#1f5fae" stroke-width="2.5"/><text x="136" y="288" text-anchor="end" font-size="17" fill="#c26a1a">CH1</text><polyline points="150.0,294 150.0,294 300.0,294 300.0,272 392.0,272 392.0,272 392.0,272 392.0,294 392.0,294 392.0,272 392.0,272 392.0,294 392.0,294 392.0,294 480.8,294 480.8,272 480.8,272 480.8,294 575.4,294 575.4,272 575.4,272 575.4,294 575.4,294 575.4,272 575.4,272 575.4,272 575.4,272 575.4,272 575.4,272 575.4,272 575.4,272 575.4,294 664.4,294 664.4,272 664.4,272 664.4,272 762.6,272 762.6,294 762.6,294 762.6,272 762.6,272 762.6,294 762.6,294 762.6,294 842.5,294 842.5,294 923.8,294 923.8,272 923.8,272 923.8,294 923.8,294 923.8,272 923.8,272 923.8,272 923.8,272 923.8,294 1170.0,294" fill="none" stroke="#c26a1a" stroke-width="2.5"/><text x="346.0" y="267" text-anchor="middle" font-size="16" font-weight="700" fill="#c26a1a">상승 0.70 s</text><text x="528.1" y="215" text-anchor="middle" font-size="16" font-weight="700" fill="#1f5fae">하강 0.72 s</text><text x="713.5" y="267" text-anchor="middle" font-size="16" font-weight="700" fill="#c26a1a">상승 0.75 s</text><text x="883.2" y="215" text-anchor="middle" font-size="16" font-weight="700" fill="#1f5fae">하강 0.62 s</text><text x="0" y="342" font-size="21" font-weight="700" fill="#1b1f24">조향 · 왼쪽 (내보낸 구간에 명령 1회)</text><text x="136" y="394" text-anchor="end" font-size="17" fill="#1f5fae">CH0</text><polyline points="150.0,400 150.0,400 1076.2,400 1076.2,378 1076.2,378 1076.2,378 1076.2,378 1076.2,378 1140.4,378 1140.4,400 1140.4,400 1140.4,378 1140.4,378 1140.4,400 1140.4,400 1140.4,378 1140.4,378 1140.4,400 1140.5,400 1140.5,378 1140.6,378 1140.6,400 1140.6,400 1140.6,378 1140.6,378 1140.6,400 1140.6,400 1140.6,378 1140.6,378 1140.6,400 1140.6,400 1140.6,378 1140.6,378 1140.6,400 1140.6,400 1140.6,378 1140.6,378 1140.6,400 1140.7,400 1140.7,378 1140.7,378 1140.7,400 1140.7,400 1140.7,378 1140.7,378 1140.7,400 1140.7,400 1140.7,378 1140.7,378 1140.7,400 1140.7,400 1140.7,378 1140.8,378 1140.8,400 1140.8,400 1140.8,378 1140.8,378 1140.8,400 1140.8,400 1140.8,378 1140.8,378 1140.8,400 1170.0,400" fill="none" stroke="#1f5fae" stroke-width="2.5"/><text x="136" y="446" text-anchor="end" font-size="17" fill="#c26a1a">CH1</text><polyline points="150.0,452 150.0,452 1076.2,452 1076.2,452 1076.2,452 1076.2,430 1076.2,430 1076.2,452 1140.4,452 1140.4,452 1140.4,452 1140.4,452 1140.4,452 1140.4,452 1140.4,452 1140.4,452 1140.4,452 1140.4,452 1140.5,452 1140.5,452 1140.6,452 1140.6,452 1140.6,452 1140.6,452 1140.6,452 1140.6,452 1140.6,452 1140.6,452 1140.6,452 1140.6,452 1140.6,452 1140.6,452 1140.6,452 1140.6,452 1140.6,452 1140.6,452 1140.6,452 1140.6,452 1140.7,452 1140.7,452 1140.7,452 1140.7,452 1140.7,452 1140.7,452 1140.7,452 1140.7,452 1140.7,452 1140.7,452 1140.7,452 1140.7,452 1140.7,452 1140.7,452 1140.8,452 1140.8,452 1140.8,452 1140.8,452 1140.8,452 1140.8,452 1140.8,452 1140.8,452 1140.8,452 1140.8,452 1170.0,452" fill="none" stroke="#c26a1a" stroke-width="2.5"/><text x="1108.3" y="373" text-anchor="middle" font-size="16" font-weight="700" fill="#1f5fae">왼쪽 0.56 s</text></g></svg>
 </div></x-import>
 </section>
 
-<section data-label="승강·기타 파형" data-screen-label="06" data-duration="50" data-speaker-notes="권장 50초
+<section data-label="PWM 없음" data-screen-label="06" data-duration="60" data-speaker-notes="권장 60초
 
-[작성 예정] 승강과 속도 조절, 제동 버튼의 파형이다. 상승과 하강이 승강 모터의 방향 신호로 나타나는지, 속도 조절 버튼이 주행 신호의 듀티나 전압을 바꾸는지, 제동이 어떤 신호로 전달되는지 확인한다.
+파형과 회로 조사를 합친 해석이다. 먼저 파형에서 직접 확인한 것은, 측정한 두 선이 명령이 켜져 있는 동안 1메가헤르츠 샘플에서 한 번도 바뀌지 않았다는 것이다. PWM이라면 켜짐과 꺼짐이 빠르게 반복되어야 하므로 이 두 선은 PWM 신호가 아니라 켜짐과 꺼짐 레벨이다. 왼쪽은 누르는 순간을 몇 밀리초로 확대한 것으로, 주행 명령 네 번 모두 약 3밀리초 동안 두 채널이 함께 켜졌다가 한 채널만 남는다. 팀은 전환 순간 접지가 튄 것으로 보고 있으며, 모터 단자를 함께 재서 확인한다. 회로를 따라가 보니 모터는 릴레이로 켜고 끄며 방향만 바꾸고, 조종기에 속도 버튼이 있지만 속도 조절 기능 자체가 없었다. 결국 기존 제어기로는 속도나 위치를 제어할 수 없다.
 
 [Sources]
-화면 생성: 로직 애널라이저 캡처 (작성 예정)
-§2 버튼별 신호 측정: docs/references/week4_feedback.md
+화면 생성: DSLogic 캡처 엣지 확대
+명령 구간 내 엣지 0개 (1 µs 튐 제외), 주행 누름 순간 두 채널 동시 High 2.95–3.43 ms 4회 — 원인은 팀 판단(접지 튐), 미확정: forklift-presentations/week-05/assets/data_la_edges.json
+릴레이 구동, 속도 조절 기능 없음 (회로 조사): 팀 리버스 엔지니어링 보고 (2026-09-30)
+§2 버튼별 신호 확인: docs/references/week4_feedback.md
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="05  버튼별 파형 · 승강 · 속도 · 제동"><div class="slide-body">
-<h2 class="headline">승강·속도 조절·제동 버튼별 파형 <span class="draft">작성 중</span></h2>
-<div class="stack grow">
-<div class="placeholder grow"><b>상승 · 하강</b><span>같은 시간축 · 승강 모터 채널</span></div>
-<div class="placeholder grow"><b>속도 조절 · 제동</b><span>속도 단계별 변화 · 제동 시 신호</span></div>
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="05  파형 해석"><div class="slide-body">
+<h2 class="headline">측정한 두 선은 켜짐·꺼짐뿐, 회로 조사 결과 릴레이 구동</h2>
+<div class="split grow" style="grid-template-columns:1fr 1fr">
+<div class="stack" style="justify-content:center"><svg class="diagram" viewBox="0 0 560 250" role="img" aria-label="누르는 순간 두 채널이 약 3 ms 동시에 High가 된 뒤 한 채널만 남는 파형"><g font-family="var(--uos-font)"><text x="58" y="84" text-anchor="end" font-size="17" fill="#1f5fae">CH0</text><polyline points="70.0,90 251.1,90 251.1,50 428.2,50 428.2,90 428.3,90 428.3,90 550.0,90" fill="none" stroke="#1f5fae" stroke-width="3"/><text x="58" y="174" text-anchor="end" font-size="17" fill="#c26a1a">CH1</text><polyline points="70.0,180 251.1,180 251.1,140 428.2,140 428.2,180 428.3,180 428.3,140 550.0,140" fill="none" stroke="#c26a1a" stroke-width="3"/><rect x="251.1" y="30" width="177.1" height="160" fill="#c0392b" opacity="0.10"/><text x="339.6" y="222" text-anchor="middle" font-size="17" fill="#c0392b">두 채널 동시 High 3.0 ms</text><text x="70" y="244" font-size="15" fill="#6b7785">8 ms 구간 · 누르는 순간</text></g></svg><p class="chart-cap">누르는 순간 약 3 ms 두 채널 동시 High (주행 4회 모두) · 팀 판단: 전환 순간 접지 튐, 추가 확인</p></div>
+<div class="fb-cards licence" style="align-self:center;grid-template-columns:1fr;grid-template-rows:auto">
+<article><h3>파형 (측정한 두 선)</h3><p>명령 8회, 켜진 동안 1 MHz 샘플에서 변화 0회 → PWM 신호 아님</p></article>
+<article><h3>회로 조사 (팀)</h3><p>릴레이로 모터 켜짐·꺼짐 · 정·역 전환만<br>속도 조절 기능 자체가 없음</p></article>
+<article class="key"><h3>의미</h3><p>모터를 켜고 끄는 열린 루프 · 속도·위치 제어 불가</p></article>
+</div>
 </div>
 </div></x-import>
 </section>
 
-<section data-label="신호 해석" data-screen-label="07" data-duration="60" data-speaker-notes="권장 60초
+<section data-label="리버싱 결론" data-screen-label="07" data-duration="60" data-speaker-notes="권장 60초
 
-[작성 예정] 파형을 버튼별로 정리한 표이다. 버튼마다 어느 신호선이 바뀌는지, 그 신호가 단순 켜짐·꺼짐인지 PWM인지 직렬 통신인지, 그리고 그것이 무엇을 뜻하는지 적는다. 오른쪽 도식은 조종기에서 모터까지의 신호 경로와, 컴퓨터가 명령을 넣을 수 있는 지점을 보인다. 이 결과에 따라 기존 제어기를 살려 신호만 넣을지, 모터 드라이버로 제어기를 대체할지 정한다.
+리버스 엔지니어링의 결론이다. 전원 스위치는 플러스와 V 단자를 직접 잇는 단순한 스위치이고, 무선 수신 회로는 메인보드에 통합되어 있다. 모터는 릴레이로 켜고 끄며 방향만 바꾸고, 속도 조절은 없다. 여기에 컴퓨터 명령을 끼워 넣어도 켜고 끄는 것 이상은 할 수 없으므로, 기존 제어기를 쓰지 않고 DRV8244 SPI형 모터 드라이버로 제어기를 새로 만든다. 전원 스위치와 주행 모터, 리프트 모터는 그대로 쓴다. 남은 질문은 리프트 높이 조절이다. 포크를 원하는 높이에 세우려면 엔코더나 높이 센서가 필요하다.
 
 [Sources]
-화면 생성: 측정 결과 정리 (작성 예정)
-§2 리버스 엔지니어링: docs/references/week4_feedback.md
+출처: 팀 측정 보고
+전원 스위치 +·V 직결, RF 메인보드 통합, 릴레이 구동·PWM 없음, 속도 조절 기능 없음, 결론 DRV8244 SPI 신규 개발, 재활용: 전원 스위치·주행 모터·리프트 모터: 팀 리버스 엔지니어링 보고 (2026-09-30)
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="06  리버스 엔지니어링 결과"><div class="slide-body">
-<h2 class="headline">버튼별 신호 형식과 컴퓨터 명령 입력 지점 <span class="draft">작성 중</span></h2>
-<div class="split grow" style="grid-template-columns:1.1fr 0.9fr">
-<table class="comparison measure"><tr><th>버튼</th><th>신호선</th><th>형식 (레벨 · PWM · 직렬)</th><th>해석</th></tr><tr><td>전진</td><td class="pending">—</td><td class="pending">—</td><td class="pending">—</td></tr><tr><td>후진</td><td class="pending">—</td><td class="pending">—</td><td class="pending">—</td></tr><tr><td>좌회전</td><td class="pending">—</td><td class="pending">—</td><td class="pending">—</td></tr><tr><td>우회전</td><td class="pending">—</td><td class="pending">—</td><td class="pending">—</td></tr><tr><td>상승</td><td class="pending">—</td><td class="pending">—</td><td class="pending">—</td></tr><tr><td>하강</td><td class="pending">—</td><td class="pending">—</td><td class="pending">—</td></tr><tr><td>속도 조절</td><td class="pending">—</td><td class="pending">—</td><td class="pending">—</td></tr><tr><td>제동</td><td class="pending">—</td><td class="pending">—</td><td class="pending">—</td></tr></table>
-<div class="placeholder grow"><b>신호 경로 도식</b><span>조종기 → 수신부 → 제어기 → 모터 · 컴퓨터가 끼어들 지점 표시</span></div>
-</div>
-<div class="takeaway">다음 작업: 명령 입력 지점에 모터 드라이버 연결 · 기존 제어기 대체 여부 결정</div>
+<h2 class="headline">결론: 기존 제어기를 쓰지 않고 DRV8244 SPI형으로 새로 개발</h2>
+<table class="comparison select practice grow"><tr><th>대상</th><th>관측</th><th>처리</th></tr><tr><td class="step">전원 스위치</td><td>+ 와 V 를 직접 연결하는 단순 스위치</td><td><b>재활용</b></td></tr><tr><td class="step">무선 수신</td><td>RF 회로가 메인보드에 통합</td><td><b>분리 불가 → 사용 안 함</b></td></tr><tr><td class="step">모터 구동</td><td>릴레이 켜짐·꺼짐 · 정·역 전환만</td><td><b>대체</b></td></tr><tr><td class="step">속도 조절</td><td>PWM·전압 제어 없음 · 기능 자체 없음</td><td><b>새로 구현</b></td></tr><tr><td class="step">주행 모터 (양쪽 바퀴)</td><td>—</td><td><b>재활용</b></td></tr><tr><td class="step">리프트 모터</td><td>—</td><td><b>재활용 · 높이 센서 필요</b></td></tr></table>
+<div class="takeaway">남은 질문: 리프트 높이 조절 → 엔코더 또는 높이 센서 필요</div>
 </div></x-import>
 </section>
 
@@ -205,7 +212,7 @@ KOSHA 지게차 교육자료 — 감속·일단 정지, 정면 삽입, 5–10 cm
 
 <section data-label="리보틱스 미팅 질문" data-screen-label="11" data-duration="50" data-speaker-notes="권장 50초
 
-마지막으로 리보틱스와의 중간 미팅에서 확인할 사항이다. 먼저 최종 시연 장소와 바닥 상태, 평가 기준이 성공률과 시간, 정밀도 가운데 무엇인지, 시험 팔레트와 적재 하중을 확인하고, 추천받은 다우테크놀로지 사례의 작업 공간과 험지 여부를 묻는다. 요청할 자료는 기존 제어기와 조종기의 배선·신호 자료, 모터의 정격 전압과 전류, 실제 지게차의 운용 영상과 데이터이다. 특히 모터 전류는 오늘 본 모터 드라이버의 전류 제한과 방열 설계에 필요하다. 함께 정할 것은 기존 제어기를 우리 드라이버로 대체해도 되는지, 시험 공간과 허용 속도, 비상정지와 기울기·과적 감지 같은 안전 정지 요구, 그리고 동봉 팔레트의 활용이다.
+마지막으로 리보틱스와의 중간 미팅에서 확인할 사항이다. 먼저 최종 시연 장소와 바닥 상태, 평가 기준이 성공률과 시간, 정밀도 가운데 무엇인지, 시험 팔레트와 적재 하중을 확인하고, 추천받은 다우테크놀로지 사례의 작업 공간과 험지 여부를 묻는다. 요청할 자료는 모터 사양서와 정격 전압·전류, 실제 지게차의 운용 영상과 데이터이다. 특히 모터 전류는 오늘 본 모터 드라이버의 전류 제한과 방열 설계에 필요하다. 함께 정할 것은 기존 제어기를 DRV8244 기반 새 제어기로 바꾸는 것에 대한 승인, 리프트 높이를 어느 범위와 정밀도로 조절해야 하는지, 시험 공간과 허용 속도, 비상정지와 기울기·과적 감지 같은 안전 정지 요구, 그리고 동봉 팔레트의 활용이다.
 
 [Sources]
 출처: 4주차 피드백 · 이번 주 하드웨어 작업
@@ -214,7 +221,7 @@ KOSHA 지게차 교육자료 — 감속·일단 정지, 정면 삽입, 5–10 cm
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="10  리보틱스 중간 미팅 질문"><div class="slide-body">
 <h2 class="headline">리보틱스 중간 미팅에서 확인할 사항</h2>
-<table class="comparison select meeting grow"><tr><th>구분</th><th>항목</th></tr><tr><td rowspan="4" class="grp">확인할 것</td><td class="item">최종 시연 장소 · 바닥 (실내·실외)</td></tr><tr><td class="item">평가 기준 (성공률 · 시간 · 정밀도)</td></tr><tr><td class="item">시험 팔레트 (EPAL 6 · 축소 T11) · 적재 하중</td></tr><tr><td class="item">다우테크놀로지 사례 (작업 공간 · 험지)</td></tr><tr><td rowspan="3" class="grp">요청할 것</td><td class="item">제어기 J6 D-CC-12V · 조종기 배선·신호 자료</td></tr><tr><td class="item">주행·조향·승강 모터 정격 (전압 · 전류)</td></tr><tr><td class="item">실제 지게차 운용 영상 · 데이터</td></tr><tr><td rowspan="4" class="grp">함께 정할 것</td><td class="item">기존 제어기 대체 (자체 드라이버) 허용 범위</td></tr><tr><td class="item">시험 공간 · 허용 속도</td></tr><tr><td class="item">안전 정지 요구 (비상정지 · 기울기 · 과적)</td></tr><tr><td class="item">동봉 팔레트 활용</td></tr></table>
+<table class="comparison select meeting grow"><tr><th>구분</th><th>항목</th></tr><tr><td rowspan="4" class="grp">확인할 것</td><td class="item">최종 시연 장소 · 바닥 (실내·실외)</td></tr><tr><td class="item">평가 기준 (성공률 · 시간 · 정밀도)</td></tr><tr><td class="item">시험 팔레트 (EPAL 6 · 축소 T11) · 적재 하중</td></tr><tr><td class="item">다우테크놀로지 사례 (작업 공간 · 험지)</td></tr><tr><td rowspan="3" class="grp">요청할 것</td><td class="item">주행·승강 모터 사양서 (있다면)</td></tr><tr><td class="item">주행·조향·승강 모터 정격 (전압 · 전류)</td></tr><tr><td class="item">실제 지게차 운용 영상 · 데이터</td></tr><tr><td rowspan="5" class="grp">함께 정할 것</td><td class="item">기존 제어기 교체 (DRV8244 신규 제어기) 승인</td></tr><tr><td class="item">리프트 높이 조절 요구 (범위 · 정밀도)</td></tr><tr><td class="item">시험 공간 · 허용 속도</td></tr><tr><td class="item">안전 정지 요구 (비상정지 · 기울기 · 과적)</td></tr><tr><td class="item">동봉 팔레트 활용</td></tr></table>
 </div></x-import>
 </section>
 </x-import></x-dc></body></html>

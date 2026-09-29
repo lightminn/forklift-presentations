@@ -47,7 +47,7 @@ def placeholder(what, detail, cls='grow'):
 
 # ----------------------------------------------------------------- 1
 add('개발 진행 보고', '5주차\n자율 지게차 개발', 20, '',
-    """이번 주에는 하드웨어를 다룬다. 입고한 차체와 포크, 동봉 팔레트를 실측하고, 4주차 피드백에 따라 조종기 버튼별 신호를 로직 애널라이저로 측정해 기존 제어 신호를 역으로 분석하였다. 이어서 컴퓨터가 차체를 직접 구동하고 상태를 읽기 위한 부품으로 모터 드라이버와 엔코더를 선정한 근거를 보인다. 끝으로 우리 임무 절차를 지게차 표준 운용 절차와 대조하고, 리보틱스 중간 미팅 질문을 정리한다.""",
+    """이번 주에는 하드웨어를 다룬다. 입고한 차체와 포크, 동봉 팔레트를 실측하고, 4주차 피드백에 따라 조종기와 제어기를 로직 애널라이저로 역분석하여, 기존 제어기가 릴레이로 모터를 켜고 끄기만 한다는 것을 확인하였다. 이어서 컴퓨터가 차체를 직접 구동하고 상태를 읽기 위한 부품으로 모터 드라이버와 엔코더를 선정한 근거를 보인다. 끝으로 우리 임무 절차를 지게차 표준 운용 절차와 대조하고, 리보틱스 중간 미팅 질문을 정리한다.""",
     [(INTAKE, '입고 조사'), (FEEDBACK, '4주차 피드백 §2')], '진행 보고')
 
 # ----------------------------------------------------------------- 3 (placeholder)
@@ -63,7 +63,7 @@ MEASURE_ROWS = [
 ]
 measure_table = ''.join(f'<tr><td>{k}</td><td class="pending">—</td><td class="muted">{v}</td></tr>'
                         for k, v in MEASURE_ROWS)
-add('차체 실측', '01  차체 실측', 55, f"""
+add('차체 실측', '01  차체 실측', 45, f"""
 <h2 class="headline">차체 실측값과 잠정 모델 비교 <span class="draft">작성 중</span></h2>
 <div class="split grow" style="grid-template-columns:0.8fr 1.2fr">
 {placeholder('치수선 사진', '측정 기준점·치수선 표시')}
@@ -76,7 +76,7 @@ add('차체 실측', '01  차체 실측', 55, f"""
     '화면 생성: 실물 사진 (작성 예정)')
 
 # ----------------------------------------------------------------- 3 (placeholder)
-add('포크·동봉 팔레트', '02  포크 · 동봉 팔레트', 50, f"""
+add('포크·동봉 팔레트', '02  포크 · 동봉 팔레트', 40, f"""
 <h2 class="headline">포크·동봉 팔레트 실측 <span class="draft">작성 중</span></h2>
 <div class="split grow" style="grid-template-columns:1fr 1fr">
 {placeholder('포크 사진 · 치수선', '폭 · 두께 · 간격 · 최저·최고 높이')}
@@ -88,58 +88,157 @@ add('포크·동봉 팔레트', '02  포크 · 동봉 팔레트', 50, f"""
     [(INTAKE, '입고 때 관찰한 포크·동봉 팔레트'), (MODEL, '잠정 모델 포크 치수 — 사진 추정')],
     '화면 생성: 실물 사진 (작성 예정)')
 
-# ----------------------------------------------------------------- 4 remote setup
-add('조종기 측정 구성', '03  조종기 신호 측정 구성', 50, f"""
-<h2 class="headline">무선 조종기 → 제어기 신호를 로직 애널라이저로 측정 <span class="draft">작성 중</span></h2>
+# ----------------------------------------------------------------- 4-7 remote reverse engineering
+# Traces are drawn from assets/data_la_edges.json (prepare_la.py): the level
+# changes of three DSLogic Pro captures, 1 MHz, two channels.
+LA = json.loads((ROOT / 'assets/data_la_edges.json').read_text())
+LA_ROWS = [  # capture, title, command name per channel (CH0, CH1)
+    ('drive', '주행 · 앞 → 뒤 → 앞 → 뒤', ('앞', '뒤')),
+    ('lift', '승강 · 상승 → 하강 → 상승 → 하강', ('하강', '상승')),
+    ('steer', '조향 · 왼쪽 (내보낸 구간에 명령 1회)', ('왼쪽', '오른쪽')),
+]
+CH_COLOURS = ('#1f5fae', '#c26a1a')
+GLITCH_S = 0.01   # shorter than this = contact/ground bounce, not a command
+
+
+def la_segments(key):
+    """(channel, start, end) for each run where exactly one channel is high."""
+    e = LA[key]['edges'] + [[LA[key]['end_s'], 0, 0]]
+    runs = []
+    for (t, a, b), (t2, _, _) in zip(e, e[1:]):
+        if a + b == 1:
+            runs.append((0 if a else 1, t, t2))
+    return runs
+
+
+def la_commands(key):
+    return [r for r in la_segments(key) if r[2] - r[1] >= GLITCH_S]
+
+
+def la_traces():
+    W, left, lane, gap = 1180, 150, 52, 26
+    rows_h = []
+    parts = []
+    y = 10
+    for key, title, names in LA_ROWS:
+        cap = LA[key]
+        t0, t1 = cap['start_s'], cap['end_s']
+        sx = lambda t: left + (t - t0) / (t1 - t0) * (W - left - 10)
+        parts.append(f'<text x="0" y="{y + 16}" font-size="21" font-weight="700" fill="#1b1f24">{title}</text>')
+        y += 28
+        for ch in (0, 1):
+            base = y + lane * (ch + 1) - 6
+            parts.append(f'<text x="{left - 14}" y="{base - 6}" text-anchor="end" font-size="17" fill="{CH_COLOURS[ch]}">CH{ch}</text>')
+            pts, level = [], 0
+            for t, a, b in cap['edges']:
+                v = (a, b)[ch]
+                x = sx(t)
+                pts.append(f'{x:.1f},{base - level * 22}')
+                pts.append(f'{x:.1f},{base - v * 22}')
+                level = v
+            pts.append(f'{sx(t1):.1f},{base - level * 22}')
+            parts.append(f'<polyline points="{" ".join(pts)}" fill="none" stroke="{CH_COLOURS[ch]}" stroke-width="2.5"/>')
+        for ch, a, b in la_commands(key):
+            base = y + lane * (ch + 1) - 6
+            parts.append(f'<text x="{(sx(a) + sx(b)) / 2:.1f}" y="{base - 27}" text-anchor="middle" font-size="16" font-weight="700" fill="{CH_COLOURS[ch]}">{names[ch]} {b - a:.2f} s</text>')
+        y += lane * 2 + gap
+    return (f'<svg class="diagram grow" viewBox="0 0 {W} {y}" role="img" aria-label="주행·승강·조향 명령별 두 채널의 로직 애널라이저 파형. '
+            f'명령마다 한 채널만 켜지고, 누르는 동안 신호가 바뀌지 않는다"><g font-family="var(--uos-font)">{"".join(parts)}</g></svg>')
+
+
+def la_zoom(key='drive', centre=5.0906, span=0.008):
+    """Press edge of one command, a few milliseconds wide."""
+    W, H, left = 560, 250, 70
+    cap = LA[key]
+    t0, t1 = centre - span / 2, centre + span / 2
+    sx = lambda t: left + (min(max(t, t0), t1) - t0) / (t1 - t0) * (W - left - 10)
+    parts = []
+    for ch in (0, 1):
+        base = 90 + ch * 90
+        parts.append(f'<text x="{left - 12}" y="{base - 6}" text-anchor="end" font-size="17" fill="{CH_COLOURS[ch]}">CH{ch}</text>')
+        level = 0
+        for t, a, b in cap['edges']:
+            if t <= t0:
+                level = (a, b)[ch]
+        pts = [f'{sx(t0):.1f},{base - level * 40}']
+        for t, a, b in cap['edges']:
+            if t0 < t < t1:
+                v = (a, b)[ch]
+                pts += [f'{sx(t):.1f},{base - level * 40}', f'{sx(t):.1f},{base - v * 40}']
+                level = v
+        pts.append(f'{sx(t1):.1f},{base - level * 40}')
+        parts.append(f'<polyline points="{" ".join(pts)}" fill="none" stroke="{CH_COLOURS[ch]}" stroke-width="3"/>')
+    both = next((t, t2) for (t, a, b), (t2, _, _) in zip(cap['edges'], cap['edges'][1:]) if a and b and t0 < t < t1)
+    parts.append(f'<rect x="{sx(both[0]):.1f}" y="30" width="{sx(both[1]) - sx(both[0]):.1f}" height="160" fill="#c0392b" opacity="0.10"/>'
+                 f'<text x="{(sx(both[0]) + sx(both[1])) / 2:.1f}" y="222" text-anchor="middle" font-size="17" fill="#c0392b">두 채널 동시 High {(both[1] - both[0]) * 1000:.1f} ms</text>'
+                 f'<text x="{left}" y="244" font-size="15" fill="#6b7785">{span * 1000:.0f} ms 구간 · 누르는 순간</text>')
+    return (f'<svg class="diagram" viewBox="0 0 {W} {H}" role="img" aria-label="누르는 순간 두 채널이 약 3 ms 동시에 High가 된 뒤 한 채널만 남는 파형">'
+            f'<g font-family="var(--uos-font)">{"".join(parts)}</g></svg>')
+
+
+add('측정 구성', '03  조종기·제어기 리버스 엔지니어링', 50, f"""
+<h2 class="headline">무선 조종기·제어기 신호를 로직 애널라이저로 측정</h2>
 <div class="split grow" style="grid-template-columns:0.9fr 0.9fr 1.2fr">
-{figure('05_remote.jpg', '무선 조종기 T07D-DGN. 전진·후진, 상승·하강, 좌회전·우회전, 속도 조절과 제동 버튼', '무선 조종기 T07D-DGN', cls='')}
-{figure('04_controller_label.jpg', '좌석 아래 제어기의 라벨 J6 D-CC-12V', '제어기 J6 D-CC-12V', cls='')}
-{placeholder('측정 구성 사진', '탐침 연결 지점 · 채널 배정 · 샘플링 속도')}
+{figure('05_remote.jpg', '무선 조종기 T07D-DGN', '무선 조종기 T07D-DGN', cls='')}
+{figure('04_controller_label.jpg', '좌석 아래 제어기의 라벨 J6 D-CC-12V', '제어기(메인보드) J6 D-CC-12V', cls='')}
+<table class="comparison select setup"><tr><th colspan="2">측정 구성</th></tr>
+<tr><td>장비</td><td>DSLogic Pro · 멀티미터</td></tr>
+<tr><td>샘플링</td><td>1 MHz · 2채널 (CH0 · CH1)</td></tr>
+<tr><td>주행</td><td>앞 → 뒤 → 앞 → 뒤</td></tr>
+<tr><td>승강</td><td>상승 → 하강 → 상승 → 하강</td></tr>
+<tr><td>조향</td><td>왼쪽 → 오른쪽 → 왼쪽 → 오른쪽</td></tr></table>
 </div>
-<div class="takeaway">측정: 버튼을 하나씩 눌러 제어기 입력·모터 출력 신호를 기록</div>
+<div class="takeaway">4주차 피드백: 버튼별 신호를 로직 애널라이저로 측정 · 기존 제어기 리버스 엔지니어링</div>
 """,
-    """[작성 예정] 측정 대상은 무선 조종기와 좌석 아래 제어기이다. 조종기의 무선 신호를 제어기가 받아 주행, 조향, 승강 모터를 구동한다. 오른쪽은 로직 애널라이저를 연결한 모습으로, 어느 지점에 탐침을 대고 채널을 어떻게 나눴는지, 샘플링 속도는 얼마로 했는지 보인다. 버튼을 하나씩 누르며 각 채널의 신호가 어떻게 바뀌는지 기록하였다.""",
-    [(INTAKE, '조종기·제어기 표기와 사진'), (FEEDBACK, '§2 로직 애널라이저로 버튼별 신호 측정')],
-    '화면 생성: 실물 사진(2026-09-23 입고) · 측정 구성 사진(작성 예정)')
+    """4주차 피드백에 따라 조종기와 제어기를 역으로 분석하였다. 장비는 DSLogic Pro 로직 애널라이저와 멀티미터이다. 로직 애널라이저는 1메가헤르츠로 두 채널을 기록했고, 주행은 앞과 뒤, 승강은 상승과 하강, 조향은 왼쪽과 오른쪽을 번갈아 두 번씩 눌렀다. 제어기에는 무선 수신 회로까지 모두 한 보드에 들어 있다.""",
+    [(INTAKE, '조종기·제어기 표기와 사진'), (FEEDBACK, '§2 로직 애널라이저로 버튼별 신호 측정, 리버스 엔지니어링'),
+     ('forklift-presentations/week-05/assets/data_la_edges.json', 'DSLogic 캡처 3개 (1 MHz, 2채널) — prepare_la.py 로 추출')],
+    '화면 생성: 실물 사진(2026-09-23 입고) · 팀 측정 기록')
 
-# ----------------------------------------------------------------- 5 waveforms drive/steer
-add('주행·조향 파형', '04  버튼별 파형 · 주행 · 조향', 60, f"""
-<h2 class="headline">주행·조향 버튼별 로직 애널라이저 파형 <span class="draft">작성 중</span></h2>
-<div class="stack grow">
-{placeholder('전진 · 후진', '같은 시간축에 채널별 파형을 한 줄씩 · 버튼 누름 구간 표시')}
-{placeholder('좌회전 · 우회전', '같은 시간축 · 방향에 따라 바뀌는 채널 강조')}
-</div>
+add('명령별 파형', '04  명령별 로직 애널라이저 파형', 70, f"""
+<h2 class="headline">명령마다 한 채널만 켜짐: 방향은 채널, 동작 시간은 누른 시간</h2>
+{la_traces()}
 """,
-    """[작성 예정] 주행과 조향 버튼을 하나씩 눌렀을 때의 파형이다. 모든 파형은 같은 시간축에 채널별로 한 줄씩 놓아, 버튼에 따라 어느 채널이 어떻게 바뀌는지 비교한다. 전진과 후진에서 신호가 방향만 바뀌는지, 속도가 듀티로 표현되는지, 조향이 좌우 두 신호로 나뉘는지를 확인한다.""",
-    [(FEEDBACK, '§2 버튼별 신호 측정')],
-    '화면 생성: 로직 애널라이저 캡처 (작성 예정)')
+    """세 번의 측정 파형이다. 주행에서는 앞 버튼을 누르면 CH0가, 뒤 버튼을 누르면 CH1이 켜지고, 버튼을 누른 시간만큼 켜져 있다. 승강도 같은 구조로 상승은 CH1, 하강은 CH0이다. 즉 두 선 가운데 어느 쪽에 전압을 거느냐로 모터의 회전 방향이 바뀐다. 조향 파일은 내보낸 구간에 왼쪽 명령 한 번만 들어 있어 나머지 명령은 다시 확인한다.""",
+    [('forklift-presentations/week-05/assets/data_la_edges.json', '엣지 목록 — 주행 19 · 승강 28 · 조향 31개, 조향 CSV 는 7.72–16.69 s 구간만 포함'),
+     ('forklift-presentations/week-05/prepare_la.py', 'DSLogic CSV → 엣지 추출')],
+    '화면 생성: DSLogic 캡처 엣지로 그린 파형 (명령 옆 숫자 = 켜진 시간)')
 
-# ----------------------------------------------------------------- 6 waveforms lift/other
-add('승강·기타 파형', '05  버튼별 파형 · 승강 · 속도 · 제동', 50, f"""
-<h2 class="headline">승강·속도 조절·제동 버튼별 파형 <span class="draft">작성 중</span></h2>
-<div class="stack grow">
-{placeholder('상승 · 하강', '같은 시간축 · 승강 모터 채널')}
-{placeholder('속도 조절 · 제동', '속도 단계별 변화 · 제동 시 신호')}
+drive_cmds = la_commands('drive') + la_commands('lift')
+add('PWM 없음', '05  파형 해석', 60, f"""
+<h2 class="headline">측정한 두 선은 켜짐·꺼짐뿐, 회로 조사 결과 릴레이 구동</h2>
+<div class="split grow" style="grid-template-columns:1fr 1fr">
+<div class="stack" style="justify-content:center">{la_zoom()}<p class="chart-cap">누르는 순간 약 3 ms 두 채널 동시 High (주행 4회 모두) · 팀 판단: 전환 순간 접지 튐, 추가 확인</p></div>
+<div class="fb-cards licence" style="align-self:center;grid-template-columns:1fr;grid-template-rows:auto">
+<article><h3>파형 (측정한 두 선)</h3><p>명령 {len(drive_cmds)}회, 켜진 동안 1 MHz 샘플에서 변화 0회 → PWM 신호 아님</p></article>
+<article><h3>회로 조사 (팀)</h3><p>릴레이로 모터 켜짐·꺼짐 · 정·역 전환만<br>속도 조절 기능 자체가 없음</p></article>
+<article class="key"><h3>의미</h3><p>모터를 켜고 끄는 열린 루프 · 속도·위치 제어 불가</p></article>
+</div>
 </div>
 """,
-    """[작성 예정] 승강과 속도 조절, 제동 버튼의 파형이다. 상승과 하강이 승강 모터의 방향 신호로 나타나는지, 속도 조절 버튼이 주행 신호의 듀티나 전압을 바꾸는지, 제동이 어떤 신호로 전달되는지 확인한다.""",
-    [(FEEDBACK, '§2 버튼별 신호 측정')],
-    '화면 생성: 로직 애널라이저 캡처 (작성 예정)')
+    """파형과 회로 조사를 합친 해석이다. 먼저 파형에서 직접 확인한 것은, 측정한 두 선이 명령이 켜져 있는 동안 1메가헤르츠 샘플에서 한 번도 바뀌지 않았다는 것이다. PWM이라면 켜짐과 꺼짐이 빠르게 반복되어야 하므로 이 두 선은 PWM 신호가 아니라 켜짐과 꺼짐 레벨이다. 왼쪽은 누르는 순간을 몇 밀리초로 확대한 것으로, 주행 명령 네 번 모두 약 3밀리초 동안 두 채널이 함께 켜졌다가 한 채널만 남는다. 팀은 전환 순간 접지가 튄 것으로 보고 있으며, 모터 단자를 함께 재서 확인한다. 회로를 따라가 보니 모터는 릴레이로 켜고 끄며 방향만 바꾸고, 조종기에 속도 버튼이 있지만 속도 조절 기능 자체가 없었다. 결국 기존 제어기로는 속도나 위치를 제어할 수 없다.""",
+    [('forklift-presentations/week-05/assets/data_la_edges.json', '명령 구간 내 엣지 0개 (1 µs 튐 제외), 주행 누름 순간 두 채널 동시 High 2.95–3.43 ms 4회 — 원인은 팀 판단(접지 튐), 미확정'),
+     ('팀 리버스 엔지니어링 보고 (2026-09-30)', '릴레이 구동, 속도 조절 기능 없음 (회로 조사)'),
+     (FEEDBACK, '§2 버튼별 신호 확인')],
+    '화면 생성: DSLogic 캡처 엣지 확대')
 
-# ----------------------------------------------------------------- 7 reverse engineering summary
-SIGNAL_ROWS = ['전진', '후진', '좌회전', '우회전', '상승', '하강', '속도 조절', '제동']
-signal_table = ''.join(f'<tr><td>{b}</td><td class="pending">—</td><td class="pending">—</td><td class="pending">—</td></tr>' for b in SIGNAL_ROWS)
-add('신호 해석', '06  리버스 엔지니어링 결과', 60, f"""
-<h2 class="headline">버튼별 신호 형식과 컴퓨터 명령 입력 지점 <span class="draft">작성 중</span></h2>
-<div class="split grow" style="grid-template-columns:1.1fr 0.9fr">
-<table class="comparison measure"><tr><th>버튼</th><th>신호선</th><th>형식 (레벨 · PWM · 직렬)</th><th>해석</th></tr>{signal_table}</table>
-{placeholder('신호 경로 도식', '조종기 → 수신부 → 제어기 → 모터 · 컴퓨터가 끼어들 지점 표시')}
-</div>
-<div class="takeaway">다음 작업: 명령 입력 지점에 모터 드라이버 연결 · 기존 제어기 대체 여부 결정</div>
+RE_ROWS = [
+    ('전원 스위치', '+ 와 V 를 직접 연결하는 단순 스위치', '재활용'),
+    ('무선 수신', 'RF 회로가 메인보드에 통합', '분리 불가 → 사용 안 함'),
+    ('모터 구동', '릴레이 켜짐·꺼짐 · 정·역 전환만', '대체'),
+    ('속도 조절', 'PWM·전압 제어 없음 · 기능 자체 없음', '새로 구현'),
+    ('주행 모터 (양쪽 바퀴)', '—', '재활용'),
+    ('리프트 모터', '—', '재활용 · 높이 센서 필요'),
+]
+re_table = ''.join(f'<tr><td class="step">{a}</td><td>{b}</td><td><b>{c}</b></td></tr>' for a, b, c in RE_ROWS)
+add('리버싱 결론', '06  리버스 엔지니어링 결과', 60, f"""
+<h2 class="headline">결론: 기존 제어기를 쓰지 않고 DRV8244 SPI형으로 새로 개발</h2>
+<table class="comparison select practice grow"><tr><th>대상</th><th>관측</th><th>처리</th></tr>{re_table}</table>
+<div class="takeaway">남은 질문: 리프트 높이 조절 → 엔코더 또는 높이 센서 필요</div>
 """,
-    """[작성 예정] 파형을 버튼별로 정리한 표이다. 버튼마다 어느 신호선이 바뀌는지, 그 신호가 단순 켜짐·꺼짐인지 PWM인지 직렬 통신인지, 그리고 그것이 무엇을 뜻하는지 적는다. 오른쪽 도식은 조종기에서 모터까지의 신호 경로와, 컴퓨터가 명령을 넣을 수 있는 지점을 보인다. 이 결과에 따라 기존 제어기를 살려 신호만 넣을지, 모터 드라이버로 제어기를 대체할지 정한다.""",
-    [(FEEDBACK, '§2 리버스 엔지니어링')],
-    '화면 생성: 측정 결과 정리 (작성 예정)')
+    """리버스 엔지니어링의 결론이다. 전원 스위치는 플러스와 V 단자를 직접 잇는 단순한 스위치이고, 무선 수신 회로는 메인보드에 통합되어 있다. 모터는 릴레이로 켜고 끄며 방향만 바꾸고, 속도 조절은 없다. 여기에 컴퓨터 명령을 끼워 넣어도 켜고 끄는 것 이상은 할 수 없으므로, 기존 제어기를 쓰지 않고 DRV8244 SPI형 모터 드라이버로 제어기를 새로 만든다. 전원 스위치와 주행 모터, 리프트 모터는 그대로 쓴다. 남은 질문은 리프트 높이 조절이다. 포크를 원하는 높이에 세우려면 엔코더나 높이 센서가 필요하다.""",
+    [('팀 리버스 엔지니어링 보고 (2026-09-30)', '전원 스위치 +·V 직결, RF 메인보드 통합, 릴레이 구동·PWM 없음, 속도 조절 기능 없음, 결론 DRV8244 SPI 신규 개발, 재활용: 전원 스위치·주행 모터·리프트 모터')],
+    '출처: 팀 측정 보고')
 
 # ----------------------------------------------------------------- 8 motor driver
 DRV_DS = 'https://www.ti.com/lit/ds/symlink/drv8244-q1.pdf'
@@ -247,9 +346,9 @@ add('표준 운용 절차 대조', '09  표준 운용 절차 대조', 90, f"""
 # ----------------------------------------------------------------- 12 meeting questions
 add('리보틱스 미팅 질문', '10  리보틱스 중간 미팅 질문', 50, """
 <h2 class="headline">리보틱스 중간 미팅에서 확인할 사항</h2>
-<table class="comparison select meeting grow"><tr><th>구분</th><th>항목</th></tr><tr><td rowspan="4" class="grp">확인할 것</td><td class="item">최종 시연 장소 · 바닥 (실내·실외)</td></tr><tr><td class="item">평가 기준 (성공률 · 시간 · 정밀도)</td></tr><tr><td class="item">시험 팔레트 (EPAL 6 · 축소 T11) · 적재 하중</td></tr><tr><td class="item">다우테크놀로지 사례 (작업 공간 · 험지)</td></tr><tr><td rowspan="3" class="grp">요청할 것</td><td class="item">제어기 J6 D-CC-12V · 조종기 배선·신호 자료</td></tr><tr><td class="item">주행·조향·승강 모터 정격 (전압 · 전류)</td></tr><tr><td class="item">실제 지게차 운용 영상 · 데이터</td></tr><tr><td rowspan="4" class="grp">함께 정할 것</td><td class="item">기존 제어기 대체 (자체 드라이버) 허용 범위</td></tr><tr><td class="item">시험 공간 · 허용 속도</td></tr><tr><td class="item">안전 정지 요구 (비상정지 · 기울기 · 과적)</td></tr><tr><td class="item">동봉 팔레트 활용</td></tr></table>
+<table class="comparison select meeting grow"><tr><th>구분</th><th>항목</th></tr><tr><td rowspan="4" class="grp">확인할 것</td><td class="item">최종 시연 장소 · 바닥 (실내·실외)</td></tr><tr><td class="item">평가 기준 (성공률 · 시간 · 정밀도)</td></tr><tr><td class="item">시험 팔레트 (EPAL 6 · 축소 T11) · 적재 하중</td></tr><tr><td class="item">다우테크놀로지 사례 (작업 공간 · 험지)</td></tr><tr><td rowspan="3" class="grp">요청할 것</td><td class="item">주행·승강 모터 사양서 (있다면)</td></tr><tr><td class="item">주행·조향·승강 모터 정격 (전압 · 전류)</td></tr><tr><td class="item">실제 지게차 운용 영상 · 데이터</td></tr><tr><td rowspan="5" class="grp">함께 정할 것</td><td class="item">기존 제어기 교체 (DRV8244 신규 제어기) 승인</td></tr><tr><td class="item">리프트 높이 조절 요구 (범위 · 정밀도)</td></tr><tr><td class="item">시험 공간 · 허용 속도</td></tr><tr><td class="item">안전 정지 요구 (비상정지 · 기울기 · 과적)</td></tr><tr><td class="item">동봉 팔레트 활용</td></tr></table>
 """,
-    """마지막으로 리보틱스와의 중간 미팅에서 확인할 사항이다. 먼저 최종 시연 장소와 바닥 상태, 평가 기준이 성공률과 시간, 정밀도 가운데 무엇인지, 시험 팔레트와 적재 하중을 확인하고, 추천받은 다우테크놀로지 사례의 작업 공간과 험지 여부를 묻는다. 요청할 자료는 기존 제어기와 조종기의 배선·신호 자료, 모터의 정격 전압과 전류, 실제 지게차의 운용 영상과 데이터이다. 특히 모터 전류는 오늘 본 모터 드라이버의 전류 제한과 방열 설계에 필요하다. 함께 정할 것은 기존 제어기를 우리 드라이버로 대체해도 되는지, 시험 공간과 허용 속도, 비상정지와 기울기·과적 감지 같은 안전 정지 요구, 그리고 동봉 팔레트의 활용이다.""",
+    """마지막으로 리보틱스와의 중간 미팅에서 확인할 사항이다. 먼저 최종 시연 장소와 바닥 상태, 평가 기준이 성공률과 시간, 정밀도 가운데 무엇인지, 시험 팔레트와 적재 하중을 확인하고, 추천받은 다우테크놀로지 사례의 작업 공간과 험지 여부를 묻는다. 요청할 자료는 모터 사양서와 정격 전압·전류, 실제 지게차의 운용 영상과 데이터이다. 특히 모터 전류는 오늘 본 모터 드라이버의 전류 제한과 방열 설계에 필요하다. 함께 정할 것은 기존 제어기를 DRV8244 기반 새 제어기로 바꾸는 것에 대한 승인, 리프트 높이를 어느 범위와 정밀도로 조절해야 하는지, 시험 공간과 허용 속도, 비상정지와 기울기·과적 감지 같은 안전 정지 요구, 그리고 동봉 팔레트의 활용이다.""",
     [(FEEDBACK, '§1 중간 미팅 준비 — 궁금한 것 · 제공 요청 · 결정 요청, 팀 메모 기울기·과적 정지'),
      (DRV_DS, '모터 전류 → 전류 제한·방열 설계 (7쪽)')],
     '출처: 4주차 피드백 · 이번 주 하드웨어 작업')
