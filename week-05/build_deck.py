@@ -342,7 +342,7 @@ add('포크·팔레트·버튼 신호', '04  포크 · 팔레트 · 버튼 신�
 
 # ----------------------------------------------------------------- 6 demo
 add('LiDAR 장착 높이', '05  2D LiDAR 장착 높이', 45, f"""
-<h2 class="headline">LiDAR 장착 높이에 따른 관측 범위 차이 {badge('기술 실증 · LiDAR 장착 검토')}</h2>
+<h2 class="headline">LiDAR 장착 높이에 따른 관측 범위 차이</h2>
 <div class="split grow" style="grid-template-columns:1fr 1fr">
 {LIDAR_CONCEPT}
 {occlusion_chart()}
@@ -357,7 +357,7 @@ add('LiDAR 장착 높이', '05  2D LiDAR 장착 높이', 45, f"""
 
 # ----------------------------------------------------------------- 7 demo
 add('지도 작성', '06  2D LiDAR 지도 작성', 75, f"""
-<h2 class="headline">2D LiDAR 기록 재생으로 만든 30 × 31 m 공장 지도와 자기 위치 {badge('기술 실증 · LiDAR SLAM')}</h2>
+<h2 class="headline">2D LiDAR 기록 재생으로 만든 30 × 31 m 공장 지도와 자기 위치</h2>
 <div class="delta"><span class="was"><b>4주차</b>카메라: 팔레트 위치</span><i>→</i><span class="now"><b>5주차</b>+ 2D LiDAR: 지도·자기 위치 (기록 재생)</span><em>임무 주행은 여전히 시뮬레이터 위치</em></div>
 <div class="pair grow"><div class="pair-box">
 <span class="pair-tag left">Isaac 주행 <i>빨간 점: LiDAR 측정점</i></span>
@@ -373,7 +373,7 @@ add('지도 작성', '06  2D LiDAR 지도 작성', 75, f"""
 
 # ----------------------------------------------------------------- 8 demo
 add('위치 추정 오차', '07  위치 추정 오차', 55, f"""
-<h2 class="headline">LiDAR 지도와 맞춘 위치 오차 약 5 cm · 바퀴·조향만으로는 약 78 cm {badge('기술 실증 · LiDAR SLAM')}</h2>
+<h2 class="headline">LiDAR 지도와 맞춘 위치 오차 약 5 cm · 바퀴·조향만으로는 약 78 cm</h2>
 <div class="split grow" style="grid-template-columns:1fr 1.05fr">
 <div class="traj-box">{trajectory_anim()}
 <div class="legend"><span><i style="background:#c9ced4"></i>정답 경로</span><span><i style="background:#2f74c0"></i>SLAM 추정</span><span><i style="background:#c26a1a"></i>바퀴·조향 추정</span></div></div>
@@ -393,7 +393,7 @@ add('위치 추정 오차', '07  위치 추정 오차', 55, f"""
 
 # ----------------------------------------------------------------- 9 demo
 add('공장 임무', '08  공장 규모 자율 임무', 50, f"""
-<h2 class="headline">카메라로 팔레트를 찾아 운반·하역·복귀까지 이어진 공장 임무 {badge()}</h2>
+<h2 class="headline">카메라로 팔레트를 찾아 운반·하역·복귀까지 이어진 공장 임무</h2>
 <div class="split grow" style="grid-template-columns:1fr 1fr">
 {figure('22_mission_side_seed16.mp4', '16번 배치 임무를 지게차 옆 위에서 따라가며 본 영상. 팔레트에 접근해 포크를 넣고 들어 올린 뒤 운반해 초록 원 목적지에 내려놓는다', 'Isaac Sim 추적 시점 · 16번 배치 사례 1건 · 임무 주행은 시뮬레이터 위치 사용', cls='')}
 <div class="stack" style="justify-content:center;gap:16px">
