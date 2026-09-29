@@ -274,7 +274,7 @@ add('개발 단계와 이번 주 위치', '01  개발 단계와 이번 주 위�
 <article class="pipeline-step now"><h3>① 차체 조사</h3><img class="step-thumb" src="assets/t1_chassis.jpg" alt=""><p>치수 실측<br>전장·신호 조사</p><p class="state">진행 중</p></article>
 <article class="pipeline-step wait"><h3>② 하위 제어</h3><img class="step-thumb" src="assets/t2_remote.jpg" alt=""><p>컴퓨터 명령 입력<br>주행 상태 읽기</p><p class="state">예정</p></article>
 <article class="pipeline-step wait"><h3>③ 모델 검증</h3><img class="step-thumb" src="assets/t3_model.jpg" alt=""><p>실측 차체 모델<br>주행 특성 비교</p><p class="state">예정</p></article>
-<article class="pipeline-step demo"><h3>④ 위치 추정</h3><img class="step-thumb" src="assets/t4_map.jpg" alt=""><p>지도 기반<br>자기 위치 추정</p><p class="state">시뮬레이션 실증 <small class="new-tag">NEW</small></p></article>
+<article class="pipeline-step demo"><h3>④ 위치 추정</h3><img class="step-thumb" src="assets/t4_map.jpg" alt=""><p>지도 기반<br>자기 위치 추정</p><p class="state">이번 주 진행<br>(시뮬레이션 실증)</p></article>
 <article class="pipeline-step wait"><h3>⑤ 삽입·운반</h3><img class="step-thumb" src="assets/t5_carry.jpg" alt=""><p>포크 삽입<br>적재·운반·하역</p><p class="state">예정</p></article>
 </div>
 <div class="takeaway">이번 주: 차체 실측 시작 · ④ 위치 추정용 2D LiDAR SLAM을 시뮬레이션으로 미리 확인</div>
@@ -357,7 +357,7 @@ add('LiDAR 장착 높이', '05  2D LiDAR 장착 높이', 45, f"""
 
 # ----------------------------------------------------------------- 7 demo
 add('지도 작성', '06  2D LiDAR 지도 작성', 75, f"""
-<h2 class="headline">2D LiDAR 기록 재생으로 만든 30 × 31 m 공장 지도와 자기 위치 {badge('신규 · 기술 실증')}</h2>
+<h2 class="headline">2D LiDAR 기록 재생으로 만든 30 × 31 m 공장 지도와 자기 위치 {badge('이번 주 진행 · 기술 실증')}</h2>
 <div class="delta"><span class="was"><b>4주차</b>카메라: 팔레트 위치</span><i>→</i><span class="now"><b>5주차</b>+ 2D LiDAR: 지도·자기 위치 (기록 재생)</span><em>임무 주행은 여전히 시뮬레이터 위치</em></div>
 <div class="pair grow"><div class="pair-box">
 <span class="pair-tag left">Isaac 주행 <i>빨간 점: LiDAR 측정점</i></span>
@@ -373,7 +373,7 @@ add('지도 작성', '06  2D LiDAR 지도 작성', 75, f"""
 
 # ----------------------------------------------------------------- 8 demo
 add('위치 추정 오차', '07  위치 추정 오차', 55, f"""
-<h2 class="headline">LiDAR 지도와 맞춘 위치 오차 약 5 cm · 바퀴·조향만으로는 약 78 cm {badge('신규 · 기술 실증')}</h2>
+<h2 class="headline">LiDAR 지도와 맞춘 위치 오차 약 5 cm · 바퀴·조향만으로는 약 78 cm {badge('이번 주 진행 · 기술 실증')}</h2>
 <div class="split grow" style="grid-template-columns:1fr 1.05fr">
 <div class="traj-box">{trajectory_anim()}
 <div class="legend"><span><i style="background:#c9ced4"></i>정답 경로</span><span><i style="background:#2f74c0"></i>SLAM 추정</span><span><i style="background:#c26a1a"></i>바퀴·조향 추정</span></div></div>

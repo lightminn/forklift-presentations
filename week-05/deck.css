@@ -436,7 +436,6 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .vs-arrow i { font-style:normal; font-size:54px; line-height:1; }
 .comparison.auto td.new { color:#b36b00; font-weight:700; }
 .comparison.auto td, .comparison.auto th { padding:11px 10px; }
-.new-tag { display:inline-block; margin-left:8px; padding:1px 8px; font-size:15px; font-weight:700; color:#fff; background:#E0A100; border-radius:3px; vertical-align:4px; }
 .versus h3 small { font-size:18px; font-weight:600; color:#6b7785; margin-left:8px; }
 .vs-note { font-size:18px; color:#6b4a00; background:#fdeec8; padding:6px 10px; border-radius:4px; }
 .comparison.auto td .new { color:#b36b00; font-weight:700; }
