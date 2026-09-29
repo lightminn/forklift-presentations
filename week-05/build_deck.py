@@ -70,54 +70,6 @@ def placeholder(what, detail, cls='grow'):
 # source tables. Colours: one series = SLAM blue; the SLAM/odometry pair was
 # checked with the dataviz validator (light surface, all checks pass).
 
-# Share of 400 rays cast at the provisional URDF collision boxes that hit the
-# truck itself, laser at base_link x = -0.12 m (validation record section 1).
-SELF_OCCLUSION = [(0.55, 60.0), (0.65, 18.8), (0.75, 9.5), (1.05, 0.0)]
-
-
-def occlusion_chart():
-    left, top, row, bar_h, scale = 118, 56, 66, 34, 6.5   # px per percent
-    rows = []
-    for i, (height, pct) in enumerate(SELF_OCCLUSION):
-        y = top + i * row
-        w = pct * scale
-        label = f'{pct:g} %' + ('  ← 이번 실증 장착' if height == 1.05 else '')
-        rows.append(
-            f'<text x="{left - 14}" y="{y + bar_h / 2 + 8}" text-anchor="end" font-size="22" '
-            f'fill="#1b1f24" font-weight="700">{height:.2f} m</text>'
-            + (f'<rect x="{left}" y="{y}" width="{w}" height="{bar_h}" rx="4" fill="{SLAM_BLUE}"/>'
-               if w else '')
-            + f'<text x="{left + w + 10}" y="{y + bar_h / 2 + 8}" font-size="21" fill="#1b1f24">{label}</text>')
-    axis = (f'<line x1="{left}" y1="{top - 8}" x2="{left}" y2="{top + 4 * row - 24}" '
-            f'stroke="#8c959e" stroke-width="2"/>')
-    return (f'<svg class="diagram grow" viewBox="0 0 600 330" role="img" aria-label="LiDAR 장착 높이별로 '
-            f'차체에 가려지는 빔 비율: 0.55 m 60 %, 0.65 m 18.8 %, 0.75 m 9.5 %, 1.05 m 0 %">'
-            f'<g font-family="var(--uos-font)">'
-            f'<text x="0" y="24" font-size="22" font-weight="700" fill="#44505c">자기 차체에 가려지는 빔 비율 (잠정 차체 모델)</text>'
-            f'{axis}{"".join(rows)}</g></svg>')
-
-
-# Side view: a high scan plane passes over a low box, a low plane hits the
-# truck's own body. Concept only; nothing is to scale.
-LIDAR_CONCEPT = """
-<svg class="diagram grow" viewBox="0 0 600 330" role="img" aria-label="개념도: 높은 스캔 평면은 낮은 물체 위를 지나가고, 낮은 스캔 평면은 자기 차체에 가려진다">
-<g font-family="var(--uos-font)">
-<line x1="10" y1="300" x2="590" y2="300" stroke="#8c959e" stroke-width="3"/>
-<rect x="40" y="200" width="200" height="70" rx="14" fill="#d8dce1"/>
-<g stroke="#5d6670" stroke-width="7" stroke-linecap="round"><line x1="70" y1="200" x2="80" y2="110"/><line x1="220" y1="200" x2="228" y2="110"/><line x1="64" y1="108" x2="236" y2="108"/></g>
-<rect x="240" y="96" width="12" height="190" fill="#8a939c"/><rect x="252" y="276" width="100" height="8" fill="#3d444b"/>
-<circle cx="80" cy="272" r="26" fill="#50585f"/><circle cx="200" cy="272" r="26" fill="#50585f"/>
-<rect x="130" y="84" width="24" height="16" rx="3" fill="#0b3c8c"/>
-<line x1="154" y1="92" x2="585" y2="92" stroke="#2f74c0" stroke-width="4" stroke-dasharray="10 7"/>
-<text x="585" y="76" text-anchor="end" font-size="20" fill="#0b3c8c" font-weight="700">높은 장착: 차체 가림 없음</text>
-<rect x="430" y="232" width="90" height="68" fill="#e3d6c3" stroke="#b98b54" stroke-width="2"/>
-<text x="475" y="222" text-anchor="middle" font-size="19" fill="#8a5a1f" font-weight="700">낮은 물체 미관측</text>
-<rect x="18" y="178" width="22" height="14" rx="3" fill="#c26a1a"/>
-<line x1="40" y1="185" x2="238" y2="185" stroke="#c26a1a" stroke-width="4" stroke-dasharray="10 7"/>
-<text x="262" y="176" font-size="19" fill="#8a4a10" font-weight="700">← 낮은 장착: 마스트·차체 가림</text>
-</g></svg>"""
-
-
 # slam_toolbox replays of the 0.5 m/s survey loop, start-pose-aligned ATE in
 # metres, layout seeds 0-4 (validation record section 6): (seed, clean, noisy).
 REPLAY_ATE = {
@@ -319,7 +271,7 @@ add('버튼별 신호', '03  조종기 버튼별 신호', 100, f"""
     '화면 생성: 실물 사진 · 로직 애널라이저 캡처 (작성 예정)')
 
 # ----------------------------------------------------------------- 5 demo (new clip)
-add('LiDAR가 보는 것', '04  2D LiDAR 스캔', 60, f"""
+add('LiDAR가 보는 것', '04  2D LiDAR 스캔', 75, f"""
 <h2 class="headline">2D LiDAR는 1.05 m 높이 한 평면만 관측</h2>
 <div class="split grow" style="grid-template-columns:1.15fr 0.85fr">
 {figure('25_scan_view.mp4', '지게차를 위에서 따라가며 본 LiDAR 스캔. 빨간 선과 점은 한 바퀴 스캔이 닿은 곳이고, 진한 회색 물체만 닿고 옅은 회색 물체는 스캔에 나타나지 않는다', 'Isaac 주행 기록의 스캔 · 시뮬레이터상 실제 위치 기준 · 약 7배속', cls='')}
@@ -331,28 +283,13 @@ add('LiDAR가 보는 것', '04  2D LiDAR 스캔', 60, f"""
 </div>
 </div>
 """,
-    """2D LiDAR가 무엇을 보는지부터 보인다. 영상은 Isaac 주행 기록의 스캔을 지게차를 따라가며 그린 것이다. LiDAR는 한 바퀴에 1,600개의 빔을 쏘아 빔마다 처음 닿은 곳까지 거리를 재며, 그 지점이 빨간 점이다. 한 바퀴는 0.1초이다. 빔은 1.05미터 높이의 수평면 하나에만 있으므로, 이 높이에 걸친 진한 회색 물체만 점으로 나타나고, 걸치지 않는 옅은 회색 물체는 바로 옆을 지나가도 보이지 않는다. 또 가까운 물체 뒤에 가려진 면은 찍히지 않는다. 센서 값은 우리가 쓸 A2M12의 카탈로그 값을 따른 합성 센서이다.""",
+    """2D LiDAR가 무엇을 보는지부터 보인다. 영상은 Isaac 주행 기록의 스캔을 지게차를 따라가며 그린 것이다. LiDAR는 한 바퀴에 1,600개의 빔을 쏘아 빔마다 처음 닿은 곳까지 거리를 재며, 그 지점이 빨간 점이다. 한 바퀴는 0.1초이다. 빔은 1.05미터 높이의 수평면 하나에만 있으므로, 이 높이에 걸친 진한 회색 물체만 점으로 나타나고, 걸치지 않는 옅은 회색 물체는 바로 옆을 지나가도 보이지 않는다. 또 가까운 물체 뒤에 가려진 면은 찍히지 않는다. 그래서 실물에서는 지도에 담아야 할 물체의 높이를 보고 장착 높이를 정한다. 센서 값은 우리가 쓸 A2M12의 카탈로그 값을 따른 합성 센서이다.""",
     [(FACTORY, '§3 Isaac SLAM 기록 seed 0 — 스캔 2,454개'),
      (LIDAR_CFG, '합성 LiDAR 1,600빔 · 10 Hz · 0.2–12 m · 장착 높이 1.05 m (A2M12 카탈로그 값, 실측 아님)')],
     '화면 생성: slam_log.npz 의 스캔과 정답 레이저 자세를 prepare_videos.py 로 그림 (물체 윤곽은 meta.json 배치)')
 
-# ----------------------------------------------------------------- 6 demo
-add('LiDAR 장착 높이', '05  2D LiDAR 장착 높이', 45, f"""
-<h2 class="headline">장착 높이별 차체 가림: 낮으면 차체가 가리고, 높으면 낮은 물체를 놓침</h2>
-<div class="split grow" style="grid-template-columns:1fr 1fr">
-{LIDAR_CONCEPT}
-{occlusion_chart()}
-</div>
-<div class="takeaway">실물 장착 높이: 차체 실측 후 결정</div>
-""",
-    """앞 영상처럼 LiDAR는 한 높이만 보므로, 장착 높이가 두 가지를 맞바꾼다. 낮게 달면 마스트와 차체가 빔을 가리고, 높게 달면 그보다 낮은 물체를 보지 못한다. 오른쪽은 잠정 차체 모델에 빔 400개를 쏘아, 높이별로 자기 차체에 가려지는 비율을 잰 것이다. 0.55미터에서는 60퍼센트가 가려지고, 1.05미터에서는 가리지 않는다. 이번 실증은 차체 최상단 1.01미터보다 높은 1.05미터에 달았고, 그 대가로 이보다 낮은 물체는 지도에 나타나지 않아, 공장 장면의 적재 높이도 이 평면에 닿도록 맞추었다. 이 수치는 사진으로 만든 잠정 모델의 것이므로, 실물 장착 높이는 실측 차체로 다시 계산해 정한다.""",
-    [(FACTORY, '§1 — 빔 400개, base_link x = −0.12 m: 0.55 m 60 %, 0.65 m 18.8 %, 0.75 m 9.5 %, 1.05 m 0 %'),
-     (LIDAR_CFG, '실증 장착 (−0.12, 0, 1.05) m — 합성 장착이며 하드웨어 결정 아님'),
-     (HW, 'LiDAR 장착 위치 미확정')],
-    '화면 생성: 개념도 · 잠정 모델 충돌 형상에 대한 광선 계산')
-
 # ----------------------------------------------------------------- 7 demo
-add('지도 작성', '06  2D LiDAR 지도 작성', 70, f"""
+add('지도 작성', '05  2D LiDAR 지도 작성', 70, f"""
 <h2 class="headline">LiDAR로 만든 30 × 31 m 공장 지도와 자기 위치</h2>
 <div class="pair grow"><div class="pair-box">
 <span class="pair-tag left">Isaac 주행 <i>빨간 점: LiDAR 측정점</i></span>
@@ -367,7 +304,7 @@ add('지도 작성', '06  2D LiDAR 지도 작성', 70, f"""
     '화면 생성: Isaac Sim 기록 + ROS 2 slam_toolbox 재생 20260928_week05_replay, 3분할 영상에서 조감·지도 두 칸만 잘라 8배속')
 
 # ----------------------------------------------------------------- map compare (new clip)
-add('지도 비교', '07  위치 추정에 따른 지도 차이', 60, f"""
+add('지도 비교', '06  위치 추정에 따른 지도 차이', 75, f"""
 <h2 class="headline">위치 추정이 틀리면 같은 스캔도 지도가 번짐</h2>
 <div class="pair grow"><div class="pair-box" style="aspect-ratio:1254/732">
 <video class="pair-video" src="assets/26_map_compare.mp4" poster="assets/26_map_compare_poster.jpg" autoplay loop muted playsinline aria-label="같은 스캔을 왼쪽은 바퀴·조향으로 추정한 위치에, 오른쪽은 SLAM이 추정한 위치에 쌓아 지도를 만드는 영상. 왼쪽은 물체 윤곽이 여러 겹으로 번지고 오른쪽은 선명하다"></video>
@@ -380,7 +317,7 @@ add('지도 비교', '07  위치 추정에 따른 지도 차이', 60, f"""
     '화면 생성: 같은 스캔을 두 궤적에 놓아 prepare_videos.py 로 누적 (slam_toolbox 가 만든 지도가 아님)')
 
 # ----------------------------------------------------------------- 8 demo
-add('위치 추정 오차', '08  위치 추정 오차', 55, f"""
+add('위치 추정 오차', '07  위치 추정 오차', 70, f"""
 <h2 class="headline">LiDAR 지도와 맞춘 위치 오차 약 5 cm · 바퀴·조향만으로는 약 78 cm</h2>
 <div class="split grow" style="grid-template-columns:1fr 1.05fr">
 <div class="traj-box">{trajectory_anim()}
@@ -400,7 +337,7 @@ add('위치 추정 오차', '08  위치 추정 오차', 55, f"""
     '화면 생성: 재생 평가 수치 도식 (2026-09-28 재실행: 12개 값 중 11개가 소수 셋째 자리까지 일치, 1개는 0.001 m 차)')
 
 # ----------------------------------------------------------------- 11
-add('중간 미팅 확인 사항', '09  중간 미팅 확인 사항', 30, """
+add('중간 미팅 확인 사항', '08  중간 미팅 확인 사항', 30, """
 <h2 class="headline">중간 미팅 확인 사항</h2>
 <div class="spread grow"><div class="qcols">
 <article><h3>확인 사항</h3><ul><li>시연 장소·바닥 상태 (실내·실외)</li><li>평가 기준 (성공률 · 시간 · 정밀도)</li><li>시험 팔레트 치수·적재 하중</li><li>다우테크놀로지 사례 공유</li></ul></article>
@@ -419,12 +356,12 @@ TOTAL = 610
 
 
 def build():
-    assert len(slides) == 10, len(slides)
+    assert len(slides) == 9, len(slides)
     assert sum(s['seconds'] for s in slides) == TOTAL, sum(s['seconds'] for s in slides)
     sections = []
     script = [f'# {TITLE} · 발표 원고', '',
-              f'10장 · 시간 배분 합계 {TOTAL//60}분 {TOTAL%60}초. 쪽별 배정 시간은 발표 연습 후 조정한다.', '',
-              '기준일: 2026-09-29. 2–4쪽은 차체 실측 결과이고, 시뮬레이션 쪽(5–9)은 '
+              f'9장 · 시간 배분 합계 {TOTAL//60}분 {TOTAL%60}초. 쪽별 배정 시간은 발표 연습 후 조정한다.', '',
+              '기준일: 2026-09-29. 2–4쪽은 차체 실측 결과이고, 시뮬레이션 쪽(5–8)은 '
               'Isaac Sim 합성 장면의 기술 실증이다. 시뮬레이션 수치는 실제 장비 성능이 아니며, '
               '로봇 제어는 시뮬레이터 정답 위치를 썼다.', '']
     elapsed = 0

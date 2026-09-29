@@ -75,9 +75,9 @@
 </div></x-import>
 </section>
 
-<section data-label="LiDAR가 보는 것" data-screen-label="05" data-duration="60" data-speaker-notes="권장 60초
+<section data-label="LiDAR가 보는 것" data-screen-label="05" data-duration="75" data-speaker-notes="권장 75초
 
-2D LiDAR가 무엇을 보는지부터 보인다. 영상은 Isaac 주행 기록의 스캔을 지게차를 따라가며 그린 것이다. LiDAR는 한 바퀴에 1,600개의 빔을 쏘아 빔마다 처음 닿은 곳까지 거리를 재며, 그 지점이 빨간 점이다. 한 바퀴는 0.1초이다. 빔은 1.05미터 높이의 수평면 하나에만 있으므로, 이 높이에 걸친 진한 회색 물체만 점으로 나타나고, 걸치지 않는 옅은 회색 물체는 바로 옆을 지나가도 보이지 않는다. 또 가까운 물체 뒤에 가려진 면은 찍히지 않는다. 센서 값은 우리가 쓸 A2M12의 카탈로그 값을 따른 합성 센서이다.
+2D LiDAR가 무엇을 보는지부터 보인다. 영상은 Isaac 주행 기록의 스캔을 지게차를 따라가며 그린 것이다. LiDAR는 한 바퀴에 1,600개의 빔을 쏘아 빔마다 처음 닿은 곳까지 거리를 재며, 그 지점이 빨간 점이다. 한 바퀴는 0.1초이다. 빔은 1.05미터 높이의 수평면 하나에만 있으므로, 이 높이에 걸친 진한 회색 물체만 점으로 나타나고, 걸치지 않는 옅은 회색 물체는 바로 옆을 지나가도 보이지 않는다. 또 가까운 물체 뒤에 가려진 면은 찍히지 않는다. 그래서 실물에서는 지도에 담아야 할 물체의 높이를 보고 장착 높이를 정한다. 센서 값은 우리가 쓸 A2M12의 카탈로그 값을 따른 합성 센서이다.
 
 [Sources]
 화면 생성: slam_log.npz 의 스캔과 정답 레이저 자세를 prepare_videos.py 로 그림 (물체 윤곽은 meta.json 배치)
@@ -98,43 +98,7 @@
 </div></x-import>
 </section>
 
-<section data-label="LiDAR 장착 높이" data-screen-label="06" data-duration="45" data-speaker-notes="권장 45초
-
-앞 영상처럼 LiDAR는 한 높이만 보므로, 장착 높이가 두 가지를 맞바꾼다. 낮게 달면 마스트와 차체가 빔을 가리고, 높게 달면 그보다 낮은 물체를 보지 못한다. 오른쪽은 잠정 차체 모델에 빔 400개를 쏘아, 높이별로 자기 차체에 가려지는 비율을 잰 것이다. 0.55미터에서는 60퍼센트가 가려지고, 1.05미터에서는 가리지 않는다. 이번 실증은 차체 최상단 1.01미터보다 높은 1.05미터에 달았고, 그 대가로 이보다 낮은 물체는 지도에 나타나지 않아, 공장 장면의 적재 높이도 이 평면에 닿도록 맞추었다. 이 수치는 사진으로 만든 잠정 모델의 것이므로, 실물 장착 높이는 실측 차체로 다시 계산해 정한다.
-
-[Sources]
-화면 생성: 개념도 · 잠정 모델 충돌 형상에 대한 광선 계산
-§1 — 빔 400개, base_link x = −0.12 m: 0.55 m 60 %, 0.65 m 18.8 %, 0.75 m 9.5 %, 1.05 m 0 %: docs/validation/2026-09-26-factory-hall-and-isaac-slam.md
-실증 장착 (−0.12, 0, 1.05) m — 합성 장착이며 하드웨어 결정 아님: config/isaac_slam_lidar.yaml
-LiDAR 장착 위치 미확정: docs/hardware.md
-[/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="05  2D LiDAR 장착 높이"><div class="slide-body">
-<h2 class="headline">장착 높이별 차체 가림: 낮으면 차체가 가리고, 높으면 낮은 물체를 놓침</h2>
-<div class="split grow" style="grid-template-columns:1fr 1fr">
-
-<svg class="diagram grow" viewBox="0 0 600 330" role="img" aria-label="개념도: 높은 스캔 평면은 낮은 물체 위를 지나가고, 낮은 스캔 평면은 자기 차체에 가려진다">
-<g font-family="var(--uos-font)">
-<line x1="10" y1="300" x2="590" y2="300" stroke="#8c959e" stroke-width="3"/>
-<rect x="40" y="200" width="200" height="70" rx="14" fill="#d8dce1"/>
-<g stroke="#5d6670" stroke-width="7" stroke-linecap="round"><line x1="70" y1="200" x2="80" y2="110"/><line x1="220" y1="200" x2="228" y2="110"/><line x1="64" y1="108" x2="236" y2="108"/></g>
-<rect x="240" y="96" width="12" height="190" fill="#8a939c"/><rect x="252" y="276" width="100" height="8" fill="#3d444b"/>
-<circle cx="80" cy="272" r="26" fill="#50585f"/><circle cx="200" cy="272" r="26" fill="#50585f"/>
-<rect x="130" y="84" width="24" height="16" rx="3" fill="#0b3c8c"/>
-<line x1="154" y1="92" x2="585" y2="92" stroke="#2f74c0" stroke-width="4" stroke-dasharray="10 7"/>
-<text x="585" y="76" text-anchor="end" font-size="20" fill="#0b3c8c" font-weight="700">높은 장착: 차체 가림 없음</text>
-<rect x="430" y="232" width="90" height="68" fill="#e3d6c3" stroke="#b98b54" stroke-width="2"/>
-<text x="475" y="222" text-anchor="middle" font-size="19" fill="#8a5a1f" font-weight="700">낮은 물체 미관측</text>
-<rect x="18" y="178" width="22" height="14" rx="3" fill="#c26a1a"/>
-<line x1="40" y1="185" x2="238" y2="185" stroke="#c26a1a" stroke-width="4" stroke-dasharray="10 7"/>
-<text x="262" y="176" font-size="19" fill="#8a4a10" font-weight="700">← 낮은 장착: 마스트·차체 가림</text>
-</g></svg>
-<svg class="diagram grow" viewBox="0 0 600 330" role="img" aria-label="LiDAR 장착 높이별로 차체에 가려지는 빔 비율: 0.55 m 60 %, 0.65 m 18.8 %, 0.75 m 9.5 %, 1.05 m 0 %"><g font-family="var(--uos-font)"><text x="0" y="24" font-size="22" font-weight="700" fill="#44505c">자기 차체에 가려지는 빔 비율 (잠정 차체 모델)</text><line x1="118" y1="48" x2="118" y2="296" stroke="#8c959e" stroke-width="2"/><text x="104" y="81.0" text-anchor="end" font-size="22" fill="#1b1f24" font-weight="700">0.55 m</text><rect x="118" y="56" width="390.0" height="34" rx="4" fill="#2f74c0"/><text x="518.0" y="81.0" font-size="21" fill="#1b1f24">60 %</text><text x="104" y="147.0" text-anchor="end" font-size="22" fill="#1b1f24" font-weight="700">0.65 m</text><rect x="118" y="122" width="122.2" height="34" rx="4" fill="#2f74c0"/><text x="250.2" y="147.0" font-size="21" fill="#1b1f24">18.8 %</text><text x="104" y="213.0" text-anchor="end" font-size="22" fill="#1b1f24" font-weight="700">0.75 m</text><rect x="118" y="188" width="61.75" height="34" rx="4" fill="#2f74c0"/><text x="189.75" y="213.0" font-size="21" fill="#1b1f24">9.5 %</text><text x="104" y="279.0" text-anchor="end" font-size="22" fill="#1b1f24" font-weight="700">1.05 m</text><text x="128.0" y="279.0" font-size="21" fill="#1b1f24">0 %  ← 이번 실증 장착</text></g></svg>
-</div>
-<div class="takeaway">실물 장착 높이: 차체 실측 후 결정</div>
-</div></x-import>
-</section>
-
-<section data-label="지도 작성" data-screen-label="07" data-duration="70" data-speaker-notes="권장 70초
+<section data-label="지도 작성" data-screen-label="06" data-duration="70" data-speaker-notes="권장 70초
 
 Isaac의 30 곱하기 31미터 공장에서 지게차가 116미터 경로를 달리며 LiDAR 스캔과 바퀴 회전, 조향각을 기록하고, 이 기록을 ROS 2에서 재생해 공개 SLAM 패키지인 slam_toolbox가 지도와 위치를 추정하게 했다. 왼쪽은 위에서 본 주행이고, 오른쪽은 그 시각까지 만들어진 지도와 추정 경로이다. 지게차가 돌수록 지도가 넓어지고, 파란 SLAM 추정 위치가 회색 실제 경로 위를 따라간다. 다만 기록을 다시 재생해 얻은 결과이고, 주행 자체는 시뮬레이터가 알려 준 정답 위치로 하였다. 즉 SLAM 결과로 차를 움직인 것은 아니다.
 
@@ -144,7 +108,7 @@ Isaac의 30 곱하기 31미터 공장에서 지게차가 116미터 경로를 달
 §1 30 × 31 m 공장 홀: docs/validation/2026-09-26-factory-hall-and-isaac-slam.md
 합성 LiDAR 1,600빔 · 10 Hz · 0.2–12 m (A2M12 카탈로그 값, 실측 아님): config/isaac_slam_lidar.yaml
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="06  2D LiDAR 지도 작성"><div class="slide-body">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="05  2D LiDAR 지도 작성"><div class="slide-body">
 <h2 class="headline">LiDAR로 만든 30 × 31 m 공장 지도와 자기 위치</h2>
 <div class="pair grow"><div class="pair-box">
 <span class="pair-tag left">Isaac 주행 <i>빨간 점: LiDAR 측정점</i></span>
@@ -155,7 +119,7 @@ Isaac의 30 곱하기 31미터 공장에서 지게차가 116미터 경로를 달
 </div></x-import>
 </section>
 
-<section data-label="지도 비교" data-screen-label="08" data-duration="60" data-speaker-notes="권장 60초
+<section data-label="지도 비교" data-screen-label="07" data-duration="75" data-speaker-notes="권장 75초
 
 SLAM이 왜 필요한지 보이는 장이다. 같은 LiDAR 스캔을 두 가지 위치 추정에 따라 한 장의 지도로 쌓았다. 왼쪽은 바퀴 회전과 조향각만으로 추정한 위치에 쌓은 것으로, 달릴수록 방향 오차가 쌓여 같은 물체가 여러 겹으로 번지고 벽이 비스듬해진다. 오른쪽은 SLAM이 스캔을 이전 지도와 맞춰 가며 추정한 위치에 쌓은 것으로, 물체 윤곽이 한 겹으로 선명하다. 지도가 선명하다는 것은 그 위치 추정이 맞다는 뜻이기도 하다.
 
@@ -164,7 +128,7 @@ SLAM이 왜 필요한지 보이는 장이다. 같은 LiDAR 스캔을 두 가지 
 §4 재생 — 같은 기록의 slam_toolbox 궤적과 바퀴 오도메트리: docs/validation/2026-09-26-factory-hall-and-isaac-slam.md
 slam_trajectory.csv · odometry.csv: artifacts/20260928_week05_replay/survey_seed_0_clean
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="07  위치 추정에 따른 지도 차이"><div class="slide-body">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="06  위치 추정에 따른 지도 차이"><div class="slide-body">
 <h2 class="headline">위치 추정이 틀리면 같은 스캔도 지도가 번짐</h2>
 <div class="pair grow"><div class="pair-box" style="aspect-ratio:1254/732">
 <video class="pair-video" src="assets/26_map_compare.mp4" poster="assets/26_map_compare_poster.jpg" autoplay loop muted playsinline aria-label="같은 스캔을 왼쪽은 바퀴·조향으로 추정한 위치에, 오른쪽은 SLAM이 추정한 위치에 쌓아 지도를 만드는 영상. 왼쪽은 물체 윤곽이 여러 겹으로 번지고 오른쪽은 선명하다"></video>
@@ -173,7 +137,7 @@ slam_trajectory.csv · odometry.csv: artifacts/20260928_week05_replay/survey_see
 </div></x-import>
 </section>
 
-<section data-label="위치 추정 오차" data-screen-label="09" data-duration="55" data-speaker-notes="권장 55초
+<section data-label="위치 추정 오차" data-screen-label="08" data-duration="70" data-speaker-notes="권장 70초
 
 왼쪽은 위에서 본 지도 작성 경로이다. 회색 실제 경로 위로 파란 SLAM 추정은 거의 그대로 겹치고, 주황 바퀴·조향 추정은 점점 벗어나 끝에서 약 80센티미터 떨어진다. 오른쪽은 물건 배치가 다른 다섯 공장 장면의 주행 기록을, 잡음 없이와 합성 잡음을 넣어 모두 열 번 재생한 결과이다. 평균 위치 오차는 SLAM이 약 5센티미터, 바퀴와 조향만으로는 약 78센티미터였다. 바퀴·조향 추정은 달린 거리는 정확했지만 방향이 조금씩 틀어지며 오차가 쌓였다. 이것은 시뮬레이터의 관절 값에서 나온 결과이므로, 실물에서는 바퀴와 조향 신호를 직접 측정해 확인한다.
 
@@ -183,7 +147,7 @@ slam_trajectory.csv · odometry.csv: artifacts/20260928_week05_replay/survey_see
 §4 — 누적 거리 115.92 대 115.98 m, 회전 9.54 대 9.43 rad, 원인 미확정 (seed 0): docs/validation/2026-09-26-factory-hall-and-isaac-slam.md
 합성 잡음: 거리 σ 0.02 m · 뒷바퀴 σ 0.2 rad/s · 조향 σ 0.005 rad (가정값): docs/validation/2026-09-26-factory-hall-and-isaac-slam.md
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="08  위치 추정 오차"><div class="slide-body">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="07  위치 추정 오차"><div class="slide-body">
 <h2 class="headline">LiDAR 지도와 맞춘 위치 오차 약 5 cm · 바퀴·조향만으로는 약 78 cm</h2>
 <div class="split grow" style="grid-template-columns:1fr 1.05fr">
 <div class="traj-box"><svg class="diagram grow traj" viewBox="0 0 560 560" role="img" aria-label="위에서 본 116 m 지도 작성 경로. 실제 경로 위로 SLAM 추정이 겹치고, 바퀴·조향 추정은 점점 벗어난다">
@@ -203,7 +167,7 @@ slam_trajectory.csv · odometry.csv: artifacts/20260928_week05_replay/survey_see
 </div></x-import>
 </section>
 
-<section data-label="중간 미팅 확인 사항" data-screen-label="10" data-duration="30" data-speaker-notes="권장 30초
+<section data-label="중간 미팅 확인 사항" data-screen-label="09" data-duration="30" data-speaker-notes="권장 30초
 
 마지막으로 추석 이후 중간 미팅에서 확인할 사항이다. 시연 환경과 평가 기준, 시험 팔레트를 확인하고, 제어기·조종기 자료와 운용 영상을 요청하며, 시험 공간과 팔레트 조건은 기업과 함께 정한다. 다음 작업은 측정한 버튼 신호를 분석해 하위 제어를 만드는 것이다.
 
@@ -212,7 +176,7 @@ slam_trajectory.csv · odometry.csv: artifacts/20260928_week05_replay/survey_see
 §1 중간 미팅 준비 — 궁금한 것 · 제공 요청 · 결정 요청: docs/references/week4_feedback.md
 로드맵 H1–H4 · M4: docs/plans/2026-09-11-development-roadmap.md
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="09  중간 미팅 확인 사항"><div class="slide-body">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="08  중간 미팅 확인 사항"><div class="slide-body">
 <h2 class="headline">중간 미팅 확인 사항</h2>
 <div class="spread grow"><div class="qcols">
 <article><h3>확인 사항</h3><ul><li>시연 장소·바닥 상태 (실내·실외)</li><li>평가 기준 (성공률 · 시간 · 정밀도)</li><li>시험 팔레트 치수·적재 하중</li><li>다우테크놀로지 사례 공유</li></ul></article>
