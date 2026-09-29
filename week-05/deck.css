@@ -489,3 +489,10 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .reasons article.note { border-top-color:#E0A100; background:#fff8e6; }
 .reasons h3 { font-size:21px; margin-bottom:4px; }
 .reasons p { font-size:18px; line-height:1.45; margin:0; }
+.fb-cards.licence { grid-template-rows:auto; }
+.fb-cards.licence article { padding:22px 26px; }
+.fb-cards.licence article p { font-size:23px; line-height:1.6; }
+.fb-cards.licence article h3 { font-size:27px; }
+.comparison.select.practice { font-size:20px; table-layout:fixed; width:100%; }
+.comparison.select.practice th:first-child { width:56%; }
+.comparison.select.practice td, .comparison.select.practice th { padding:10px 12px; white-space:normal !important; }
