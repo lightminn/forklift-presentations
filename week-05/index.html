@@ -3,7 +3,7 @@
 <link rel="icon" href="data:,">
 <script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>5주차 자율 지게차 개발</title>
-<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=dfeafe488a4a"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=0db4936523f5"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 <section class="title-section" data-label="개발 진행 보고" data-screen-label="01" data-duration="20" data-speaker-notes="권장 20초
 
@@ -197,10 +197,15 @@ AS5600 — 12 bit, 시스템 INL ±1°: https://files.seeedstudio.com/wiki/Grove
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="09  사람의 운전 방식 · 운전 자격"><div class="slide-body">
 <h2 class="headline">지게차 운전 자격: 3톤 미만은 12시간 조종교육 이수 후 면허 신청</h2>
-<div class="spread grow"><div class="fb-cards licence">
-<article><h3>3톤 이상</h3><p>국가기술자격 지게차운전기능사 취득<br>→ 건설기계조종사면허 신청 · 적성검사<br><b>필기·실기 시험 일정에 좌우</b></p></article>
-<article class="key"><h3>3톤 미만 <small>팀 검토</small></h3><p>조종교육 이수 (이론 6 + 실습 6시간) + 자동차 운전면허<br>→ 건설기계조종사면허 신청 · 적성검사<br>예: 한 기관 2일 과정 · 23–33만 원 · 희망일 14일 전 신청<br><b>→ 실제 일정·학생 신청 가능 여부 확인 중</b></p></article>
-</div></div>
+<table class="comparison select licence grow">
+<tr><th>구분</th><th>3톤 이상</th><th class="pickh">3톤 미만 <small>팀 검토</small></th></tr>
+<tr><td>필요 자격</td><td>지게차운전기능사 (국가기술자격)</td><td class="pickc">소형건설기계 조종교육 이수</td></tr>
+<tr><td>교육·시험</td><td>필기 · 실기 시험</td><td class="pickc">이론 6시간 + 실습 6시간</td></tr>
+<tr><td>추가 요건</td><td>—</td><td class="pickc">자동차 운전면허</td></tr>
+<tr><td>면허 발급</td><td>건설기계조종사면허 신청 · 적성검사</td><td class="pickc">건설기계조종사면허 신청 · 적성검사</td></tr>
+<tr><td>기간·비용 (예)</td><td>시험 일정에 좌우</td><td class="pickc">2일 과정 · 23–33만 원 · 희망일 14일 전 신청</td></tr>
+<tr><td>팀 상태</td><td>—</td><td class="pickc">실제 일정 · 학생 신청 가능 여부 확인 중</td></tr>
+</table>
 <div class="takeaway">목적: 사람의 표준 작업 순서를 익혀 자율 동작 규칙에 반영 (4주차 피드백)</div>
 </div></x-import>
 </section>
@@ -233,11 +238,7 @@ KOSHA 지게차 교육자료 — 5–10 cm 들기, 10–20 cm 당김, 운반 시
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="11  리보틱스 중간 미팅 질문"><div class="slide-body">
 <h2 class="headline">리보틱스 중간 미팅에서 확인할 사항</h2>
-<div class="spread grow"><div class="qcols">
-<article><h3>확인할 것</h3><ul><li>최종 시연 장소·바닥 (실내·실외)</li><li>평가 기준 (성공률 · 시간 · 정밀도)</li><li>시험 팔레트 (EPAL 6 · 축소 T11)·적재 하중</li><li>다우테크놀로지 사례 (공간 · 험지)</li></ul></article>
-<article><h3>요청할 것</h3><ul><li>제어기 J6 D-CC-12V · 조종기 배선·신호 자료</li><li>주행·조향·승강 모터 정격 (전압·전류)</li><li>실제 지게차 운용 영상·데이터</li></ul></article>
-<article><h3>함께 정할 것</h3><ul><li>기존 제어기 대체 (자체 드라이버) 허용 범위</li><li>시험 공간 · 허용 속도</li><li>안전 정지 요구 (비상정지 · 기울기 · 과적)</li><li>동봉 팔레트 활용</li></ul></article>
-</div></div>
+<table class="comparison select meeting grow"><tr><th>구분</th><th>항목</th></tr><tr><td rowspan="4" class="grp">확인할 것</td><td class="item">최종 시연 장소 · 바닥 (실내·실외)</td></tr><tr><td class="item">평가 기준 (성공률 · 시간 · 정밀도)</td></tr><tr><td class="item">시험 팔레트 (EPAL 6 · 축소 T11) · 적재 하중</td></tr><tr><td class="item">다우테크놀로지 사례 (작업 공간 · 험지)</td></tr><tr><td rowspan="3" class="grp">요청할 것</td><td class="item">제어기 J6 D-CC-12V · 조종기 배선·신호 자료</td></tr><tr><td class="item">주행·조향·승강 모터 정격 (전압 · 전류)</td></tr><tr><td class="item">실제 지게차 운용 영상 · 데이터</td></tr><tr><td rowspan="4" class="grp">함께 정할 것</td><td class="item">기존 제어기 대체 (자체 드라이버) 허용 범위</td></tr><tr><td class="item">시험 공간 · 허용 속도</td></tr><tr><td class="item">안전 정지 요구 (비상정지 · 기울기 · 과적)</td></tr><tr><td class="item">동봉 팔레트 활용</td></tr></table>
 </div></x-import>
 </section>
 </x-import></x-dc></body></html>

@@ -496,3 +496,14 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .comparison.select.practice { font-size:20px; table-layout:fixed; width:100%; }
 .comparison.select.practice th:first-child { width:56%; }
 .comparison.select.practice td, .comparison.select.practice th { padding:10px 12px; white-space:normal !important; }
+.comparison.select.licence { font-size:22px; table-layout:fixed; width:100%; }
+.comparison.select.licence th:first-child { width:20%; }
+.comparison.select.licence td, .comparison.select.licence th { white-space:normal !important; padding:11px 14px; }
+.comparison.select.licence td:first-child { font-weight:700; color:#44505c; }
+.comparison.select.licence .pickc { background:#fff8e6; }
+.comparison.select.licence .pickh small { font-size:15px; color:#8a5a00; margin-left:6px; }
+.comparison.select.meeting { font-size:20px; table-layout:fixed; width:100%; }
+.comparison.select.meeting th:first-child { width:18%; }
+.comparison.select.meeting td { padding:4px 14px; white-space:normal !important; }
+.comparison.select.meeting td.item { font-weight:400; color:#1b1f24; }
+.comparison.select.meeting td.grp { font-weight:700; color:var(--uos-blue); vertical-align:middle; background:var(--uos-surface); }

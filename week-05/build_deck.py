@@ -221,10 +221,15 @@ KOSHA_EDU = 'https://oshri.kosha.or.kr/kosha/data/business/serviceSafetyBusiness
 BUCHEON = 'http://bucheoncci.korcham.net/file/dext5uploaddata/2026/2026년%203톤%20미만%20지게차(전동식%20지게차)%20교육%20안내%20[공문].pdf'
 add('지게차 운전 자격', '09  사람의 운전 방식 · 운전 자격', 40, f"""
 <h2 class="headline">지게차 운전 자격: 3톤 미만은 12시간 조종교육 이수 후 면허 신청</h2>
-<div class="spread grow"><div class="fb-cards licence">
-<article><h3>3톤 이상</h3><p>국가기술자격 지게차운전기능사 취득<br>→ 건설기계조종사면허 신청 · 적성검사<br><b>필기·실기 시험 일정에 좌우</b></p></article>
-<article class="key"><h3>3톤 미만 <small>팀 검토</small></h3><p>조종교육 이수 (이론 6 + 실습 6시간) + 자동차 운전면허<br>→ 건설기계조종사면허 신청 · 적성검사<br>예: 한 기관 2일 과정 · 23–33만 원 · 희망일 14일 전 신청<br><b>→ 실제 일정·학생 신청 가능 여부 확인 중</b></p></article>
-</div></div>
+<table class="comparison select licence grow">
+<tr><th>구분</th><th>3톤 이상</th><th class="pickh">3톤 미만 <small>팀 검토</small></th></tr>
+<tr><td>필요 자격</td><td>지게차운전기능사 (국가기술자격)</td><td class="pickc">소형건설기계 조종교육 이수</td></tr>
+<tr><td>교육·시험</td><td>필기 · 실기 시험</td><td class="pickc">이론 6시간 + 실습 6시간</td></tr>
+<tr><td>추가 요건</td><td>—</td><td class="pickc">자동차 운전면허</td></tr>
+<tr><td>면허 발급</td><td>건설기계조종사면허 신청 · 적성검사</td><td class="pickc">건설기계조종사면허 신청 · 적성검사</td></tr>
+<tr><td>기간·비용 (예)</td><td>시험 일정에 좌우</td><td class="pickc">2일 과정 · 23–33만 원 · 희망일 14일 전 신청</td></tr>
+<tr><td>팀 상태</td><td>—</td><td class="pickc">실제 일정 · 학생 신청 가능 여부 확인 중</td></tr>
+</table>
 <div class="takeaway">목적: 사람의 표준 작업 순서를 익혀 자율 동작 규칙에 반영 (4주차 피드백)</div>
 """,
     """4주차에 사람이 운전하는 방식과 비슷하게 움직여야 보는 사람이 덜 불안하다는 피드백을 받아, 지게차 면허 취득을 검토하였다. 인양능력 3톤 이상은 국가기술자격인 지게차운전기능사를 따야 하고, 3톤 미만은 지정 기관의 소형건설기계 조종교육 이수로 국가기술자격을 대신할 수 있다. 이 교육은 이론 6시간과 실습 6시간이고, 자동차 운전면허가 함께 있어야 한다. 교육을 이수하면 국가기술자격을 대신해 건설기계조종사면허를 신청할 수 있고, 면허 신청 때 적성검사를 거친다. 한 상공회의소 과정을 예로 들면 2일 과정에 비용은 23만에서 33만 원이고 희망 교육일 14일 전까지 신청한다. 팀은 이 경로를 검토 중이며, 실제 교육 일정과 학생 개인이 신청할 수 있는지는 확인하고 있다.""",
@@ -258,11 +263,7 @@ add('표준 작업 절차', '10  사람의 운전 방식 · 표준 작업 절차
 # ----------------------------------------------------------------- 12 meeting questions
 add('리보틱스 미팅 질문', '11  리보틱스 중간 미팅 질문', 50, """
 <h2 class="headline">리보틱스 중간 미팅에서 확인할 사항</h2>
-<div class="spread grow"><div class="qcols">
-<article><h3>확인할 것</h3><ul><li>최종 시연 장소·바닥 (실내·실외)</li><li>평가 기준 (성공률 · 시간 · 정밀도)</li><li>시험 팔레트 (EPAL 6 · 축소 T11)·적재 하중</li><li>다우테크놀로지 사례 (공간 · 험지)</li></ul></article>
-<article><h3>요청할 것</h3><ul><li>제어기 J6 D-CC-12V · 조종기 배선·신호 자료</li><li>주행·조향·승강 모터 정격 (전압·전류)</li><li>실제 지게차 운용 영상·데이터</li></ul></article>
-<article><h3>함께 정할 것</h3><ul><li>기존 제어기 대체 (자체 드라이버) 허용 범위</li><li>시험 공간 · 허용 속도</li><li>안전 정지 요구 (비상정지 · 기울기 · 과적)</li><li>동봉 팔레트 활용</li></ul></article>
-</div></div>
+<table class="comparison select meeting grow"><tr><th>구분</th><th>항목</th></tr><tr><td rowspan="4" class="grp">확인할 것</td><td class="item">최종 시연 장소 · 바닥 (실내·실외)</td></tr><tr><td class="item">평가 기준 (성공률 · 시간 · 정밀도)</td></tr><tr><td class="item">시험 팔레트 (EPAL 6 · 축소 T11) · 적재 하중</td></tr><tr><td class="item">다우테크놀로지 사례 (작업 공간 · 험지)</td></tr><tr><td rowspan="3" class="grp">요청할 것</td><td class="item">제어기 J6 D-CC-12V · 조종기 배선·신호 자료</td></tr><tr><td class="item">주행·조향·승강 모터 정격 (전압 · 전류)</td></tr><tr><td class="item">실제 지게차 운용 영상 · 데이터</td></tr><tr><td rowspan="4" class="grp">함께 정할 것</td><td class="item">기존 제어기 대체 (자체 드라이버) 허용 범위</td></tr><tr><td class="item">시험 공간 · 허용 속도</td></tr><tr><td class="item">안전 정지 요구 (비상정지 · 기울기 · 과적)</td></tr><tr><td class="item">동봉 팔레트 활용</td></tr></table>
 """,
     """마지막으로 리보틱스와의 중간 미팅에서 확인할 사항이다. 먼저 최종 시연 장소와 바닥 상태, 평가 기준이 성공률과 시간, 정밀도 가운데 무엇인지, 시험 팔레트와 적재 하중을 확인하고, 추천받은 다우테크놀로지 사례의 작업 공간과 험지 여부를 묻는다. 요청할 자료는 기존 제어기와 조종기의 배선·신호 자료, 모터의 정격 전압과 전류, 실제 지게차의 운용 영상과 데이터이다. 특히 모터 전류는 오늘 본 모터 드라이버의 전류 제한과 방열 설계에 필요하다. 함께 정할 것은 기존 제어기를 우리 드라이버로 대체해도 되는지, 시험 공간과 허용 속도, 비상정지와 기울기·과적 감지 같은 안전 정지 요구, 그리고 동봉 팔레트의 활용이다.""",
     [(FEEDBACK, '§1 중간 미팅 준비 — 궁금한 것 · 제공 요청 · 결정 요청, 팀 메모 기울기·과적 정지'),
