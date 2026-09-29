@@ -2,7 +2,7 @@
 
 UOS 공식 템플릿을 사용한 10장·10분 10초의 진행 보고이다. 개발 단계상 위치, 4주차 피드백 대응, 차체 실측과
 포크·팔레트·버튼 신호(작성 중), 시뮬레이션 기술 실증 4장(LiDAR 장착 높이 · 지도 작성 · 위치 추정 오차 · 공장 임무),
-중간 미팅 질문과 다음 작업으로 구성한다. 구성의 근거는 로봇 저장소 `docs/plans/2026-09-29-week-05-presentation.md`.
+중간 미팅 질문과 다음 작업으로 구성한다. 구성의 근거는 [PLAN.md](PLAN.md).
 
 **시뮬레이션 장은 기술 실증이다.** 개발의 큰 그림은 개발 로드맵(실물 H0/H1 → 하위 제어 → M4)을 따르며,
 Isaac 공장 홀과 오프라인 slam_toolbox 재생은 M4에 필요한 기술을 미리 확인한 것이지 채택한 구성이 아니다.
@@ -12,6 +12,7 @@ Isaac 공장 홀과 오프라인 slam_toolbox 재생은 M4에 필요한 기술�
 - [SCRIPT.md](SCRIPT.md): 장별 한국어 발표 원고와 출처.
 - [SOURCES.md](SOURCES.md): 수치와 화면의 출처.
 - [VALIDATION.md](VALIDATION.md): 이 자료의 검증 기록.
+- [PLAN.md](PLAN.md): 구성 계획과 교차검증 기록.
 - `index.html`, `SCRIPT.md`, `slide-metadata.json`: 생성 파일. 직접 수정하지 않는다.
 
 ## 남은 작업
