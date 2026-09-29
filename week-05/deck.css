@@ -523,3 +523,5 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .comparison.measure.chassis { font-size:19px; }
 .comparison.measure.chassis td { padding:7px 10px; }
 .comparison.measure.chassis tr.hot td { background:#fdeec8; }
+.shot.sch { background:#fffdf8; }
+.shot.sch .media { object-fit:contain; background:#fffdf8; }
