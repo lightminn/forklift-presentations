@@ -2,18 +2,11 @@
 
 Run from any directory with Python 3. No third-party build dependencies.
 
-Week 5 has two strands and keeps them apart on screen. The main path is the
-physical chassis (measurement, wiring), following the roadmap. The simulation
-slides are a technology demonstration: they show what the Isaac factory hall and
-an offline 2D LiDAR SLAM replay can do, not the direction the project has
-committed to. Every demonstration slide carries the same tag and ends with what
-has to be decided on the physical robot.
-
-Slides 3-4 are placeholders until the chassis measurements arrive. The SLAM
-videos come from the ws1 rerun 20260928_week05_replay (the 2026-09-26 Isaac
-records replayed through slam_toolbox again); its twelve evaluations match the
-2026-09-26 table to the third decimal except one odometry value (0.806 vs
-0.807 m), so the numbers below are unchanged.
+Week 5 is a hardware report: chassis, fork and pallet measurements, the
+logic-analyser reverse engineering of the remote control, and the choice of
+motor driver (DRV8244-Q1) and encoder (MT6701). The measurement and waveform
+slides are placeholders until the team's data arrives. The LiDAR simulation
+slides drafted here on 2026-09-29 moved to week-06/ for next week.
 """
 from html import escape
 from pathlib import Path
@@ -22,24 +15,11 @@ from hashlib import sha256
 
 ROOT = Path(__file__).resolve().parent
 MAP = 'docs/plans/2026-09-11-development-roadmap.md'
-STATUS = 'docs/plans/2026-09-17-project-status-and-next-steps.md'
 INTAKE = 'docs/validation/2026-09-23-chassis-intake.md'
-FACTORY = 'docs/validation/2026-09-26-factory-hall-and-isaac-slam.md'
-FACTORY_PLAN = 'docs/plans/2026-09-26-factory-hall-and-isaac-slam.md'
-LIDAR_CFG = 'config/isaac_slam_lidar.yaml'
 MODEL = 'sim/models/dls08_provisional/parameters.yaml'
-VIEWS = 'docs/validation/2026-09-23-isaac-multiview-recording.md'
-ADR3 = 'docs/decisions/0003-target-selection-and-blind-zone-insertion.md'
 FEEDBACK = 'docs/references/week4_feedback.md'
-HW = 'docs/hardware.md'
-D435I = 'https://www.realsenseai.com/products/depth-camera-d435i/'
-CROWN = 'https://patents.google.com/patent/US9990535B2/en'
-ADAPT = 'https://arxiv.org/html/2503.14331v1'
 slides = []
 
-DEMO_TAG = ('<div class="demo-tag"><b>기술 실증</b> · Isaac Sim 합성 장면 · '
-            '로봇 제어에 시뮬레이터 정답 위치 사용</div>')
-SLAM_BLUE, ODOM_ORANGE = '#2f74c0', '#c26a1a'   # validated pair (dataviz)
 
 
 def add(label, title, seconds, body, notes, sources, foot='측정 결과'):
@@ -65,159 +45,10 @@ def placeholder(what, detail, cls='grow'):
             f'<span>{detail}</span></div>')
 
 
-# ----------------------------------------------------------------- charts
-# Drawn from the recorded numbers below, so the bars cannot drift from the
-# source tables. Colours: one series = SLAM blue; the SLAM/odometry pair was
-# checked with the dataviz validator (light surface, all checks pass).
-
-# slam_toolbox replays of the 0.5 m/s survey loop, start-pose-aligned ATE in
-# metres, layout seeds 0-4 (validation record section 6): (seed, clean, noisy).
-REPLAY_ATE = {
-    'SLAM': [(0, 0.025, 0.062), (1, 0.040, 0.050), (2, 0.039, 0.032), (3, 0.046, 0.084), (4, 0.047, 0.045)],
-    '바퀴·조향 추정': [(0, 0.576, 0.651), (1, 0.806, 0.757), (2, 0.807, 0.832), (3, 0.868, 0.853), (4, 0.806, 0.818)],
-}
-
-
-def _swarm(xs, radius=6, step=11):
-    """Vertical offsets so no two dots overlap: each dot takes the first lane
-    (0, -step, +step, -2 step, ...) with no dot closer than 2 radius in x."""
-    lanes, placed = [0], []
-    for k in range(1, 6):
-        lanes += [-k * step, k * step]
-    for cx in sorted(xs):
-        for dy in lanes:
-            if all(abs(cx - px) >= 2 * radius or dy != pdy for px, pdy in placed):
-                placed.append((cx, dy))
-                break
-    return placed
-
-
-def ate_chart():
-    """Both rows start at the same zero line: a bar to the ten-run mean with
-    the individual runs as dots on it, so the two rows read as one scale."""
-    left, width, xmax = 170, 1150 - 170, 0.9
-
-    def x(v):
-        return left + v / xmax * width
-    colours = {'SLAM': SLAM_BLUE, '바퀴·조향 추정': ODOM_ORANGE}
-    parts = []
-    for tick in (0, 0.2, 0.4, 0.6, 0.8):
-        parts.append(f'<line x1="{x(tick):.1f}" y1="44" x2="{x(tick):.1f}" y2="256" stroke="#e3e6ea" stroke-width="1.5"/>'
-                     f'<text x="{x(tick):.1f}" y="280" text-anchor="middle" font-size="19" fill="#44505c">{tick:.1f} m</text>')
-    parts.append(f'<line x1="{left}" y1="44" x2="{left}" y2="256" stroke="#44505c" stroke-width="2.5"/>')
-    for row, (name, runs) in enumerate(REPLAY_ATE.items()):
-        y = 92 + row * 118
-        colour = colours[name]
-        values = [c for _, c, _ in runs] + [n for _, _, n in runs]
-        mean = sum(values) / len(values)
-        parts.append(f'<text x="{left - 20}" y="{y + 8}" text-anchor="end" font-size="23" font-weight="700" fill="#1b1f24">{name}</text>')
-        parts.append(f'<rect x="{left}" y="{y - 36}" width="{x(mean) - left:.1f}" height="72" rx="4" fill="{colour}" opacity="0.28"/>')
-        parts.append(f'<line x1="{x(mean):.1f}" y1="{y - 38}" x2="{x(mean):.1f}" y2="{y + 38}" stroke="{colour}" stroke-width="3"/>')
-        for cx, dy in _swarm([x(v) for v in values]):
-            parts.append(f'<circle cx="{cx:.1f}" cy="{y + dy}" r="6" fill="{colour}" stroke="#fff" stroke-width="1.5"/>')
-        if x(mean) - left < 140:   # short bar: label beside the dots
-            lx, ly, anchor = x(max(values)) + 18, y + 8, 'start'
-        else:                      # long bar: label above its mean line
-            lx, ly, anchor = x(mean), y - 42, 'middle'
-        parts.append(f'<text x="{lx:.1f}" y="{ly}" text-anchor="{anchor}" font-size="22" font-weight="700" fill="#1b1f24">평균 {mean:.2f} m</text>')
-    note = (f'<text x="{left}" y="24" font-size="19" fill="#44505c">5개 배치(주행 궤적 3종) × 잡음 2조건 · 막대: 10회 평균 · '
-            f'점: 재생 1회 위치 오차(RMSE = 제곱평균제곱근, 출발 자세 정렬)</text>')
-    return (f'<svg class="budget" viewBox="0 0 1200 290" role="img" aria-label="116 m 지도 작성 주행 재생 10회의 위치 오차. '
-            f'같은 0 기준 축에서 SLAM 평균 0.05 m, 바퀴·조향 추정 평균 0.78 m">'
-            f'<g font-family="var(--uos-font)">{note}{"".join(parts)}</g></svg>')
-
-
-# ----------------------------------------------------------------- week 5 visuals
-# Drawn from assets/data_*.json, which prepare_data.py extracts from the Isaac
-# records and the slam_toolbox replays. The deck build itself stays stdlib-only.
-DIR_BLUE, CAM_ORANGE, STOP_GREEN = SLAM_BLUE, ODOM_ORANGE, '#2e9a6b'   # validated trio
-
-
-def _data(name):
-    return json.loads((ROOT / 'assets' / name).read_text())
-
-
-def badge(text='기술 실증 · Isaac Sim'):
-    return f'<span class="badge">{text}</span>'
-
-
-def trajectory_anim():
-    """Top view of the survey loop: truth, SLAM and wheel-only estimate drawn
-    together, so the wheel-only path is seen drifting away."""
-    d = _data('data_survey_seed0.json')
-    pts = d['truth'] + d['slam'] + d['odom']
-    xs, ys = [p[0] for p in pts], [p[1] for p in pts]
-    x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
-    size, pad = 560, 20
-    scale = (size - 2 * pad) / max(x1 - x0, y1 - y0)
-    def path(seq):
-        return 'M' + ' L'.join(f'{pad + (x - x0) * scale:.1f},{size - pad - (y - y0) * scale:.1f}' for x, y in seq)
-    end = d['odom'][-1]
-    ex, ey = pad + (end[0] - x0) * scale, size - pad - (end[1] - y0) * scale
-    return f"""<svg class="diagram grow traj" viewBox="0 0 {size} {size}" role="img" aria-label="위에서 본 116 m 지도 작성 경로. 실제 경로 위로 SLAM 추정이 겹치고, 바퀴·조향 추정은 점점 벗어난다">
-<path d="{path(d['truth'])}" fill="none" stroke="#c9ced4" stroke-width="12" stroke-linejoin="round"/>
-<path class="draw" pathLength="1" d="{path(d['odom'])}" fill="none" stroke="{ODOM_ORANGE}" stroke-width="4" stroke-linejoin="round"/>
-<path class="draw" pathLength="1" d="{path(d['slam'])}" fill="none" stroke="{SLAM_BLUE}" stroke-width="4" stroke-linejoin="round"/>
-<circle class="endmark" cx="{ex:.1f}" cy="{ey:.1f}" r="9" fill="{ODOM_ORANGE}"/>
-</svg>"""
-
-
-def ate_compact():
-    """Ten replays per row on one zero line, sized for a half-width column."""
-    left, width, xmax = 128, 440, 0.9
-    def x(v):
-        return left + v / xmax * width
-    colours = {'SLAM': SLAM_BLUE, '바퀴·조향 추정': ODOM_ORANGE}
-    labels = {'SLAM': 'SLAM', '바퀴·조향 추정': '바퀴·조향'}
-    parts = []
-    for tick in (0, 0.4, 0.8):
-        parts.append(f'<line x1="{x(tick):.1f}" y1="30" x2="{x(tick):.1f}" y2="236" stroke="#e3e6ea" stroke-width="1.5"/>'
-                     f'<text x="{x(tick):.1f}" y="262" text-anchor="middle" font-size="20" fill="#44505c">{tick * 100:.0f} cm</text>')
-    parts.append(f'<line x1="{left}" y1="30" x2="{left}" y2="236" stroke="#44505c" stroke-width="2.5"/>')
-    for row, (name, runs) in enumerate(REPLAY_ATE.items()):
-        y = 80 + row * 104
-        values = [c for _, c, _ in runs] + [n for _, _, n in runs]
-        mean = sum(values) / len(values)
-        colour = colours[name]
-        parts.append(f'<text x="{left - 16}" y="{y + 8}" text-anchor="end" font-size="23" font-weight="700" fill="#1b1f24">{labels[name]}</text>')
-        parts.append(f'<rect x="{left}" y="{y - 34}" width="{x(mean) - left:.1f}" height="68" rx="4" fill="{colour}" opacity="0.28"/>')
-        for cx, dy in _swarm([x(v) for v in values], radius=5, step=10):
-            parts.append(f'<circle cx="{cx:.1f}" cy="{y + dy}" r="5" fill="{colour}" stroke="#fff" stroke-width="1.2"/>')
-        lx = x(max(values)) + 14 if x(mean) - left < 140 else x(mean) - 8
-        anchor = 'start' if x(mean) - left < 140 else 'end'
-        ly = y + 8 if anchor == 'start' else y - 44
-        parts.append(f'<text x="{lx:.1f}" y="{ly}" text-anchor="{anchor}" font-size="24" font-weight="700" fill="#1b1f24">{mean * 100:.0f} cm</text>')
-    return (f'<svg class="diagram" viewBox="0 0 600 272" role="img" aria-label="재생 10회 위치 오차: SLAM 평균 0.05 m, '
-            f'바퀴·조향 추정 평균 0.78 m"><g font-family="var(--uos-font)">{"".join(parts)}</g></svg>')
-
-
-def margin_bar():
-    """Week 4 fork-tip lateral error inside the 45 mm pocket margin."""
-    left, width, full = 20, 1140, 45.0
-    def w(mm):
-        return mm / full * width
-    segs = [(3.58, DIR_BLUE, '차체 방향'), (1.34, CAM_ORANGE, '카메라 추정'), (0.78, STOP_GREEN, '정지 위치')]
-    parts = [f'<rect x="{left}" y="40" width="{width}" height="46" rx="4" fill="#eef1f4"/>']
-    x = left
-    for mm, fill, _ in segs:
-        parts.append(f'<rect x="{x:.1f}" y="40" width="{w(mm):.1f}" height="46" fill="{fill}"/>')
-        x += w(mm)
-    parts.append(f'<line x1="{left + width}" y1="30" x2="{left + width}" y2="96" stroke="#c0392b" stroke-width="4"/>'
-                 f'<text x="{left + width}" y="22" text-anchor="end" font-size="21" font-weight="700" fill="#c0392b">포켓 벽까지 45 mm</text>'
-                 f'<text x="{left + w(5.7) + 14:.1f}" y="72" font-size="24" font-weight="700" fill="#1b1f24">포크 끝 좌우 오차 5.7 mm</text>')
-    lx = left
-    for mm, fill, name in segs:
-        parts.append(f'<rect x="{lx}" y="112" width="18" height="18" fill="{fill}"/>'
-                     f'<text x="{lx + 26}" y="128" font-size="20" fill="#1b1f24">{name} {100 * mm / 5.70:.1f} %</text>')
-        lx += 230
-    return (f'<svg class="diagram" viewBox="0 0 1180 140" role="img" aria-label="포크 끝 옆 오차 5.7 mm는 포켓 벽까지 여유 45 mm의 약 13 %. '
-            f'차체 방향 62.8 %, 카메라 23.5 %, 정지 위치 13.7 %"><g font-family="var(--uos-font)">{"".join(parts)}</g></svg>')
-
-
 # ----------------------------------------------------------------- 1
 add('개발 진행 보고', '5주차\n자율 지게차 개발', 20, '',
-    """이번 주 진행은 두 가지이다. 입고한 차체의 치수와 포크, 동봉 팔레트를 실측하고 조종기 버튼별 신호를 측정하였다. 그리고 시뮬레이션에서 2D LiDAR로 공장 지도를 만들고 그 안에서 자기 위치를 추정하는 데 성공하였다. 마지막으로 중간 미팅에서 확인할 사항을 정리한다.""",
-    [(MAP, '개발 로드맵'), (FACTORY, '공장 홀과 LiDAR 지도 작성 실증')], '진행 보고')
+    """이번 주에는 하드웨어를 다룬다. 입고한 차체와 포크, 동봉 팔레트를 실측하고, 4주차 피드백에 따라 조종기 버튼별 신호를 로직 애널라이저로 측정해 기존 제어 신호를 역으로 분석하였다. 마지막으로 컴퓨터가 차체를 직접 구동하고 상태를 읽기 위한 부품으로 모터 드라이버와 엔코더를 선정한 근거를 보인다.""",
+    [(INTAKE, '입고 조사'), (FEEDBACK, '4주차 피드백 §2')], '진행 보고')
 
 # ----------------------------------------------------------------- 3 (placeholder)
 MEASURE_ROWS = [
@@ -232,7 +63,7 @@ MEASURE_ROWS = [
 ]
 measure_table = ''.join(f'<tr><td>{k}</td><td class="pending">—</td><td class="muted">{v}</td></tr>'
                         for k, v in MEASURE_ROWS)
-add('차체 실측', '01  차체 실측', 90, f"""
+add('차체 실측', '01  차체 실측', 70, f"""
 <h2 class="headline">차체 실측값과 잠정 모델 비교 <span class="draft">작성 중</span></h2>
 <div class="split grow" style="grid-template-columns:0.8fr 1.2fr">
 {placeholder('치수선 사진', '측정 기준점·치수선 표시')}
@@ -245,7 +76,7 @@ add('차체 실측', '01  차체 실측', 90, f"""
     '화면 생성: 실물 사진 (작성 예정)')
 
 # ----------------------------------------------------------------- 3 (placeholder)
-add('포크·동봉 팔레트', '02  포크 · 동봉 팔레트', 80, f"""
+add('포크·동봉 팔레트', '02  포크 · 동봉 팔레트', 60, f"""
 <h2 class="headline">포크·동봉 팔레트 실측 <span class="draft">작성 중</span></h2>
 <div class="split grow" style="grid-template-columns:1fr 1fr">
 {placeholder('포크 사진 · 치수선', '폭 · 두께 · 간격 · 최저·최고 높이')}
@@ -257,113 +88,141 @@ add('포크·동봉 팔레트', '02  포크 · 동봉 팔레트', 80, f"""
     [(INTAKE, '입고 때 관찰한 포크·동봉 팔레트'), (MODEL, '잠정 모델 포크 치수 — 사진 추정')],
     '화면 생성: 실물 사진 (작성 예정)')
 
-# ----------------------------------------------------------------- 4 (placeholder)
-add('버튼별 신호', '03  조종기 버튼별 신호', 100, f"""
-<h2 class="headline">조종기 버튼별 신호 측정 <span class="draft">작성 중</span></h2>
-<div class="split grow" style="grid-template-columns:0.8fr 1.2fr">
-{placeholder('측정 구성 사진', '조종기·수신기 · 로직 애널라이저 연결 지점')}
-{placeholder('버튼별 파형', '전진·후진·조향·승강 버튼을 하나씩 눌렀을 때의 파형')}
+# ----------------------------------------------------------------- 4 remote setup
+add('조종기 측정 구성', '03  조종기 신호 측정 구성', 60, f"""
+<h2 class="headline">무선 조종기 → 제어기 신호를 로직 애널라이저로 측정 <span class="draft">작성 중</span></h2>
+<div class="split grow" style="grid-template-columns:0.9fr 0.9fr 1.2fr">
+{figure('05_remote.jpg', '무선 조종기 T07D-DGN. 전진·후진, 상승·하강, 좌회전·우회전, 속도 조절과 제동 버튼', '무선 조종기 T07D-DGN', cls='')}
+{figure('04_controller_label.jpg', '좌석 아래 제어기의 라벨 J6 D-CC-12V', '제어기 J6 D-CC-12V', cls='')}
+{placeholder('측정 구성 사진', '탐침 연결 지점 · 채널 배정 · 샘플링 속도')}
 </div>
-<div class="takeaway">다음 작업: 신호 형식 확인 후 컴퓨터 명령 입력 위치 결정</div>
+<div class="takeaway">측정: 버튼을 하나씩 눌러 제어기 입력·모터 출력 신호를 기록</div>
 """,
-    """[작성 예정] 4주차 피드백에 따라 로직 애널라이저로 조종기 버튼을 하나씩 눌러 신호를 측정하였다. 왼쪽은 측정 구성으로, 어디에 탐침을 연결했는지 보인다. 오른쪽은 전진·후진, 조향, 승강 버튼별 파형이다. 버튼마다 신호가 어떤 형식으로 바뀌는지가 컴퓨터가 명령을 넣을 위치와 방식을 정한다.""",
-    [(INTAKE, '입고 때 관찰한 전장 구성'), (FEEDBACK, '§2 로직 애널라이저로 버튼별 신호 측정')],
-    '화면 생성: 실물 사진 · 로직 애널라이저 캡처 (작성 예정)')
+    """[작성 예정] 측정 대상은 무선 조종기와 좌석 아래 제어기이다. 조종기의 무선 신호를 제어기가 받아 주행, 조향, 승강 모터를 구동한다. 오른쪽은 로직 애널라이저를 연결한 모습으로, 어느 지점에 탐침을 대고 채널을 어떻게 나눴는지, 샘플링 속도는 얼마로 했는지 보인다. 버튼을 하나씩 누르며 각 채널의 신호가 어떻게 바뀌는지 기록하였다.""",
+    [(INTAKE, '조종기·제어기 표기와 사진'), (FEEDBACK, '§2 로직 애널라이저로 버튼별 신호 측정')],
+    '화면 생성: 실물 사진(2026-09-23 입고) · 측정 구성 사진(작성 예정)')
 
-# ----------------------------------------------------------------- 5 demo (new clip)
-add('LiDAR가 보는 것', '04  2D LiDAR 스캔', 75, f"""
-<h2 class="headline">2D LiDAR는 1.05 m 높이 한 평면만 관측</h2>
-<div class="split grow" style="grid-template-columns:1.15fr 0.85fr">
-{figure('25_scan_view.mp4', '지게차를 위에서 따라가며 본 LiDAR 스캔. 빨간 선과 점은 한 바퀴 스캔이 닿은 곳이고, 진한 회색 물체만 닿고 옅은 회색 물체는 스캔에 나타나지 않는다', 'Isaac 주행 기록의 스캔 · 시뮬레이터상 실제 위치 기준 · 약 7배속', cls='')}
-<div class="stack lidar-facts">
-<div class="fact"><b>1,600</b><span>빔 / 한 바퀴 (0.225° 간격)</span></div>
-<div class="fact"><b>10 Hz</b><span>한 바퀴 주기</span></div>
-<div class="fact"><b>0.2–12 m</b><span>측정 거리</span></div>
-<p class="vs-note">합성 센서 · A2M12 카탈로그 값 기준, 실측 아님</p>
-</div>
+# ----------------------------------------------------------------- 5 waveforms drive/steer
+add('주행·조향 파형', '04  버튼별 파형 · 주행 · 조향', 90, f"""
+<h2 class="headline">주행·조향 버튼별 로직 애널라이저 파형 <span class="draft">작성 중</span></h2>
+<div class="stack grow">
+{placeholder('전진 · 후진', '같은 시간축에 채널별 파형을 한 줄씩 · 버튼 누름 구간 표시')}
+{placeholder('좌회전 · 우회전', '같은 시간축 · 방향에 따라 바뀌는 채널 강조')}
 </div>
 """,
-    """2D LiDAR가 무엇을 보는지부터 보인다. 영상은 Isaac 주행 기록의 스캔을 지게차를 따라가며 그린 것이다. LiDAR는 한 바퀴에 1,600개의 빔을 쏘아 빔마다 처음 닿은 곳까지 거리를 재며, 그 지점이 빨간 점이다. 한 바퀴는 0.1초이다. 빔은 1.05미터 높이의 수평면 하나에만 있으므로, 이 높이에 걸친 진한 회색 물체만 점으로 나타나고, 걸치지 않는 옅은 회색 물체는 바로 옆을 지나가도 보이지 않는다. 또 가까운 물체 뒤에 가려진 면은 찍히지 않는다. 그래서 실물에서는 지도에 담아야 할 물체의 높이를 보고 장착 높이를 정한다. 센서 값은 우리가 쓸 A2M12의 카탈로그 값을 따른 합성 센서이다.""",
-    [(FACTORY, '§3 Isaac SLAM 기록 seed 0 — 스캔 2,454개'),
-     (LIDAR_CFG, '합성 LiDAR 1,600빔 · 10 Hz · 0.2–12 m · 장착 높이 1.05 m (A2M12 카탈로그 값, 실측 아님)')],
-    '화면 생성: slam_log.npz 의 스캔과 정답 레이저 자세를 prepare_videos.py 로 그림 (물체 윤곽은 meta.json 배치)')
+    """[작성 예정] 주행과 조향 버튼을 하나씩 눌렀을 때의 파형이다. 모든 파형은 같은 시간축에 채널별로 한 줄씩 놓아, 버튼에 따라 어느 채널이 어떻게 바뀌는지 비교한다. 전진과 후진에서 신호가 방향만 바뀌는지, 속도가 듀티로 표현되는지, 조향이 좌우 두 신호로 나뉘는지를 확인한다.""",
+    [(FEEDBACK, '§2 버튼별 신호 측정')],
+    '화면 생성: 로직 애널라이저 캡처 (작성 예정)')
 
-# ----------------------------------------------------------------- 7 demo
-add('지도 작성', '05  2D LiDAR 지도 작성', 70, f"""
-<h2 class="headline">LiDAR로 만든 30 × 31 m 공장 지도와 자기 위치</h2>
-<div class="pair grow"><div class="pair-box">
-<span class="pair-tag left">Isaac 주행 <i>빨간 점: LiDAR 측정점</i></span>
-<span class="pair-tag right">SLAM 지도 <i>파랑 SLAM 추정이 회색 실제 경로와 거의 겹침</i></span>
-<video class="pair-video" src="assets/21_slam_map_pair.mp4" poster="assets/21_slam_map_pair_poster.jpg" autoplay loop muted playsinline aria-label="왼쪽은 공장 홀을 위에서 본 지게차의 시뮬레이션 주행, 오른쪽은 같은 순간까지 slam_toolbox가 만든 지도와 추정 경로"></video>
-</div></div>
-<div class="chips"><span>Isaac 주행 기록</span><i>→</i><span>ROS 2 재생</span><i>→</i><span>slam_toolbox 지도·위치 추정</span><i>→</i><span>정답과 비교</span></div>
+# ----------------------------------------------------------------- 6 waveforms lift/other
+add('승강·기타 파형', '05  버튼별 파형 · 승강 · 속도 · 제동', 80, f"""
+<h2 class="headline">승강·속도 조절·제동 버튼별 파형 <span class="draft">작성 중</span></h2>
+<div class="stack grow">
+{placeholder('상승 · 하강', '같은 시간축 · 승강 모터 채널')}
+{placeholder('속도 조절 · 제동', '속도 단계별 변화 · 제동 시 신호')}
+</div>
 """,
-    """Isaac의 30 곱하기 31미터 공장에서 지게차가 116미터 경로를 달리며 LiDAR 스캔과 바퀴 회전, 조향각을 기록하고, 이 기록을 ROS 2에서 재생해 공개 SLAM 패키지인 slam_toolbox가 지도와 위치를 추정하게 했다. 왼쪽은 위에서 본 주행이고, 오른쪽은 그 시각까지 만들어진 지도와 추정 경로이다. 지게차가 돌수록 지도가 넓어지고, 파란 SLAM 추정 위치가 회색 실제 경로 위를 따라간다. 다만 기록을 다시 재생해 얻은 결과이고, 주행 자체는 시뮬레이터가 알려 준 정답 위치로 하였다. 즉 SLAM 결과로 차를 움직인 것은 아니다.""",
-    [(FACTORY, '§3 기록 · §4 재생 · §6 3분할 영상'), (FACTORY, '§1 30 × 31 m 공장 홀'),
-     (LIDAR_CFG, '합성 LiDAR 1,600빔 · 10 Hz · 0.2–12 m (A2M12 카탈로그 값, 실측 아님)')],
-    '화면 생성: Isaac Sim 기록 + ROS 2 slam_toolbox 재생 20260928_week05_replay, 3분할 영상에서 조감·지도 두 칸만 잘라 8배속')
+    """[작성 예정] 승강과 속도 조절, 제동 버튼의 파형이다. 상승과 하강이 승강 모터의 방향 신호로 나타나는지, 속도 조절 버튼이 주행 신호의 듀티나 전압을 바꾸는지, 제동이 어떤 신호로 전달되는지 확인한다.""",
+    [(FEEDBACK, '§2 버튼별 신호 측정')],
+    '화면 생성: 로직 애널라이저 캡처 (작성 예정)')
 
-# ----------------------------------------------------------------- map compare (new clip)
-add('지도 비교', '06  위치 추정에 따른 지도 차이', 75, f"""
-<h2 class="headline">위치 추정이 틀리면 같은 스캔도 지도가 번짐</h2>
-<div class="pair grow"><div class="pair-box" style="aspect-ratio:1254/732">
-<video class="pair-video" src="assets/26_map_compare.mp4" poster="assets/26_map_compare_poster.jpg" autoplay loop muted playsinline aria-label="같은 스캔을 왼쪽은 바퀴·조향으로 추정한 위치에, 오른쪽은 SLAM이 추정한 위치에 쌓아 지도를 만드는 영상. 왼쪽은 물체 윤곽이 여러 겹으로 번지고 오른쪽은 선명하다"></video>
-</div></div>
-<div class="takeaway">SLAM: 스캔을 이미 만든 지도와 맞춰 위치를 바로잡음 → 물체 윤곽이 한 겹</div>
+# ----------------------------------------------------------------- 7 reverse engineering summary
+SIGNAL_ROWS = ['전진', '후진', '좌회전', '우회전', '상승', '하강', '속도 조절', '제동']
+signal_table = ''.join(f'<tr><td>{b}</td><td class="pending">—</td><td class="pending">—</td><td class="pending">—</td></tr>' for b in SIGNAL_ROWS)
+add('신호 해석', '06  리버스 엔지니어링 결과', 80, f"""
+<h2 class="headline">버튼별 신호 형식과 컴퓨터 명령 입력 지점 <span class="draft">작성 중</span></h2>
+<div class="split grow" style="grid-template-columns:1.1fr 0.9fr">
+<table class="comparison measure"><tr><th>버튼</th><th>신호선</th><th>형식 (레벨 · PWM · 직렬)</th><th>해석</th></tr>{signal_table}</table>
+{placeholder('신호 경로 도식', '조종기 → 수신부 → 제어기 → 모터 · 컴퓨터가 끼어들 지점 표시')}
+</div>
+<div class="takeaway">다음 작업: 명령 입력 지점에 모터 드라이버 연결 · 기존 제어기 대체 여부 결정</div>
 """,
-    """SLAM이 왜 필요한지 보이는 장이다. 같은 LiDAR 스캔을 두 가지 위치 추정에 따라 한 장의 지도로 쌓았다. 왼쪽은 바퀴 회전과 조향각만으로 추정한 위치에 쌓은 것으로, 달릴수록 방향 오차가 쌓여 같은 물체가 여러 겹으로 번지고 벽이 비스듬해진다. 오른쪽은 SLAM이 스캔을 이전 지도와 맞춰 가며 추정한 위치에 쌓은 것으로, 물체 윤곽이 한 겹으로 선명하다. 지도가 선명하다는 것은 그 위치 추정이 맞다는 뜻이기도 하다.""",
-    [(FACTORY, '§4 재생 — 같은 기록의 slam_toolbox 궤적과 바퀴 오도메트리'),
-     ('artifacts/20260928_week05_replay/survey_seed_0_clean', 'slam_trajectory.csv · odometry.csv')],
-    '화면 생성: 같은 스캔을 두 궤적에 놓아 prepare_videos.py 로 누적 (slam_toolbox 가 만든 지도가 아님)')
+    """[작성 예정] 파형을 버튼별로 정리한 표이다. 버튼마다 어느 신호선이 바뀌는지, 그 신호가 단순 켜짐·꺼짐인지 PWM인지 직렬 통신인지, 그리고 그것이 무엇을 뜻하는지 적는다. 오른쪽 도식은 조종기에서 모터까지의 신호 경로와, 컴퓨터가 명령을 넣을 수 있는 지점을 보인다. 이 결과에 따라 기존 제어기를 살려 신호만 넣을지, 모터 드라이버로 제어기를 대체할지 정한다.""",
+    [(FEEDBACK, '§2 리버스 엔지니어링')],
+    '화면 생성: 측정 결과 정리 (작성 예정)')
 
-# ----------------------------------------------------------------- 8 demo
-add('위치 추정 오차', '07  위치 추정 오차', 70, f"""
-<h2 class="headline">LiDAR 지도와 맞춘 위치 오차 약 5 cm · 바퀴·조향만으로는 약 78 cm</h2>
-<div class="split grow" style="grid-template-columns:1fr 1.05fr">
-<div class="traj-box">{trajectory_anim()}
-<div class="legend"><span><i style="background:#c9ced4"></i>실제 경로</span><span><i style="background:#2f74c0"></i>SLAM 추정</span><span><i style="background:#c26a1a"></i>바퀴·조향 추정</span></div></div>
-<div class="stack" style="justify-content:center;gap:10px">
-<p class="chart-cap">116 m 주행 기록 10회 재생 · 점 1개 = 재생 1회 · 막대 = 평균</p>
-{ate_compact()}
-<p class="chart-cap">바퀴·조향 추정: 거리는 정확 · 방향이 약 6° 틀어지며 오차 누적</p>
+# ----------------------------------------------------------------- 8 motor driver
+DRV_DS = 'https://www.ti.com/lit/ds/symlink/drv8244-q1.pdf'
+MT_DS = 'https://uploadcdn.oneyac.com/attachments/files/brand_pdf/magntek/F3/CA/MT6701QT-STD.pdf'
+# Continuous current and protection limit kept in separate columns: they are
+# different ratings (DRV8244's continuous figure is TI's thermal simulation).
+PICK = ' class="pick"'
+DRIVER_ROWS = [
+    ('DRV8244-Q1 (선정)', '4.5–35 V', 'DC 4.0 A *', 'OCP 10.5–40 A 선택', 'IPROPI 내장'),
+    ('BTS7960 (IBT-2)', '—', '—', '전류 제한 43 A (typ)', 'IS 핀'),
+    ('VNH5019 (Pololu)', '5.5–24 V', '12 A', '30 A 최대', '약 140 mV/A'),
+    ('Cytron MD13S', '6–30 V', '13 A', '30 A (10 s)', '—'),
+    ('DRV8871', '6.5–45 V', '—', '3.6 A 피크', '없음'),
+]
+driver_table = ''.join(
+    f'<tr{PICK if i == 0 else ""}><td>{a}</td><td>{b}</td><td>{c}</td><td>{d}</td><td>{e}</td></tr>'
+    for i, (a, b, c, d, e) in enumerate(DRIVER_ROWS))
+add('모터 드라이버 선정', '07  하드웨어 선정 · 모터 드라이버', 80, f"""
+<h2 class="headline">모터 드라이버: DRV8244-Q1 SPI형 (DRV8244SQRYJRQ1) 선정</h2>
+<div class="split grow" style="grid-template-columns:1.5fr 0.62fr">
+<div class="stack" style="justify-content:center;gap:8px">
+<table class="comparison select"><tr><th>후보</th><th>전원</th><th>연속 전류</th><th>보호·최대</th><th>전류 측정</th></tr>{driver_table}</table>
+<p class="chart-cap">* TI 열 해석값: PWM 구동 · 주위 85 °C · 40 × 40 mm 4층 기판. 다른 후보는 제조사 연속 정격</p>
+</div>
+<div class="stack reasons">
+<article><h3>전류 측정 내장</h3><p>IPROPI 핀 → MCU ADC로 모터 전류<br>막힘·포크 끝단 감지에 활용</p></article>
+<article><h3>SPI 설정·진단</h3><p>전류 제한·과전류 임계·슬루율 설정<br>결함 종류를 레지스터로 확인</p></article>
+<article class="warn"><h3>조건: 모터 전류 실측 후 확정</h3><p>연속 전류는 방열이 결정<br>→ 실측 전류에 맞춰 전류 제한·방열 기판 설계</p></article>
 </div>
 </div>
-<div class="takeaway">다음 확인: 실물 바퀴·조향 신호로 방향 오차 누적량 측정</div>
 """,
-    """왼쪽은 위에서 본 지도 작성 경로이다. 회색 실제 경로 위로 파란 SLAM 추정은 거의 그대로 겹치고, 주황 바퀴·조향 추정은 점점 벗어나 끝에서 약 80센티미터 떨어진다. 오른쪽은 물건 배치가 다른 다섯 공장 장면의 주행 기록을, 잡음 없이와 합성 잡음을 넣어 모두 열 번 재생한 결과이다. 평균 위치 오차는 SLAM이 약 5센티미터, 바퀴와 조향만으로는 약 78센티미터였다. 바퀴·조향 추정은 달린 거리는 정확했지만 방향이 조금씩 틀어지며 오차가 쌓였다. 이것은 시뮬레이터의 관절 값에서 나온 결과이므로, 실물에서는 바퀴와 조향 신호를 직접 측정해 확인한다.""",
-    [(FACTORY, '§6 재생 10회 — 시작 정렬 ATE, 잡음 없음 평균 SLAM 0.040 · 바퀴 0.773 m, 합성 잡음 0.055 · 0.782 m'),
-     (FACTORY, '§4 — 누적 거리 115.92 대 115.98 m, 회전 9.54 대 9.43 rad, 원인 미확정 (seed 0)'),
-     (FACTORY, '합성 잡음: 거리 σ 0.02 m · 뒷바퀴 σ 0.2 rad/s · 조향 σ 0.005 rad (가정값)')],
-    '화면 생성: 재생 평가 수치 도식 (2026-09-28 재실행: 12개 값 중 11개가 소수 셋째 자리까지 일치, 1개는 0.001 m 차)')
+    """모터 드라이버로는 TI의 DRV8244-Q1 SPI형을 골랐다. 왼쪽은 비교한 후보이다. 완성 보드인 VNH5019나 MD13S는 바로 쓸 수 있지만, 우리가 원하는 것은 컴퓨터가 모터 전류를 읽고 드라이버의 상태를 확인하는 것이다. DRV8244는 전류에 비례하는 신호를 IPROPI 핀으로 내보내므로, 션트 저항 없이 MCU의 ADC로 모터 전류를 읽을 수 있다. 이 값으로 바퀴가 막히거나 포크가 끝에 닿은 것을 알아낼 수 있다. SPI형은 전류 제한 크기와 과전류 임계값, 출력 전압이 바뀌는 속도를 설정할 수 있고, 어떤 결함이 났는지 레지스터로 읽을 수 있다. 전원은 4.5에서 35볼트까지라 12볼트 차체에 여유가 있다. 표에서 연속 전류와 보호 전류는 다른 값이다. DRV8244의 연속 전류는 TI가 85도 환경, 4층 기판, PWM 구동으로 계산한 열 해석값 4암페어로, 기판 방열에 따라 달라진다. 그래서 이 선정은 차체 모터의 전류를 잰 뒤 확정하며, 그 전류에 맞춰 전류 제한과 기판 방열을 설계한다.""",
+    [(DRV_DS, 'DRV8244-Q1 데이터시트 SLVSG24C — 4.5–35 V, RON 47 mΩ(VQFN-HR), 출력 전류 Internally limited, OCP 21–40/15–31/10.5–24 A, ITRIP 7단계, fPWM ≤ 25 kHz, AIPROPI 4750 A/A, 표 7-1 DC 4.0 A (PWM, 85 °C, 40×40 mm 4층 2 oz), 주문 표 DRV8244SQRYJRQ1 = VQFN-HR(RYJ) 16'),
+     ('https://www.infineon.com/dgdl/bts7960b-pb-final.pdf?fileId=db3a30431ed1d7b2011efe782ebd6b60', 'BTS7960 제품 요약 — 전류 제한 43 A typ'),
+     ('https://www.pololu.com/product/1451', 'Pololu VNH5019 — 5.5–24 V, 12 A 연속, 30 A 최대, 약 140 mV/A'),
+     ('https://courses.ideate.cmu.edu/16-375/f2026/text/electronics/cy-md13s-driver.html', 'Cytron MD13S — 6–30 V, 13 A 연속, 30 A 10 s'),
+     ('https://www.ti.com/lit/ds/symlink/drv8871.pdf', 'DRV8871 — 6.5–45 V, 3.6 A 피크')],
+    '출처: 제조사 데이터시트 · 제품 페이지')
 
-# ----------------------------------------------------------------- 11
-add('중간 미팅 확인 사항', '08  중간 미팅 확인 사항', 30, """
-<h2 class="headline">중간 미팅 확인 사항</h2>
-<div class="spread grow"><div class="qcols">
-<article><h3>확인 사항</h3><ul><li>시연 장소·바닥 상태 (실내·실외)</li><li>평가 기준 (성공률 · 시간 · 정밀도)</li><li>시험 팔레트 치수·적재 하중</li><li>다우테크놀로지 사례 공유</li></ul></article>
-<article><h3>자료 요청</h3><ul><li>제어기·조종기 배선·신호 자료</li><li>실제 지게차 운용 영상·데이터</li></ul></article>
-<article><h3>협의 사항</h3><ul><li>시험 공간</li><li>허용 속도 상한</li><li>EPAL 6·축소 T11 시험 조건</li><li>동봉 팔레트 활용</li></ul></article>
+# ----------------------------------------------------------------- 9 encoder
+ENCODER_ROWS = [
+    ('MT6701 (선정)', '14 bit', 'I2C · SSI · ABZ · UVW · 아날로그 · PWM', '절대 + 증분', '±1.5° (max)'),
+    ('AS5600', '12 bit', 'I2C · 아날로그 · PWM', '절대', '±1° (시스템 INL)'),
+    ('AS5048A/B', '14 bit', 'SPI 또는 I2C · PWM', '절대', '±1.2° (온도 포함)'),
+    ('AS5047P', '14 bit', 'SPI · ABI · UVW · PWM', '절대 + 증분', '±1° (온도 포함)'),
+    ('모터축 쿼드러처', '제품별', 'A/B(Z)', '증분', '원점 복귀 필요'),
+]
+encoder_table = ''.join(
+    f'<tr{PICK if i == 0 else ""}><td>{a}</td><td>{b}</td><td>{c}</td><td>{d}</td><td>{e}</td></tr>'
+    for i, (a, b, c, d, e) in enumerate(ENCODER_ROWS))
+add('엔코더 선정', '08  하드웨어 선정 · 엔코더', 70, f"""
+<h2 class="headline">엔코더: MT6701 선정 — 절대각과 증분 출력을 한 칩에</h2>
+<div class="split grow" style="grid-template-columns:1.5fr 0.62fr">
+<table class="comparison select"><tr><th>후보</th><th>분해능</th><th>출력</th><th>방식</th><th>정확도</th></tr>{encoder_table}</table>
+<div class="stack reasons">
+<article><h3>조향각: 절대각</h3><p>전원을 켜자마자 각도 확인<br>원점 복귀 동작 불필요</p></article>
+<article><h3>바퀴 속도: ABZ 증분</h3><p>MCU 타이머 엔코더 모드로 직접 계수<br>비접촉 자석식 · 1–2달러대</p></article>
+<article class="note"><h3>4주차 피드백: 분해능</h3><p>"10 bit면 충분" → 14 bit로 충분<br>성능은 정확도(±1.5°)와 자석 정렬이 좌우</p></article>
 </div>
-<div class="next-strip"><b>다음 작업</b><span class="now">버튼 신호 분석</span><i>→</i><span>하위 제어 (명령 입력·상태 읽기)</span></div>
 </div>
+<div class="takeaway">장착 조건: 자석 축 어긋남 ≤ 0.3 mm · 간격 0.5–2 mm → 브래킷 설계 필요</div>
 """,
-    """마지막으로 추석 이후 중간 미팅에서 확인할 사항이다. 시연 환경과 평가 기준, 시험 팔레트를 확인하고, 제어기·조종기 자료와 운용 영상을 요청하며, 시험 공간과 팔레트 조건은 기업과 함께 정한다. 다음 작업은 측정한 버튼 신호를 분석해 하위 제어를 만드는 것이다.""",
-    [(FEEDBACK, '§1 중간 미팅 준비 — 궁금한 것 · 제공 요청 · 결정 요청'), (MAP, '로드맵 H1–H4 · M4')],
-    '출처: 4주차 피드백 · 개발 로드맵')
+    """엔코더로는 자석식 각도 센서인 MT6701을 골랐다. 축 끝에 자석을 붙이고 그 위에 칩을 두면 접촉 없이 회전각을 잰다. 가장 큰 이유는 한 칩이 절대각과 증분 출력을 모두 낸다는 점이다. 조향축에 달면 전원을 켜자마자 현재 조향각을 알 수 있어 원점을 찾는 동작이 필요 없고, 바퀴 쪽에 달면 ABZ 출력을 MCU 타이머의 엔코더 모드로 바로 세어 속도를 잰다. 값도 1에서 2달러 수준이다. 비슷한 기능의 AS5047P가 정확도는 조금 낫지만, MT6701은 I2C와 아날로그 출력까지 있고 영점을 칩에 저장할 수 있다. 4주차에 엔코더 분해능은 10비트면 충분하다는 피드백을 받았다. MT6701은 14비트로 충분하고, 실제 성능은 분해능보다 최대 1.5도의 정확도와 자석을 얼마나 바르게 붙이는지가 좌우한다. 그래서 자석과 칩의 축 어긋남 0.3밀리미터 이하, 간격 0.5에서 2밀리미터를 지키는 브래킷을 설계한다. 어느 축에 몇 개를 달지는 조종기 신호 분석과 모터 구조를 확인한 뒤 정한다.""",
+    [(MT_DS, 'MT6701 데이터시트 Rev.1.5 — 14 bit, I2C·SSI·ABZ(≤1024 PPR)·UVW·아날로그·PWM, INL ±1.5° max, 자석 Ø6×2.5 mm·간격 0.5–2.0 mm·축 어긋남 ≤0.3 mm, 영점 EEPROM'),
+     ('https://www.lcsc.com/product-detail/Angle-Linear-Position-Sensors_Magn-Tek-MT6701CT-STD_C2856764.html', 'LCSC 가격 $1.43–2.04'),
+     ('https://www1.futureelectronics.com/doc/ams/AS5047P-ATSM.pdf', 'AS5047P — 14 bit, SPI·ABI·UVW·PWM, 온도 포함 ±1°'),
+     ('https://media.digikey.com/pdf/Data%20Sheets/Austriamicrosystems%20PDFs/AS5048A,B.pdf', 'AS5048A/B — 14 bit, 온도 포함 ±1.2°'),
+     ('https://files.seeedstudio.com/wiki/Grove-12-bit-Magnetic-Rotary-Position-Sensor-AS5600/res/Magnetic%20Rotary%20Position%20Sensor%20AS5600%20Datasheet.pdf', 'AS5600 — 12 bit, 시스템 INL ±1°'),
+     (FEEDBACK, '§4 엔코더 분해능 10 bit면 충분')],
+    '출처: 제조사 데이터시트 · 판매처 가격')
 
 TITLE = '5주차 자율 지게차 개발'
 TOTAL = 610
+N_SLIDES = 9
 
 
 def build():
-    assert len(slides) == 9, len(slides)
+    assert len(slides) == N_SLIDES, len(slides)
     assert sum(s['seconds'] for s in slides) == TOTAL, sum(s['seconds'] for s in slides)
     sections = []
     script = [f'# {TITLE} · 발표 원고', '',
-              f'9장 · 시간 배분 합계 {TOTAL//60}분 {TOTAL%60}초. 쪽별 배정 시간은 발표 연습 후 조정한다.', '',
-              '기준일: 2026-09-29. 2–4쪽은 차체 실측 결과이고, 시뮬레이션 쪽(5–8)은 '
-              'Isaac Sim 합성 장면의 기술 실증이다. 시뮬레이션 수치는 실제 장비 성능이 아니며, '
-              '로봇 제어는 시뮬레이터 정답 위치를 썼다.', '']
+              f'{N_SLIDES}장 · 시간 배분 합계 {TOTAL//60}분 {TOTAL%60}초. 쪽별 배정 시간은 발표 연습 후 조정한다.', '',
+              '기준일: 2026-09-29. 하드웨어 발표이다. 실측·파형 쪽은 팀 측정 결과이고, 부품 선정 쪽의 사양은 제조사 데이터시트 값이다.', '']
     elapsed = 0
     for i, s in enumerate(slides, 1):
         source_lines = '\n'.join(f'{label}: {url}' for url, label in s['sources'])

@@ -476,16 +476,3 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .fact { background:var(--uos-surface); border-left:6px solid #c8281e; padding:12px 20px; display:flex; align-items:baseline; gap:16px; }
 .fact b { font-size:44px; color:#1b1f24; line-height:1.1; white-space:nowrap; }
 .fact span { font-size:21px; color:#44505c; }
-
-/* Hardware selection slides. */
-.comparison.select { font-size:19px; align-self:center; }
-.comparison.select td, .comparison.select th { padding:9px 10px; }
-.comparison.select td:nth-child(2), .comparison.select td:first-child { white-space:nowrap; }
-.comparison.select tr.pick td { background:#fff8e6; font-weight:700; color:#1b1f24; }
-.comparison.select tr.pick td:first-child { border-left:5px solid #E0A100; }
-.reasons { justify-content:center; gap:12px; }
-.reasons article { background:var(--uos-surface); border-top:4px solid var(--uos-blue); padding:10px 16px; }
-.reasons article.warn { border-top-color:#c0392b; background:#fdf1ef; }
-.reasons article.note { border-top-color:#E0A100; background:#fff8e6; }
-.reasons h3 { font-size:21px; margin-bottom:4px; }
-.reasons p { font-size:18px; line-height:1.45; margin:0; }
