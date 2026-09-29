@@ -66,27 +66,40 @@ measure_table = ''.join(f'<tr><td>{k}</td><td class="pending">—</td><td class=
 add('차체 실측', '01  차체 실측', 45, f"""
 <h2 class="headline">차체 실측값과 잠정 모델 비교 <span class="draft">작성 중</span></h2>
 <div class="split grow" style="grid-template-columns:0.8fr 1.2fr">
-{placeholder('치수선 사진', '측정 기준점·치수선 표시')}
+{figure('30_chassis_pallet.jpg', '입고한 지게차 차체와 앞에 놓인 동봉 플라스틱 팔레트', '차체와 동봉 팔레트 (2026-09-30 촬영)', cls='')}
 <table class="comparison measure"><tr><th>항목</th><th>실측 (예정)</th><th>잠정 모델</th></tr>{measure_table}</table>
 </div>
 <div class="takeaway">반영 계획: 실측값으로 시뮬레이션 모델·좌표 변환 갱신</div>
 """,
     """[작성 예정] 차체 실측 결과를 보인다. 측정 대상과 기준점, 측정값을 표로 정리하고, 지금까지 시뮬레이션에 쓴 잠정 모델 값과 비교한다. 잠정 모델은 상품 사진과 카탈로그로 만든 것이므로 실측값으로 바꾼다. 최소 회전 반경은 주행 시험이 필요해 정적 실측과 따로 표시한다.""",
     [(MODEL, '잠정 모델 치수 — 카탈로그 값과 사진 비례 추정'), (INTAKE, '입고 때 미측정 항목')],
-    '화면 생성: 실물 사진 (작성 예정)')
+    '화면 생성: 실물 사진(2026-09-30, EXIF 제거) · 실측 표(작성 예정)')
 
 # ----------------------------------------------------------------- 3 (placeholder)
+PALLET_ROWS = [
+    ('외형 (길이 × 폭)', '약 42 × 30 cm', '길이는 다리 바깥 기준'),
+    ('전체 높이', '약 8.5 cm', ''),
+    ('상판 두께', '약 2 cm', ''),
+    ('포크 진입 높이', '약 6.5 cm', '바닥 ~ 상판 아래'),
+    ('구조', '다리 9개 (3 × 3)', '네 방향 진입'),
+    ('포크 폭·두께·간격', '측정 예정', ''),
+]
+pallet_table = ''.join(f'<tr><td class="step">{a}</td><td><b>{b}</b></td><td class="muted">{c}</td></tr>' for a, b, c in PALLET_ROWS)
 add('포크·동봉 팔레트', '02  포크 · 동봉 팔레트', 40, f"""
-<h2 class="headline">포크·동봉 팔레트 실측 <span class="draft">작성 중</span></h2>
-<div class="split grow" style="grid-template-columns:1fr 1fr">
-{placeholder('포크 사진 · 치수선', '폭 · 두께 · 간격 · 최저·최고 높이')}
-{placeholder('동봉 팔레트 사진 · 치수선', '외형 · 포켓 개구 폭·높이 · 포크와의 여유')}
+<h2 class="headline">동봉 팔레트 약 42 × 30 × 8.5 cm · 포크 진입 높이 약 6.5 cm</h2>
+<div class="split grow" style="grid-template-columns:0.95fr 1.05fr">
+{figure('32_pallet_on_forks.jpg', '포크 위에 올린 동봉 팔레트', '포크 위에 올린 동봉 팔레트', cls='')}
+<div class="stack" style="gap:10px">
+<table class="comparison select pallet"><tr><th>항목</th><th>값</th><th>비고</th></tr>{pallet_table}</table>
+<div class="thumbs"><img src="assets/33_pallet_length.jpg" alt="줄자로 잰 팔레트 길이"><img src="assets/34_pallet_height.jpg" alt="줄자로 잰 팔레트 높이"><img src="assets/35_pallet_width.jpg" alt="줄자로 잰 팔레트 폭"></div>
+<p class="chart-cap">값은 줄자 사진 눈금 판독 · 포크 치수는 측정 예정</p>
 </div>
-<div class="takeaway">포크 치수: 시험 팔레트 제작과 삽입 여유 계산의 기준</div>
+</div>
 """,
-    """[작성 예정] 포크의 폭과 두께, 두 포크의 간격, 최저·최고 높이를 잰 결과를 보인다. 오른쪽은 차체와 함께 온 팔레트의 외형과 포켓 개구이다. 포크 치수와 포켓 개구의 차이가 삽입할 때의 좌우·상하 여유가 되므로, 이 값이 시험 팔레트 제작과 삽입 목표의 기준이 된다.""",
-    [(INTAKE, '입고 때 관찰한 포크·동봉 팔레트'), (MODEL, '잠정 모델 포크 치수 — 사진 추정')],
-    '화면 생성: 실물 사진 (작성 예정)')
+    """차체와 함께 온 플라스틱 팔레트를 줄자로 쟀다. 외형은 약 42 곱하기 30센티미터이고, 전체 높이는 약 8.5센티미터, 상판 두께는 약 2센티미터이다. 따라서 포크가 들어갈 수 있는 높이는 바닥에서 상판 아래까지 약 6.5센티미터이다. 다리는 3 곱하기 3으로 아홉 개라 네 방향 어디서든 포크를 넣을 수 있다. 왼쪽처럼 포크 위에 올려 크기를 맞춰 보았다. 포크의 폭과 두께, 간격은 이어서 재어 삽입 여유를 계산한다.""",
+    [('팀 실측 사진 (2026-09-30)', '팔레트 길이·높이·폭 줄자 사진 3장 — 값은 사진 눈금 판독, 길이는 다리 바깥 기준'),
+     (MODEL, '잠정 모델 포크 치수 — 사진 추정')],
+    '화면 생성: 실물 사진(2026-09-30, EXIF 제거)')
 
 # ----------------------------------------------------------------- 4-7 remote reverse engineering
 # Traces are drawn from assets/data_la_edges.json (prepare_la.py): the level
@@ -179,18 +192,19 @@ def la_zoom(key='drive', centre=5.0906, span=0.008):
 add('측정 구성', '03  조종기·제어기 리버스 엔지니어링', 50, f"""
 <h2 class="headline">무선 조종기·제어기 신호를 로직 애널라이저로 측정</h2>
 <div class="split grow" style="grid-template-columns:0.9fr 0.9fr 1.2fr">
-{figure('05_remote.jpg', '무선 조종기 T07D-DGN', '무선 조종기 T07D-DGN', cls='')}
-{figure('04_controller_label.jpg', '좌석 아래 제어기의 라벨 J6 D-CC-12V', '제어기(메인보드) J6 D-CC-12V', cls='')}
+{figure('37_la_setup.jpg', '메인보드에 로직 애널라이저 DSLogic Pro 탐침을 연결한 측정 구성', '메인보드 ↔ DSLogic Pro 연결', cls='')}
+{figure('36_board_voltage.jpg', '멀티미터로 메인보드 전원 전압 12.23 V를 잰 모습', '메인보드 전원 12.23 V (멀티미터)', cls='')}
 <table class="comparison select setup"><tr><th colspan="2">측정 구성</th></tr>
 <tr><td>장비</td><td>DSLogic Pro · 멀티미터</td></tr>
 <tr><td>샘플링</td><td>1 MHz · 2채널 (CH0 · CH1)</td></tr>
+<tr><td>전원</td><td>메인보드 12.23 V</td></tr>
 <tr><td>주행</td><td>앞 → 뒤 → 앞 → 뒤</td></tr>
 <tr><td>승강</td><td>상승 → 하강 → 상승 → 하강</td></tr>
 <tr><td>조향</td><td>왼쪽 → 오른쪽 → 왼쪽 → 오른쪽</td></tr></table>
 </div>
 <div class="takeaway">4주차 피드백: 버튼별 신호를 로직 애널라이저로 측정 · 기존 제어기 리버스 엔지니어링</div>
 """,
-    """4주차 피드백에 따라 조종기와 제어기를 역으로 분석하였다. 장비는 DSLogic Pro 로직 애널라이저와 멀티미터이다. 로직 애널라이저는 1메가헤르츠로 두 채널을 기록했고, 주행은 앞과 뒤, 승강은 상승과 하강, 조향은 왼쪽과 오른쪽을 번갈아 두 번씩 눌렀다. 제어기에는 무선 수신 회로까지 모두 한 보드에 들어 있다.""",
+    """4주차 피드백에 따라 조종기와 제어기를 역으로 분석하였다. 장비는 DSLogic Pro 로직 애널라이저와 멀티미터이다. 왼쪽은 메인보드에 로직 애널라이저를 연결한 모습이고, 가운데는 멀티미터로 잰 메인보드 전원 12.23볼트이다. 로직 애널라이저는 1메가헤르츠로 두 채널을 기록했고, 주행은 앞과 뒤, 승강은 상승과 하강, 조향은 왼쪽과 오른쪽을 번갈아 두 번씩 눌렀다. 제어기에는 무선 수신 회로까지 모두 한 보드에 들어 있다.""",
     [(INTAKE, '조종기·제어기 표기와 사진'), (FEEDBACK, '§2 로직 애널라이저로 버튼별 신호 측정, 리버스 엔지니어링'),
      ('forklift-presentations/week-05/assets/data_la_edges.json', 'DSLogic 캡처 3개 (1 MHz, 2채널) — prepare_la.py 로 추출')],
     '화면 생성: 실물 사진(2026-09-23 입고) · 팀 측정 기록')

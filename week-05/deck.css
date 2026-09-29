@@ -515,3 +515,8 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .comparison.select.meeting td { padding:4px 14px; white-space:normal !important; }
 .comparison.select.meeting td.item { font-weight:400; color:#1b1f24; }
 .comparison.select.meeting td.grp { font-weight:700; color:var(--uos-blue); vertical-align:middle; background:var(--uos-surface); }
+.thumbs { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.thumbs img { width:100%; height:110px; object-fit:cover; border:1px solid var(--uos-rule); }
+.comparison.select.pallet { font-size:19px; }
+.comparison.select.pallet td { padding:6px 10px; white-space:nowrap; }
+.comparison.select.pallet td.step { font-weight:700; color:#44505c; }

@@ -3,7 +3,7 @@
 <link rel="icon" href="data:,">
 <script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>5주차 자율 지게차 개발</title>
-<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=3854ca1b1500"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=0a1eb106bcbe"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 <section class="title-section" data-label="개발 진행 보고" data-screen-label="01" data-duration="20" data-speaker-notes="권장 20초
 
@@ -23,14 +23,14 @@
 [작성 예정] 차체 실측 결과를 보인다. 측정 대상과 기준점, 측정값을 표로 정리하고, 지금까지 시뮬레이션에 쓴 잠정 모델 값과 비교한다. 잠정 모델은 상품 사진과 카탈로그로 만든 것이므로 실측값으로 바꾼다. 최소 회전 반경은 주행 시험이 필요해 정적 실측과 따로 표시한다.
 
 [Sources]
-화면 생성: 실물 사진 (작성 예정)
+화면 생성: 실물 사진(2026-09-30, EXIF 제거) · 실측 표(작성 예정)
 잠정 모델 치수 — 카탈로그 값과 사진 비례 추정: sim/models/dls08_provisional/parameters.yaml
 입고 때 미측정 항목: docs/validation/2026-09-23-chassis-intake.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="01  차체 실측"><div class="slide-body">
 <h2 class="headline">차체 실측값과 잠정 모델 비교 <span class="draft">작성 중</span></h2>
 <div class="split grow" style="grid-template-columns:0.8fr 1.2fr">
-<div class="placeholder grow"><b>치수선 사진</b><span>측정 기준점·치수선 표시</span></div>
+<figure class="shot "><img class="media" src="assets/30_chassis_pallet.jpg" alt="입고한 지게차 차체와 앞에 놓인 동봉 플라스틱 팔레트"><figcaption class="small muted">차체와 동봉 팔레트 (2026-09-30 촬영)</figcaption></figure>
 <table class="comparison measure"><tr><th>항목</th><th>실측 (예정)</th><th>잠정 모델</th></tr><tr><td>전장 × 전폭 × 전고</td><td class="pending">—</td><td class="muted">1.46 × 0.63 × 1.01 m (카탈로그)</td></tr><tr><td>질량</td><td class="pending">—</td><td class="muted">24 kg (카탈로그)</td></tr><tr><td>축간 거리 · 윤거</td><td class="pending">—</td><td class="muted">0.64 · 0.51 m (사진 추정)</td></tr><tr><td>바퀴 반지름</td><td class="pending">—</td><td class="muted">0.135 m (사진 추정)</td></tr><tr><td>포크 길이 · 폭 · 두께</td><td class="pending">—</td><td class="muted">420 · 55 · 24 mm (사진 추정)</td></tr><tr><td>포크 중심 간격</td><td class="pending">—</td><td class="muted">290 mm (사진 추정)</td></tr><tr><td>승강 범위</td><td class="pending">—</td><td class="muted">280 mm (사진 추정)</td></tr><tr><td>최소 회전 반경</td><td class="pending">—</td><td class="muted">— (주행 시험 필요)</td></tr></table>
 </div>
 <div class="takeaway">반영 계획: 실측값으로 시뮬레이션 모델·좌표 변환 갱신</div>
@@ -39,26 +39,29 @@
 
 <section data-label="포크·동봉 팔레트" data-screen-label="03" data-duration="40" data-speaker-notes="권장 40초
 
-[작성 예정] 포크의 폭과 두께, 두 포크의 간격, 최저·최고 높이를 잰 결과를 보인다. 오른쪽은 차체와 함께 온 팔레트의 외형과 포켓 개구이다. 포크 치수와 포켓 개구의 차이가 삽입할 때의 좌우·상하 여유가 되므로, 이 값이 시험 팔레트 제작과 삽입 목표의 기준이 된다.
+차체와 함께 온 플라스틱 팔레트를 줄자로 쟀다. 외형은 약 42 곱하기 30센티미터이고, 전체 높이는 약 8.5센티미터, 상판 두께는 약 2센티미터이다. 따라서 포크가 들어갈 수 있는 높이는 바닥에서 상판 아래까지 약 6.5센티미터이다. 다리는 3 곱하기 3으로 아홉 개라 네 방향 어디서든 포크를 넣을 수 있다. 왼쪽처럼 포크 위에 올려 크기를 맞춰 보았다. 포크의 폭과 두께, 간격은 이어서 재어 삽입 여유를 계산한다.
 
 [Sources]
-화면 생성: 실물 사진 (작성 예정)
-입고 때 관찰한 포크·동봉 팔레트: docs/validation/2026-09-23-chassis-intake.md
+화면 생성: 실물 사진(2026-09-30, EXIF 제거)
+팔레트 길이·높이·폭 줄자 사진 3장 — 값은 사진 눈금 판독, 길이는 다리 바깥 기준: 팀 실측 사진 (2026-09-30)
 잠정 모델 포크 치수 — 사진 추정: sim/models/dls08_provisional/parameters.yaml
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="02  포크 · 동봉 팔레트"><div class="slide-body">
-<h2 class="headline">포크·동봉 팔레트 실측 <span class="draft">작성 중</span></h2>
-<div class="split grow" style="grid-template-columns:1fr 1fr">
-<div class="placeholder grow"><b>포크 사진 · 치수선</b><span>폭 · 두께 · 간격 · 최저·최고 높이</span></div>
-<div class="placeholder grow"><b>동봉 팔레트 사진 · 치수선</b><span>외형 · 포켓 개구 폭·높이 · 포크와의 여유</span></div>
+<h2 class="headline">동봉 팔레트 약 42 × 30 × 8.5 cm · 포크 진입 높이 약 6.5 cm</h2>
+<div class="split grow" style="grid-template-columns:0.95fr 1.05fr">
+<figure class="shot "><img class="media" src="assets/32_pallet_on_forks.jpg" alt="포크 위에 올린 동봉 팔레트"><figcaption class="small muted">포크 위에 올린 동봉 팔레트</figcaption></figure>
+<div class="stack" style="gap:10px">
+<table class="comparison select pallet"><tr><th>항목</th><th>값</th><th>비고</th></tr><tr><td class="step">외형 (길이 × 폭)</td><td><b>약 42 × 30 cm</b></td><td class="muted">길이는 다리 바깥 기준</td></tr><tr><td class="step">전체 높이</td><td><b>약 8.5 cm</b></td><td class="muted"></td></tr><tr><td class="step">상판 두께</td><td><b>약 2 cm</b></td><td class="muted"></td></tr><tr><td class="step">포크 진입 높이</td><td><b>약 6.5 cm</b></td><td class="muted">바닥 ~ 상판 아래</td></tr><tr><td class="step">구조</td><td><b>다리 9개 (3 × 3)</b></td><td class="muted">네 방향 진입</td></tr><tr><td class="step">포크 폭·두께·간격</td><td><b>측정 예정</b></td><td class="muted"></td></tr></table>
+<div class="thumbs"><img src="assets/33_pallet_length.jpg" alt="줄자로 잰 팔레트 길이"><img src="assets/34_pallet_height.jpg" alt="줄자로 잰 팔레트 높이"><img src="assets/35_pallet_width.jpg" alt="줄자로 잰 팔레트 폭"></div>
+<p class="chart-cap">값은 줄자 사진 눈금 판독 · 포크 치수는 측정 예정</p>
 </div>
-<div class="takeaway">포크 치수: 시험 팔레트 제작과 삽입 여유 계산의 기준</div>
+</div>
 </div></x-import>
 </section>
 
 <section data-label="측정 구성" data-screen-label="04" data-duration="50" data-speaker-notes="권장 50초
 
-4주차 피드백에 따라 조종기와 제어기를 역으로 분석하였다. 장비는 DSLogic Pro 로직 애널라이저와 멀티미터이다. 로직 애널라이저는 1메가헤르츠로 두 채널을 기록했고, 주행은 앞과 뒤, 승강은 상승과 하강, 조향은 왼쪽과 오른쪽을 번갈아 두 번씩 눌렀다. 제어기에는 무선 수신 회로까지 모두 한 보드에 들어 있다.
+4주차 피드백에 따라 조종기와 제어기를 역으로 분석하였다. 장비는 DSLogic Pro 로직 애널라이저와 멀티미터이다. 왼쪽은 메인보드에 로직 애널라이저를 연결한 모습이고, 가운데는 멀티미터로 잰 메인보드 전원 12.23볼트이다. 로직 애널라이저는 1메가헤르츠로 두 채널을 기록했고, 주행은 앞과 뒤, 승강은 상승과 하강, 조향은 왼쪽과 오른쪽을 번갈아 두 번씩 눌렀다. 제어기에는 무선 수신 회로까지 모두 한 보드에 들어 있다.
 
 [Sources]
 화면 생성: 실물 사진(2026-09-23 입고) · 팀 측정 기록
@@ -69,11 +72,12 @@ DSLogic 캡처 3개 (1 MHz, 2채널) — prepare_la.py 로 추출: forklift-pres
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="03  조종기·제어기 리버스 엔지니어링"><div class="slide-body">
 <h2 class="headline">무선 조종기·제어기 신호를 로직 애널라이저로 측정</h2>
 <div class="split grow" style="grid-template-columns:0.9fr 0.9fr 1.2fr">
-<figure class="shot "><img class="media" src="assets/05_remote.jpg" alt="무선 조종기 T07D-DGN"><figcaption class="small muted">무선 조종기 T07D-DGN</figcaption></figure>
-<figure class="shot "><img class="media" src="assets/04_controller_label.jpg" alt="좌석 아래 제어기의 라벨 J6 D-CC-12V"><figcaption class="small muted">제어기(메인보드) J6 D-CC-12V</figcaption></figure>
+<figure class="shot "><img class="media" src="assets/37_la_setup.jpg" alt="메인보드에 로직 애널라이저 DSLogic Pro 탐침을 연결한 측정 구성"><figcaption class="small muted">메인보드 ↔ DSLogic Pro 연결</figcaption></figure>
+<figure class="shot "><img class="media" src="assets/36_board_voltage.jpg" alt="멀티미터로 메인보드 전원 전압 12.23 V를 잰 모습"><figcaption class="small muted">메인보드 전원 12.23 V (멀티미터)</figcaption></figure>
 <table class="comparison select setup"><tr><th colspan="2">측정 구성</th></tr>
 <tr><td>장비</td><td>DSLogic Pro · 멀티미터</td></tr>
 <tr><td>샘플링</td><td>1 MHz · 2채널 (CH0 · CH1)</td></tr>
+<tr><td>전원</td><td>메인보드 12.23 V</td></tr>
 <tr><td>주행</td><td>앞 → 뒤 → 앞 → 뒤</td></tr>
 <tr><td>승강</td><td>상승 → 하강 → 상승 → 하강</td></tr>
 <tr><td>조향</td><td>왼쪽 → 오른쪽 → 왼쪽 → 오른쪽</td></tr></table>
