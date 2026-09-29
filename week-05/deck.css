@@ -470,3 +470,9 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .next-plan p { font-size:19px; line-height:1.45; margin:0; color:#1b1f24; }
 .next-plan > i { font-style:normal; align-self:center; font-size:26px; color:#8c959e; }
 .next-plan > em { grid-column:1 / -1; font-style:normal; font-size:19px; color:#44505c; }
+
+/* LiDAR scan slide: three big numbers beside the clip. */
+.lidar-facts { justify-content:center; gap:16px; }
+.fact { background:var(--uos-surface); border-left:6px solid #c8281e; padding:12px 20px; display:flex; align-items:baseline; gap:16px; }
+.fact b { font-size:44px; color:#1b1f24; line-height:1.1; white-space:nowrap; }
+.fact span { font-size:21px; color:#44505c; }

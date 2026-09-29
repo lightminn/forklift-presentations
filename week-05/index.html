@@ -3,11 +3,11 @@
 <link rel="icon" href="data:,">
 <script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>5주차 자율 지게차 개발</title>
-<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=997c418ff303"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=7dceb6e95089"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 <section class="title-section" data-label="개발 진행 보고" data-screen-label="01" data-duration="20" data-speaker-notes="권장 20초
 
-이번 주에는 4주차 입고 조사에 이어 차체 실측과 배선 조사로 실물 개발을 본격화하였다. 먼저 4주차 피드백에 대한 답을 보이고, 실물 조사 결과와 앞으로 필요한 위치 추정 기술을 시뮬레이션에서 미리 확인한 기술 실증을 차례로 보인 뒤, 중간 미팅에서 확인할 질문과 다음 작업으로 마친다.
+이번 주 진행은 두 가지이다. 입고한 차체의 치수와 포크, 동봉 팔레트를 실측하고 조종기 버튼별 신호를 측정하였다. 그리고 시뮬레이션에서 2D LiDAR로 공장 지도를 만들고 그 안에서 자기 위치를 추정하는 데 성공하였다. 마지막으로 중간 미팅에서 확인할 사항을 정리한다.
 
 [Sources]
 진행 보고
@@ -18,56 +18,7 @@
 자율 지게차 개발" subtitle="팔레트 핸들링 경로 생성 및 제어"></x-import><img class="partner-mark" src="assets/riibotics-logo.png" alt="Riibotics">
 </section>
 
-<section data-label="개발 단계와 이번 주 위치" data-screen-label="02" data-duration="40" data-speaker-notes="권장 40초
-
-개발 계획서의 실물 개발 단계이다. 첫 단계인 차체 조사는 4주차 입고 조사에 이어 이번 주에 치수 실측과 전장·신호 조사를 진행하였다. 그다음이 컴퓨터가 명령을 넣고 상태를 읽는 하위 제어, 실측 차체 모델의 검증, 지도를 이용한 위치 추정, 그리고 포크 삽입과 운반이다. 이번 주에는 이 가운데 네 번째 단계인 위치 추정에 필요한 2D LiDAR SLAM을 시뮬레이션에서 미리 확인하였다. 이것은 실증이며, 실제 구성은 그 단계에서 실물 센서와 차체로 정한다.
-
-[Sources]
-출처: 개발 로드맵
-로드맵 H0–H4, M4–M6 (발표에서는 단계 이름으로 표기): docs/plans/2026-09-11-development-roadmap.md
-현재 진행 상태: docs/plans/2026-09-17-project-status-and-next-steps.md
-이번 주 시뮬레이션 실증: docs/validation/2026-09-26-factory-hall-and-isaac-slam.md
-[/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="01  개발 단계와 이번 주 위치"><div class="slide-body">
-<h2 class="headline">실물 개발 단계와 이번 주 위치</h2>
-<div class="pipeline grow">
-<article class="pipeline-step now"><h3>① 차체 조사</h3><img class="step-thumb" src="assets/t1_chassis.jpg" alt=""><p>치수 실측<br>전장·신호 조사</p><p class="state">진행 중</p></article>
-<article class="pipeline-step wait"><h3>② 하위 제어</h3><img class="step-thumb" src="assets/t2_remote.jpg" alt=""><p>컴퓨터 명령 입력<br>주행 상태 읽기</p><p class="state">예정</p></article>
-<article class="pipeline-step wait"><h3>③ 모델 검증</h3><img class="step-thumb" src="assets/t3_model.jpg" alt=""><p>실측 차체 모델<br>주행 특성 비교</p><p class="state">예정</p></article>
-<article class="pipeline-step demo"><h3>④ 위치 추정</h3><img class="step-thumb" src="assets/t4_map.jpg" alt=""><p>지도 기반<br>자기 위치 추정</p><p class="state">이번 주 진행<br>(시뮬레이션 실증)</p></article>
-<article class="pipeline-step wait"><h3>⑤ 삽입·운반</h3><img class="step-thumb" src="assets/t5_carry.jpg" alt=""><p>포크 삽입<br>적재·운반·하역</p><p class="state">예정</p></article>
-</div>
-<div class="takeaway">이번 주: 차체 실측 시작 · ④ 위치 추정용 2D LiDAR SLAM을 시뮬레이션으로 미리 확인</div>
-</div></x-import>
-</section>
-
-<section data-label="피드백 대응" data-screen-label="03" data-duration="85" data-speaker-notes="권장 85초
-
-4주차 피드백에 대한 답을 먼저 보인다. 가장 중요한 요청은 조종기 버튼마다 신호가 어떻게 들어가는지 확인하라는 것이었다. 로직 애널라이저로 버튼을 하나씩 눌러 측정했고, 결과는 뒤의 포크·팔레트·버튼 신호 장에서 보인다. 둘째, 오차를 비율로 표현하라는 피드백이다. 위 막대는 4주차 시뮬레이션 삽입 한 사례로, 포크 끝이 빗나간 5.7밀리미터는 포켓 벽까지 여유 45밀리미터의 약 13퍼센트이고, 그 가운데 차가 비스듬히 선 방향 오차가 약 63퍼센트로 가장 크다. 차 위치를 시뮬레이터가 알려 준 결과라 실물에서 더해질 자기 위치 추정 오차는 들어 있지 않고, 여유 45밀리미터는 포크 실측으로 갱신한다. 셋째, 카메라는 Crown 특허처럼 포크 캐리지 하단에 다는 방식을 후보로 둔다. 우리 D435i는 ToF가 아니라 적외선 패턴을 쓰는 스테레오 방식이므로, 그 자리에서 가까운 거리를 볼 수 있는지 먼저 확인하고 부족할 때 근거리 센서를 더한다. 센서 조합은 조언대로 우선순위를 낮게 둔다. 넷째, 이번 시뮬레이션은 관절 값을 그대로 써서 엔코더 분해능을 판단할 근거가 되지 않으므로, 실물 바퀴와 조향 신호를 잰 뒤 정한다. 다섯째, 사람의 운전과 비슷하게 움직이도록 지게차 표준 작업 순서를 조사해 우리 임무 단계와 대조한다.
-
-[Sources]
-출처: 4주차 측정값 · 제조사 사양 · 팀 검토
-4주차 포크 끝 좌우 5.7 mm = 추정 1.34 + 정지 0.78 + 방향 3.58 mm, 포켓 벽 45 mm 계산식: forklift-presentations/week-04/SOURCES.md
-포켓 벽까지 45 mm (잠정 포크 치수): docs/decisions/0003-target-selection-and-blind-zone-insertion.md
-§4 거리 0.05 % 일치 · 방향 오차: docs/validation/2026-09-26-factory-hall-and-isaac-slam.md
-D435i — 능동 IR 스테레오 깊이: https://www.realsenseai.com/products/depth-camera-d435i/
-Crown 특허 — 캐리지 장착: https://patents.google.com/patent/US9990535B2/en
-ADAPT — 근거리 전용 센서: https://arxiv.org/html/2503.14331v1
-4주차 피드백과 팀 메모: docs/references/week4_feedback.md
-[/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="02  4주차 피드백 대응"><div class="slide-body">
-<h2 class="headline">버튼별 신호 측정 · 오차를 여유 대비 비율로 표현</h2>
-<div class="fb-top"><b>포크 끝 오차는 여유의 약 13 % · 가장 큰 원인은 차체 방향</b><svg class="diagram" viewBox="0 0 1180 140" role="img" aria-label="포크 끝 옆 오차 5.7 mm는 포켓 벽까지 여유 45 mm의 약 13 %. 차체 방향 62.8 %, 카메라 23.5 %, 정지 위치 13.7 %"><g font-family="var(--uos-font)"><rect x="20" y="40" width="1140" height="46" rx="4" fill="#eef1f4"/><rect x="20.0" y="40" width="90.7" height="46" fill="#2f74c0"/><rect x="110.7" y="40" width="33.9" height="46" fill="#c26a1a"/><rect x="144.6" y="40" width="19.8" height="46" fill="#2e9a6b"/><line x1="1160" y1="30" x2="1160" y2="96" stroke="#c0392b" stroke-width="4"/><text x="1160" y="22" text-anchor="end" font-size="21" font-weight="700" fill="#c0392b">포켓 벽까지 45 mm</text><text x="178.4" y="72" font-size="24" font-weight="700" fill="#1b1f24">포크 끝 좌우 오차 5.7 mm</text><rect x="20" y="112" width="18" height="18" fill="#2f74c0"/><text x="46" y="128" font-size="20" fill="#1b1f24">차체 방향 62.8 %</text><rect x="250" y="112" width="18" height="18" fill="#c26a1a"/><text x="276" y="128" font-size="20" fill="#1b1f24">카메라 추정 23.5 %</text><rect x="480" y="112" width="18" height="18" fill="#2e9a6b"/><text x="506" y="128" font-size="20" fill="#1b1f24">정지 위치 13.7 %</text></g></svg><span class="fb-note">4주차 시뮬레이션 1회 · 잠정 포크 치수 · 차 위치는 정답 사용</span></div>
-<div class="fb-cards grow">
-<article class="key"><h3>버튼별 신호 <small>실물</small></h3><p>로직 애널라이저로 조종기 버튼별 신호 측정<br><b>→ 측정 결과: 04 버튼 신호</b></p></article>
-<article><h3>카메라 장착 위치</h3><p>Crown 방식 포크 캐리지 하단 후보<br>D435i는 ToF 아닌 적외선 스테레오<br><b>→ 근거리 관측 확인 후 센서 추가 판단</b></p></article>
-<article><h3>엔코더 분해능</h3><p>시뮬레이션은 분해능 미반영<br><b>→ 실물 바퀴·조향 신호 측정 후 결정</b></p></article>
-<article><h3>작업자 운용 절차</h3><p>지게차 표준 작업 순서 조사<br><b>→ 임무 단계와 대조 예정</b></p></article>
-</div>
-</div></x-import>
-</section>
-
-<section data-label="차체 실측" data-screen-label="04" data-duration="75" data-speaker-notes="권장 75초
+<section data-label="차체 실측" data-screen-label="02" data-duration="90" data-speaker-notes="권장 90초
 
 [작성 예정] 차체 실측 결과를 보인다. 측정 대상과 기준점, 측정값을 표로 정리하고, 지금까지 시뮬레이션에 쓴 잠정 모델 값과 비교한다. 잠정 모델은 상품 사진과 카탈로그로 만든 것이므로 실측값으로 바꾼다. 최소 회전 반경은 주행 시험이 필요해 정적 실측과 따로 표시한다.
 
@@ -76,7 +27,7 @@ ADAPT — 근거리 전용 센서: https://arxiv.org/html/2503.14331v1
 잠정 모델 치수 — 카탈로그 값과 사진 비례 추정: sim/models/dls08_provisional/parameters.yaml
 입고 때 미측정 항목: docs/validation/2026-09-23-chassis-intake.md
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="03  차체 실측"><div class="slide-body">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="01  차체 실측"><div class="slide-body">
 <h2 class="headline">차체 실측값과 잠정 모델 비교 <span class="draft">작성 중</span></h2>
 <div class="split grow" style="grid-template-columns:0.8fr 1.2fr">
 <div class="placeholder grow"><b>치수선 사진</b><span>측정 기준점·치수선 표시</span></div>
@@ -86,28 +37,70 @@ ADAPT — 근거리 전용 센서: https://arxiv.org/html/2503.14331v1
 </div></x-import>
 </section>
 
-<section data-label="포크·팔레트·버튼 신호" data-screen-label="05" data-duration="80" data-speaker-notes="권장 80초
+<section data-label="포크·동봉 팔레트" data-screen-label="03" data-duration="80" data-speaker-notes="권장 80초
 
-[작성 예정] 포크의 폭·두께·간격과 최저·최고 높이, 동봉 팔레트의 외형과 개구를 잰 결과를 보인다. 포크 치수는 시험 팔레트 제작의 선행 조건이다. 오른쪽에는 전원에서 제어기, 모터까지 확인한 배선과, 조종기 버튼별로 측정한 신호를 보인다. 파형을 얻지 못한 경우에는 확인한 배선과 다음 측정점을 구분해 보인다.
+[작성 예정] 포크의 폭과 두께, 두 포크의 간격, 최저·최고 높이를 잰 결과를 보인다. 오른쪽은 차체와 함께 온 팔레트의 외형과 포켓 개구이다. 포크 치수와 포켓 개구의 차이가 삽입할 때의 좌우·상하 여유가 되므로, 이 값이 시험 팔레트 제작과 삽입 목표의 기준이 된다.
 
 [Sources]
 화면 생성: 실물 사진 (작성 예정)
-입고 때 관찰한 전장 구성: docs/validation/2026-09-23-chassis-intake.md
-로드맵 H1 전장과 피드백: docs/plans/2026-09-11-development-roadmap.md
+입고 때 관찰한 포크·동봉 팔레트: docs/validation/2026-09-23-chassis-intake.md
+잠정 모델 포크 치수 — 사진 추정: sim/models/dls08_provisional/parameters.yaml
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="04  포크 · 팔레트 · 버튼 신호"><div class="slide-body">
-<h2 class="headline">포크·동봉 팔레트 실측 및 버튼별 신호 확인 <span class="draft">작성 중</span></h2>
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="02  포크 · 동봉 팔레트"><div class="slide-body">
+<h2 class="headline">포크·동봉 팔레트 실측 <span class="draft">작성 중</span></h2>
 <div class="split grow" style="grid-template-columns:1fr 1fr">
-<div class="placeholder grow"><b>포크 · 동봉 팔레트</b><span>포크 치수·팔레트 개구 실측 | 동봉 팔레트의 시험용 사용 가능성</span></div>
-<div class="placeholder grow"><b>배선 · 버튼 신호</b><span>확인된 배선·버튼 신호 | 파형 미확보 시 다음 측정 위치</span></div>
+<div class="placeholder grow"><b>포크 사진 · 치수선</b><span>폭 · 두께 · 간격 · 최저·최고 높이</span></div>
+<div class="placeholder grow"><b>동봉 팔레트 사진 · 치수선</b><span>외형 · 포켓 개구 폭·높이 · 포크와의 여유</span></div>
+</div>
+<div class="takeaway">포크 치수: 시험 팔레트 제작과 삽입 여유 계산의 기준</div>
+</div></x-import>
+</section>
+
+<section data-label="버튼별 신호" data-screen-label="04" data-duration="100" data-speaker-notes="권장 100초
+
+[작성 예정] 4주차 피드백에 따라 로직 애널라이저로 조종기 버튼을 하나씩 눌러 신호를 측정하였다. 왼쪽은 측정 구성으로, 어디에 탐침을 연결했는지 보인다. 오른쪽은 전진·후진, 조향, 승강 버튼별 파형이다. 버튼마다 신호가 어떤 형식으로 바뀌는지가 컴퓨터가 명령을 넣을 위치와 방식을 정한다.
+
+[Sources]
+화면 생성: 실물 사진 · 로직 애널라이저 캡처 (작성 예정)
+입고 때 관찰한 전장 구성: docs/validation/2026-09-23-chassis-intake.md
+§2 로직 애널라이저로 버튼별 신호 측정: docs/references/week4_feedback.md
+[/Sources]" style="background:#fff">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="03  조종기 버튼별 신호"><div class="slide-body">
+<h2 class="headline">조종기 버튼별 신호 측정 <span class="draft">작성 중</span></h2>
+<div class="split grow" style="grid-template-columns:0.8fr 1.2fr">
+<div class="placeholder grow"><b>측정 구성 사진</b><span>조종기·수신기 · 로직 애널라이저 연결 지점</span></div>
+<div class="placeholder grow"><b>버튼별 파형</b><span>전진·후진·조향·승강 버튼을 하나씩 눌렀을 때의 파형</span></div>
 </div>
 <div class="takeaway">다음 작업: 신호 형식 확인 후 컴퓨터 명령 입력 위치 결정</div>
 </div></x-import>
 </section>
 
+<section data-label="LiDAR가 보는 것" data-screen-label="05" data-duration="60" data-speaker-notes="권장 60초
+
+2D LiDAR가 무엇을 보는지부터 보인다. 영상은 Isaac 주행 기록의 스캔을 지게차를 따라가며 그린 것이다. LiDAR는 한 바퀴에 1,600개의 빔을 쏘아 빔마다 처음 닿은 곳까지 거리를 재며, 그 지점이 빨간 점이다. 한 바퀴는 0.1초이다. 빔은 1.05미터 높이의 수평면 하나에만 있으므로, 이 높이에 걸친 진한 회색 물체만 점으로 나타나고, 걸치지 않는 옅은 회색 물체는 바로 옆을 지나가도 보이지 않는다. 또 가까운 물체 뒤에 가려진 면은 찍히지 않는다. 센서 값은 우리가 쓸 A2M12의 카탈로그 값을 따른 합성 센서이다.
+
+[Sources]
+화면 생성: slam_log.npz 의 스캔과 정답 레이저 자세를 prepare_videos.py 로 그림 (물체 윤곽은 meta.json 배치)
+§3 Isaac SLAM 기록 seed 0 — 스캔 2,454개: docs/validation/2026-09-26-factory-hall-and-isaac-slam.md
+합성 LiDAR 1,600빔 · 10 Hz · 0.2–12 m · 장착 높이 1.05 m (A2M12 카탈로그 값, 실측 아님): config/isaac_slam_lidar.yaml
+[/Sources]" style="background:#fff">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="04  2D LiDAR 스캔"><div class="slide-body">
+<h2 class="headline">2D LiDAR는 1.05 m 높이 한 평면만 관측</h2>
+<div class="split grow" style="grid-template-columns:1.15fr 0.85fr">
+<figure class="shot "><video class="media" src="assets/25_scan_view.mp4" poster="assets/25_scan_view_poster.jpg" autoplay loop muted playsinline aria-label="지게차를 위에서 따라가며 본 LiDAR 스캔. 빨간 선과 점은 한 바퀴 스캔이 닿은 곳이고, 진한 회색 물체만 닿고 옅은 회색 물체는 스캔에 나타나지 않는다"></video><figcaption class="small muted">Isaac 주행 기록의 스캔 · 시뮬레이터상 실제 위치 기준 · 약 7배속</figcaption></figure>
+<div class="stack lidar-facts">
+<div class="fact"><b>1,600</b><span>빔 / 한 바퀴 (0.225° 간격)</span></div>
+<div class="fact"><b>10 Hz</b><span>한 바퀴 주기</span></div>
+<div class="fact"><b>0.2–12 m</b><span>측정 거리</span></div>
+<p class="vs-note">합성 센서 · A2M12 카탈로그 값 기준, 실측 아님</p>
+</div>
+</div>
+</div></x-import>
+</section>
+
 <section data-label="LiDAR 장착 높이" data-screen-label="06" data-duration="45" data-speaker-notes="권장 45초
 
-이번 주 시뮬레이션에서 새로 더한 센서는 2D LiDAR이다. 지도를 보기 전에 장착 높이부터 본다. 2D LiDAR는 한 높이의 수평면만 본다. 그래서 장착 높이가 두 가지를 맞바꾼다. 낮게 달면 마스트와 차체가 빔을 가리고, 높게 달면 그보다 낮은 물체를 보지 못한다. 오른쪽은 잠정 차체 모델에 빔 400개를 쏘아, 높이별로 자기 차체에 가려지는 비율을 잰 것이다. 0.55미터에서는 60퍼센트가 가려지고, 1.05미터에서는 가리지 않는다. 이번 실증은 차체 최상단 1.01미터보다 높은 1.05미터에 달았고, 그 대가로 이보다 낮은 물체는 지도에 나타나지 않아, 공장 장면의 적재 높이도 이 평면에 닿도록 맞추었다. 이 수치는 사진으로 만든 잠정 모델의 것이므로, 실물 장착 높이는 실측 차체로 다시 계산해 정한다.
+앞 영상처럼 LiDAR는 한 높이만 보므로, 장착 높이가 두 가지를 맞바꾼다. 낮게 달면 마스트와 차체가 빔을 가리고, 높게 달면 그보다 낮은 물체를 보지 못한다. 오른쪽은 잠정 차체 모델에 빔 400개를 쏘아, 높이별로 자기 차체에 가려지는 비율을 잰 것이다. 0.55미터에서는 60퍼센트가 가려지고, 1.05미터에서는 가리지 않는다. 이번 실증은 차체 최상단 1.01미터보다 높은 1.05미터에 달았고, 그 대가로 이보다 낮은 물체는 지도에 나타나지 않아, 공장 장면의 적재 높이도 이 평면에 닿도록 맞추었다. 이 수치는 사진으로 만든 잠정 모델의 것이므로, 실물 장착 높이는 실측 차체로 다시 계산해 정한다.
 
 [Sources]
 화면 생성: 개념도 · 잠정 모델 충돌 형상에 대한 광선 계산
@@ -116,7 +109,7 @@ ADAPT — 근거리 전용 센서: https://arxiv.org/html/2503.14331v1
 LiDAR 장착 위치 미확정: docs/hardware.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="05  2D LiDAR 장착 높이"><div class="slide-body">
-<h2 class="headline">LiDAR 장착 높이에 따른 관측 범위 차이</h2>
+<h2 class="headline">장착 높이별 차체 가림: 낮으면 차체가 가리고, 높으면 낮은 물체를 놓침</h2>
 <div class="split grow" style="grid-template-columns:1fr 1fr">
 
 <svg class="diagram grow" viewBox="0 0 600 330" role="img" aria-label="개념도: 높은 스캔 평면은 낮은 물체 위를 지나가고, 낮은 스캔 평면은 자기 차체에 가려진다">
@@ -135,15 +128,15 @@ LiDAR 장착 위치 미확정: docs/hardware.md
 <line x1="40" y1="185" x2="238" y2="185" stroke="#c26a1a" stroke-width="4" stroke-dasharray="10 7"/>
 <text x="262" y="176" font-size="19" fill="#8a4a10" font-weight="700">← 낮은 장착: 마스트·차체 가림</text>
 </g></svg>
-<svg class="diagram grow" viewBox="0 0 600 330" role="img" aria-label="LiDAR 장착 높이별로 차체에 가려지는 빔 비율: 0.55 m 60 %, 0.65 m 18.8 %, 0.75 m 9.5 %, 1.05 m 0 %"><g font-family="var(--uos-font)"><text x="0" y="24" font-size="22" font-weight="700" fill="#44505c">장착 높이별 차체 가림 비율 (잠정 차체 모델)</text><line x1="118" y1="48" x2="118" y2="296" stroke="#8c959e" stroke-width="2"/><text x="104" y="81.0" text-anchor="end" font-size="22" fill="#1b1f24" font-weight="700">0.55 m</text><rect x="118" y="56" width="390.0" height="34" rx="4" fill="#2f74c0"/><text x="518.0" y="81.0" font-size="21" fill="#1b1f24">60 %</text><text x="104" y="147.0" text-anchor="end" font-size="22" fill="#1b1f24" font-weight="700">0.65 m</text><rect x="118" y="122" width="122.2" height="34" rx="4" fill="#2f74c0"/><text x="250.2" y="147.0" font-size="21" fill="#1b1f24">18.8 %</text><text x="104" y="213.0" text-anchor="end" font-size="22" fill="#1b1f24" font-weight="700">0.75 m</text><rect x="118" y="188" width="61.75" height="34" rx="4" fill="#2f74c0"/><text x="189.75" y="213.0" font-size="21" fill="#1b1f24">9.5 %</text><text x="104" y="279.0" text-anchor="end" font-size="22" fill="#1b1f24" font-weight="700">1.05 m</text><text x="128.0" y="279.0" font-size="21" fill="#1b1f24">0 %  ← 이번 실증 장착</text></g></svg>
+<svg class="diagram grow" viewBox="0 0 600 330" role="img" aria-label="LiDAR 장착 높이별로 차체에 가려지는 빔 비율: 0.55 m 60 %, 0.65 m 18.8 %, 0.75 m 9.5 %, 1.05 m 0 %"><g font-family="var(--uos-font)"><text x="0" y="24" font-size="22" font-weight="700" fill="#44505c">자기 차체에 가려지는 빔 비율 (잠정 차체 모델)</text><line x1="118" y1="48" x2="118" y2="296" stroke="#8c959e" stroke-width="2"/><text x="104" y="81.0" text-anchor="end" font-size="22" fill="#1b1f24" font-weight="700">0.55 m</text><rect x="118" y="56" width="390.0" height="34" rx="4" fill="#2f74c0"/><text x="518.0" y="81.0" font-size="21" fill="#1b1f24">60 %</text><text x="104" y="147.0" text-anchor="end" font-size="22" fill="#1b1f24" font-weight="700">0.65 m</text><rect x="118" y="122" width="122.2" height="34" rx="4" fill="#2f74c0"/><text x="250.2" y="147.0" font-size="21" fill="#1b1f24">18.8 %</text><text x="104" y="213.0" text-anchor="end" font-size="22" fill="#1b1f24" font-weight="700">0.75 m</text><rect x="118" y="188" width="61.75" height="34" rx="4" fill="#2f74c0"/><text x="189.75" y="213.0" font-size="21" fill="#1b1f24">9.5 %</text><text x="104" y="279.0" text-anchor="end" font-size="22" fill="#1b1f24" font-weight="700">1.05 m</text><text x="128.0" y="279.0" font-size="21" fill="#1b1f24">0 %  ← 이번 실증 장착</text></g></svg>
 </div>
-<div class="takeaway">낮게 달면 차체가 가리고, 높게 달면 낮은 물체를 놓침 | 실물 장착 높이: 차체 실측 후 결정</div>
+<div class="takeaway">실물 장착 높이: 차체 실측 후 결정</div>
 </div></x-import>
 </section>
 
-<section data-label="지도 작성" data-screen-label="07" data-duration="75" data-speaker-notes="권장 75초
+<section data-label="지도 작성" data-screen-label="07" data-duration="70" data-speaker-notes="권장 70초
 
-4주차에는 카메라로 팔레트 위치만 알아냈고, 이번 주에는 2D LiDAR로 지도를 만들고 그 안에서 자기 위치를 추정하는 기술을 시뮬레이션에서 확인하였다. Isaac의 30 곱하기 31미터 공장에서 지게차가 116미터 경로를 달리며 LiDAR 스캔과 바퀴 회전, 조향각을 기록하고, 이 기록을 ROS 2에서 재생해 공개 SLAM 패키지인 slam_toolbox가 지도와 위치를 추정하게 했다. 왼쪽은 위에서 본 주행이고, 오른쪽은 그 시각까지 만들어진 지도와 추정 경로이다. 지게차가 돌수록 지도가 넓어지고, 빨간 추정 위치가 파란 정답 경로 위를 따라간다. 다만 기록을 다시 재생해 얻은 결과이고, 주행 자체는 시뮬레이터가 알려 준 정답 위치로 하였다. 즉 SLAM 결과로 차를 움직인 것은 아니다.
+Isaac의 30 곱하기 31미터 공장에서 지게차가 116미터 경로를 달리며 LiDAR 스캔과 바퀴 회전, 조향각을 기록하고, 이 기록을 ROS 2에서 재생해 공개 SLAM 패키지인 slam_toolbox가 지도와 위치를 추정하게 했다. 왼쪽은 위에서 본 주행이고, 오른쪽은 그 시각까지 만들어진 지도와 추정 경로이다. 지게차가 돌수록 지도가 넓어지고, 파란 SLAM 추정 위치가 회색 실제 경로 위를 따라간다. 다만 기록을 다시 재생해 얻은 결과이고, 주행 자체는 시뮬레이터가 알려 준 정답 위치로 하였다. 즉 SLAM 결과로 차를 움직인 것은 아니다.
 
 [Sources]
 화면 생성: Isaac Sim 기록 + ROS 2 slam_toolbox 재생 20260928_week05_replay, 3분할 영상에서 조감·지도 두 칸만 잘라 8배속
@@ -152,20 +145,37 @@ LiDAR 장착 위치 미확정: docs/hardware.md
 합성 LiDAR 1,600빔 · 10 Hz · 0.2–12 m (A2M12 카탈로그 값, 실측 아님): config/isaac_slam_lidar.yaml
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="06  2D LiDAR 지도 작성"><div class="slide-body">
-<h2 class="headline">2D LiDAR 기록 재생으로 만든 30 × 31 m 공장 지도와 자기 위치</h2>
-<div class="delta"><span class="was"><b>4주차</b>카메라: 팔레트 위치</span><i>→</i><span class="now"><b>5주차</b>+ 2D LiDAR: 지도·자기 위치 (기록 재생)</span></div>
+<h2 class="headline">LiDAR로 만든 30 × 31 m 공장 지도와 자기 위치</h2>
 <div class="pair grow"><div class="pair-box">
 <span class="pair-tag left">Isaac 주행 <i>빨간 점: LiDAR 측정점</i></span>
-<span class="pair-tag right">SLAM 지도 <i>빨강 SLAM 추정이 파랑 정답과 거의 겹침</i></span>
+<span class="pair-tag right">SLAM 지도 <i>파랑 SLAM 추정이 회색 실제 경로와 거의 겹침</i></span>
 <video class="pair-video" src="assets/21_slam_map_pair.mp4" poster="assets/21_slam_map_pair_poster.jpg" autoplay loop muted playsinline aria-label="왼쪽은 공장 홀을 위에서 본 지게차의 시뮬레이션 주행, 오른쪽은 같은 순간까지 slam_toolbox가 만든 지도와 추정 경로"></video>
 </div></div>
 <div class="chips"><span>Isaac 주행 기록</span><i>→</i><span>ROS 2 재생</span><i>→</i><span>slam_toolbox 지도·위치 추정</span><i>→</i><span>정답과 비교</span></div>
 </div></x-import>
 </section>
 
-<section data-label="위치 추정 오차" data-screen-label="08" data-duration="55" data-speaker-notes="권장 55초
+<section data-label="지도 비교" data-screen-label="08" data-duration="60" data-speaker-notes="권장 60초
 
-왼쪽은 위에서 본 지도 작성 경로이다. 앞 장의 영상과 달리 이 도표에서는 파랑이 SLAM 추정이다. 회색 정답 경로 위로 파란 SLAM 추정은 거의 그대로 겹치고, 주황 바퀴·조향 추정은 점점 벗어나 끝에서 약 80센티미터 떨어진다. 오른쪽은 같은 주행 기록을 배치와 잡음을 바꿔 열 번 재생한 결과이다. 평균 위치 오차는 SLAM이 약 5센티미터, 바퀴와 조향만으로는 약 78센티미터였다. 바퀴·조향 추정은 달린 거리는 정확했지만 방향이 조금씩 틀어지며 오차가 쌓였다. 이것은 시뮬레이터의 관절 값에서 나온 결과이므로, 실물에서는 바퀴와 조향 신호를 직접 측정해 확인한다.
+SLAM이 왜 필요한지 보이는 장이다. 같은 LiDAR 스캔을 두 가지 위치 추정에 따라 한 장의 지도로 쌓았다. 왼쪽은 바퀴 회전과 조향각만으로 추정한 위치에 쌓은 것으로, 달릴수록 방향 오차가 쌓여 같은 물체가 여러 겹으로 번지고 벽이 비스듬해진다. 오른쪽은 SLAM이 스캔을 이전 지도와 맞춰 가며 추정한 위치에 쌓은 것으로, 물체 윤곽이 한 겹으로 선명하다. 지도가 선명하다는 것은 그 위치 추정이 맞다는 뜻이기도 하다.
+
+[Sources]
+화면 생성: 같은 스캔을 두 궤적에 놓아 prepare_videos.py 로 누적 (slam_toolbox 가 만든 지도가 아님)
+§4 재생 — 같은 기록의 slam_toolbox 궤적과 바퀴 오도메트리: docs/validation/2026-09-26-factory-hall-and-isaac-slam.md
+slam_trajectory.csv · odometry.csv: artifacts/20260928_week05_replay/survey_seed_0_clean
+[/Sources]" style="background:#fff">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="07  위치 추정에 따른 지도 차이"><div class="slide-body">
+<h2 class="headline">위치 추정이 틀리면 같은 스캔도 지도가 번짐</h2>
+<div class="pair grow"><div class="pair-box" style="aspect-ratio:1254/732">
+<video class="pair-video" src="assets/26_map_compare.mp4" poster="assets/26_map_compare_poster.jpg" autoplay loop muted playsinline aria-label="같은 스캔을 왼쪽은 바퀴·조향으로 추정한 위치에, 오른쪽은 SLAM이 추정한 위치에 쌓아 지도를 만드는 영상. 왼쪽은 물체 윤곽이 여러 겹으로 번지고 오른쪽은 선명하다"></video>
+</div></div>
+<div class="takeaway">SLAM: 스캔을 이미 만든 지도와 맞춰 위치를 바로잡음 → 물체 윤곽이 한 겹</div>
+</div></x-import>
+</section>
+
+<section data-label="위치 추정 오차" data-screen-label="09" data-duration="55" data-speaker-notes="권장 55초
+
+왼쪽은 위에서 본 지도 작성 경로이다. 회색 실제 경로 위로 파란 SLAM 추정은 거의 그대로 겹치고, 주황 바퀴·조향 추정은 점점 벗어나 끝에서 약 80센티미터 떨어진다. 오른쪽은 물건 배치가 다른 다섯 공장 장면의 주행 기록을, 잡음 없이와 합성 잡음을 넣어 모두 열 번 재생한 결과이다. 평균 위치 오차는 SLAM이 약 5센티미터, 바퀴와 조향만으로는 약 78센티미터였다. 바퀴·조향 추정은 달린 거리는 정확했지만 방향이 조금씩 틀어지며 오차가 쌓였다. 이것은 시뮬레이터의 관절 값에서 나온 결과이므로, 실물에서는 바퀴와 조향 신호를 직접 측정해 확인한다.
 
 [Sources]
 화면 생성: 재생 평가 수치 도식 (2026-09-28 재실행: 12개 값 중 11개가 소수 셋째 자리까지 일치, 1개는 0.001 m 차)
@@ -173,16 +183,16 @@ LiDAR 장착 위치 미확정: docs/hardware.md
 §4 — 누적 거리 115.92 대 115.98 m, 회전 9.54 대 9.43 rad, 원인 미확정 (seed 0): docs/validation/2026-09-26-factory-hall-and-isaac-slam.md
 합성 잡음: 거리 σ 0.02 m · 뒷바퀴 σ 0.2 rad/s · 조향 σ 0.005 rad (가정값): docs/validation/2026-09-26-factory-hall-and-isaac-slam.md
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="07  위치 추정 오차"><div class="slide-body">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="08  위치 추정 오차"><div class="slide-body">
 <h2 class="headline">LiDAR 지도와 맞춘 위치 오차 약 5 cm · 바퀴·조향만으로는 약 78 cm</h2>
 <div class="split grow" style="grid-template-columns:1fr 1.05fr">
-<div class="traj-box"><svg class="diagram grow traj" viewBox="0 0 560 560" role="img" aria-label="위에서 본 116 m 지도 작성 경로. 정답 경로 위로 SLAM 추정이 겹치고, 바퀴·조향 추정은 점점 벗어난다">
+<div class="traj-box"><svg class="diagram grow traj" viewBox="0 0 560 560" role="img" aria-label="위에서 본 116 m 지도 작성 경로. 실제 경로 위로 SLAM 추정이 겹치고, 바퀴·조향 추정은 점점 벗어난다">
 <path d="M369.9,147.9 L368.1,147.9 L364.2,147.9 L358.5,147.9 L352.6,147.9 L346.7,147.9 L340.8,147.9 L334.9,147.9 L329.0,147.9 L323.0,147.9 L317.1,147.9 L311.2,147.9 L305.3,147.9 L299.4,147.9 L293.5,147.9 L287.6,147.9 L281.6,147.9 L275.7,147.9 L269.8,147.9 L263.9,147.9 L258.0,147.9 L252.1,147.9 L246.2,147.9 L240.3,147.9 L234.3,147.9 L228.4,147.9 L222.5,147.9 L216.6,147.9 L210.7,147.9 L204.8,147.8 L198.9,147.9 L192.9,147.9 L187.0,147.9 L181.1,147.9 L175.2,147.8 L169.3,147.8 L163.4,147.9 L157.5,147.9 L151.5,147.9 L145.6,147.8 L139.7,147.8 L133.8,147.9 L127.9,147.9 L121.9,147.9 L116.0,147.8 L110.1,147.8 L104.2,147.8 L99.5,148.0 L94.9,148.8 L89.4,150.7 L84.2,153.5 L79.5,157.1 L75.3,161.3 L71.8,166.0 L69.1,170.9 L67.7,173.5 L65.1,177.9 L61.9,182.9 L58.6,187.8 L55.5,192.8 L52.4,197.8 L49.3,202.8 L46.0,207.8 L42.8,212.8 L39.7,217.8 L36.6,222.8 L33.4,227.8 L31.6,231.0 L29.9,235.1 L28.6,240.8 L28.2,246.7 L28.6,252.2 L28.8,255.4 L28.9,260.6 L28.9,266.5 L28.8,272.4 L28.8,278.3 L28.8,284.2 L28.9,290.2 L28.8,296.1 L28.8,302.0 L28.8,307.9 L28.9,313.8 L28.9,319.7 L28.8,325.6 L28.8,331.5 L28.8,337.4 L28.9,343.3 L28.9,349.3 L28.8,355.2 L28.8,361.1 L28.8,367.0 L28.9,372.9 L28.9,378.9 L28.8,384.7 L28.8,390.7 L28.8,396.6 L28.9,402.5 L28.8,408.4 L28.8,414.3 L28.8,420.2 L28.8,426.1 L28.9,432.1 L28.8,438.0 L28.8,443.9 L28.8,449.8 L28.9,455.7 L28.9,461.6 L29.0,465.2 L29.9,469.8 L32.0,475.3 L34.9,480.5 L38.5,485.1 L42.8,489.2 L47.6,492.6 L52.8,495.3 L55.6,496.7 L59.9,499.0 L65.0,501.9 L70.1,504.9 L75.2,507.9 L80.3,510.8 L85.5,513.7 L90.6,516.7 L95.7,519.7 L100.8,522.7 L106.0,525.5 L111.1,528.5 L116.2,531.5 L121.3,534.4 L125.5,536.7 L130.2,538.5 L135.9,539.6 L141.8,539.7 L147.7,539.1 L151.9,538.2 L155.7,537.5 L161.4,536.8 L167.2,536.1 L173.1,535.4 L179.0,534.7 L184.8,533.8 L190.7,533.1 L196.6,532.4 L202.4,531.8 L208.3,531.0 L214.2,530.2 L220.0,529.4 L225.9,528.8 L231.8,528.1 L237.6,527.3 L243.5,526.5 L249.4,525.7 L255.3,525.1 L261.1,524.4 L267.0,523.6 L272.8,522.8 L278.7,522.1 L284.6,521.4 L290.4,520.7 L296.3,519.9 L302.2,519.1 L308.1,518.4 L313.9,517.8 L319.8,517.0 L325.6,516.2 L331.5,515.4 L337.4,514.8 L343.2,514.1 L349.1,513.3 L355.0,512.5 L359.4,512.2 L363.5,512.2 L365.9,512.0 L370.1,511.0 L375.5,508.7 L380.5,505.6 L384.2,502.7 L386.7,500.8 L391.3,497.6 L396.2,494.3 L401.2,491.1 L406.1,487.8 L410.9,484.4 L415.9,481.1 L420.8,477.8 L425.8,474.6 L430.6,471.3 L435.5,467.9 L440.4,464.6 L445.3,461.4 L450.3,458.1 L455.2,454.8 L460.0,451.4 L464.9,448.1 L469.9,444.9 L474.8,441.6 L479.7,438.3 L484.6,434.9 L489.5,431.6 L494.5,428.4 L499.4,425.2 L504.2,421.8 L509.1,418.4 L514.0,415.2 L516.7,413.2 L519.9,410.0 L523.4,405.2 L526.0,399.9 L527.9,394.4 L529.0,388.6 L529.1,382.7 L528.8,378.2 L528.6,375.1 L528.5,369.8 L528.5,363.8 L528.6,358.0 L528.6,352.1 L528.6,346.1 L528.3,342.2 L527.1,337.1 L524.8,331.7 L521.7,326.7 L518.0,322.2 L513.6,318.2 L508.7,315.0 L503.3,312.5 L499.3,311.1 L496.1,309.8 L491.0,307.7 L485.6,305.2 L480.2,302.7 L474.8,300.3 L469.4,298.0 L464.0,295.6 L458.6,293.1 L453.2,290.7 L447.8,288.3 L442.4,286.0 L437.0,283.5 L431.6,281.1 L427.3,279.2 L423.2,278.0 L417.3,277.4 L411.4,277.6 L408.9,277.8 L404.9,278.0 L399.0,278.0 L393.1,278.0 L387.2,277.9 L381.3,277.9 L375.4,278.0 L369.5,278.0 L363.6,277.9 L357.7,277.9 L351.8,277.9 L345.8,278.0 L339.9,278.0 L335.6,277.8 L330.5,276.8 L324.9,274.6 L319.7,271.6 L315.0,267.9 L311.4,264.5 L307.6,261.2 L302.9,257.6 L298.2,254.0 L293.6,250.3 L289.0,246.6 L284.4,242.9 L279.7,239.2 L275.1,235.6 L270.4,232.0 L265.8,228.2 L261.5,224.7 L259.2,222.5 L255.9,218.2 L253.2,212.9 L251.3,207.2 L250.2,201.3 L250.0,195.2 L250.4,189.9 L250.7,185.3 L250.7,179.4 L250.6,173.5 L250.5,167.6 L250.6,161.7 L250.7,155.8 L250.7,149.9 L250.6,144.0 L250.5,138.0 L250.6,132.1 L250.7,126.2 L250.7,120.3 L250.6,114.4 L250.5,108.5 L250.6,102.5 L250.7,96.7 L250.6,90.8 L250.6,84.8 L250.3,81.1 L249.2,76.3 L247.0,70.8 L244.0,65.8 L240.2,61.2 L235.9,57.2 L231.0,53.9 L225.7,51.4 L223.3,50.2 L219.4,48.2 L214.2,45.3 L209.1,42.4 L203.9,39.4 L198.8,36.6 L193.6,33.8 L188.4,30.9 L183.3,27.9 L178.1,25.0 L173.8,22.8 L169.0,21.2 L163.2,20.2 L157.3,20.2 L151.5,21.0 L145.8,22.7 L141.9,24.2 L138.6,25.4 L133.5,27.2 L127.8,28.9 L122.1,30.5 L116.5,32.3 L110.9,34.1 L105.2,35.9 L99.5,37.7 L93.9,39.3 L88.3,41.1 L82.6,42.9 L77.0,44.7 L71.3,46.5 L65.6,48.2 L60.0,49.9 L54.4,51.8 L50.4,53.2 L46.9,54.9 L42.1,58.3 L38.0,62.5 L34.5,67.3 L31.7,72.5 L29.7,78.0 L28.5,83.8 L28.2,89.7 L28.8,95.6 L30.3,101.3 L32.5,106.7 L35.6,111.8 L39.3,116.3 L43.7,120.3 L48.6,123.6 L53.9,126.1 L59.5,127.8 L63.8,128.6 L66.7,129.2 L72.0,130.5 L77.7,132.2 L83.4,133.8 L89.1,135.4 L94.8,136.9 L100.6,138.4 L106.3,140.0 L111.9,141.6 L117.6,143.2 L123.3,144.6 L129.1,146.2 L134.1,147.6 L137.4,148.2 L142.7,148.4 L146.9,148.1 L150.2,147.9 L155.5,147.8 L161.5,147.8 L167.4,147.9 L173.3,147.9 L179.2,147.8 L185.1,147.8 L191.0,147.8 L196.9,147.9 L202.8,147.9 L208.7,147.8 L214.7,147.8 L220.6,147.9 L226.5,147.9 L232.4,147.9 L238.3,147.8 L244.2,147.8 L250.2,147.9 L256.0,147.9 L261.9,147.9 L267.9,147.8 L273.8,147.8 L279.7,147.9 L285.6,147.9 L291.5,147.9 L297.4,147.8 L303.4,147.8 L309.3,147.9 L315.2,147.9 L320.4,147.9 L323.5,147.8 L324.5,147.8 L324.5,147.8" fill="none" stroke="#c9ced4" stroke-width="12" stroke-linejoin="round"/>
 <path class="draw" pathLength="1" d="M370.0,147.9 L368.2,147.9 L364.2,147.9 L358.5,147.9 L352.6,147.9 L346.7,147.9 L340.8,147.9 L334.9,147.9 L329.0,147.9 L323.0,147.9 L317.1,147.9 L311.2,147.9 L305.3,147.9 L299.4,147.9 L293.5,147.9 L287.6,147.9 L281.7,147.9 L275.7,147.9 L269.8,147.9 L263.9,147.9 L258.0,147.9 L252.1,147.9 L246.2,147.9 L240.3,147.9 L234.3,147.9 L228.4,147.9 L222.5,147.9 L216.6,147.9 L210.7,147.9 L204.8,147.9 L198.9,148.0 L193.0,148.0 L187.0,148.0 L181.1,148.0 L175.2,148.0 L169.3,148.0 L163.4,148.0 L157.5,148.0 L151.5,148.0 L145.6,148.0 L139.8,148.0 L133.9,148.1 L127.9,148.1 L122.0,148.1 L116.0,148.0 L110.2,148.0 L104.3,148.1 L99.7,148.3 L95.3,149.1 L89.7,151.2 L84.6,154.1 L79.9,157.8 L75.9,162.1 L72.5,167.0 L70.0,171.8 L68.6,174.7 L66.1,179.2 L62.9,184.3 L59.8,189.3 L56.8,194.3 L53.9,199.5 L50.9,204.6 L47.7,209.7 L44.6,214.7 L41.7,219.7 L38.7,224.9 L35.7,230.0 L33.9,233.2 L32.4,237.2 L31.2,243.0 L31.0,248.9 L31.5,254.1 L31.8,257.6 L32.1,262.8 L32.1,268.8 L32.1,274.7 L32.3,280.6 L32.6,286.5 L32.7,292.4 L32.7,298.4 L32.8,304.2 L33.0,310.1 L33.3,316.1 L33.4,322.0 L33.4,328.0 L33.5,333.9 L33.8,339.8 L34.0,345.7 L34.1,351.7 L34.1,357.6 L34.2,363.4 L34.5,369.3 L34.7,375.3 L34.8,381.2 L34.8,387.2 L35.0,393.0 L35.2,398.9 L35.4,404.9 L35.5,410.8 L35.5,416.7 L35.7,422.5 L36.0,428.5 L36.1,434.4 L36.2,440.4 L36.2,446.3 L36.5,452.1 L36.7,458.1 L36.9,464.0 L37.1,467.4 L38.0,471.9 L40.2,477.4 L43.3,482.5 L47.0,487.0 L51.5,491.0 L56.4,494.2 L61.8,496.7 L64.8,498.0 L69.2,500.2 L74.4,503.0 L79.5,505.9 L84.7,508.7 L90.0,511.3 L95.3,514.1 L100.5,517.0 L105.6,519.8 L110.8,522.5 L116.1,525.2 L121.4,528.0 L126.6,530.8 L131.7,533.6 L135.8,535.5 L140.4,537.0 L146.2,537.9 L152.1,537.8 L157.9,536.8 L162.0,535.8 L166.0,534.9 L171.5,533.9 L177.4,533.1 L183.2,532.2 L189.0,531.2 L194.8,530.1 L200.7,529.2 L206.6,528.3 L212.4,527.4 L218.2,526.3 L224.0,525.3 L229.9,524.3 L235.8,523.5 L241.6,522.5 L247.3,521.4 L253.2,520.4 L259.1,519.5 L264.9,518.6 L270.7,517.6 L276.5,516.6 L282.4,515.5 L288.3,514.7 L294.1,513.8 L299.9,512.7 L305.7,511.6 L311.6,510.7 L317.5,509.8 L323.3,508.9 L329.1,507.8 L334.9,506.7 L340.8,505.8 L346.6,504.9 L352.4,504.0 L358.2,502.9 L364.0,501.8 L368.0,501.4 L371.9,501.2 L374.3,500.9 L378.4,499.8 L383.7,497.2 L388.6,493.8 L391.9,490.9 L394.7,488.6 L399.1,485.2 L403.9,481.7 L408.7,478.3 L413.4,474.8 L418.1,471.2 L422.9,467.6 L427.7,464.2 L432.5,460.7 L437.1,457.2 L441.9,453.5 L446.7,450.0 L451.5,446.6 L456.2,443.2 L460.9,439.6 L465.6,435.9 L470.4,432.4 L475.3,429.0 L480.0,425.5 L484.7,421.9 L489.4,418.3 L494.2,414.8 L499.0,411.4 L503.7,407.9 L508.4,404.3 L513.1,400.7 L518.0,397.2 L520.4,395.3 L523.5,391.9 L526.8,386.9 L529.2,381.5 L530.8,375.8 L531.4,369.9 L531.2,363.9 L530.6,359.7 L530.2,356.1 L529.7,350.9 L529.5,344.9 L529.3,339.1 L528.8,333.2 L528.3,327.3 L527.8,323.6 L526.3,318.7 L523.5,313.4 L520.0,308.6 L515.9,304.4 L511.1,300.8 L505.9,298.1 L500.2,296.1 L496.1,295.1 L492.5,294.1 L487.3,292.4 L481.7,290.4 L476.2,288.4 L470.6,286.6 L464.9,284.8 L459.3,282.9 L453.7,280.8 L448.2,278.9 L442.6,277.1 L436.9,275.3 L431.3,273.4 L425.7,271.3 L421.5,269.9 L417.3,269.1 L411.4,269.0 L405.5,269.8 L402.8,270.3 L398.9,270.8 L393.0,271.3 L387.0,271.7 L381.2,272.2 L375.3,272.8 L369.4,273.4 L363.5,273.9 L357.6,274.4 L351.8,274.9 L345.9,275.6 L340.0,276.2 L334.1,276.7 L330.1,276.9 L325.2,276.3 L319.5,274.6 L314.1,271.9 L309.1,268.3 L305.7,265.4 L301.8,262.5 L296.9,259.2 L292.0,255.9 L287.1,252.5 L282.3,249.0 L277.5,245.7 L272.6,242.4 L267.7,239.1 L262.8,235.7 L258.0,232.2 L253.7,229.1 L251.5,227.1 L248.0,223.1 L245.0,217.8 L243.0,212.1 L241.8,206.2 L241.6,200.2 L241.9,195.1 L242.1,190.7 L242.0,184.8 L241.7,178.8 L241.6,172.9 L241.6,166.9 L241.6,161.0 L241.4,155.2 L241.2,149.3 L241.1,143.3 L241.1,137.3 L241.1,131.5 L240.9,125.6 L240.6,119.7 L240.6,113.7 L240.6,107.8 L240.5,101.9 L240.3,96.0 L240.1,90.1 L239.8,86.5 L238.6,81.8 L236.2,76.4 L233.0,71.4 L229.0,67.0 L224.5,63.2 L219.4,60.1 L214.1,57.8 L211.4,56.7 L207.4,54.8 L202.1,52.1 L196.9,49.3 L191.7,46.7 L186.3,44.1 L181.0,41.5 L175.7,38.7 L170.5,36.0 L165.2,33.3 L161.0,31.4 L156.4,30.1 L150.5,29.4 L144.6,29.7 L138.8,30.8 L133.2,32.9 L129.4,34.7 L125.9,36.2 L120.9,38.1 L115.3,40.1 L109.8,42.1 L104.3,44.2 L98.8,46.4 L93.2,48.5 L87.6,50.4 L82.1,52.4 L76.6,54.6 L71.1,56.7 L65.5,58.8 L59.9,60.8 L54.4,62.8 L48.9,64.9 L43.4,67.1 L39.6,68.7 L36.2,70.6 L31.7,74.3 L27.8,78.8 L24.7,83.7 L22.2,89.1 L20.7,94.9 L20.0,100.7 L20.2,106.6 L21.3,112.5 L23.3,118.1 L26.1,123.3 L29.6,128.0 L33.8,132.2 L38.6,135.6 L43.9,138.3 L49.6,140.2 L55.4,141.2 L59.5,141.5 L63.0,141.8 L68.4,142.5 L74.3,143.5 L80.1,144.5 L85.9,145.3 L91.8,146.1 L97.7,147.0 L103.5,148.0 L109.3,148.9 L115.1,149.7 L121.0,150.5 L126.9,151.4 L131.9,152.2 L135.1,152.4 L140.3,152.0 L144.3,151.2 L148.0,150.6 L153.2,150.0 L159.1,149.5 L165.0,149.0 L170.8,148.3 L176.7,147.6 L182.6,146.9 L188.5,146.4 L194.4,145.9 L200.3,145.2 L206.1,144.5 L212.1,143.8 L218.0,143.4 L223.8,142.8 L229.7,142.1 L235.6,141.4 L241.5,140.8 L247.4,140.3 L253.3,139.7 L259.1,139.0 L265.0,138.3 L271.0,137.7 L276.9,137.2 L282.7,136.6 L288.6,135.9 L294.5,135.2 L300.4,134.6 L306.3,134.1 L312.2,133.5 L317.3,132.9 L320.4,132.5 L321.4,132.4 L321.4,132.4" fill="none" stroke="#c26a1a" stroke-width="4" stroke-linejoin="round"/>
 <path class="draw" pathLength="1" d="M370.0,147.9 L368.2,147.9 L364.2,147.9 L358.5,147.9 L352.6,147.9 L346.7,147.9 L340.8,147.9 L334.9,147.9 L329.0,147.9 L323.0,147.9 L317.1,147.9 L311.2,147.9 L305.3,147.9 L299.4,147.9 L293.5,147.9 L287.6,147.9 L281.7,147.9 L275.7,147.9 L269.8,147.9 L263.9,147.9 L258.0,147.9 L252.1,147.9 L246.2,147.9 L240.3,147.9 L234.3,147.9 L228.4,147.9 L222.5,147.9 L216.6,147.9 L210.7,147.9 L204.8,147.9 L198.9,148.0 L193.0,148.0 L187.0,148.0 L181.1,148.0 L175.2,148.0 L169.3,148.0 L163.4,148.0 L157.5,148.0 L151.5,148.0 L145.6,148.0 L139.8,148.0 L133.9,148.1 L127.9,148.1 L122.0,148.0 L116.0,148.0 L110.2,148.0 L104.3,148.2 L99.7,148.3 L95.3,149.1 L89.7,151.1 L84.3,154.0 L79.6,157.6 L75.5,161.8 L71.8,166.7 L69.2,171.4 L67.7,174.2 L65.0,178.7 L62.0,183.3 L58.8,188.2 L55.7,193.2 L52.6,198.2 L49.4,203.3 L46.1,208.2 L43.1,212.8 L40.1,217.8 L37.0,222.9 L33.6,228.3 L31.8,231.5 L30.1,235.4 L28.8,241.2 L28.5,247.1 L28.8,252.3 L29.1,255.8 L29.2,261.1 L29.1,266.6 L29.0,272.5 L29.0,278.4 L29.1,284.7 L29.1,290.7 L29.0,296.6 L29.1,301.7 L29.2,307.5 L29.4,313.5 L29.2,320.1 L29.1,326.0 L29.1,331.9 L29.2,337.8 L29.2,343.7 L29.1,349.7 L29.2,355.2 L29.3,361.0 L29.4,367.0 L29.5,372.9 L29.2,379.3 L29.1,385.2 L29.2,391.1 L29.3,396.9 L29.3,402.9 L29.2,408.9 L29.2,414.8 L29.3,420.6 L29.4,426.5 L29.2,432.7 L29.1,438.6 L29.0,444.5 L29.3,450.2 L29.4,456.2 L29.4,462.1 L29.5,465.5 L30.4,470.0 L32.5,475.5 L35.4,480.7 L39.1,485.7 L43.4,489.8 L48.3,493.1 L53.5,495.8 L56.5,497.3 L60.8,499.6 L65.5,502.4 L70.5,505.4 L75.7,508.3 L81.0,511.2 L86.2,514.1 L91.3,517.2 L96.0,520.0 L101.1,522.9 L106.3,525.7 L111.8,528.8 L116.9,531.9 L122.0,534.8 L126.0,536.9 L130.7,538.8 L136.5,539.9 L142.4,540.0 L148.2,539.3 L152.4,538.4 L156.4,537.8 L162.0,537.0 L167.7,536.4 L173.5,535.7 L179.3,534.9 L185.4,534.1 L191.3,533.5 L197.2,532.9 L202.2,532.1 L208.1,531.3 L214.0,530.4 L220.3,529.7 L226.2,529.1 L232.0,528.3 L238.2,527.5 L244.1,526.8 L250.1,526.1 L254.7,525.5 L260.5,524.7 L266.4,523.8 L273.5,523.0 L279.4,522.4 L285.2,521.8 L291.0,521.0 L296.9,520.1 L302.9,519.4 L308.8,518.8 L313.4,518.1 L319.2,517.2 L325.1,516.3 L332.2,515.7 L338.1,515.1 L343.9,514.4 L349.5,513.6 L355.4,512.8 L359.4,512.5 L362.9,512.5 L365.3,512.3 L369.4,511.4 L374.9,509.0 L380.1,505.9 L383.6,503.1 L386.5,500.9 L391.1,497.8 L395.8,494.6 L400.8,491.4 L405.6,488.0 L410.7,484.6 L415.6,481.3 L420.6,478.2 L425.3,474.9 L430.1,471.6 L435.0,468.1 L440.0,465.0 L445.0,461.8 L449.8,458.6 L454.7,455.2 L459.6,451.9 L464.6,448.6 L469.6,445.5 L474.4,442.1 L479.2,438.7 L484.1,435.3 L489.3,432.0 L494.3,428.9 L499.1,425.6 L504.0,422.1 L508.9,418.7 L513.9,415.4 L516.4,413.5 L519.7,410.4 L523.1,405.5 L525.7,400.2 L527.6,394.6 L528.6,388.7 L528.7,382.8 L528.6,378.5 L528.4,374.9 L528.3,369.6 L528.4,363.7 L528.3,358.6 L528.2,352.7 L528.1,346.8 L528.0,342.3 L526.8,337.3 L524.4,331.8 L521.3,326.4 L517.5,321.9 L513.0,318.0 L508.2,314.3 L502.8,311.8 L498.8,310.4 L495.3,309.1 L490.7,307.0 L485.3,304.4 L480.0,301.9 L474.4,300.0 L468.9,297.7 L463.5,295.3 L458.3,292.8 L453.0,290.3 L447.6,288.0 L442.1,285.3 L436.7,282.8 L431.3,280.3 L427.1,279.3 L422.9,278.1 L417.0,277.5 L411.1,277.8 L408.4,277.6 L404.4,277.7 L398.5,277.7 L392.5,277.5 L386.9,277.9 L381.0,278.1 L375.1,278.2 L369.1,277.8 L363.2,277.7 L357.4,277.7 L351.3,278.0 L345.3,278.1 L339.3,278.0 L335.5,277.6 L330.8,276.7 L325.2,274.4 L319.2,271.5 L314.6,267.6 L311.4,264.4 L307.7,261.2 L302.4,257.5 L297.6,253.9 L293.0,250.2 L288.6,246.4 L284.1,242.8 L279.4,239.2 L274.7,235.5 L270.1,231.8 L265.5,228.0 L261.2,224.8 L259.1,222.8 L255.9,218.5 L253.2,213.1 L250.9,207.0 L250.0,201.0 L250.1,194.9 L250.0,190.1 L250.2,185.7 L250.2,179.7 L250.1,173.4 L250.1,167.5 L250.3,161.5 L250.3,155.6 L250.2,149.8 L250.0,143.8 L250.0,137.9 L250.2,131.9 L250.3,126.1 L250.2,120.2 L250.1,114.3 L250.2,108.3 L250.3,102.4 L250.3,96.5 L250.1,90.6 L250.2,84.7 L250.0,81.1 L248.9,76.4 L246.6,70.9 L243.6,65.6 L239.8,61.0 L235.3,57.1 L230.6,53.8 L225.4,51.3 L222.7,50.0 L218.8,48.0 L213.9,45.1 L208.8,42.0 L203.7,39.1 L198.3,36.4 L193.1,33.5 L188.0,30.5 L182.8,27.7 L177.7,24.9 L173.5,22.9 L168.9,21.4 L162.9,20.0 L157.0,20.0 L151.1,20.9 L145.4,22.4 L141.5,24.0 L138.0,25.3 L133.1,26.7 L127.4,28.4 L121.7,30.0 L116.1,32.0 L110.5,33.9 L104.8,35.6 L99.1,37.3 L93.5,39.0 L87.9,40.9 L82.3,42.7 L76.6,44.4 L70.9,46.0 L65.3,47.7 L59.7,49.6 L54.0,51.5 L50.2,52.8 L46.4,54.6 L41.7,58.0 L37.6,62.2 L34.1,67.0 L31.4,72.2 L29.4,77.8 L28.1,83.6 L27.9,89.5 L28.5,95.4 L29.8,101.2 L32.1,106.6 L35.2,111.7 L39.0,116.2 L43.4,120.1 L48.4,123.3 L53.6,126.2 L59.3,127.9 L63.4,128.6 L66.7,129.3 L71.7,130.7 L77.4,132.4 L83.0,134.1 L88.7,135.4 L94.4,136.9 L100.2,138.4 L105.9,140.1 L111.5,141.7 L117.2,143.1 L122.9,144.8 L128.7,146.4 L133.5,147.9 L136.7,148.5 L142.3,148.5 L146.4,148.1 L150.1,147.9 L155.4,147.9 L161.1,148.0 L167.0,148.1 L172.8,148.1 L178.8,148.0 L184.7,148.0 L190.7,148.2 L196.6,148.0 L202.5,147.9 L208.4,147.7 L214.3,147.9 L220.3,148.1 L226.1,148.2 L232.0,147.9 L238.0,147.8 L243.9,147.8 L249.9,147.9 L255.8,147.9 L261.7,147.8 L267.6,147.9 L273.6,148.0 L279.5,148.2 L285.4,147.9 L291.3,147.8 L297.2,147.7 L303.2,147.9 L309.1,148.1 L315.0,148.1 L320.2,147.8 L323.3,147.7 L324.3,147.7 L324.3,147.7" fill="none" stroke="#2f74c0" stroke-width="4" stroke-linejoin="round"/>
 <circle class="endmark" cx="321.4" cy="132.4" r="9" fill="#c26a1a"/>
 </svg>
-<div class="legend"><span><i style="background:#c9ced4"></i>정답 경로</span><span><i style="background:#2f74c0"></i>SLAM 추정</span><span><i style="background:#c26a1a"></i>바퀴·조향 추정</span></div></div>
+<div class="legend"><span><i style="background:#c9ced4"></i>실제 경로</span><span><i style="background:#2f74c0"></i>SLAM 추정</span><span><i style="background:#c26a1a"></i>바퀴·조향 추정</span></div></div>
 <div class="stack" style="justify-content:center;gap:10px">
 <p class="chart-cap">116 m 주행 기록 10회 재생 · 점 1개 = 재생 1회 · 막대 = 평균</p>
 <svg class="diagram" viewBox="0 0 600 272" role="img" aria-label="재생 10회 위치 오차: SLAM 평균 0.05 m, 바퀴·조향 추정 평균 0.78 m"><g font-family="var(--uos-font)"><line x1="128.0" y1="30" x2="128.0" y2="236" stroke="#e3e6ea" stroke-width="1.5"/><text x="128.0" y="262" text-anchor="middle" font-size="20" fill="#44505c">0 cm</text><line x1="323.6" y1="30" x2="323.6" y2="236" stroke="#e3e6ea" stroke-width="1.5"/><text x="323.6" y="262" text-anchor="middle" font-size="20" fill="#44505c">40 cm</text><line x1="519.1" y1="30" x2="519.1" y2="236" stroke="#e3e6ea" stroke-width="1.5"/><text x="519.1" y="262" text-anchor="middle" font-size="20" fill="#44505c">80 cm</text><line x1="128" y1="30" x2="128" y2="236" stroke="#44505c" stroke-width="2.5"/><text x="112" y="88" text-anchor="end" font-size="23" font-weight="700" fill="#1b1f24">SLAM</text><rect x="128" y="46" width="23.0" height="68" rx="4" fill="#2f74c0" opacity="0.28"/><circle cx="140.2" cy="80" r="5" fill="#2f74c0" stroke="#fff" stroke-width="1.2"/><circle cx="143.6" cy="70" r="5" fill="#2f74c0" stroke="#fff" stroke-width="1.2"/><circle cx="147.1" cy="90" r="5" fill="#2f74c0" stroke="#fff" stroke-width="1.2"/><circle cx="147.6" cy="60" r="5" fill="#2f74c0" stroke="#fff" stroke-width="1.2"/><circle cx="150.0" cy="100" r="5" fill="#2f74c0" stroke="#fff" stroke-width="1.2"/><circle cx="150.5" cy="80" r="5" fill="#2f74c0" stroke="#fff" stroke-width="1.2"/><circle cx="151.0" cy="50" r="5" fill="#2f74c0" stroke="#fff" stroke-width="1.2"/><circle cx="152.4" cy="110" r="5" fill="#2f74c0" stroke="#fff" stroke-width="1.2"/><circle cx="158.3" cy="70" r="5" fill="#2f74c0" stroke="#fff" stroke-width="1.2"/><circle cx="169.1" cy="80" r="5" fill="#2f74c0" stroke="#fff" stroke-width="1.2"/><text x="183.1" y="88" text-anchor="start" font-size="24" font-weight="700" fill="#1b1f24">5 cm</text><text x="112" y="192" text-anchor="end" font-size="23" font-weight="700" fill="#1b1f24">바퀴·조향</text><rect x="128" y="150" width="380.1" height="68" rx="4" fill="#c26a1a" opacity="0.28"/><circle cx="409.6" cy="184" r="5" fill="#c26a1a" stroke="#fff" stroke-width="1.2"/><circle cx="446.3" cy="184" r="5" fill="#c26a1a" stroke="#fff" stroke-width="1.2"/><circle cx="498.1" cy="184" r="5" fill="#c26a1a" stroke="#fff" stroke-width="1.2"/><circle cx="522.0" cy="184" r="5" fill="#c26a1a" stroke="#fff" stroke-width="1.2"/><circle cx="522.0" cy="174" r="5" fill="#c26a1a" stroke="#fff" stroke-width="1.2"/><circle cx="522.5" cy="194" r="5" fill="#c26a1a" stroke="#fff" stroke-width="1.2"/><circle cx="527.9" cy="164" r="5" fill="#c26a1a" stroke="#fff" stroke-width="1.2"/><circle cx="534.8" cy="184" r="5" fill="#c26a1a" stroke="#fff" stroke-width="1.2"/><circle cx="545.0" cy="184" r="5" fill="#c26a1a" stroke="#fff" stroke-width="1.2"/><circle cx="552.4" cy="174" r="5" fill="#c26a1a" stroke="#fff" stroke-width="1.2"/><text x="500.1" y="140" text-anchor="end" font-size="24" font-weight="700" fill="#1b1f24">78 cm</text></g></svg>
@@ -193,54 +203,23 @@ LiDAR 장착 위치 미확정: docs/hardware.md
 </div></x-import>
 </section>
 
-<section data-label="공장 임무" data-screen-label="09" data-duration="50" data-speaker-notes="권장 50초
+<section data-label="중간 미팅 확인 사항" data-screen-label="10" data-duration="30" data-speaker-notes="권장 30초
 
-4주차에 작은 구역에서 보인 임무를 넓은 공장 작업장으로 옮겨 수행하였다. 지게차는 카메라로 팔레트를 찾아 접근해 포크를 넣고 들어 올린 뒤, 출하장까지 운반해 내려놓고 출발 자리로 돌아온다. 고른 사례 하나이며 성공률이 아니다. 오른쪽 표는 입력별로 4주차와 이번 주를 비교한 것이다. 팔레트 위치는 4주차부터 카메라로 추정하였고, 이번 주에는 로봇 위치와 장애물 지도를 LiDAR로 만들 수 있음을 기록 재생으로 실증하였다. 다만 영상 속 임무 주행에는 아직 시뮬레이터 값을 쓴다. 시뮬레이션에서의 다음 단계는 LiDAR로 추정한 위치와 지도로 임무를 주행해 보는 것이며, 실물 적용 방식은 차체와 센서를 갖춘 뒤 정한다.
-
-[Sources]
-화면 생성: Isaac Sim 추적 시점, 기본 속도 설정 재렌더 (ws1 20260928_week05_viewsD, 카메라 3.2 m 뒤·3.2 m 옆·2.6 m 위) · 관측~들기 4배속, 운반 8배속, 하역 3배속 편집
-§7 공장 모드 인식 임무 — 16번 배치 완주, 팔레트 위치만 카메라 추정: docs/validation/2026-09-26-factory-hall-and-isaac-slam.md
-현재 운반 코드가 사용하는 입력: docs/plans/2026-09-17-project-status-and-next-steps.md
-[/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="08  공장 규모 자율 임무"><div class="slide-body">
-<h2 class="headline">카메라로 팔레트를 찾아 운반·하역·복귀까지 이어진 공장 임무</h2>
-<div class="split grow" style="grid-template-columns:1fr 1fr">
-<figure class="shot "><video class="media" src="assets/22_mission_side_seed16.mp4" poster="assets/22_mission_side_poster.jpg" autoplay loop muted playsinline aria-label="16번 배치 임무를 지게차 옆 위에서 따라가며 본 영상. 팔레트에 접근해 포크를 넣고 들어 올린 뒤 운반해 초록 원 목적지에 내려놓는다"></video><figcaption class="small muted">Isaac Sim 추적 시점 · 16번 배치 사례 1건</figcaption></figure>
-<div class="stack" style="justify-content:center;gap:16px">
-<div class="flow-chips"><span>관측</span><i>→</i><span>접근·삽입</span><i>→</i><span>들기</span><i>→</i><span>운반</span><i>→</i><span>하역</span><i>→</i><span>복귀</span></div>
-<table class="comparison auto">
-<tr><th>임무 주행 입력</th><th>4주차</th><th>5주차</th></tr>
-<tr><td>팔레트 위치</td><td class="ok">카메라</td><td class="ok">카메라</td></tr>
-<tr><td>로봇 위치</td><td>시뮬레이터</td><td>시뮬레이터</td></tr>
-<tr><td>장애물 지도</td><td>시뮬레이터</td><td>시뮬레이터</td></tr></table>
-</div>
-</div>
-<div class="takeaway">시뮬레이션 다음 단계: LiDAR로 추정한 위치·지도로 임무 주행 시험</div>
-</div></x-import>
-</section>
-
-<section data-label="미팅 확인 사항과 다음 작업" data-screen-label="10" data-duration="85" data-speaker-notes="권장 85초
-
-추석 이후 중간 미팅에서 확인할 질문이다. 먼저 최종 시연 환경이 실내인지 실외인지, 평가를 성공률과 시간, 정밀도 가운데 무엇으로 하는지, 시험 팔레트와 적재 하중을 확인한다. 추천받은 다우테크놀로지 사례의 작업 공간과 험지 주행 여부도 확인한다. 요청할 자료는 제어기와 조종기의 배선·신호 자료, 실제 지게차의 운용 영상과 데이터이다. 시험 공간과 허용 속도, 그리고 EPAL 6·축소 T11의 시험 조건과 동봉 팔레트 활용 여부는 기업과 함께 정한다. 다음 작업은 계획서 순서대로 진행하며, 시점은 실물 측정 결과에 따라 조정한다. 다음 주에는 버튼별 신호 형식과 모터 구동 방식을 분석해 컴퓨터가 명령을 넣을 위치를 정한다. 중간고사 전까지 명령을 넣고 상태를 읽는 하위 제어를 만들고, 실측 차체로 모델을 만들어 주행 특성을 비교한다. 중간고사 뒤에는 고정 지도를 이용한 위치 추정과 포크 삽입 시험으로 넘어간다. 카메라와 LiDAR 장착과 보정, 그리고 팀에서 제안한 기울기·과적 감지 안전 정지의 설계는 그와 병행하며, 기준값은 무게중심과 적재 한도를 잰 뒤 정한다.
+마지막으로 추석 이후 중간 미팅에서 확인할 사항이다. 시연 환경과 평가 기준, 시험 팔레트를 확인하고, 제어기·조종기 자료와 운용 영상을 요청하며, 시험 공간과 팔레트 조건은 기업과 함께 정한다. 다음 작업은 측정한 버튼 신호를 분석해 하위 제어를 만드는 것이다.
 
 [Sources]
 출처: 4주차 피드백 · 개발 로드맵
 §1 중간 미팅 준비 — 궁금한 것 · 제공 요청 · 결정 요청: docs/references/week4_feedback.md
 로드맵 H1–H4 · M4: docs/plans/2026-09-11-development-roadmap.md
-팀 메모 — 기울기·과적 감지 정지: docs/references/week4_feedback.md
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="09  중간 미팅 확인 사항과 다음 작업"><div class="slide-body">
-<h2 class="headline">중간 미팅 확인 사항과 다음 작업</h2>
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="09  중간 미팅 확인 사항"><div class="slide-body">
+<h2 class="headline">중간 미팅 확인 사항</h2>
 <div class="spread grow"><div class="qcols">
 <article><h3>확인 사항</h3><ul><li>시연 장소·바닥 상태 (실내·실외)</li><li>평가 기준 (성공률 · 시간 · 정밀도)</li><li>시험 팔레트 치수·적재 하중</li><li>다우테크놀로지 사례 공유</li></ul></article>
 <article><h3>자료 요청</h3><ul><li>제어기·조종기 배선·신호 자료</li><li>실제 지게차 운용 영상·데이터</li></ul></article>
 <article><h3>협의 사항</h3><ul><li>시험 공간</li><li>허용 속도 상한</li><li>EPAL 6·축소 T11 시험 조건</li><li>동봉 팔레트 활용</li></ul></article>
 </div>
-<div class="next-plan"><b>다음 작업 <small>실물 측정 결과에 따라 조정</small></b>
-<article class="now"><h4>다음 주</h4><p>버튼 신호·모터 구동 방식 분석<br>컴퓨터 명령 입력 경로 결정</p></article><i>→</i>
-<article><h4>중간고사 전</h4><p>하위 제어 (명령 입력·상태 읽기)<br>실측 차체 모델 · 주행 특성 비교</p></article><i>→</i>
-<article><h4>중간고사 후</h4><p>고정 지도 기반 위치 추정<br>포크 삽입 시험</p></article>
-<em>병행: 카메라·LiDAR 장착과 보정 · 안전 정지(기울기·과적) 설계</em></div>
+<div class="next-strip"><b>다음 작업</b><span class="now">버튼 신호 분석</span><i>→</i><span>하위 제어 (명령 입력·상태 읽기)</span></div>
 </div>
 </div></x-import>
 </section>
