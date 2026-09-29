@@ -525,3 +525,6 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .comparison.measure.chassis tr.hot td { background:#fdeec8; }
 .shot.sch { background:#fffdf8; }
 .shot.sch .media { object-fit:contain; background:#fffdf8; }
+.comparison.select.re { font-size:19px; align-self:center; }
+.comparison.select.re td { padding:8px 10px; white-space:normal !important; }
+.comparison.select.re td.step { font-weight:700; color:#44505c; white-space:nowrap !important; }

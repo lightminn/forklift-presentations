@@ -65,7 +65,7 @@ MEASURE_ROWS = [  # item, measured, provisional model
 measure_table = ''.join(
     f'<tr{HOT if k.startswith(("최대 조향각", "최소 회전")) else ""}><td>{k}</td><td><b>{m}</b></td><td class="muted">{v}</td></tr>'
     for k, m, v in MEASURE_ROWS)
-add('차체 실측', '01  차체 실측', 55, f"""
+add('차체 실측', '01  차체 실측', 65, f"""
 <h2 class="headline">최대 조향각 15° → 최소 회전 반경 약 2.5 m, 잠정 모델의 약 2배</h2>
 <div class="split grow" style="grid-template-columns:0.8fr 1.2fr">
 {figure('30_chassis_pallet.jpg', '입고한 지게차 차체와 앞에 놓인 동봉 플라스틱 팔레트', '차체와 동봉 팔레트 (2026-09-30 촬영)', cls='')}
@@ -90,7 +90,7 @@ PALLET_ROWS = [
     ('포크 중심 간격', '5.5–38 cm 조절', ''),
 ]
 pallet_table = ''.join(f'<tr><td class="step">{a}</td><td><b>{b}</b></td><td class="muted">{c}</td></tr>' for a, b, c in PALLET_ROWS)
-add('포크·동봉 팔레트', '02  포크 · 동봉 팔레트', 35, f"""
+add('포크·동봉 팔레트', '02  포크 · 동봉 팔레트', 40, f"""
 <h2 class="headline">동봉 팔레트 약 42 × 30 × 8.5 cm · 포크 진입 높이 약 6.5 cm</h2>
 <div class="split grow" style="grid-template-columns:0.95fr 1.05fr">
 {figure('32_pallet_on_forks.jpg', '포크 위에 올린 동봉 팔레트', '포크 위에 올린 동봉 팔레트', cls='')}
@@ -194,70 +194,45 @@ def la_zoom(key='drive', centre=5.0906, span=0.008):
             f'<g font-family="var(--uos-font)">{"".join(parts)}</g></svg>')
 
 
-add('측정 구성', '03  조종기·제어기 리버스 엔지니어링', 45, f"""
-<h2 class="headline">무선 조종기·제어기 신호를 로직 애널라이저로 측정</h2>
-<div class="split grow" style="grid-template-columns:0.9fr 0.9fr 1.2fr">
-{figure('37_la_setup.jpg', '메인보드에 로직 애널라이저 DSLogic Pro 탐침을 연결한 측정 구성', '메인보드 ↔ DSLogic Pro 연결', cls='')}
-{figure('36_board_voltage.jpg', '멀티미터로 메인보드 전원 전압 12.23 V를 잰 모습', '메인보드 전원 12.23 V (멀티미터)', cls='')}
-<table class="comparison select setup"><tr><th colspan="2">측정 구성</th></tr>
-<tr><td>장비</td><td>DSLogic Pro · 멀티미터</td></tr>
-<tr><td>샘플링</td><td>1 MHz · 2채널 (CH0 · CH1)</td></tr>
-<tr><td>전원</td><td>메인보드 12.23 V</td></tr>
-<tr><td>주행</td><td>앞 → 뒤 → 앞 → 뒤</td></tr>
-<tr><td>승강</td><td>상승 → 하강 → 상승 → 하강</td></tr>
-<tr><td>조향</td><td>왼쪽 → 오른쪽 → 왼쪽 → 오른쪽</td></tr></table>
-</div>
-<div class="takeaway">4주차 피드백: 버튼별 신호를 로직 애널라이저로 측정 · 기존 제어기 리버스 엔지니어링</div>
-""",
-    """4주차 피드백에 따라 조종기와 제어기를 역으로 분석하였다. 장비는 DSLogic Pro 로직 애널라이저와 멀티미터이다. 왼쪽은 메인보드에 로직 애널라이저를 연결한 모습이고, 가운데는 멀티미터로 잰 메인보드 전원 12.23볼트이다. 로직 애널라이저는 1메가헤르츠로 두 채널을 기록했고, 주행은 앞과 뒤, 승강은 상승과 하강, 조향은 왼쪽과 오른쪽을 번갈아 두 번씩 눌렀다. 제어기에는 무선 수신 회로까지 모두 한 보드에 들어 있다.""",
-    [(INTAKE, '조종기·제어기 표기와 사진'), (FEEDBACK, '§2 로직 애널라이저로 버튼별 신호 측정, 리버스 엔지니어링'),
-     ('forklift-presentations/week-05/assets/data_la_edges.json', 'DSLogic 캡처 3개 (1 MHz, 2채널) — prepare_la.py 로 추출')],
-    '화면 생성: 실물 사진(2026-09-23 입고) · 팀 측정 기록')
-
-add('명령별 파형', '04  명령별 로직 애널라이저 파형', 60, f"""
+add('명령별 파형', '03  조종기·제어기 리버스 엔지니어링 · 파형', 80, f"""
 <h2 class="headline">명령마다 한 채널만 켜짐: 방향은 채널, 동작 시간은 누른 시간</h2>
+<div class="split grow" style="grid-template-columns:0.3fr 1fr">
+<div class="stack" style="gap:8px">
+{figure('37_la_setup.jpg', '메인보드에 로직 애널라이저 DSLogic Pro 탐침을 연결한 측정 구성', '메인보드 ↔ DSLogic Pro', cls='')}
+<table class="comparison select pallet"><tr><td class="step">장비</td><td>DSLogic Pro</td></tr><tr><td class="step">샘플링</td><td>1 MHz · 2채널</td></tr><tr><td class="step">전원</td><td>12.23 V</td></tr></table>
+</div>
 {la_traces()}
+</div>
 """,
-    """세 번의 측정 파형이다. 주행에서는 앞 버튼을 누르면 CH0가, 뒤 버튼을 누르면 CH1이 켜지고, 버튼을 누른 시간만큼 켜져 있다. 승강도 같은 구조로 상승은 CH1, 하강은 CH0이다. 즉 두 선 가운데 어느 쪽에 전압을 거느냐로 모터의 회전 방향이 바뀐다. 조향 파일은 내보낸 구간에 왼쪽 명령 한 번만 들어 있어 나머지 명령은 다시 확인한다.""",
-    [('forklift-presentations/week-05/assets/data_la_edges.json', '엣지 목록 — 주행 19 · 승강 28 · 조향 31개, 조향 CSV 는 7.72–16.69 s 구간만 포함'),
-     ('forklift-presentations/week-05/prepare_la.py', 'DSLogic CSV → 엣지 추출')],
-    '화면 생성: DSLogic 캡처 엣지로 그린 파형 (명령 옆 숫자 = 켜진 시간)')
+    """4주차 피드백에 따라 조종기와 제어기를 역으로 분석하였다. 왼쪽처럼 메인보드에 DSLogic Pro 로직 애널라이저를 연결해 1메가헤르츠로 두 채널을 기록했고, 멀티미터로 잰 전원은 12.23볼트였다. 주행은 앞과 뒤, 승강은 상승과 하강, 조향은 왼쪽과 오른쪽을 번갈아 눌렀다. 오른쪽 파형을 보면 앞 버튼을 누르면 CH0가, 뒤 버튼을 누르면 CH1이 켜지고, 누른 시간만큼 켜져 있다. 승강도 같은 구조로 상승은 CH1, 하강은 CH0이다. 즉 두 선 가운데 어느 쪽에 전압을 거느냐로 모터의 방향이 바뀐다. 조향 파일은 내보낸 구간에 왼쪽 명령 한 번만 들어 있다.""",
+    [(FEEDBACK, '§2 로직 애널라이저로 버튼별 신호 측정, 리버스 엔지니어링'),
+     ('forklift-presentations/week-05/assets/data_la_edges.json', '엣지 목록 — 주행 19 · 승강 28 · 조향 31개, 조향 CSV 는 7.72–16.69 s 구간만 포함'),
+     ('forklift-presentations/week-05/prepare_la.py', 'DSLogic CSV → 엣지 추출'),
+     ('팀 실측 사진 (2026-09-29–30)', '메인보드–DSLogic 연결, 멀티미터 12.23 V')],
+    '화면 생성: 실물 사진(EXIF 제거) · DSLogic 캡처 엣지로 그린 파형 (명령 옆 숫자 = 켜진 시간)')
 
 drive_cmds = la_commands('drive') + la_commands('lift')
-add('PWM 없음', '05  파형 해석', 50, f"""
-<h2 class="headline">측정한 두 선은 켜짐·꺼짐뿐, 회로 조사 결과 릴레이 구동</h2>
-<div class="split grow" style="grid-template-columns:1fr 1fr">
-<div class="stack" style="justify-content:center">{la_zoom()}<p class="chart-cap">누르는 순간 약 3 ms 두 채널 동시 High (주행 4회 모두) · 팀 판단: 전환 순간 접지 튐, 추가 확인</p></div>
-<div class="fb-cards licence" style="align-self:center;grid-template-columns:1fr;grid-template-rows:auto">
-<article><h3>파형 (측정한 두 선)</h3><p>명령 {len(drive_cmds)}회, 켜진 동안 1 MHz 샘플에서 변화 0회 → PWM 신호 아님</p></article>
-<article><h3>회로 조사 (팀)</h3><p>릴레이로 모터 켜짐·꺼짐 · 정·역 전환만<br>속도 조절 기능 자체가 없음</p></article>
-<article class="key"><h3>의미</h3><p>모터를 켜고 끄는 열린 루프 · 속도·위치 제어 불가</p></article>
-</div>
-</div>
-""",
-    """파형과 회로 조사를 합친 해석이다. 먼저 파형에서 직접 확인한 것은, 측정한 두 선이 명령이 켜져 있는 동안 1메가헤르츠 샘플에서 한 번도 바뀌지 않았다는 것이다. PWM이라면 켜짐과 꺼짐이 빠르게 반복되어야 하므로 이 두 선은 PWM 신호가 아니라 켜짐과 꺼짐 레벨이다. 왼쪽은 누르는 순간을 몇 밀리초로 확대한 것으로, 주행 명령 네 번 모두 약 3밀리초 동안 두 채널이 함께 켜졌다가 한 채널만 남는다. 팀은 전환 순간 접지가 튄 것으로 보고 있으며, 모터 단자를 함께 재서 확인한다. 회로를 따라가 보니 모터는 릴레이로 켜고 끄며 방향만 바꾸고, 조종기에 속도 버튼이 있지만 속도 조절 기능 자체가 없었다. 결국 기존 제어기로는 속도나 위치를 제어할 수 없다.""",
-    [('forklift-presentations/week-05/assets/data_la_edges.json', '명령 구간 내 엣지 0개 (1 µs 튐 제외), 주행 누름 순간 두 채널 동시 High 2.95–3.43 ms 4회 — 원인은 팀 판단(접지 튐), 미확정'),
-     ('팀 리버스 엔지니어링 보고 (2026-09-30)', '릴레이 구동, 속도 조절 기능 없음 (회로 조사)'),
-     (FEEDBACK, '§2 버튼별 신호 확인')],
-    '화면 생성: DSLogic 캡처 엣지 확대')
-
 RE_ROWS = [
-    ('전원 스위치', '+ 와 V 를 직접 연결하는 단순 스위치', '재활용'),
-    ('무선 수신', 'RF 회로가 메인보드에 통합', '분리 불가 → 사용 안 함'),
-    ('모터 구동', '릴레이 켜짐·꺼짐 · 정·역 전환만', '대체'),
-    ('속도 조절', 'PWM·전압 제어 없음 · 기능 자체 없음', '새로 구현'),
-    ('주행 모터 (양쪽 바퀴)', '—', '재활용'),
-    ('리프트 모터', '—', '재활용 · 높이 센서 필요'),
+    ('파형 (측정한 두 선)', f'명령 {len(drive_cmds)}회, 켜진 동안 변화 0회 → PWM 아님', '—'),
+    ('모터 구동 (회로 조사)', '릴레이 켜짐·꺼짐 · 정·역 전환만', '대체'),
+    ('속도 조절', '기능 자체 없음', '새로 구현'),
+    ('무선 수신', 'RF 회로가 메인보드에 통합', '사용 안 함'),
+    ('전원 스위치', '+ 와 V 직결 단순 스위치', '재활용'),
+    ('주행 모터 · 리프트 모터', '—', '재활용'),
 ]
 re_table = ''.join(f'<tr><td class="step">{a}</td><td>{b}</td><td><b>{c}</b></td></tr>' for a, b, c in RE_ROWS)
-add('리버싱 결론', '06  리버스 엔지니어링 결과', 50, f"""
-<h2 class="headline">결론: 기존 제어기를 쓰지 않고 DRV8244 SPI형으로 새로 개발</h2>
-<table class="comparison select practice grow"><tr><th>대상</th><th>관측</th><th>처리</th></tr>{re_table}</table>
+add('해석과 결론', '04  조종기·제어기 리버스 엔지니어링 · 결론', 75, f"""
+<h2 class="headline">릴레이로 켜고 끄기만 함 → 기존 제어기 대신 DRV8244 SPI형으로 새로 개발</h2>
+<div class="split grow" style="grid-template-columns:0.8fr 1.2fr">
+<div class="stack" style="justify-content:center">{la_zoom()}<p class="chart-cap">누르는 순간 약 3 ms 두 채널 동시 High (주행 4회 모두) · 팀 판단: 전환 순간 접지 튐, 추가 확인</p></div>
+<table class="comparison select re"><tr><th>대상</th><th>관측</th><th>처리</th></tr>{re_table}</table>
+</div>
 <div class="takeaway">남은 질문: 리프트 높이 조절 → 엔코더 또는 높이 센서 필요</div>
 """,
-    """리버스 엔지니어링의 결론이다. 전원 스위치는 플러스와 V 단자를 직접 잇는 단순한 스위치이고, 무선 수신 회로는 메인보드에 통합되어 있다. 모터는 릴레이로 켜고 끄며 방향만 바꾸고, 속도 조절은 없다. 여기에 컴퓨터 명령을 끼워 넣어도 켜고 끄는 것 이상은 할 수 없으므로, 기존 제어기를 쓰지 않고 DRV8244 SPI형 모터 드라이버로 제어기를 새로 만든다. 전원 스위치와 주행 모터, 리프트 모터는 그대로 쓴다. 남은 질문은 리프트 높이 조절이다. 포크를 원하는 높이에 세우려면 엔코더나 높이 센서가 필요하다.""",
-    [('팀 리버스 엔지니어링 보고 (2026-09-30)', '전원 스위치 +·V 직결, RF 메인보드 통합, 릴레이 구동·PWM 없음, 속도 조절 기능 없음, 결론 DRV8244 SPI 신규 개발, 재활용: 전원 스위치·주행 모터·리프트 모터')],
-    '출처: 팀 측정 보고')
+    """파형과 회로 조사를 합친 결론이다. 측정한 두 선은 명령이 켜져 있는 동안 1메가헤르츠 샘플에서 한 번도 바뀌지 않았다. PWM이라면 켜짐과 꺼짐이 빠르게 반복되어야 하므로 이 두 선은 켜짐과 꺼짐 레벨이다. 왼쪽은 누르는 순간을 확대한 것으로, 약 3밀리초 동안 두 채널이 함께 켜졌다가 한 채널만 남는다. 팀은 전환 순간 접지가 튄 것으로 보고 있으며 모터 단자를 함께 재서 확인한다. 회로를 따라가 보니 모터는 릴레이로 켜고 끄며 방향만 바꾸고, 속도 조절 기능 자체가 없었다. 무선 수신 회로도 메인보드에 통합되어 있다. 여기에 컴퓨터 명령을 끼워 넣어도 켜고 끄는 것 이상은 할 수 없으므로, 기존 제어기를 쓰지 않고 DRV8244 SPI형 드라이버로 제어기를 새로 만든다. 전원 스위치와 주행 모터, 리프트 모터는 그대로 쓴다. 남은 질문은 리프트 높이 조절로, 포크를 원하는 높이에 세우려면 엔코더나 높이 센서가 필요하다.""",
+    [('forklift-presentations/week-05/assets/data_la_edges.json', '명령 구간 내 엣지 0개 (1 µs 튐 제외), 주행 누름 순간 두 채널 동시 High 2.95–3.43 ms 4회 — 원인은 팀 판단(접지 튐), 미확정'),
+     ('팀 리버스 엔지니어링 보고 (2026-09-30)', '전원 스위치 +·V 직결, RF 메인보드 통합, 릴레이 구동, 속도 조절 기능 없음, 결론 DRV8244 SPI 신규 개발, 재활용: 전원 스위치·주행 모터·리프트 모터')],
+    '화면 생성: DSLogic 캡처 엣지 확대 · 팀 측정 보고')
 
 # ----------------------------------------------------------------- 8 motor driver
 DRV_DS = 'https://www.ti.com/lit/ds/symlink/drv8244-q1.pdf'
@@ -275,7 +250,7 @@ DRIVER_ROWS = [
 driver_table = ''.join(
     f'<tr{PICK if i == 0 else ""}><td>{a}</td><td>{b}</td><td>{c}</td><td>{d}</td><td>{e}</td></tr>'
     for i, (a, b, c, d, e) in enumerate(DRIVER_ROWS))
-add('모터 드라이버 선정', '07  하드웨어 선정 · 모터 드라이버', 55, f"""
+add('모터 드라이버 선정', '05  하드웨어 선정 · 모터 드라이버', 65, f"""
 <h2 class="headline">모터 드라이버: DRV8244-Q1 SPI형 (DRV8244SQRYJRQ1) 선정</h2>
 <div class="split grow" style="grid-template-columns:1.5fr 0.62fr">
 <div class="stack" style="justify-content:center;gap:8px">
@@ -308,7 +283,7 @@ ENCODER_ROWS = [
 encoder_table = ''.join(
     f'<tr{PICK if i == 0 else ""}><td>{a}</td><td>{b}</td><td>{c}</td><td>{d}</td><td>{e}</td></tr>'
     for i, (a, b, c, d, e) in enumerate(ENCODER_ROWS))
-add('엔코더 선정', '08  하드웨어 선정 · 엔코더', 50, f"""
+add('엔코더 선정', '06  하드웨어 선정 · 엔코더', 60, f"""
 <h2 class="headline">엔코더: MT6701 선정 — 절대각과 증분 출력을 한 칩에</h2>
 <div class="split grow" style="grid-template-columns:1.5fr 0.62fr">
 <table class="comparison select"><tr><th>후보</th><th>분해능</th><th>출력</th><th>방식</th><th>정확도</th></tr>{encoder_table}</table>
@@ -333,7 +308,7 @@ add('엔코더 선정', '08  하드웨어 선정 · 엔코더', 50, f"""
 IPROPI_R = 3600.0          # ohm, on the draft (R5/R6/R9)
 A_IPROPI = 4750.0          # A/A, VQFN-HR (datasheet)
 V_PER_A = IPROPI_R / A_IPROPI
-add('구동부 회로 초안', '09  구동부 회로 초안 · 모터 드라이버', 40, f"""
+add('구동부 회로 초안', '07  구동부 회로 초안 · 모터 드라이버', 50, f"""
 <h2 class="headline">DRV8244 3채널 드라이버 보드 초안: SPI 버스 공유 · 채널별 전류 측정</h2>
 <div class="split grow" style="grid-template-columns:1.45fr 0.55fr">
 <figure class="shot sch"><img class="media" src="assets/40_sch_drv8244.png" alt="DRV8244SQRYJRQ1 세 개(L·M·R)의 회로 초안. MISO·MOSI·CLK 공유, 채널별 CS·IN1·IN2·DRVOFF·nSLEEP·nFAULT·IPROPI"><figcaption class="small muted">회로 초안 (2026-09-30)</figcaption></figure>
@@ -351,25 +326,19 @@ add('구동부 회로 초안', '09  구동부 회로 초안 · 모터 드라이�
      (DRV_DS, f'AIPROPI 4750 A/A (VQFN-HR) → 3.6 kΩ 에서 {V_PER_A:.3f} V/A, 3.3 V ↔ {3.3 / V_PER_A:.2f} A, ITRIP 최대 2.97 V ↔ {2.97 / V_PER_A:.2f} A (계산)')],
     '화면 생성: 팀 회로 초안 캡처')
 
-add('엔코더 회로 초안', '10  구동부 회로 초안 · 엔코더', 35, """
-<h2 class="headline">MT6701 엔코더 보드 초안: 증분(ABZ)·절대(SSI) 두 가지</h2>
-<div class="split grow" style="grid-template-columns:1fr 1fr">
-<figure class="shot sch"><img class="media" src="assets/41_sch_mt6701_abz.png" alt="MT6701QT-ACD 증분 출력판. A·B와 반전 /A·/B 출력을 2×4 핀 헤더로"><figcaption class="small muted">증분 출력판 · A · B + 반전 /A · /B → 바퀴 속도</figcaption></figure>
-<figure class="shot sch"><img class="media" src="assets/42_sch_mt6701_ssi.png" alt="MT6701QT-ACD 절대각 출력판. SSI DO·CLK·CSN을 2×4 핀 헤더로"><figcaption class="small muted">절대각 출력판 · SSI DO · CLK · CSN → 조향각</figcaption></figure>
+add('엔코더·MCU 회로 초안', '08  구동부 회로 초안 · 엔코더 · MCU', 40, """
+<h2 class="headline">엔코더 보드 두 가지(증분·절대)와 MCU 핀 배정 초안</h2>
+<div class="split grow" style="grid-template-columns:0.9fr 1.1fr">
+<div class="stack" style="gap:6px">
+<figure class="shot sch"><img class="media" src="assets/41_sch_mt6701_abz.png" alt="MT6701QT-ACD 증분 출력판. A·B와 반전 /A·/B"><figcaption class="small muted">MT6701 증분판 · A · B + 반전 /A · /B → 바퀴 속도</figcaption></figure>
+<figure class="shot sch"><img class="media" src="assets/42_sch_mt6701_ssi.png" alt="MT6701QT-ACD 절대각 출력판. SSI DO·CLK·CSN"><figcaption class="small muted">MT6701 절대판 · SSI DO · CLK · CSN → 조향각</figcaption></figure>
 </div>
-<div class="takeaway">같은 칩(MT6701QT-ACD) · 같은 2×4 커넥터 · 출력 방식만 바꾼 두 판</div>
+<figure class="shot sch"><img class="media" src="assets/43_sch_mcu_pins.png" alt="MCU 포트별 신호 배정과 2열 38핀 커넥터 두 개의 핀 배치 초안"><figcaption class="small muted">MCU 포트별 신호 배정과 2 × 38핀 커넥터 배치 · 초안</figcaption></figure>
+</div>
 """,
-    """엔코더 보드 초안이다. 같은 MT6701 칩으로 두 가지 판을 만든다. 왼쪽은 증분 출력판으로, A와 B 신호에 반전 신호까지 내보내 긴 배선에서도 잡음에 강하게 바퀴 회전을 센다. 오른쪽은 절대각 출력판으로, SSI의 데이터·클록·칩 선택 세 선으로 현재 각도를 바로 읽으므로 조향각에 쓴다. 두 판 모두 같은 2 곱하기 4 핀 커넥터를 쓴다.""",
-    [('팀 회로 초안 (2026-09-30)', 'MT6701QT-ACD — 증분판: A·B, U·V 핀을 /A·/B 로, MODE → SGND / 절대판: A·B·Z 핀을 DO·CLK·CSN 으로, 둘 다 VDD 100 nF, 2.54 mm 2×4 헤더'),
+    """엔코더 보드와 MCU 핀 배정 초안이다. 엔코더는 같은 MT6701 칩과 같은 2 곱하기 4 핀 커넥터로 두 가지 판을 만든다. 위는 증분 출력판으로, A와 B에 반전 신호까지 내보내 긴 배선에서도 잡음에 강하게 바퀴 회전을 센다. 아래는 절대각 출력판으로, SSI 세 선으로 현재 각도를 바로 읽어 조향각에 쓴다. 오른쪽은 MCU 핀 배정 초안으로, 포트마다 신호 이름을 붙이고 보드의 38핀 두 줄 커넥터에 배치하였다. 아직 초안이며, 드라이버와 엔코더 보드가 확정되면 함께 정리한다.""",
+    [('팀 회로 초안 (2026-09-30)', 'MT6701QT-ACD — 증분판: A·B, U·V 핀을 /A·/B 로, MODE → SGND / 절대판: A·B·Z 핀을 DO·CLK·CSN 으로, 둘 다 VDD 100 nF, 2.54 mm 2×4 헤더 / MCU 포트 신호 배정과 2 × 38핀 커넥터 배치'),
      (MT_DS, 'MT6701 출력 방식 — ABZ·UVW, SSI')],
-    '화면 생성: 팀 회로 초안 캡처')
-
-add('MCU 핀 배정', '11  구동부 회로 초안 · MCU 핀 배정', 25, """
-<h2 class="headline">MCU 핀 배정 초안: 모터·센서·통신 신호를 보드 커넥터에 배치</h2>
-<figure class="shot sch grow"><img class="media" src="assets/43_sch_mcu_pins.png" alt="MCU 포트별 신호 배정과 2열 38핀 커넥터 두 개의 핀 배치 초안"><figcaption class="small muted">포트별 신호 이름(위)과 2 × 38핀 커넥터 배치(아래) · 초안</figcaption></figure>
-""",
-    """MCU 쪽 핀 배정 초안이다. 위는 포트마다 어떤 신호를 연결할지 이름을 붙인 것이고, 아래는 보드의 38핀 두 줄 커넥터에 실제로 어느 핀이 나오는지이다. 모터 제어선, SPI, IMU의 I2C 같은 신호를 배치하였으며, 드라이버와 엔코더 보드가 확정되면 함께 정리한다.""",
-    [('팀 회로 초안 (2026-09-30)', 'MCU 포트 신호 배정(MTR_L1–L4·R1–R4, SPI3, IMU I2C 등)과 2 × 38핀 커넥터 배치')],
     '화면 생성: 팀 회로 초안 캡처')
 
 # ----------------------------------------------------------------- 10 standard practice vs our mission
@@ -391,7 +360,7 @@ MARK = {OK_: '<span class="mk ok">일치</span>', PART: '<span class="mk part">�
 practice_table = ''.join(
     f'<tr><td class="step">{st}</td><td>{std}</td><td>{ours}</td><td>{MARK[m]}</td><td><b>{act}</b></td></tr>'
     for st, std, ours, m, act in PRACTICE_ROWS)
-add('표준 운용 절차 대조', '12  표준 운용 절차 대조', 65, f"""
+add('표준 운용 절차 대조', '09  표준 운용 절차 대조', 75, f"""
 <h2 class="headline">표준 운용 절차와 우리 임무 절차 대조: 7단계 중 5단계 보완 필요</h2>
 <table class="comparison select practice grow"><tr><th>단계</th><th>표준 운용 절차 (KOSHA · 산업안전보건기준)</th><th>우리 임무 절차 (현재 시뮬레이션)</th><th>대조</th><th>조치</th></tr>{practice_table}</table>
 <p class="chart-cap">표준 수치는 사람이 타는 실제 지게차 기준 · 우리 차체에 적용할 비율은 실측 후 결정</p>
@@ -406,7 +375,7 @@ add('표준 운용 절차 대조', '12  표준 운용 절차 대조', 65, f"""
     '출처: KOSHA 교육자료 · 법령 · 우리 시뮬레이션 설정')
 
 # ----------------------------------------------------------------- 12 meeting questions
-add('리보틱스 미팅 질문', '13  리보틱스 중간 미팅 질문', 30, """
+add('리보틱스 미팅 질문', '10  리보틱스 중간 미팅 질문', 45, """
 <h2 class="headline">리보틱스 중간 미팅에서 확인할 사항</h2>
 <table class="comparison select meeting grow"><tr><th>구분</th><th>항목</th></tr><tr><td rowspan="4" class="grp">확인할 것</td><td class="item">최종 시연 장소 · 바닥 (실내·실외)</td></tr><tr><td class="item">평가 기준 (성공률 · 시간 · 정밀도)</td></tr><tr><td class="item">시험 팔레트 (EPAL 6 · 축소 T11) · 적재 하중</td></tr><tr><td class="item">다우테크놀로지 사례 (작업 공간 · 험지)</td></tr><tr><td rowspan="3" class="grp">요청할 것</td><td class="item">주행·승강 모터 사양서 (있다면)</td></tr><tr><td class="item">주행·조향·승강 모터 정격 (전압 · 전류)</td></tr><tr><td class="item">실제 지게차 운용 영상 · 데이터</td></tr><tr><td rowspan="5" class="grp">함께 정할 것</td><td class="item">기존 제어기 교체 (DRV8244 신규 제어기) 승인</td></tr><tr><td class="item">리프트 높이 조절 요구 (범위 · 정밀도)</td></tr><tr><td class="item">시험 공간 · 허용 속도</td></tr><tr><td class="item">안전 정지 요구 (비상정지 · 기울기 · 과적)</td></tr><tr><td class="item">동봉 팔레트 활용</td></tr></table>
 """,
@@ -417,7 +386,7 @@ add('리보틱스 미팅 질문', '13  리보틱스 중간 미팅 질문', 30, "
 
 TITLE = '5주차 자율 지게차 개발'
 TOTAL = 610
-N_SLIDES = 14
+N_SLIDES = 11
 
 
 def build():
