@@ -351,7 +351,7 @@ practice_table = ''.join(
     f'<tr><td class="step">{st}</td><td>{std}</td><td>{ours}</td><td>{MARK[m]}</td><td><b>{act}</b></td></tr>'
     for st, std, ours, m, act in PRACTICE_ROWS)
 add('표준 운용 절차 대조', '09  표준 운용 절차 대조', 75, f"""
-<h2 class="headline">표준 운용 절차와 우리 임무 절차 대조: 7단계 중 5단계 보완 필요</h2>
+<h2 class="headline">표준 운용 절차와 우리 임무 절차 대조</h2>
 <table class="comparison select practice compact grow"><tr><th>단계</th><th>표준 절차</th><th>우리 절차</th><th>대조</th><th>조치</th></tr>{practice_table}</table>
 
 """,
