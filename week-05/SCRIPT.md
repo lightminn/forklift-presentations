@@ -64,11 +64,10 @@ DRV8876 — 4.5–37 V, 3.5 A 피크, 700 mΩ (HS + LS): https://www.ti.com/lit/
 
 ## 7쪽 · 엔코더 선정 (05:40–06:40, 60초)
 
-엔코더로는 자석식 각도 센서인 MT6701을 골랐다. 축 끝에 자석을 붙이고 그 위에 칩을 두면 접촉 없이 회전각을 잰다. 가장 큰 이유는 한 칩이 절대각과 증분 출력을 모두 낸다는 점이다. 조향축에 달면 전원을 켜자마자 현재 조향각을 알 수 있어 원점을 찾는 동작이 필요 없고, 바퀴 쪽에 달면 ABZ 출력을 MCU 타이머의 엔코더 모드로 바로 세어 속도를 잰다. 값도 1에서 2달러 수준이다. AS5600은 증분 출력이 없어 바퀴 속도를 세기 어렵고, AS5047P는 증분과 절대각을 모두 내지만 SPI 전용이다. MT6701은 SSI와 I2C, 아날로그 출력까지 있고 영점을 칩에 저장할 수 있다. 실제 성능은 분해능보다 최대 1.5도의 정확도와 자석을 얼마나 바르게 붙이는지가 좌우하므로, 자석과 칩의 축 어긋남 0.3밀리미터 이하, 간격 0.5에서 2밀리미터를 지키는 브래킷을 설계한다. 어느 축에 몇 개를 달지는 조종기 신호 분석과 모터 구조를 확인한 뒤 정한다.
+엔코더로는 자석식 각도 센서인 MT6701을 골랐다. 축 끝에 자석을 붙이고 그 위에 칩을 두면 접촉 없이 회전각을 잰다. 가장 큰 이유는 한 칩이 절대각과 증분 출력을 모두 낸다는 점이다. 조향축에 달면 전원을 켜자마자 현재 조향각을 알 수 있어 원점을 찾는 동작이 필요 없고, 바퀴 쪽에 달면 ABZ 출력을 MCU 타이머의 엔코더 모드로 바로 세어 속도를 잰다. AS5600은 증분 출력이 없어 바퀴 속도를 세기 어렵고, AS5047P는 증분과 절대각을 모두 내지만 SPI 전용이다. MT6701은 SSI와 I2C, 아날로그 출력까지 있고 영점을 칩에 저장할 수 있다. 실제 성능은 분해능보다 최대 1.5도의 정확도와 자석을 얼마나 바르게 붙이는지가 좌우하므로, 자석과 칩의 축 어긋남 0.3밀리미터 이하, 간격 0.5에서 2밀리미터를 지키는 브래킷을 설계한다. 어느 축에 몇 개를 달지는 조종기 신호 분석과 모터 구조를 확인한 뒤 정한다.
 
 [Sources]
 MT6701 데이터시트 Rev.1.5 — 14 bit, I2C·SSI·ABZ(≤1024 PPR)·UVW·아날로그·PWM, INL ±1.5° max, 자석 Ø6×2.5 mm·간격 0.5–2.0 mm·축 어긋남 ≤0.3 mm, 영점 EEPROM: https://uploadcdn.oneyac.com/attachments/files/brand_pdf/magntek/F3/CA/MT6701QT-STD.pdf
-LCSC 가격 $1.43–2.04: https://www.lcsc.com/product-detail/Angle-Linear-Position-Sensors_Magn-Tek-MT6701CT-STD_C2856764.html
 AS5047P — 14 bit, ABI 최대 1024 PPR, SPI·ABI·PWM, 동적 각도 오차 보상: https://www.infineon.com/assets/row/public/documents/24/49/infineon-as5047p-datasheet-en.pdf
 AS5600 — 12 bit, I2C·아날로그·PWM, ABZ 없음: https://www.infineon.com/assets/row/public/documents/24/49/infineon-as5600-datasheet-en.pdf
 §4 엔코더 분해능 10 bit면 충분: docs/references/week4_feedback.md
