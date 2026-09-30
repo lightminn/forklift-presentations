@@ -68,8 +68,8 @@ measure_table = ''.join(
 add('차체 실측', '01  차체 실측', 65, f"""
 <h2 class="headline">최대 조향각 15° → 최소 회전 반경 약 2.5 m, 잠정 모델의 약 2배</h2>
 <div class="split grow" style="grid-template-columns:0.8fr 1.2fr">
-{figure('30_chassis_pallet.jpg', '입고한 지게차 차체와 앞에 놓인 동봉 플라스틱 팔레트', '차체와 동봉 팔레트 (2026-09-30 촬영)', cls='')}
-<div class="stack" style="gap:8px;justify-content:center"><table class="comparison measure chassis"><tr><th>항목</th><th>실측</th><th>잠정 모델</th></tr>{measure_table}</table><p class="chart-cap">회전 반경 = 축간 거리 ÷ tan(최대 조향각), 뒤차축 중심 기준 계산값</p></div>
+{figure('30_chassis_pallet.jpg', '입고한 지게차 차체와 앞에 놓인 동봉 플라스틱 팔레트', '', cls='')}
+<div class="stack" style="gap:8px;justify-content:center"><table class="comparison measure chassis"><tr><th>항목</th><th>실측</th><th>잠정 모델</th></tr>{measure_table}</table></div>
 </div>
 <div class="takeaway">반영: 실측값으로 시뮬레이션 모델 갱신 · 회전 반경 증가로 접근·후진 경로 다시 계획</div>
 """,
@@ -93,11 +93,11 @@ pallet_table = ''.join(f'<tr><td class="step">{a}</td><td><b>{b}</b></td><td cla
 add('포크·동봉 팔레트', '02  포크 · 동봉 팔레트', 40, f"""
 <h2 class="headline">동봉 팔레트 약 42 × 30 × 8.5 cm · 포크 진입 높이 약 6.5 cm</h2>
 <div class="split grow" style="grid-template-columns:0.95fr 1.05fr">
-{figure('32_pallet_on_forks.jpg', '포크 위에 올린 동봉 팔레트', '포크 위에 올린 동봉 팔레트', cls='')}
+{figure('32_pallet_on_forks.jpg', '포크 위에 올린 동봉 팔레트', '', cls='')}
 <div class="stack" style="gap:10px">
 <table class="comparison select pallet"><tr><th>항목</th><th>값</th><th>비고</th></tr>{pallet_table}</table>
 <div class="thumbs"><img src="assets/33_pallet_length.jpg" alt="줄자로 잰 팔레트 길이"><img src="assets/34_pallet_height.jpg" alt="줄자로 잰 팔레트 높이"><img src="assets/35_pallet_width.jpg" alt="줄자로 잰 팔레트 폭"></div>
-<p class="chart-cap">팔레트 값은 줄자 사진 눈금 판독 · 포크는 팀 실측</p>
+
 </div>
 </div>
 """,
@@ -198,7 +198,7 @@ add('명령별 파형', '03  조종기·제어기 리버스 엔지니어링 · �
 <h2 class="headline">명령마다 한 채널만 켜짐: 방향은 채널, 동작 시간은 누른 시간</h2>
 <div class="split grow" style="grid-template-columns:0.3fr 1fr">
 <div class="stack" style="gap:8px">
-{figure('37_la_setup.jpg', '메인보드에 로직 애널라이저 DSLogic Pro 탐침을 연결한 측정 구성', '메인보드 ↔ DSLogic Pro', cls='')}
+{figure('37_la_setup.jpg', '메인보드에 로직 애널라이저 DSLogic Pro 탐침을 연결한 측정 구성', '', cls='')}
 <table class="comparison select pallet"><tr><td class="step">장비</td><td>DSLogic Pro</td></tr><tr><td class="step">샘플링</td><td>1 MHz · 2채널</td></tr><tr><td class="step">전원</td><td>12.23 V</td></tr></table>
 </div>
 {la_traces()}
@@ -224,7 +224,7 @@ re_table = ''.join(f'<tr><td class="step">{a}</td><td>{b}</td><td><b>{c}</b></td
 add('해석과 결론', '04  조종기·제어기 리버스 엔지니어링 · 결론', 75, f"""
 <h2 class="headline">릴레이로 켜고 끄기만 함 → 기존 제어기 대신 DRV8244 SPI형으로 새로 개발</h2>
 <div class="split grow" style="grid-template-columns:0.8fr 1.2fr">
-<div class="stack" style="justify-content:center">{la_zoom()}<p class="chart-cap">누르는 순간 약 3 ms 두 채널 동시 High (주행 4회 모두) · 팀 판단: 전환 순간 접지 튐, 추가 확인</p></div>
+<div class="stack" style="justify-content:center">{la_zoom()}</div>
 <table class="comparison select re"><tr><th>대상</th><th>관측</th><th>처리</th></tr>{re_table}</table>
 </div>
 <div class="takeaway">남은 질문: 리프트 높이 조절 → 엔코더 또는 높이 센서 필요</div>
@@ -241,7 +241,7 @@ MT_DS = 'https://uploadcdn.oneyac.com/attachments/files/brand_pdf/magntek/F3/CA/
 # different ratings (DRV8244's continuous figure is TI's thermal simulation).
 PICK = ' class="pick"'
 DRIVER_ROWS = [
-    ('DRV8244-Q1 (선정)', '4.5–35 V', 'DC 4.0 A *', 'OCP 10.5–40 A 선택', 'IPROPI 내장'),
+    ('DRV8244-Q1 (선정)', '4.5–35 V', 'DC 4.0 A', 'OCP 10.5–40 A 선택', 'IPROPI 내장'),
     ('BTS7960 (IBT-2)', '—', '—', '전류 제한 43 A (typ)', 'IS 핀'),
     ('VNH5019 (Pololu)', '5.5–24 V', '12 A', '30 A 최대', '약 140 mV/A'),
     ('Cytron MD13S', '6–30 V', '13 A', '30 A (10 s)', '—'),
@@ -255,7 +255,7 @@ add('모터 드라이버 선정', '05  하드웨어 선정 · 모터 드라이�
 <div class="split grow" style="grid-template-columns:1.5fr 0.62fr">
 <div class="stack" style="justify-content:center;gap:8px">
 <table class="comparison select"><tr><th>후보</th><th>전원</th><th>연속 전류</th><th>보호·최대</th><th>전류 측정</th></tr>{driver_table}</table>
-<p class="chart-cap">* TI 열 해석값: PWM 구동 · 주위 85 °C · 40 × 40 mm 4층 기판. 다른 후보는 제조사 연속 정격</p>
+
 </div>
 <div class="stack reasons">
 <article><h3>전류 측정 내장</h3><p>IPROPI 핀 → MCU ADC로 모터 전류<br>막힘·포크 끝단 감지에 활용</p></article>
@@ -264,7 +264,7 @@ add('모터 드라이버 선정', '05  하드웨어 선정 · 모터 드라이�
 </div>
 </div>
 """,
-    """모터 드라이버로는 TI의 DRV8244-Q1 SPI형을 골랐다. 왼쪽은 비교한 후보이다. 완성 보드인 VNH5019나 MD13S는 바로 쓸 수 있지만, 우리가 원하는 것은 컴퓨터가 모터 전류를 읽고 드라이버의 상태를 확인하는 것이다. DRV8244는 전류에 비례하는 신호를 IPROPI 핀으로 내보내므로, 션트 저항 없이 MCU의 ADC로 모터 전류를 읽을 수 있다. 이 값으로 바퀴가 막히거나 포크가 끝에 닿은 것을 알아낼 수 있다. SPI형은 전류 제한 크기와 과전류 임계값, 출력 전압이 바뀌는 속도를 설정할 수 있고, 어떤 결함이 났는지 레지스터로 읽을 수 있다. 전원은 4.5에서 35볼트까지라 12볼트 차체에 여유가 있다. 표에서 연속 전류와 보호 전류는 다른 값이다. DRV8244의 연속 전류는 TI가 85도 환경, 4층 기판, PWM 구동으로 계산한 열 해석값 4암페어로, 기판 방열에 따라 달라진다. 그래서 이 선정은 차체 모터의 전류를 잰 뒤 확정하며, 그 전류에 맞춰 전류 제한과 기판 방열을 설계한다.""",
+    """모터 드라이버로는 TI의 DRV8244-Q1 SPI형을 골랐다. 왼쪽은 비교한 후보이다. 완성 보드인 VNH5019나 MD13S는 바로 쓸 수 있지만, 우리가 원하는 것은 컴퓨터가 모터 전류를 읽고 드라이버의 상태를 확인하는 것이다. DRV8244는 전류에 비례하는 신호를 IPROPI 핀으로 내보내므로, 션트 저항 없이 MCU의 ADC로 모터 전류를 읽을 수 있다. 이 값으로 바퀴가 막히거나 포크가 끝에 닿은 것을 알아낼 수 있다. SPI형은 전류 제한 크기와 과전류 임계값, 출력 전압이 바뀌는 속도를 설정할 수 있고, 어떤 결함이 났는지 레지스터로 읽을 수 있다. 전원은 4.5에서 35볼트까지라 12볼트 차체에 여유가 있다. 표에서 연속 전류와 보호 전류는 다른 값이다. 다른 후보의 연속 전류는 제조사 정격이고, DRV8244의 연속 전류는 TI가 85도 환경, 4층 기판, PWM 구동으로 계산한 열 해석값 4암페어로, 기판 방열에 따라 달라진다. 그래서 이 선정은 차체 모터의 전류를 잰 뒤 확정하며, 그 전류에 맞춰 전류 제한과 기판 방열을 설계한다.""",
     [(DRV_DS, 'DRV8244-Q1 데이터시트 SLVSG24C — 4.5–35 V, RON 47 mΩ(VQFN-HR), 출력 전류 Internally limited, OCP 21–40/15–31/10.5–24 A, ITRIP 7단계, fPWM ≤ 25 kHz, AIPROPI 4750 A/A, 표 7-1 DC 4.0 A (PWM, 85 °C, 40×40 mm 4층 2 oz), 주문 표 DRV8244SQRYJRQ1 = VQFN-HR(RYJ) 16'),
      ('https://www.infineon.com/dgdl/bts7960b-pb-final.pdf?fileId=db3a30431ed1d7b2011efe782ebd6b60', 'BTS7960 제품 요약 — 전류 제한 43 A typ'),
      ('https://www.pololu.com/product/1451', 'Pololu VNH5019 — 5.5–24 V, 12 A 연속, 30 A 최대, 약 140 mV/A'),
@@ -311,7 +311,7 @@ V_PER_A = IPROPI_R / A_IPROPI
 add('구동부 회로 초안', '07  구동부 회로 초안 · 모터 드라이버', 50, f"""
 <h2 class="headline">DRV8244 3채널 드라이버 보드 초안: SPI 버스 공유 · 채널별 전류 측정</h2>
 <div class="split grow" style="grid-template-columns:1.45fr 0.55fr">
-<figure class="shot sch"><img class="media" src="assets/40_sch_drv8244.png" alt="DRV8244SQRYJRQ1 세 개(L·M·R)의 회로 초안. MISO·MOSI·CLK 공유, 채널별 CS·IN1·IN2·DRVOFF·nSLEEP·nFAULT·IPROPI"><figcaption class="small muted">회로 초안 (2026-09-30)</figcaption></figure>
+<figure class="shot sch"><img class="media" src="assets/40_sch_drv8244.png" alt="DRV8244SQRYJRQ1 세 개(L·M·R)의 회로 초안. MISO·MOSI·CLK 공유, 채널별 CS·IN1·IN2·DRVOFF·nSLEEP·nFAULT·IPROPI"></figure>
 <table class="comparison select pallet"><tr><th colspan="2">구성</th></tr>
 <tr><td class="step">채널</td><td>L · M · R 3개</td></tr>
 <tr><td class="step">공유</td><td>SPI MISO · MOSI · CLK</td></tr>
@@ -330,10 +330,10 @@ add('엔코더·MCU 회로 초안', '08  구동부 회로 초안 · 엔코더 ·
 <h2 class="headline">엔코더 보드 두 가지(증분·절대)와 MCU 핀 배정 초안</h2>
 <div class="split grow" style="grid-template-columns:0.9fr 1.1fr">
 <div class="stack" style="gap:6px">
-<figure class="shot sch"><img class="media" src="assets/41_sch_mt6701_abz.png" alt="MT6701QT-ACD 증분 출력판. A·B와 반전 /A·/B"><figcaption class="small muted">MT6701 증분판 · A · B + 반전 /A · /B → 바퀴 속도</figcaption></figure>
-<figure class="shot sch"><img class="media" src="assets/42_sch_mt6701_ssi.png" alt="MT6701QT-ACD 절대각 출력판. SSI DO·CLK·CSN"><figcaption class="small muted">MT6701 절대판 · SSI DO · CLK · CSN → 조향각</figcaption></figure>
+<figure class="shot sch"><img class="media" src="assets/41_sch_mt6701_abz.png" alt="MT6701QT-ACD 증분 출력판. A·B와 반전 /A·/B"><figcaption class="small muted">증분 출력판 → 바퀴 속도</figcaption></figure>
+<figure class="shot sch"><img class="media" src="assets/42_sch_mt6701_ssi.png" alt="MT6701QT-ACD 절대각 출력판. SSI DO·CLK·CSN"><figcaption class="small muted">절대각 출력판 → 조향각</figcaption></figure>
 </div>
-<figure class="shot sch"><img class="media" src="assets/43_sch_mcu_pins.png" alt="MCU 포트별 신호 배정과 2열 38핀 커넥터 두 개의 핀 배치 초안"><figcaption class="small muted">MCU 포트별 신호 배정과 2 × 38핀 커넥터 배치 · 초안</figcaption></figure>
+<figure class="shot sch"><img class="media" src="assets/43_sch_mcu_pins.png" alt="MCU 포트별 신호 배정과 2열 38핀 커넥터 두 개의 핀 배치 초안"></figure>
 </div>
 """,
     """엔코더 보드와 MCU 핀 배정 초안이다. 엔코더는 같은 MT6701 칩과 같은 2 곱하기 4 핀 커넥터로 두 가지 판을 만든다. 위는 증분 출력판으로, A와 B에 반전 신호까지 내보내 긴 배선에서도 잡음에 강하게 바퀴 회전을 센다. 아래는 절대각 출력판으로, SSI 세 선으로 현재 각도를 바로 읽어 조향각에 쓴다. 오른쪽은 MCU 핀 배정 초안으로, 포트마다 신호 이름을 붙이고 보드의 38핀 두 줄 커넥터에 배치하였다. 아직 초안이며, 드라이버와 엔코더 보드가 확정되면 함께 정리한다.""",
@@ -363,7 +363,7 @@ practice_table = ''.join(
 add('표준 운용 절차 대조', '09  표준 운용 절차 대조', 75, f"""
 <h2 class="headline">표준 운용 절차와 우리 임무 절차 대조: 7단계 중 5단계 보완 필요</h2>
 <table class="comparison select practice grow"><tr><th>단계</th><th>표준 운용 절차 (KOSHA · 산업안전보건기준)</th><th>우리 임무 절차 (현재 시뮬레이션)</th><th>대조</th><th>조치</th></tr>{practice_table}</table>
-<p class="chart-cap">표준 수치는 사람이 타는 실제 지게차 기준 · 우리 차체에 적용할 비율은 실측 후 결정</p>
+
 """,
     """4주차에 사람이 운전하는 방식과 비슷하게 움직여야 보는 사람이 덜 불안하다는 피드백을 받았다. 지금까지 우리가 정한 임무 절차는 팀이 임의로 정한 것이어서, 한국산업안전보건공단 교육자료와 산업안전보건기준에 있는 표준 운용 절차를 찾아 단계별로 대조하였다. 팔레트 앞에서 멈춰 정렬한 뒤 천천히 넣는 접근과, 작업 종료 때 포크를 내리는 것은 표준과 같다. 그리고 운반 중 포크 높이와 속도 상한은 맞지만 마스트 후경과 감속 구역이 빠져 있다. 나머지 세 단계는 다르다. 표준은 백레스트에 닿을 때까지 끝까지 넣지만, 우리는 팔레트 깊이의 60퍼센트와 차체 한계 가운데 작은 값인 360밀리미터만 넣는다. 표준은 조금 들어 당겼다가 내리고 다시 끝까지 넣은 뒤 드는데, 우리는 한 번에 20센티미터를 든다. 또 표준은 사람과 부딪힐 위험이 있으면 후진경보기와 경광등, 또는 후방감지기로 뒤를 확인하도록 하는데, 우리 임무에는 후방 확인 수단이 없다. 오른쪽 열처럼 삽입 깊이 기준, 재삽입 단계, 마스트 후경, 감속 구역과 경고음, 후방 확인 수단을 임무 절차에 반영할지 검토한다. 표준 수치는 실제 지게차 기준이므로 우리 차체에 줄여 적용할 비율은 실측 후 정한다.""",
     [(KOSHA_EDU, 'KOSHA 지게차 교육자료 — 감속·일단 정지, 정면 삽입, 5–10 cm 들기, 10–20 cm 당김 후 내림, 재삽입, 운반 시 포크 약 15–20 cm·마스트 후경, 구내 10 km/h 이하, 모퉁이·사람 근처 감속·경고음'),
