@@ -85,7 +85,7 @@ DSLogic CSV → 엣지 추출: forklift-presentations/week-05/prepare_la.py
 
 <section data-label="해석과 결론" data-screen-label="05" data-duration="75" data-speaker-notes="권장 75초
 
-파형과 회로 조사를 합친 결론이다. 측정한 두 선은 명령이 켜져 있는 동안 1메가헤르츠 샘플에서 한 번도 바뀌지 않았다. PWM이라면 켜짐과 꺼짐이 빠르게 반복되어야 하므로 이 두 선은 켜짐과 꺼짐 레벨이다. 왼쪽은 누르는 순간을 확대한 것으로, 약 3밀리초 동안 두 채널이 함께 켜졌다가 한 채널만 남는다. 팀은 전환 순간 접지가 튄 것으로 보고 있으며 모터 단자를 함께 재서 확인한다. 회로를 따라가 보니 모터는 릴레이로 켜고 끄며 방향만 바꾸고, 속도 조절 기능 자체가 없었다. 무선 수신 회로도 메인보드에 통합되어 있다. 여기에 컴퓨터 명령을 끼워 넣어도 켜고 끄는 것 이상은 할 수 없으므로, 기존 제어기를 쓰지 않고 DRV8244 SPI형 드라이버로 제어기를 새로 만든다. 전원 스위치와 주행 모터, 리프트 모터는 그대로 쓴다. 남은 질문은 리프트 높이 조절로, 포크를 원하는 높이에 세우려면 엔코더나 높이 센서가 필요하다.
+파형과 회로 조사를 합친 결론이다. 측정한 두 선은 명령이 켜져 있는 동안 1메가헤르츠 샘플에서 한 번도 바뀌지 않았다. PWM이라면 켜짐과 꺼짐이 빠르게 반복되어야 하므로 이 두 선은 켜짐과 꺼짐 레벨이다. 회로를 따라가 보니 모터는 릴레이로 켜고 끄며 방향만 바꾸고, 속도 조절 기능 자체가 없었다. 무선 수신 회로도 메인보드에 통합되어 있다. 여기에 컴퓨터 명령을 끼워 넣어도 켜고 끄는 것 이상은 할 수 없으므로, 기존 제어기를 쓰지 않고 DRV8244 SPI형 드라이버로 제어기를 새로 만든다. 전원 스위치와 주행 모터, 리프트 모터는 그대로 쓴다. 남은 질문은 리프트 높이 조절로, 포크를 원하는 높이에 세우려면 엔코더나 높이 센서가 필요하다.
 
 [Sources]
 화면 생성: DSLogic 캡처 엣지 확대 · 팀 측정 보고
@@ -94,10 +94,7 @@ DSLogic CSV → 엣지 추출: forklift-presentations/week-05/prepare_la.py
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="04  조종기·제어기 리버스 엔지니어링 · 결론"><div class="slide-body">
 <h2 class="headline">릴레이로 켜고 끄기만 함 → 기존 제어기 대신 DRV8244 SPI형으로 새로 개발</h2>
-<div class="split grow" style="grid-template-columns:0.8fr 1.2fr">
-<div class="stack" style="justify-content:center"><svg class="diagram" viewBox="0 0 560 250" role="img" aria-label="누르는 순간 두 채널이 약 3 ms 동시에 High가 된 뒤 한 채널만 남는 파형"><g font-family="var(--uos-font)"><text x="58" y="84" text-anchor="end" font-size="17" fill="#1f5fae">CH0</text><polyline points="70.0,90 251.1,90 251.1,50 428.2,50 428.2,90 428.3,90 428.3,90 550.0,90" fill="none" stroke="#1f5fae" stroke-width="3"/><text x="58" y="174" text-anchor="end" font-size="17" fill="#c26a1a">CH1</text><polyline points="70.0,180 251.1,180 251.1,140 428.2,140 428.2,180 428.3,180 428.3,140 550.0,140" fill="none" stroke="#c26a1a" stroke-width="3"/><rect x="251.1" y="30" width="177.1" height="160" fill="#c0392b" opacity="0.10"/><text x="339.6" y="222" text-anchor="middle" font-size="17" fill="#c0392b">두 채널 동시 High 3.0 ms</text><text x="70" y="244" font-size="15" fill="#6b7785">8 ms 구간 · 누르는 순간</text></g></svg></div>
-<table class="comparison select re"><tr><th>대상</th><th>관측</th><th>처리</th></tr><tr><td class="step">파형 (측정한 두 선)</td><td>누르는 동안 신호가 켜진 채 그대로 (깜빡임 없음) → PWM 아님</td><td><b>—</b></td></tr><tr><td class="step">모터 구동 (회로 조사)</td><td>릴레이 켜짐·꺼짐</td><td><b>대체</b></td></tr><tr><td class="step">속도 조절</td><td>기능 자체 없음 (확인)</td><td><b>—</b></td></tr><tr><td class="step">무선 수신</td><td>RF 회로가 메인보드에 통합</td><td><b>사용 안 함</b></td></tr><tr><td class="step">전원 스위치</td><td>+ 와 V 직결 단순 스위치</td><td><b>재활용</b></td></tr><tr><td class="step">주행 모터 · 리프트 모터</td><td>—</td><td><b>재활용</b></td></tr></table>
-</div>
+<table class="comparison select re grow"><tr><th>대상</th><th>관측</th><th>처리</th></tr><tr><td class="step">파형 (측정한 두 선)</td><td>누르는 동안 신호가 켜진 채 그대로 (깜빡임 없음) → PWM 아님</td><td><b>—</b></td></tr><tr><td class="step">모터 구동 (회로 조사)</td><td>릴레이 켜짐·꺼짐</td><td><b>대체</b></td></tr><tr><td class="step">속도 조절</td><td>기능 자체 없음 (확인)</td><td><b>—</b></td></tr><tr><td class="step">무선 수신</td><td>RF 회로가 메인보드에 통합</td><td><b>사용 안 함</b></td></tr><tr><td class="step">전원 스위치</td><td>+ 와 V 직결 단순 스위치</td><td><b>재활용</b></td></tr><tr><td class="step">주행 모터 · 리프트 모터</td><td>—</td><td><b>재활용</b></td></tr></table>
 <div class="takeaway">남은 질문: 리프트 높이 조절 → 엔코더 또는 높이 센서 필요</div>
 </div></x-import>
 </section>
