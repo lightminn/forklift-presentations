@@ -31,4 +31,4 @@
 | MT6701 | 14 bit · ABZ ≤ 1024 PPR · INL ±1.5° max · 자석 간격 0.5–2.0 mm · 축 어긋남 ≤ 0.3 mm | [데이터시트 Rev.1.5](https://uploadcdn.oneyac.com/attachments/files/brand_pdf/magntek/F3/CA/MT6701QT-STD.pdf). 판마다 값이 달라 최신판 기준 |
 | 우리 임무 절차 | 접근 0.60 · 삽입 0.055 · 운반 0.30 m/s · 들기 0.20 m · 삽입 깊이 360 mm · 틸트 관절 없음 | `config/isaac_transport.yaml`, `sim/isaac/run_transport.py` 단계 전환, 잠정 URDF, 삽입 깊이 규칙(로봇 저장소 CLAUDE.md). 시뮬레이터 설정값 |
 | 표준 작업 절차 | 들기 5–10 cm · 당김 10–20 cm · 운반 시 포크 약 15–20 cm · 구내 10 km/h 이하 | KOSHA 지게차 교육자료, 산업안전보건기준에 관한 규칙 제98·99·172·173·179조. 사람이 타는 실제 지게차 기준 |
-| 비교 후보 | BTS7960 · VNH5019 · MD13S · DRV8871 · AS5600 · AS5048 · AS5047P | 각 장 원고 [Sources] 의 제조사·판매처 자료 |
+| 비교 후보 | DRV8873 (4.5–38 V · 10 A 피크 · 150 mΩ · SPI) · DRV8876 (4.5–37 V · 3.5 A 피크 · 700 mΩ) · AS5600 (12 bit · ABZ 없음) · AS5047P (14 bit · ABI 1024 PPR · SPI) | TI·ams(Infineon) 데이터시트. 사용자 지시로 Codex 독립판의 비교 제품 구성을 채택, 수치는 데이터시트 원문으로 재확인 |

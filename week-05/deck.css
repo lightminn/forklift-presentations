@@ -534,3 +534,5 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .comparison.select.practice.compact th:nth-child(2) { width:30%; }
 .comparison.select.practice.compact th:nth-child(3) { width:27%; }
 .comparison.select.practice.compact th:nth-child(4) { width:9%; }
+.comparison.select.big { font-size:21px; }
+.comparison.select.big td, .comparison.select.big th { padding:14px 12px; }

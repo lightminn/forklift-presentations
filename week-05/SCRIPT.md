@@ -54,26 +54,23 @@ DSLogic CSV → 엣지 추출: forklift-presentations/week-05/prepare_la.py
 
 ## 6쪽 · 모터 드라이버 선정 (04:35–05:40, 65초)
 
-모터 드라이버로는 TI의 DRV8244-Q1 SPI형을 골랐다. 왼쪽은 비교한 후보이다. 완성 보드인 VNH5019나 MD13S는 바로 쓸 수 있지만, 우리가 원하는 것은 컴퓨터가 모터 전류를 읽고 드라이버의 상태를 확인하는 것이다. DRV8244는 전류에 비례하는 신호를 IPROPI 핀으로 내보내므로, 션트 저항 없이 MCU의 ADC로 모터 전류를 읽을 수 있다. 이 값으로 바퀴가 막히거나 포크가 끝에 닿은 것을 알아낼 수 있다. SPI형은 전류 제한 크기와 과전류 임계값, 출력 전압이 바뀌는 속도를 설정할 수 있고, 어떤 결함이 났는지 레지스터로 읽을 수 있다. 전원은 4.5에서 35볼트까지라 12볼트 차체에 여유가 있다. 표에서 연속 전류와 보호 전류는 다른 값이다. 다른 후보의 연속 전류는 제조사 정격이고, DRV8244의 연속 전류는 TI가 85도 환경, 4층 기판, PWM 구동으로 계산한 열 해석값 4암페어로, 기판 방열에 따라 달라진다. 그래서 이 선정은 차체 모터의 전류를 잰 뒤 확정하며, 그 전류에 맞춰 전류 제한과 기판 방열을 설계한다.
+모터 드라이버로는 TI의 DRV8244-Q1 SPI형을 골랐다. 12볼트 전원에서 쓸 수 있는 TI의 세 드라이버를 비교하였다. DRV8873도 SPI 설정과 전류 감지를 지원하므로 SPI만으로 고른 것은 아니다. DRV8244는 상하측 합산 도통 저항이 47밀리옴으로 DRV8873의 약 3분의 1이라 같은 전류에서 열이 덜 나고, 최대 전류도 가장 크다. 또 IPROPI 핀으로 모터 전류를 션트 저항 없이 MCU의 ADC로 읽고, 전류 제한과 결함 종류를 SPI로 설정하고 확인할 수 있다. DRV8876은 핀으로 설정하고 피크 전류가 3.5암페어로 작다. 표의 전류는 최대·피크 값이고 연속으로 흘릴 수 있는 값은 아니다. DRV8244가 실제로 계속 흘릴 수 있는 전류는 방열이 정하며, TI가 85도 환경, 4층 기판, PWM 구동으로 계산한 값은 직류 4암페어이다. 그래서 이 선정은 차체 모터의 전류를 잰 뒤 확정하며, 그 전류에 맞춰 전류 제한과 기판 방열을 설계한다.
 
 [Sources]
 DRV8244-Q1 데이터시트 SLVSG24C — 4.5–35 V, RON 47 mΩ(VQFN-HR), 출력 전류 Internally limited, OCP 21–40/15–31/10.5–24 A, ITRIP 7단계, fPWM ≤ 25 kHz, AIPROPI 4750 A/A, 표 7-1 DC 4.0 A (PWM, 85 °C, 40×40 mm 4층 2 oz), 주문 표 DRV8244SQRYJRQ1 = VQFN-HR(RYJ) 16: https://www.ti.com/lit/ds/symlink/drv8244-q1.pdf
-BTS7960 제품 요약 — 전류 제한 43 A typ: https://www.infineon.com/dgdl/bts7960b-pb-final.pdf?fileId=db3a30431ed1d7b2011efe782ebd6b60
-Pololu VNH5019 — 5.5–24 V, 12 A 연속, 30 A 최대, 약 140 mV/A: https://www.pololu.com/product/1451
-Cytron MD13S — 6–30 V, 13 A 연속, 30 A 10 s: https://courses.ideate.cmu.edu/16-375/f2026/text/electronics/cy-md13s-driver.html
-DRV8871 — 6.5–45 V, 3.6 A 피크: https://www.ti.com/lit/ds/symlink/drv8871.pdf
+DRV8873 — 4.5–38 V, 10 A 피크, 150 mΩ (TJ 25 °C, 13.5 V), SPI 또는 하드웨어 인터페이스: https://www.ti.com/lit/ds/symlink/drv8873.pdf
+DRV8876 — 4.5–37 V, 3.5 A 피크, 700 mΩ (HS + LS): https://www.ti.com/lit/ds/symlink/drv8876.pdf
 [/Sources]
 
 ## 7쪽 · 엔코더 선정 (05:40–06:40, 60초)
 
-엔코더로는 자석식 각도 센서인 MT6701을 골랐다. 축 끝에 자석을 붙이고 그 위에 칩을 두면 접촉 없이 회전각을 잰다. 가장 큰 이유는 한 칩이 절대각과 증분 출력을 모두 낸다는 점이다. 조향축에 달면 전원을 켜자마자 현재 조향각을 알 수 있어 원점을 찾는 동작이 필요 없고, 바퀴 쪽에 달면 ABZ 출력을 MCU 타이머의 엔코더 모드로 바로 세어 속도를 잰다. 값도 1에서 2달러 수준이다. 비슷한 기능의 AS5047P가 정확도는 조금 낫지만, MT6701은 I2C와 아날로그 출력까지 있고 영점을 칩에 저장할 수 있다. 4주차에 엔코더 분해능은 10비트면 충분하다는 피드백을 받았다. MT6701은 14비트로 충분하고, 실제 성능은 분해능보다 최대 1.5도의 정확도와 자석을 얼마나 바르게 붙이는지가 좌우한다. 그래서 자석과 칩의 축 어긋남 0.3밀리미터 이하, 간격 0.5에서 2밀리미터를 지키는 브래킷을 설계한다. 어느 축에 몇 개를 달지는 조종기 신호 분석과 모터 구조를 확인한 뒤 정한다.
+엔코더로는 자석식 각도 센서인 MT6701을 골랐다. 축 끝에 자석을 붙이고 그 위에 칩을 두면 접촉 없이 회전각을 잰다. 가장 큰 이유는 한 칩이 절대각과 증분 출력을 모두 낸다는 점이다. 조향축에 달면 전원을 켜자마자 현재 조향각을 알 수 있어 원점을 찾는 동작이 필요 없고, 바퀴 쪽에 달면 ABZ 출력을 MCU 타이머의 엔코더 모드로 바로 세어 속도를 잰다. 값도 1에서 2달러 수준이다. AS5600은 증분 출력이 없어 바퀴 속도를 세기 어렵고, AS5047P는 증분과 절대각을 모두 내지만 SPI 전용이다. MT6701은 SSI와 I2C, 아날로그 출력까지 있고 영점을 칩에 저장할 수 있다. 4주차에 엔코더 분해능은 10비트면 충분하다는 피드백을 받았다. MT6701은 14비트로 충분하고, 실제 성능은 분해능보다 최대 1.5도의 정확도와 자석을 얼마나 바르게 붙이는지가 좌우한다. 그래서 자석과 칩의 축 어긋남 0.3밀리미터 이하, 간격 0.5에서 2밀리미터를 지키는 브래킷을 설계한다. 어느 축에 몇 개를 달지는 조종기 신호 분석과 모터 구조를 확인한 뒤 정한다.
 
 [Sources]
 MT6701 데이터시트 Rev.1.5 — 14 bit, I2C·SSI·ABZ(≤1024 PPR)·UVW·아날로그·PWM, INL ±1.5° max, 자석 Ø6×2.5 mm·간격 0.5–2.0 mm·축 어긋남 ≤0.3 mm, 영점 EEPROM: https://uploadcdn.oneyac.com/attachments/files/brand_pdf/magntek/F3/CA/MT6701QT-STD.pdf
 LCSC 가격 $1.43–2.04: https://www.lcsc.com/product-detail/Angle-Linear-Position-Sensors_Magn-Tek-MT6701CT-STD_C2856764.html
-AS5047P — 14 bit, SPI·ABI·UVW·PWM, 온도 포함 ±1°: https://www1.futureelectronics.com/doc/ams/AS5047P-ATSM.pdf
-AS5048A/B — 14 bit, 온도 포함 ±1.2°: https://media.digikey.com/pdf/Data%20Sheets/Austriamicrosystems%20PDFs/AS5048A,B.pdf
-AS5600 — 12 bit, 시스템 INL ±1°: https://files.seeedstudio.com/wiki/Grove-12-bit-Magnetic-Rotary-Position-Sensor-AS5600/res/Magnetic%20Rotary%20Position%20Sensor%20AS5600%20Datasheet.pdf
+AS5047P — 14 bit, ABI 최대 1024 PPR, SPI·ABI·PWM, 동적 각도 오차 보상: https://www.infineon.com/assets/row/public/documents/24/49/infineon-as5047p-datasheet-en.pdf
+AS5600 — 12 bit, I2C·아날로그·PWM, ABZ 없음: https://www.infineon.com/assets/row/public/documents/24/49/infineon-as5600-datasheet-en.pdf
 §4 엔코더 분해능 10 bit면 충분: docs/references/week4_feedback.md
 [/Sources]
 
