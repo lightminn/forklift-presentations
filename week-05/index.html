@@ -3,7 +3,7 @@
 <link rel="icon" href="data:,">
 <script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>5주차 자율 지게차 개발</title>
-<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=863364344877"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=0bdc352caac3"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 <section class="title-section" data-label="개발 진행 보고" data-screen-label="01" data-duration="15" data-speaker-notes="권장 15초
 
@@ -127,7 +127,7 @@ DRV8876 — 4.5–37 V, 3.5 A 피크, 700 mΩ (HS + LS): https://www.ti.com/lit/
 
 <section data-label="엔코더 선정" data-screen-label="07" data-duration="60" data-speaker-notes="권장 60초
 
-엔코더로는 자석식 각도 센서인 MT6701을 골랐다. 축 끝에 자석을 붙이고 그 위에 칩을 두면 접촉 없이 회전각을 잰다. 가장 큰 이유는 한 칩이 절대각과 증분 출력을 모두 낸다는 점이다. 조향축에 달면 전원을 켜자마자 현재 조향각을 알 수 있어 원점을 찾는 동작이 필요 없고, 바퀴 쪽에 달면 ABZ 출력을 MCU 타이머의 엔코더 모드로 바로 세어 속도를 잰다. 값도 1에서 2달러 수준이다. AS5600은 증분 출력이 없어 바퀴 속도를 세기 어렵고, AS5047P는 증분과 절대각을 모두 내지만 SPI 전용이다. MT6701은 SSI와 I2C, 아날로그 출력까지 있고 영점을 칩에 저장할 수 있다. 4주차에 엔코더 분해능은 10비트면 충분하다는 피드백을 받았다. MT6701은 14비트로 충분하고, 실제 성능은 분해능보다 최대 1.5도의 정확도와 자석을 얼마나 바르게 붙이는지가 좌우한다. 그래서 자석과 칩의 축 어긋남 0.3밀리미터 이하, 간격 0.5에서 2밀리미터를 지키는 브래킷을 설계한다. 어느 축에 몇 개를 달지는 조종기 신호 분석과 모터 구조를 확인한 뒤 정한다.
+엔코더로는 자석식 각도 센서인 MT6701을 골랐다. 축 끝에 자석을 붙이고 그 위에 칩을 두면 접촉 없이 회전각을 잰다. 가장 큰 이유는 한 칩이 절대각과 증분 출력을 모두 낸다는 점이다. 조향축에 달면 전원을 켜자마자 현재 조향각을 알 수 있어 원점을 찾는 동작이 필요 없고, 바퀴 쪽에 달면 ABZ 출력을 MCU 타이머의 엔코더 모드로 바로 세어 속도를 잰다. 값도 1에서 2달러 수준이다. AS5600은 증분 출력이 없어 바퀴 속도를 세기 어렵고, AS5047P는 증분과 절대각을 모두 내지만 SPI 전용이다. MT6701은 SSI와 I2C, 아날로그 출력까지 있고 영점을 칩에 저장할 수 있다. 실제 성능은 분해능보다 최대 1.5도의 정확도와 자석을 얼마나 바르게 붙이는지가 좌우하므로, 자석과 칩의 축 어긋남 0.3밀리미터 이하, 간격 0.5에서 2밀리미터를 지키는 브래킷을 설계한다. 어느 축에 몇 개를 달지는 조종기 신호 분석과 모터 구조를 확인한 뒤 정한다.
 
 [Sources]
 출처: 제조사 데이터시트 · 판매처 가격
@@ -140,11 +140,10 @@ AS5600 — 12 bit, I2C·아날로그·PWM, ABZ 없음: https://www.infineon.com/
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="06  하드웨어 선정 · 엔코더"><div class="slide-body">
 <h2 class="headline">엔코더: MT6701 선정 — 절대각과 증분 출력을 한 칩에</h2>
 <div class="split grow" style="grid-template-columns:1.5fr 0.62fr">
-<table class="comparison select big"><tr><th>후보</th><th>절대각 분해능</th><th>증분 출력</th><th>통신·출력</th><th>특징</th></tr><tr class="pick"><td>MT6701 (선정)</td><td>14 bit</td><td>1–1024 PPR</td><td>SSI · I2C · ABZ · 아날로그 · PWM</td><td>증분 · 절대 둘 다</td></tr><tr><td>AS5600</td><td>12 bit</td><td>없음</td><td>I2C · 아날로그 · PWM</td><td>절대각만</td></tr><tr><td>AS5047P</td><td>14 bit</td><td>최대 1024 PPR</td><td>SPI · ABI · PWM</td><td>고속 동적 오차 보상</td></tr></table>
+<table class="comparison select big"><tr><th>후보</th><th>절대각 분해능</th><th>증분 출력</th><th>통신·출력</th><th>특징</th></tr><tr class="pick"><td>MT6701 (선정)</td><td>14 bit</td><td>1–1024 PPR</td><td>SSI · I2C · ABZ · 아날로그 · PWM</td><td>증분·절대 모두</td></tr><tr><td>AS5600</td><td>12 bit</td><td>없음</td><td>I2C · 아날로그 · PWM</td><td>절대각만</td></tr><tr><td>AS5047P</td><td>14 bit</td><td>최대 1024 PPR</td><td>SPI · ABI · PWM</td><td>고속 동적 오차 보상</td></tr></table>
 <div class="stack reasons">
 <article><h3>조향각: 절대각</h3><p>전원을 켜자마자 각도 확인<br>원점 복귀 동작 불필요</p></article>
 <article><h3>바퀴 속도: ABZ 증분</h3><p>MCU 타이머 엔코더 모드로 직접 계수<br>비접촉 자석식 · 1–2달러대</p></article>
-<article class="note"><h3>4주차 피드백: 분해능</h3><p>"10 bit면 충분" → 14 bit로 충분<br>성능은 정확도(±1.5°)와 자석 정렬이 좌우</p></article>
 </div>
 </div>
 <div class="takeaway">장착 조건: 자석 축 어긋남 ≤ 0.3 mm · 간격 0.5–2 mm → 브래킷 설계 필요</div>
