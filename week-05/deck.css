@@ -528,3 +528,9 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .comparison.select.re { font-size:19px; align-self:center; }
 .comparison.select.re td { padding:8px 10px; white-space:normal !important; }
 .comparison.select.re td.step { font-weight:700; color:#44505c; white-space:nowrap !important; }
+.comparison.select.practice.compact { font-size:23px; }
+.comparison.select.practice.compact td, .comparison.select.practice.compact th { padding:10px 14px; white-space:nowrap !important; }
+.comparison.select.practice.compact th:nth-child(1) { width:9%; }
+.comparison.select.practice.compact th:nth-child(2) { width:30%; }
+.comparison.select.practice.compact th:nth-child(3) { width:27%; }
+.comparison.select.practice.compact th:nth-child(4) { width:9%; }
