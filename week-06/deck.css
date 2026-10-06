@@ -499,8 +499,8 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .why6 .diagram { width:100%; height:auto; display:block; }
 /* Week 6 slide 2: simulation parameters and their basis. */
 .params6 { font-size:19px; }
-.params6 th { padding:8px 14px; }
-.params6 td { padding:7px 14px; font-size:19px; vertical-align:middle; }
+.params6 th { padding:4px 14px; }
+.params6 td { padding:4px 14px; font-size:19px; vertical-align:middle; }
 .params6 td:first-child { width:20%; }
 .params6 td:nth-child(2) { width:33%; font-variant-numeric:tabular-nums; }
 .params6 .kind { display:inline-block; color:#fff; font-size:15px; font-weight:700; padding:2px 8px; border-radius:3px; margin-right:6px; }

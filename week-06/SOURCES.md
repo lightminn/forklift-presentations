@@ -36,10 +36,10 @@
 | 차체 외형 · 순중량 | 1.46 × 0.63 × 1.01 m · 24 kg | DLS08 카탈로그 12–13쪽 | `sim/models/dls08_provisional/parameters.yaml` 8–11 |
 | 축 위치 · 윤거 · 바퀴 반지름 · 포크 치수 | 축간 0.64 · 0.51 · 0.135 m | 상품 사진 비율 추정(이번 실행). 실측은 0.66 · 0.53 · 0.125 m, `sim/models/dls08_measured/README.md` — 이번 실행에는 미반영 | 같은 파일 5·14–30 |
 | 최대 조향각 · 부품 질량 · 무게중심 | 0.45 rad 등 | 가정 | 같은 파일 33–38, `tools/forklift_model_geometry.py` 203 |
-| 바퀴 토크 · 가속도 · 최대 바퀴 각속도 | 3 N·m · 0.3 m/s² · 8 rad/s | 가정 | `config/isaac_transport.yaml` 6·23–26 |
+| 바퀴 토크 · 가속도 · 최대 바퀴 각속도 | 3 N·m · 0.3 m/s² · 8 rad/s | 가정. 네 바퀴 모두 구동(`scene.py` 420)이라 3/0.135 m = 22 N × 4 = 89 N — 적재 34 kg 을 0.3 m/s² 로 가속하는 데 드는 10 N 의 약 9배 | `config/isaac_transport.yaml` 6·23–26 |
 | 조향 토크 · 강성 · 감쇠 | 20 N·m · 1000 · 100 | 조향 응답 점검 뒤 조정 | 같은 파일 7–9, `docs/design/2026-09-17-hybrid-astar-transport.md` 11 |
-| 접근 · 운반 · 삽입 속도 | 0.6 · 0.3 · 0.055 m/s | 시뮬레이터 설정 | 같은 파일 17–22 |
-| 정지 · 운동 마찰, 반발 | 0.8 · 0.7 · 0 | 가정. 지게차·팔레트 충돌 형상에만 적용(바닥은 기본값) | `sim/isaac/scene.py` 362–388 |
+| 접근 · 운반 · 삽입 속도 | 0.6 · 0.3 · 0.055 m/s | 시뮬레이터 설정. 운반 0.3 m/s 는 카탈로그 최고 5 km/h(1.4 m/s, ADR 0002 22행)의 약 1/5 | 같은 파일 17–22 |
+| 정지 · 운동 마찰, 반발 | 0.8 · 0.7 · 0 | 가정. 고무–콘크리트 마찰의 일반 범위(약 0.6–0.9) 안의 값. 지게차·팔레트 충돌 형상에만 적용(바닥은 기본값) | `sim/isaac/scene.py` 362–388 |
 | 물리 주기 · 솔버 반복 | 120 Hz · 32/8 | 가정 | `config/isaac_transport.yaml` 2, `scene.py` 385 |
 | EPAL 6 외형 · 블록 | 800 × 600 × 144 mm | 공식 제품 시트 · CAD 측정 | `config/pallet_geometry_epal6.yaml` 3–10 |
 | 팔레트 질량 | 10 kg | 실물 EPAL 6 9–10 kg, DLS08 적재 능력 10 kg | `docs/decisions/0002-*.md` 22 |
@@ -47,5 +47,5 @@
 | 장애물 LiDAR | 0.08 m 두 대 + 1.05 m, 800빔, 최소 0.15 m, 잡음 σ 0.02 · 절단 0.06 m | 높이는 배치 후보 시험(D_008), 빔 수·최소 거리는 가정, 절단은 3σ | `config/obstacle_layer.yaml` 4–16, 계획 2026-10-04 |
 | 카메라 | 640 × 480 · 화각 69° | D435i 컬러 화각(보정값 아님) | `config/isaac_perception_camera.yaml` 5–6 |
 | 깊이 잡음 · 양자화 | σ = 0.0036 z² · 1 mm | 데이터시트 식(유도값 0.00344, 쓴 값 0.0036은 가정) · z16 형식 | `src/forklift_core/perception/pocket_clearance.py` 38, `docs/validation/2026-09-16-adr-0003-review-handoff.md` 31 |
-| 오도메트리 · 거리 잡음 | 바퀴 0.2 rad/s · 조향 0.005 rad · 거리 0.02 m | 가정(센서 사양 아님) | `src/forklift_core/localization/slam_pose.py` 293–310 |
+| 오도메트리 · 거리 잡음 | 바퀴 0.2 rad/s · 조향 0.005 rad · 거리 0.02 m | 가정(센서 사양 아님). 잡음을 끄고 S3 장면 1 을 다시 적분해도 바퀴 오도메트리 오차 346 cm(켬 339 cm) — 결과에 영향 작음 | `src/forklift_core/localization/slam_pose.py` 293–310 |
 | 공장 홀 | 30.3 × 31.2 m | Isaac 창고 에셋 벽면 측정 | `config/factory_south_hall.yaml` 1–16 |
