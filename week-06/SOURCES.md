@@ -26,3 +26,26 @@
 | 5 | 93.8 % 이상 | 같은 계획 266–273행: 기록 경로의 정지 범위 관측 비율, 첫 점유 앞까지 셈, 0.03 m 미만 돌출 제외 |
 | 6 | 하역 15.8 mm, 정지 구역 침범 0, 충돌 0, 정지 → 재계획 | 1124Z N1 `result.json` (하역 0.01579 m, `unpermitted_entries` 0, `forbidden_pocket_contacts` 0), `plan_history.json` 새 상자 출현 73.2 s · 그 상자에 대한 재계획 83.6 s (140.0 s 재계획은 상자와 약 4.3 m 떨어진 다른 이유) |
 | 7 | 0.00 → 0.73 m | 복귀 첫 계획(0431Z 246.5 s, 1124Z 221.6 s)의 경로점(뒤차축)과 그 시각 전까지 기록된 LiDAR 점유 칸(`obstacle_grid_frames.npz`)의 칸 중심까지 최소 거리(0431Z 0.0022 m, 1124Z 0.7277 m). 차체 외곽과 실제 장애물의 간격이 아니다 |
+
+## 시뮬레이션 파라미터와 근거 (2쪽, 2026-10-06 조사)
+
+`가정` 은 문서에 '합성 가정' 이라고만 있고 값을 고른 이유가 기록되지 않은 것이다.
+
+| 항목 | 값 | 근거 | 출처 |
+|---|---|---|---|
+| 차체 외형 · 순중량 | 1.46 × 0.63 × 1.01 m · 24 kg | DLS08 카탈로그 12–13쪽 | `sim/models/dls08_provisional/parameters.yaml` 8–11 |
+| 축 위치 · 윤거 · 바퀴 반지름 · 포크 치수 | 축간 0.64 · 0.51 · 0.135 m | 상품 사진 비율 추정 | 같은 파일 5·14–30 |
+| 최대 조향각 · 부품 질량 · 무게중심 | 0.45 rad 등 | 가정 | 같은 파일 33–38, `tools/forklift_model_geometry.py` 203 |
+| 바퀴 토크 · 가속도 · 최대 바퀴 각속도 | 3 N·m · 0.3 m/s² · 8 rad/s | 가정 | `config/isaac_transport.yaml` 6·23–26 |
+| 조향 토크 · 강성 · 감쇠 | 20 N·m · 1000 · 100 | 조향 응답 점검 뒤 조정 | 같은 파일 7–9, `docs/design/2026-09-17-hybrid-astar-transport.md` 11 |
+| 접근 · 운반 · 삽입 속도 | 0.6 · 0.3 · 0.055 m/s | 시뮬레이터 설정 | 같은 파일 17–22 |
+| 정지 · 운동 마찰, 반발 | 0.8 · 0.7 · 0 | 가정. 지게차·팔레트 충돌 형상에만 적용(바닥은 기본값) | `sim/isaac/scene.py` 362–388 |
+| 물리 주기 · 솔버 반복 | 120 Hz · 32/8 | 가정 | `config/isaac_transport.yaml` 2, `scene.py` 385 |
+| EPAL 6 외형 · 블록 | 800 × 600 × 144 mm | 공식 제품 시트 · CAD 측정 | `config/pallet_geometry_epal6.yaml` 3–10 |
+| 팔레트 질량 | 10 kg | 실물 EPAL 6 9–10 kg, DLS08 적재 능력 10 kg | `docs/decisions/0002-*.md` 22 |
+| 위치 추정 LiDAR | 1,600빔 · 10 Hz · 0.2–12 m · 높이 1.05 m | RPLIDAR A2M12 카탈로그 · 높이는 차체 최고점 위 | `config/isaac_slam_lidar.yaml` 3–17 |
+| 장애물 LiDAR | 0.08 m 두 대 + 1.05 m, 800빔, 최소 0.15 m, 잡음 σ 0.02 · 절단 0.06 m | 높이는 배치 후보 시험(D_008), 빔 수·최소 거리는 가정, 절단은 3σ | `config/obstacle_layer.yaml` 4–16, 계획 2026-10-04 |
+| 카메라 | 640 × 480 · 화각 69° | D435i 컬러 화각(보정값 아님) | `config/isaac_perception_camera.yaml` 5–6 |
+| 깊이 잡음 · 양자화 | σ = 0.0036 z² · 1 mm | 데이터시트 식(유도값 0.00344, 쓴 값 0.0036은 가정) · z16 형식 | `src/forklift_core/perception/pocket_clearance.py` 38, `docs/validation/2026-09-16-adr-0003-review-handoff.md` 31 |
+| 오도메트리 · 거리 잡음 | 바퀴 0.2 rad/s · 조향 0.005 rad · 거리 0.02 m | 가정(센서 사양 아님) | `src/forklift_core/localization/slam_pose.py` 293–310 |
+| 공장 홀 | 30.3 × 31.2 m | Isaac 창고 에셋 벽면 측정 | `config/factory_south_hall.yaml` 1–16 |

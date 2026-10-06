@@ -144,8 +144,44 @@ add('개발 진행 보고', '6주차\n자율 지게차 개발', 20, '',
     """안녕하십니까. 6주차 자율 지게차 개발 진행 상황을 발표할 김광민이라고 합니다. 이번 주는 시뮬레이션 소프트웨어 진행만 말씀드리겠습니다. 지난주까지 지게차는 시뮬레이터가 알려 주는 정답 위치로 움직였는데, 이번 주에는 LiDAR로 추정한 위치로 운반 임무를 끝까지 했고 주행 중에 나타난 장애물도 피하게 했습니다. (전환)""",
     [(SLAM, '온라인 SLAM 폐루프 실행 기록'), (LIDAR, 'LiDAR 장애물 지도 계획')], '진행 보고')
 
+
+# ----------------------------------------------------------------- sim settings
+# Basis of the simulation's basic parameters (sources checked 2026-10-06; the
+# full table with file:line is in SOURCES.md). kind: spec / test / assume.
+SIM_PARAMS = [
+    ('차체 외형 · 무게', '1.46 × 0.63 × 1.01 m · 24 kg', 'spec', '제조사 카탈로그'),
+    ('축간 거리 · 바퀴 반지름', '0.64 m · 0.135 m', 'assume', '상품 사진 비율로 추정'),
+    ('팔레트', 'EPAL 6 · 800 × 600 × 144 mm · 10 kg', 'spec', '표준 규격 · 실물 무게 9–10 kg (차체 적재 한계 10 kg)'),
+    ('위치 추정 LiDAR', '1,600빔 · 10 Hz · 0.2–12 m', 'spec', 'RPLIDAR A2M12 카탈로그'),
+    ('장애물 LiDAR 높이', '0.08 m 두 대 (+ 1.05 m)', 'test', '배치 후보 비교 시험으로 선택'),
+    ('카메라', '640 × 480 · 화각 69°', 'spec', 'D435i 컬러 화각 · 깊이 잡음은 데이터시트 식'),
+    ('바퀴 · 팔레트 마찰', '정지 0.8 · 운동 0.7', 'assume', '근거 없는 가정값'),
+    ('구동 토크 · 운반 속도', '3 N·m · 0.3 m/s', 'assume', '시뮬레이터에서 정한 값'),
+    ('센서 잡음', '바퀴 0.2 rad/s · 조향 0.005 rad · 거리 2 cm', 'assume', '가정값 (센서 사양 아님)'),
+]
+KIND = {'spec': ('규격·사양', '#2f74c0'), 'test': ('시험으로 선택', '#2e9a6b'), 'assume': ('가정', '#c26a1a')}
+param_rows = ''.join(
+    f'<tr><td>{a}</td><td>{v}</td><td><span class="kind" style="background:{KIND[k][1]}">{KIND[k][0]}</span> {why}</td></tr>'
+    for a, v, k, why in SIM_PARAMS)
+add('시뮬레이션 설정', '01  시뮬레이션 설정과 근거', 60, f"""
+<h2 class="headline">시뮬레이션에 넣은 값과 그 근거</h2>
+<table class="comparison params6 grow"><tr><th>항목</th><th>값</th><th>근거</th></tr>{param_rows}</table>
+<div class="takeaway">가정값이 결과를 좌우하는 곳: 마찰·구동 (바퀴만 쓴 위치 추정의 오차), 센서 잡음 — 실측값이 나오면 바꿀 항목</div>
+""",
+    """오늘 보여 드리는 결과는 모두 시뮬레이션이라서, 먼저 시뮬레이션에 넣은 값과 그 근거부터 말씀드리겠습니다. 차체 외형과 무게는 제조사 카탈로그 값이고, 축간 거리와 바퀴 크기는 상품 사진 비율로 추정했습니다. 팔레트는 EPAL 6 표준 규격이고, 무게 10킬로그램은 실물 EPAL 6 무게이자 차체가 들 수 있는 한계입니다. 위치 추정용 LiDAR는 쓸 예정인 RPLIDAR A2M12 카탈로그 값을, 카메라는 D435i의 화각과 데이터시트의 깊이 오차 식을 따랐습니다. 장애물용 LiDAR 높이는 배치 후보를 비교하는 시험으로 정했습니다. 반면 바퀴 마찰, 구동 토크, 센서 잡음은 근거 없이 정한 가정값입니다. 뒤에서 보실 위치 추정 오차는 이 가정값에 영향을 받으므로, 실측값이 나오면 바꿀 항목입니다. (전환)""",
+    [('sim/models/dls08_provisional/parameters.yaml', '차체 외형 1.46×0.63×1.01 m·24 kg = 카탈로그, 축·바퀴 = 사진 비율 추정'),
+     ('docs/decisions/0002-*.md', 'EPAL 6 실물 9–10 kg, DLS08 적재 능력 10 kg (카탈로그 12쪽)'),
+     ('config/pallet_geometry_epal6.yaml', 'EPAL 6 공식 제품 시트'),
+     ('config/isaac_slam_lidar.yaml', 'RPLIDAR A2M12 카탈로그 1,600빔·10 Hz·0.2–12 m'),
+     ('config/isaac_perception_camera.yaml', 'hfov 1.204 rad(69°) — D435i 컬러 화각, 보정값 아님'),
+     ('src/forklift_core/perception/pocket_clearance.py', '깊이 σ = 0.0036 z² (가정; 데이터시트 식 유도값 0.00344)'),
+     ('config/isaac_transport.yaml', '시뮬레이터 전용 가정값 — 마찰 0.8/0.7(지게차·팔레트 충돌 형상에만 적용), 바퀴 토크 3 N·m, 운반 0.3 m/s'),
+     ('src/forklift_core/localization/slam_pose.py', '오도메트리·거리 잡음 — 센서 사양 아닌 가정값'),
+     ('docs/plans/2026-10-04-lidar-obstacle-map.md', '장애물 LiDAR 배치 D_008 — 후보 비교 시험')],
+    '근거 조사: 저장소 설정·결정·검증 문서 (2026-10-06)')
+
 # ----------------------------------------------------------------- 2
-add('캐리지 하단 카메라', '01  캐리지 하단 카메라', 75, f"""
+add('캐리지 하단 카메라', '02  캐리지 하단 카메라', 65, f"""
 <h2 class="headline">카메라를 캐리지 아래로 옮겨 포켓 진입 직전까지 관측</h2>
 <div class="cmp6 grow">
 <div class="rowlab"><b>기존</b><span>차체 앞 높은 위치</span></div>
@@ -165,7 +201,7 @@ add('캐리지 하단 카메라', '01  캐리지 하단 카메라', 75, f"""
     '화면 생성: 1124Z N1 실행의 로봇 카메라 프레임 (prepare_clips.py)')
 
 # ----------------------------------------------------------------- 3
-add('지도 작성', '02  2D LiDAR 지도 작성', 40, f"""
+add('지도 작성', '03  2D LiDAR 지도 작성', 35, f"""
 <h2 class="headline">LiDAR 스캔을 겹쳐 만든 30 × 31 m 공장 지도와 자기 위치</h2>
 <div class="pair grow"><div class="pair-box">
 <span class="pair-tag left">Isaac 주행 <i>빨간 점: LiDAR 측정점</i></span>
@@ -180,7 +216,7 @@ add('지도 작성', '02  2D LiDAR 지도 작성', 40, f"""
     '화면 생성: Isaac 주행 기록 + ROS 2 slam_toolbox 재생, 조감·지도 두 칸 20배속 (5주차 영상을 2.5배 더 빠르게, prepare_clips.py)')
 
 # ----------------------------------------------------------------- 4
-add('SLAM 위치로 운반', '03  SLAM 위치로 운반 임무', 55, f"""
+add('SLAM 위치로 운반', '04  SLAM 위치로 운반 임무', 50, f"""
 <h2 class="headline">SLAM 추정 위치만으로 운반 임무 완주</h2>
 <div class="split grow" style="grid-template-columns:1fr 1.15fr">
 <figure class="shot">{video('44_mission_overview.mp4', '공장 홀을 위에서 본 지게차. 팔레트를 인식해 들고, 목적지에 내린 뒤 출발점으로 돌아온다')}<figcaption class="small muted">12배속 · 360초 임무 전체</figcaption></figure>
@@ -199,7 +235,7 @@ add('SLAM 위치로 운반', '03  SLAM 위치로 운반 임무', 55, f"""
     '화면 생성: ws1 artifacts/20261004_slam_s3/seed_1 3분할 영상의 조감 칸 12배속 (prepare_clips.py)')
 
 # ----------------------------------------------------------------- 4b
-add('SLAM 위치 정확도', '04  SLAM 위치 정확도', 55, f"""
+add('SLAM 위치 정확도', '05  SLAM 위치 정확도', 55, f"""
 <h2 class="headline">바퀴 회전만으로는 3.4 m 어긋나는 위치를 SLAM은 9 cm 오차로 유지</h2>
 <div class="split grow" style="grid-template-columns:1fr 1.15fr">
 <figure class="shot">{video('45_slam_error.mp4', '같은 임무 동안 slam_toolbox가 만든 지도와 추정 경로. 아래 숫자는 SLAM 추정 오차와 바퀴 회전만으로 추정했을 때의 오차')}<figcaption class="small muted">같은 임무 · 12배속 · 빨강: SLAM 추정 · 파랑: 실제 경로</figcaption></figure>
@@ -209,16 +245,16 @@ add('SLAM 위치 정확도', '04  SLAM 위치 정확도', 55, f"""
 <div class="fact-box"><b>SLAM은 9 cm</b><span>LiDAR 스캔을 지도와 맞춰 방향과 위치를 계속 바로잡음</span></div>
 </div>
 </div>
-{cond(SIM, '시뮬 가정값: 차체 24 kg · 팔레트 10 kg · 바닥 마찰 0.7 (실측 아님)', '센서 잡음을 꺼도 346 cm')}
+{cond(SIM, '팔레트 10 kg (실물 EPAL 6 무게) · 바퀴 마찰 0.7 (가정)', '센서 잡음을 꺼도 346 cm')}
 """,
-    """같은 임무를 위치 추정 쪽에서 본 화면입니다. 왼쪽 지도에서 빨간 SLAM 추정 경로가 파란 실제 경로를 거의 그대로 따라갑니다. 아래 숫자를 보시면, 바퀴 회전과 조향각만으로 위치를 추정했을 때는 끝에서 3.4미터가 어긋납니다. 왜 이만큼 어긋나는지 따져 보면, 달린 거리는 93미터 중 0.7미터만 틀렸고 대부분은 방향이 24도 틀어진 탓입니다. 방향은 팔레트를 싣고 돌 때 틀어졌습니다. 빈 차일 때는 계산한 만큼 돌지만, 팔레트를 실으면 실제로는 계산보다 7.5퍼센트 덜 돕니다. 시뮬레이션에서 팔레트 무게(10 kg 가정)가 실리면 바퀴가 옆으로 미끄러지기 때문으로 보입니다. 센서 잡음을 꺼도 오차가 346센티미터로 거의 같아서, 잡음 탓은 아닙니다. 반면 SLAM은 LiDAR 스캔을 지도와 맞춰 방향과 위치를 계속 바로잡기 때문에 오차가 RMSE(제곱평균제곱근)로 약 9센티미터였습니다. 실물에서도 짐을 실으면 같은 일이 생길 수 있어서, SLAM이 필요하다고 판단했습니다. (전환)""",
+    """같은 임무를 위치 추정 쪽에서 본 화면입니다. 왼쪽 지도에서 빨간 SLAM 추정 경로가 파란 실제 경로를 거의 그대로 따라갑니다. 아래 숫자를 보시면, 바퀴 회전과 조향각만으로 위치를 추정했을 때는 끝에서 3.4미터가 어긋납니다. 왜 이만큼 어긋나는지 따져 보면, 달린 거리는 93미터 중 0.7미터만 틀렸고 대부분은 방향이 24도 틀어진 탓입니다. 방향은 팔레트를 싣고 돌 때 틀어졌습니다. 빈 차일 때는 계산한 만큼 돌지만, 팔레트를 실으면 실제로는 계산보다 7.5퍼센트 덜 돕니다. 시뮬레이션에서 팔레트 무게(실물과 같은 10 kg)가 실리면 바퀴가 옆으로 미끄러지기 때문으로 보이고, 이 미끄러짐은 앞 장에서 말씀드린 가정값인 바퀴 마찰에 따라 달라집니다. 센서 잡음을 꺼도 오차가 346센티미터로 거의 같아서, 잡음 탓은 아닙니다. 반면 SLAM은 LiDAR 스캔을 지도와 맞춰 방향과 위치를 계속 바로잡기 때문에 오차가 RMSE(제곱평균제곱근)로 약 9센티미터였습니다. 실물에서도 짐을 실으면 같은 일이 생길 수 있어서, SLAM이 필요하다고 판단했습니다. (전환)""",
     [(SLAM, 'S3 장면 1 — 위치 RMSE 0.088 m · 최대 0.190 m, 358 s 에서 SLAM 4.0 cm 대 바퀴 오도메트리만 340 cm'),
      ('ws1 artifacts/20261004_slam_s3/seed_1/run/slam_log.npz', '2026-10-06 재계산: 거리 92.9 대 93.6 m, 끝 방향 오차 −24.3°, 잡음 끔 346 cm · −25.2°, 회전 시 실제/계산 비 빈 차 0.998 · 운반 0.925'),
      ('config/isaac_transport.yaml', '시뮬레이터 전용 가정값 — 팔레트 10 kg, 정지 0.8 · 동마찰 0.7 (차체 24 kg 은 카탈로그)')],
     '화면 생성: 같은 3분할 영상의 SLAM 지도 칸과 오차 표시 12배속 (prepare_clips.py)')
 
 # ----------------------------------------------------------------- 5
-add('낮은 장애물용 LiDAR', '05  낮은 장애물용 LiDAR', 75, f"""
+add('낮은 장애물용 LiDAR', '06  낮은 장애물용 LiDAR', 70, f"""
 <h2 class="headline">1.05 m 높이와 겹치는 바닥 장애물 43–47 % · 0.08 m 평면 두 대 추가</h2>
 <div class="split grow" style="grid-template-columns:1fr 1fr">
 <div class="stack" style="justify-content:center;gap:8px"><p class="chart-cap">평면 높이별 · 평면에 걸치는 바닥 장애물 비율 (점: 물건 배치가 다른 공장)</p>{plane_chart()}</div>
@@ -233,7 +269,7 @@ add('낮은 장애물용 LiDAR', '05  낮은 장애물용 LiDAR', 75, f"""
     '화면 생성: 계획서 표 값으로 그린 도표, 배치도는 시뮬레이션 차체 모델 치수')
 
 # ----------------------------------------------------------------- 6
-add('새 장애물 재계획', '06  새 장애물 감지와 재계획', 115, f"""
+add('새 장애물 재계획', '07  새 장애물 감지와 재계획', 100, f"""
 <h2 class="headline">운반 중 경로에 나타난 상자 감지 → 정지 → 새 경로로 재개</h2>
 <div class="split grow" style="grid-template-columns:1.62fr 0.78fr">
 <figure class="shot">{video('41_new_obstacle.mp4', '팔레트를 들고 운반하던 중 경로 위에 상자가 나타나자 멈추고, 노란 새 경로로 바꿔 돌아가는 장면. 회색 선은 이전 경로')}<figcaption class="small muted">1.5배속 · 노랑: 현재 경로 · 회색: 직전 경로 · 주황: LiDAR 장애물 칸</figcaption></figure>
@@ -251,7 +287,7 @@ add('새 장애물 재계획', '06  새 장애물 감지와 재계획', 115, f""
     '화면 생성: ws1 l5_video14_nopc/seed_1_n1 3분할 영상 66–102 s 1.5배속 (prepare_clips.py)')
 
 # ----------------------------------------------------------------- 7
-add('본 장애물 기억', '07  본 장애물 기억', 110, f"""
+add('본 장애물 기억', '08  본 장애물 기억', 95, f"""
 <h2 class="headline">본 장애물을 기억해 복귀 경로가 적재 더미를 우회</h2>
 <div class="split grow" style="grid-template-columns:1.62fr 0.78fr">
 <figure class="shot">{video('42_memory_compare.mp4', '같은 장면에서 하역 후 출발점으로 돌아가는 첫 계획. 왼쪽은 노란 경로가 적재 더미 줄을 가로지르고, 오른쪽은 더미를 돌아간다')}<figcaption class="small muted">같은 장면 · 하역 뒤 복귀 경로 · 노랑: 계획 경로</figcaption></figure>
@@ -276,7 +312,7 @@ NEXT_ROWS = [
     ('EPAL 6 팔레트', 'T11 팔레트'),
 ]
 next_table = ''.join(f'<tr><td>{a}</td><td class="arrow">→</td><td>{b}</td></tr>' for a, b in NEXT_ROWS)
-add('다음 작업', '08  남은 과제와 다음 작업', 65, f"""
+add('다음 작업', '09  남은 과제와 다음 작업', 60, f"""
 <h2 class="headline">남은 과제: 센서만으로 계획한 임무의 반복 검증</h2>
 <table class="comparison next6 grow"><tr><th>이번 주 확인</th><th></th><th>다음 단계</th></tr>{next_table}</table>
 """,
@@ -290,7 +326,7 @@ TOTAL = 610
 
 
 def build():
-    assert len(slides) == 9, len(slides)
+    assert len(slides) == 10, len(slides)
     assert sum(s['seconds'] for s in slides) == TOTAL, sum(s['seconds'] for s in slides)
     sections = []
     script = [f'# {TITLE} · 발표 원고', '',
