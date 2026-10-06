@@ -161,26 +161,43 @@ add('지도 작성', '02  2D LiDAR 지도 작성', 40, f"""
     '화면 생성: Isaac 주행 기록 + ROS 2 slam_toolbox 재생, 조감·지도 두 칸 20배속 (5주차 영상을 2.5배 더 빠르게, prepare_clips.py)')
 
 # ----------------------------------------------------------------- 4
-add('SLAM 위치로 운반', '03  SLAM 위치로 운반 임무', 110, f"""
-<h2 class="headline">SLAM 추정 위치만으로 운반 임무 3개 장면 완주 · 하역 오차 8–22 mm</h2>
-<div class="split grow" style="grid-template-columns:1.62fr 0.78fr">
-<figure class="shot">{video('40_slam_mission.mp4', '공장 홀에서 팔레트를 인식해 들고 목적지에 내린 뒤 출발점으로 돌아오는 전체 임무. 조감, 온라인 SLAM 지도와 추정 경로, 로봇 카메라 RGB·깊이, 위치 오차 그래프')}<figcaption class="small muted">장면 1 · 8배속 · 360초 임무 전체</figcaption></figure>
-<div class="stack" style="justify-content:center;gap:16px">
-{card('3 / 3', '정답 위치로 완주하던 장면 모두 SLAM 위치로 완주 · 포크·팔레트 충돌 0')}
-{card('9 cm · 340 cm', '주행 전체 SLAM 위치 오차(RMSE) · 바퀴 회전만 쓴 끝 시점 오차')}
+add('SLAM 위치로 운반', '03  SLAM 위치로 운반 임무', 55, f"""
+<h2 class="headline">SLAM 추정 위치만으로 운반 임무 완주</h2>
+<div class="split grow" style="grid-template-columns:1fr 1.15fr">
+<figure class="shot">{video('44_mission_overview.mp4', '공장 홀을 위에서 본 지게차. 팔레트를 인식해 들고, 목적지에 내린 뒤 출발점으로 돌아온다')}<figcaption class="small muted">12배속 · 360초 임무 전체</figcaption></figure>
+<div class="stack" style="justify-content:center;gap:18px">
+<div class="chips" style="justify-content:flex-start"><span>팔레트 인식</span><i>→</i><span>들기</span><i>→</i><span>운반</span><i>→</i><span>하역</span><i>→</i><span>복귀</span></div>
+{card('3 / 3', '정답 위치로 완주하던 장면 모두 SLAM 위치로 완주')}
+{card('8–22 mm', '하역 위치 오차 · 포크·팔레트 충돌 0')}
 </div>
 </div>
 {cond(SIM, '위치: SLAM 추정', '경로 계획의 장애물: 시뮬레이터 정답 지도', '팔레트: 깊이 카메라 인식')}
 """,
-    """이번에는 정답 위치를 쓰지 않고, slam_toolbox가 실시간으로 추정한 위치만으로 지게차를 움직였습니다. 영상은 팔레트를 인식해 들어 올리고, 목적지에 내린 뒤 출발점으로 돌아오는 360초 임무 전체를 8배속으로 보여 드리는 것입니다. 가운데 지도를 보시면 빨간 추정 경로가 파란 실제 경로를 따라갑니다. 정답 위치로 완주하던 장면 3개를 모두 SLAM 위치로 완주했고, 포크와 팔레트 충돌은 없었으며 하역 오차는 8에서 22밀리미터였습니다. 영상 장면의 위치 오차는 RMSE(제곱평균제곱근)로 약 9센티미터였고, 바퀴 회전만으로 위치를 추정했다면 끝에서 3.4미터가 어긋났습니다. 다만 경로를 짤 때 장애물은 아직 시뮬레이터 정답 지도를 썼고, 하역이 정밀했던 것은 목적지 앞에서 미리 찍어 둔 스캔과 맞춘 덕분입니다. (전환)""",
+    """이번 주 가장 큰 진전입니다. 이번에는 정답 위치를 쓰지 않고, slam_toolbox가 실시간으로 추정한 위치만으로 지게차를 움직였습니다. 영상은 팔레트를 인식해 들어 올리고, 목적지에 내린 뒤 출발점으로 돌아오는 360초 임무 전체를 위에서 본 것입니다. 정답 위치로 완주하던 장면 3개를 모두 SLAM 위치로 완주했고, 포크와 팔레트 충돌은 없었으며 하역 오차는 8에서 22밀리미터였습니다. 다만 경로를 짤 때 장애물은 아직 시뮬레이터 정답 지도를 썼습니다. (전환)""",
     [(SLAM, 'S2 v3.8d — 기대 완주 장면 1·3·5 모두 완주, 하역 12.6·22.4·7.8 mm, 안전 위반 0 (장면 0 은 정답 위치로도 실패, 2·4 미실행)'),
-     (SLAM, 'S3 장면 1 — 하역 16.9 mm, 위치 RMSE 0.088 m · 최대 0.190 m, 358 s 에서 SLAM 4.0 cm 대 바퀴 오도메트리만 340 cm'),
      (SLAM, '범위: 경로 계획 장애물은 정답 사각형, 하역 도킹 기준 스캔은 사전 정보'),
      ('docs/validation/2026-10-03-fifth-frozen-evaluation.md', '정답 위치 30/30 완주 (단측 95 % 하한 90.5 %)')],
-    '화면 생성: ws1 artifacts/20261004_slam_s3/seed_1 3분할 영상 8배속 (prepare_clips.py)')
+    '화면 생성: ws1 artifacts/20261004_slam_s3/seed_1 3분할 영상의 조감 칸 12배속 (prepare_clips.py)')
+
+# ----------------------------------------------------------------- 4b
+add('SLAM 위치 정확도', '04  SLAM 위치 정확도', 55, f"""
+<h2 class="headline">바퀴 회전만으로는 3.4 m 어긋나는 위치를 SLAM은 9 cm 오차로 유지</h2>
+<div class="split grow" style="grid-template-columns:1fr 1.15fr">
+<figure class="shot">{video('45_slam_error.mp4', '같은 임무 동안 slam_toolbox가 만든 지도와 추정 경로. 아래 숫자는 SLAM 추정 오차와 바퀴 회전만으로 추정했을 때의 오차')}<figcaption class="small muted">같은 임무 · 12배속 · 빨강: SLAM 추정 · 파랑: 실제 경로</figcaption></figure>
+<div class="stack" style="justify-content:center;gap:18px">
+{card('9 cm', 'SLAM 추정 위치 오차 (주행 전체 RMSE)')}
+{card('340 cm', '바퀴 회전만으로 추정했을 때 끝 시점 오차')}
+<div class="fact-box"><b>차이가 나는 이유</b><span>바퀴 추정은 오차가 계속 쌓이고, SLAM은 스캔을 지도와 맞춰 위치를 바로잡음</span></div>
+</div>
+</div>
+{cond(SIM, '같은 주행 기록에서 두 방식의 오차를 계산')}
+""",
+    """같은 임무를 위치 추정 쪽에서 본 화면입니다. 왼쪽 지도에서 빨간 SLAM 추정 경로가 파란 실제 경로를 거의 그대로 따라갑니다. 아래 숫자를 보시면, 같은 주행에서 바퀴 회전만으로 위치를 추정했을 때의 오차는 계속 커져서 끝에서 3.4미터가 됩니다. 반면 SLAM은 LiDAR 스캔을 지도와 맞춰 위치를 계속 바로잡기 때문에 주행 전체 오차가 RMSE(제곱평균제곱근)로 약 9센티미터였습니다. 그래서 정답 위치 없이도 임무를 끝까지 할 수 있었습니다. (전환)""",
+    [(SLAM, 'S3 장면 1 — 위치 RMSE 0.088 m · 최대 0.190 m, 358 s 에서 SLAM 4.0 cm 대 바퀴 오도메트리만 340 cm')],
+    '화면 생성: 같은 3분할 영상의 SLAM 지도 칸과 오차 표시 12배속 (prepare_clips.py)')
 
 # ----------------------------------------------------------------- 5
-add('낮은 장애물용 LiDAR', '04  낮은 장애물용 LiDAR', 75, f"""
+add('낮은 장애물용 LiDAR', '05  낮은 장애물용 LiDAR', 75, f"""
 <h2 class="headline">1.05 m 높이와 겹치는 바닥 장애물 43–47 % · 0.08 m 평면 두 대 추가</h2>
 <div class="split grow" style="grid-template-columns:1fr 1fr">
 <div class="stack" style="justify-content:center;gap:8px"><p class="chart-cap">평면 높이별 · 평면에 걸치는 바닥 장애물 비율 (점: 배치 장면 3개)</p>{plane_chart()}</div>
@@ -195,7 +212,7 @@ add('낮은 장애물용 LiDAR', '04  낮은 장애물용 LiDAR', 75, f"""
     '화면 생성: 계획서 표 값으로 그린 도표, 배치도는 시뮬레이션 차체 모델 치수')
 
 # ----------------------------------------------------------------- 6
-add('새 장애물 재계획', '05  새 장애물 감지와 재계획', 115, f"""
+add('새 장애물 재계획', '06  새 장애물 감지와 재계획', 115, f"""
 <h2 class="headline">운반 중 경로에 나타난 상자 감지 → 정지 → 새 경로로 재개</h2>
 <div class="split grow" style="grid-template-columns:1.62fr 0.78fr">
 <figure class="shot">{video('41_new_obstacle.mp4', '팔레트를 들고 운반하던 중 경로 위에 상자가 나타나자 멈추고, 노란 새 경로로 바꿔 돌아가는 장면. 회색 선은 이전 경로')}<figcaption class="small muted">1.5배속 · 노랑: 현재 경로 · 회색: 직전 경로 · 주황: LiDAR 장애물 칸</figcaption></figure>
@@ -213,7 +230,7 @@ add('새 장애물 재계획', '05  새 장애물 감지와 재계획', 115, f""
     '화면 생성: ws1 l5_video14_nopc/seed_1_n1 3분할 영상 66–102 s 1.5배속 (prepare_clips.py)')
 
 # ----------------------------------------------------------------- 7
-add('본 장애물 기억', '06  본 장애물 기억', 110, f"""
+add('본 장애물 기억', '07  본 장애물 기억', 110, f"""
 <h2 class="headline">본 장애물을 기억해 복귀 경로가 적재 더미를 우회</h2>
 <div class="split grow" style="grid-template-columns:1.62fr 0.78fr">
 <figure class="shot">{video('42_memory_compare.mp4', '같은 장면에서 하역 후 출발점으로 돌아가는 첫 계획. 왼쪽은 노란 경로가 적재 더미 줄을 가로지르고, 오른쪽은 더미를 돌아간다')}<figcaption class="small muted">같은 장면 · 하역 뒤 복귀 경로 · 노랑: 계획 경로</figcaption></figure>
@@ -238,7 +255,7 @@ NEXT_ROWS = [
     ('EPAL 6 팔레트', 'T11 팔레트'),
 ]
 next_table = ''.join(f'<tr><td>{a}</td><td class="arrow">→</td><td>{b}</td></tr>' for a, b in NEXT_ROWS)
-add('다음 작업', '07  남은 과제와 다음 작업', 65, f"""
+add('다음 작업', '08  남은 과제와 다음 작업', 65, f"""
 <h2 class="headline">남은 과제: 센서만으로 계획한 임무의 반복 검증</h2>
 <table class="comparison next6 grow"><tr><th>이번 주 확인</th><th></th><th>다음 단계</th></tr>{next_table}</table>
 """,
@@ -252,7 +269,7 @@ TOTAL = 610
 
 
 def build():
-    assert len(slides) == 8, len(slides)
+    assert len(slides) == 9, len(slides)
     assert sum(s['seconds'] for s in slides) == TOTAL, sum(s['seconds'] for s in slides)
     sections = []
     script = [f'# {TITLE} · 발표 원고', '',

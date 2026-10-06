@@ -13,7 +13,8 @@ Inputs (paths relative to the robot repository):
   scenario before the planning memory (ws1 l5_video3).
 
 Outputs in assets/:
-- 40_slam_mission.mp4: the whole SLAM mission at 8x.
+- 44_mission_overview.mp4 / 45_slam_error.mp4: the SLAM mission (S3 seed 1) split in two --
+  overhead with the phase text, online map with the live SLAM / wheel-odometry error text.
 - 41_new_obstacle.mp4: new box on the transport path (spawn 73.2 s, replan 83.6 s) at 1.5x.
 - 42_memory_compare.mp4: the overhead panel from just after the first return plan,
   before (0431Z, return plan 246.5 s) and with the memory (1124Z, 221.6 s), side by side;
@@ -61,8 +62,13 @@ def main(repo):
     n2 = v / '20261006T1124Z_p5_slam_seed1_n2_planning_memory_no_pocket_check'
     old = v / '20261006T0431Z_p5_slam_seed1_n2_new_obstacle'
 
-    run(encode(['-i', str(s3), '-vf', 'setpts=PTS/8,scale=1280:-2'], a / '40_slam_mission.mp4'))
-    poster(a / '40_slam_mission.mp4', 44, a / '40_slam_mission_poster.jpg')
+
+    # The SLAM mission split over two slides: overhead + phase text, and the
+    # online map + live SLAM/odometry error text (both at 12x).
+    run(encode(['-i', str(s3), '-vf', 'crop=620:750:20:70,setpts=PTS/12'], a / '44_mission_overview.mp4'))
+    poster(a / '44_mission_overview.mp4', 25, a / '44_mission_overview_poster.jpg')
+    run(encode(['-i', str(s3), '-vf', 'crop=620:770:650:70,setpts=PTS/12'], a / '45_slam_error.mp4'))
+    poster(a / '45_slam_error.mp4', 29.5, a / '45_slam_error_poster.jpg')
 
     run(encode(['-ss', '66', '-t', '36', '-i', str(n1 / 'slam_online_three_panel.mp4'),
                 '-vf', 'setpts=PTS/1.5,scale=1280:-2'], a / '41_new_obstacle.mp4'))
