@@ -128,8 +128,8 @@ add('개발 진행 보고', '6주차\n자율 지게차 개발', 20, '',
 add('캐리지 하단 카메라', '01  캐리지 하단 카메라', 75, f"""
 <h2 class="headline">카메라를 캐리지 아래로 옮겨 포켓 진입 직전까지 관측</h2>
 <div class="split grow" style="grid-template-columns:1fr 1fr 0.9fr">
-<figure class="shot"><img class="media" src="assets/43_camera_far.jpg" alt="팔레트 앞면까지 1.10 m 거리의 로봇 카메라 화면. 팔레트와 두 포켓을 찾은 표시"><figcaption class="small muted">접근 중 · 포크 끝–앞면 1.10 m (화면 표시)</figcaption></figure>
-<figure class="shot"><img class="media" src="assets/43_camera_near.jpg" alt="포켓 진입 직전의 로봇 카메라 화면. 두 포켓과 윗판이 화면 안에 있음"><figcaption class="small muted">진입 직전 · 포크 끝–앞면 0.03 m (화면 표시)</figcaption></figure>
+<figure class="shot"><img class="media" src="assets/43_camera_far.jpg" alt="팔레트 앞면까지 1.10 m 거리의 로봇 카메라 화면. 팔레트와 두 포켓을 찾은 표시"><figcaption class="small muted">접근 중</figcaption></figure>
+<figure class="shot"><img class="media" src="assets/43_camera_near.jpg" alt="포켓 진입 직전의 로봇 카메라 화면. 두 포켓과 윗판이 화면 안에 있음"><figcaption class="small muted">진입 직전</figcaption></figure>
 <div class="stack" style="justify-content:center;gap:14px">
 <div class="fact-box"><b>기존: 높이 0.50 m · 수평</b><span>삽입 마지막 약 0.25 m 관측 불가</span></div>
 <div class="fact-box"><b>변경: 높이 0.27 m · 아래로 약 6°</b><span>앞면으로 포켓을 찾은 뒤 윗판 추적으로 넘김</span></div>
