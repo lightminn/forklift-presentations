@@ -17,6 +17,7 @@ from hashlib import sha256
 ROOT = Path(__file__).resolve().parent
 NEARMOUNT = 'docs/validation/2026-10-03-near-field-mount-study.md'
 NEARPLAN = 'docs/plans/2026-10-03-near-field-pocket-tracking.md'
+CROWN = 'https://patents.google.com/patent/US9990535B2/en'
 FACTORY = 'docs/validation/2026-09-26-factory-hall-and-isaac-slam.md'
 SLAM = 'docs/validation/2026-10-04-online-slam-closed-loop.md'
 LIDAR = 'docs/plans/2026-10-04-lidar-obstacle-map.md'
@@ -131,14 +132,15 @@ add('캐리지 하단 카메라', '01  캐리지 하단 카메라', 75, f"""
 <div class="rowlab"><b>기존</b><span>차체 앞 높은 위치</span></div>
 <figure class="shot"><img class="media" src="assets/43_before_far.jpg" alt="기존 장착 카메라로 팔레트에 다가가는 화면. 팔레트와 두 포켓이 보임"><figcaption class="small muted">접근 중</figcaption></figure>
 <figure class="shot"><img class="media" src="assets/43_before_near.jpg" alt="기존 장착 카메라로 포크를 넣는 중의 화면. 팔레트가 화면 아래로 빠져 벽과 바닥만 보임"><figcaption class="small muted">삽입 중 · 팔레트가 화면 밖</figcaption></figure>
-<div class="rowlab now"><b>변경</b><span>캐리지 아래, 살짝 아래로</span></div>
+<div class="rowlab now"><b>변경</b><span>캐리지 아래, 살짝 아래로</span><span class="ref">4주차 Crown 특허 방식 참고</span></div>
 <figure class="shot"><img class="media" src="assets/43_camera_far.jpg" alt="새 장착 카메라로 팔레트에 다가가는 화면. 팔레트와 두 포켓을 찾은 표시"><figcaption class="small muted">접근 중</figcaption></figure>
 <figure class="shot"><img class="media" src="assets/43_camera_near.jpg" alt="새 장착 카메라로 포켓에 들어가기 직전의 화면. 두 포켓과 윗판이 화면 안에 있음"><figcaption class="small muted">진입 직전 · 포켓이 계속 보임</figcaption></figure>
 </div>
 {cond(SIM)}
 """,
-    """먼저 카메라 위치입니다. 윗줄이 지난 발표의 카메라로, 차체 앞 높은 곳에 수평으로 달려 있었습니다. 다가갈 때는 팔레트가 잘 보이지만, 포크를 넣기 시작하면 오른쪽처럼 팔레트가 화면 아래로 빠져서 벽과 바닥만 보입니다. 그래서 카메라를 캐리지(포크를 올리고 내리는 부분) 아래로 옮기고 살짝 아래로 숙였습니다. 아랫줄이 바꾼 카메라입니다. 포켓에 들어가기 직전까지 포켓이 화면 안에 있고, 가까워지면 팔레트 앞면은 화면 밖으로 나가지만 윗판을 따라가며 포켓 위치를 끝까지 놓치지 않습니다. (전환)""",
-    [(NEARPLAN, '기존 장착(0.75, 0, 0.50 m · 틸트 0)의 마지막 약 0.25 m 무관측'),
+    """먼저 카메라 위치입니다. 윗줄이 지난 발표의 카메라로, 차체 앞 높은 곳에 수평으로 달려 있었습니다. 다가갈 때는 팔레트가 잘 보이지만, 포크를 넣기 시작하면 오른쪽처럼 팔레트가 화면 아래로 빠져서 벽과 바닥만 보입니다. 그래서 4주차에 소개한 Crown 특허처럼 카메라를 캐리지(포크를 올리고 내리는 부분) 아래로 옮기고 살짝 아래로 숙였습니다. 아랫줄이 바꾼 카메라입니다. 포켓에 들어가기 직전까지 포켓이 화면 안에 있고, 가까워지면 팔레트 앞면은 화면 밖으로 나가지만 윗판을 따라가며 포켓 위치를 끝까지 놓치지 않습니다. (전환)""",
+    [(CROWN, 'Crown 특허 US9990535B2 — 포크 캐리지 하단 장착 (4주차 장착 사례 ②)'),
+     (NEARPLAN, '기존 장착(0.75, 0, 0.50 m · 틸트 0)의 마지막 약 0.25 m 무관측'),
      (NEARMOUNT, '장착 연구 — 높이 0.27 m · 틸트 0.10 rad, 12 장면 인계, 오차 ≤ 20 mm (잡음 0 · 정렬 · 승강 0)'),
      (N1, 'camera_rgb.mp4 39 s · 43 s 프레임')],
     '화면 생성: 1124Z N1 실행의 로봇 카메라 프레임 (prepare_clips.py)')
