@@ -146,19 +146,19 @@ add('캐리지 하단 카메라', '01  캐리지 하단 카메라', 75, f"""
     '화면 생성: 1124Z N1 실행의 로봇 카메라 프레임 (prepare_clips.py)')
 
 # ----------------------------------------------------------------- 3
-add('지도 작성', '02  2D LiDAR 지도 작성', 65, f"""
+add('지도 작성', '02  2D LiDAR 지도 작성', 40, f"""
 <h2 class="headline">LiDAR 스캔을 겹쳐 만든 30 × 31 m 공장 지도와 자기 위치</h2>
 <div class="pair grow"><div class="pair-box">
 <span class="pair-tag left">Isaac 주행 <i>빨간 점: LiDAR 측정점</i></span>
 <span class="pair-tag right">SLAM 지도 <i>파랑 SLAM 추정 · 회색 실제 경로</i></span>
-<video class="pair-video" src="assets/21_slam_map_pair.mp4" poster="assets/21_slam_map_pair_poster.jpg" autoplay loop muted playsinline aria-label="왼쪽은 공장 홀을 위에서 본 지게차 주행, 오른쪽은 같은 순간까지 slam_toolbox가 만든 지도와 추정 경로"></video>
+<video class="pair-video" src="assets/21_slam_map_pair_fast.mp4" poster="assets/21_slam_map_pair_fast_poster.jpg" autoplay loop muted playsinline aria-label="왼쪽은 공장 홀을 위에서 본 지게차 주행, 오른쪽은 같은 순간까지 slam_toolbox가 만든 지도와 추정 경로"></video>
 </div></div>
 {cond(SIM, '주행 기록을 slam_toolbox로 다시 돌린 영상 (주행 자체는 시뮬레이터 정답 위치)')}
 """,
-    """다음은 위치를 추정하는 방법입니다. 지게차가 30 곱하기 31미터 공장을 돌면서 LiDAR로 주변 거리를 재면, slam_toolbox(공개 SLAM 패키지)가 이 스캔을 겹쳐 지도를 만들면서 그 지도 안에서 자기 위치를 찾습니다. 왼쪽은 위에서 본 주행이고 오른쪽은 그 시점까지 만들어진 지도입니다. 지게차가 돌수록 지도가 넓어지고, 파란 추정 경로가 회색 실제 경로를 따라가는 것을 보실 수 있습니다. 이 영상은 주행 기록을 재생해서 만든 것이고 주행은 정답 위치로 했습니다. 이 추정 위치로 실제로 지게차를 움직인 결과는 다음 장에서 보여 드리겠습니다. (전환)""",
+    """다음은 위치를 추정하는 방법입니다. 지게차가 공장을 돌면서 LiDAR로 주변 거리를 재면, slam_toolbox(공개 SLAM 패키지)가 이 스캔을 겹쳐 지도를 만들면서 그 지도 안에서 자기 위치를 찾습니다. 오른쪽처럼 돌수록 지도가 넓어지고, 파란 추정 경로가 회색 실제 경로를 따라갑니다. (전환)""",
     [(FACTORY, '§1 30 × 31 m 공장 홀 · §3 기록 · §4 slam_toolbox 재생'),
      ('week-06/SOURCES.md', '21_slam_map_pair.mp4 제작 경위 (9/26 기록, 9/28 재생, 정답 자세 주행)')],
-    '화면 생성: Isaac 주행 기록 + ROS 2 slam_toolbox 재생, 조감·지도 두 칸 8배속 (5주차 제작)')
+    '화면 생성: Isaac 주행 기록 + ROS 2 slam_toolbox 재생, 조감·지도 두 칸 20배속 (5주차 영상을 2.5배 더 빠르게, prepare_clips.py)')
 
 # ----------------------------------------------------------------- 4
 add('SLAM 위치로 운반', '03  SLAM 위치로 운반 임무', 110, f"""
@@ -195,7 +195,7 @@ add('낮은 장애물용 LiDAR', '04  낮은 장애물용 LiDAR', 75, f"""
     '화면 생성: 계획서 표 값으로 그린 도표, 배치도는 시뮬레이션 차체 모델 치수')
 
 # ----------------------------------------------------------------- 6
-add('새 장애물 재계획', '05  새 장애물 감지와 재계획', 105, f"""
+add('새 장애물 재계획', '05  새 장애물 감지와 재계획', 115, f"""
 <h2 class="headline">운반 중 경로에 나타난 상자 감지 → 정지 → 새 경로로 재개</h2>
 <div class="split grow" style="grid-template-columns:1.62fr 0.78fr">
 <figure class="shot">{video('41_new_obstacle.mp4', '팔레트를 들고 운반하던 중 경로 위에 상자가 나타나자 멈추고, 노란 새 경로로 바꿔 돌아가는 장면. 회색 선은 이전 경로')}<figcaption class="small muted">1.5배속 · 노랑: 현재 경로 · 회색: 직전 경로 · 주황: LiDAR 장애물 칸</figcaption></figure>
@@ -213,7 +213,7 @@ add('새 장애물 재계획', '05  새 장애물 감지와 재계획', 105, f""
     '화면 생성: ws1 l5_video14_nopc/seed_1_n1 3분할 영상 66–102 s 1.5배속 (prepare_clips.py)')
 
 # ----------------------------------------------------------------- 7
-add('본 장애물 기억', '06  본 장애물 기억', 95, f"""
+add('본 장애물 기억', '06  본 장애물 기억', 110, f"""
 <h2 class="headline">본 장애물을 기억해 복귀 경로가 적재 더미를 우회</h2>
 <div class="split grow" style="grid-template-columns:1.62fr 0.78fr">
 <figure class="shot">{video('42_memory_compare.mp4', '같은 장면에서 하역 후 출발점으로 돌아가는 첫 계획. 왼쪽은 노란 경로가 적재 더미 줄을 가로지르고, 오른쪽은 더미를 돌아간다')}<figcaption class="small muted">같은 장면 · 하역 뒤 복귀 경로 · 노랑: 계획 경로</figcaption></figure>

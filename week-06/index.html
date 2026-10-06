@@ -43,12 +43,12 @@ camera_rgb.mp4 39 s · 43 s 프레임: videos-from-ws1/20261006T1124Z_p5_slam_se
 </div></x-import>
 </section>
 
-<section data-label="지도 작성" data-screen-label="03" data-duration="65" data-speaker-notes="권장 65초
+<section data-label="지도 작성" data-screen-label="03" data-duration="40" data-speaker-notes="권장 40초
 
-다음은 위치를 추정하는 방법입니다. 지게차가 30 곱하기 31미터 공장을 돌면서 LiDAR로 주변 거리를 재면, slam_toolbox(공개 SLAM 패키지)가 이 스캔을 겹쳐 지도를 만들면서 그 지도 안에서 자기 위치를 찾습니다. 왼쪽은 위에서 본 주행이고 오른쪽은 그 시점까지 만들어진 지도입니다. 지게차가 돌수록 지도가 넓어지고, 파란 추정 경로가 회색 실제 경로를 따라가는 것을 보실 수 있습니다. 이 영상은 주행 기록을 재생해서 만든 것이고 주행은 정답 위치로 했습니다. 이 추정 위치로 실제로 지게차를 움직인 결과는 다음 장에서 보여 드리겠습니다. (전환)
+다음은 위치를 추정하는 방법입니다. 지게차가 공장을 돌면서 LiDAR로 주변 거리를 재면, slam_toolbox(공개 SLAM 패키지)가 이 스캔을 겹쳐 지도를 만들면서 그 지도 안에서 자기 위치를 찾습니다. 오른쪽처럼 돌수록 지도가 넓어지고, 파란 추정 경로가 회색 실제 경로를 따라갑니다. (전환)
 
 [Sources]
-화면 생성: Isaac 주행 기록 + ROS 2 slam_toolbox 재생, 조감·지도 두 칸 8배속 (5주차 제작)
+화면 생성: Isaac 주행 기록 + ROS 2 slam_toolbox 재생, 조감·지도 두 칸 20배속 (5주차 영상을 2.5배 더 빠르게, prepare_clips.py)
 §1 30 × 31 m 공장 홀 · §3 기록 · §4 slam_toolbox 재생: docs/validation/2026-09-26-factory-hall-and-isaac-slam.md
 21_slam_map_pair.mp4 제작 경위 (9/26 기록, 9/28 재생, 정답 자세 주행): week-06/SOURCES.md
 [/Sources]" style="background:#fff">
@@ -57,7 +57,7 @@ camera_rgb.mp4 39 s · 43 s 프레임: videos-from-ws1/20261006T1124Z_p5_slam_se
 <div class="pair grow"><div class="pair-box">
 <span class="pair-tag left">Isaac 주행 <i>빨간 점: LiDAR 측정점</i></span>
 <span class="pair-tag right">SLAM 지도 <i>파랑 SLAM 추정 · 회색 실제 경로</i></span>
-<video class="pair-video" src="assets/21_slam_map_pair.mp4" poster="assets/21_slam_map_pair_poster.jpg" autoplay loop muted playsinline aria-label="왼쪽은 공장 홀을 위에서 본 지게차 주행, 오른쪽은 같은 순간까지 slam_toolbox가 만든 지도와 추정 경로"></video>
+<video class="pair-video" src="assets/21_slam_map_pair_fast.mp4" poster="assets/21_slam_map_pair_fast_poster.jpg" autoplay loop muted playsinline aria-label="왼쪽은 공장 홀을 위에서 본 지게차 주행, 오른쪽은 같은 순간까지 slam_toolbox가 만든 지도와 추정 경로"></video>
 </div></div>
 <div class="demo-tag"><b>조건</b> Isaac Sim 합성 장면 · 주행 기록을 slam_toolbox로 다시 돌린 영상 (주행 자체는 시뮬레이터 정답 위치)</div>
 </div></x-import>
@@ -107,7 +107,7 @@ S3 장면 1 — 하역 16.9 mm, 위치 RMSE 0.088 m · 최대 0.190 m, 358 s 에
 </div></x-import>
 </section>
 
-<section data-label="새 장애물 재계획" data-screen-label="06" data-duration="105" data-speaker-notes="권장 105초
+<section data-label="새 장애물 재계획" data-screen-label="06" data-duration="115" data-speaker-notes="권장 115초
 
 이 장부터는 경로를 짤 때 시뮬레이터 정답 지도를 쓰지 않고, LiDAR 세 대가 만든 장애물 격자만 씁니다. 영상은 팔레트를 들고 운반하던 중 경로 위에 상자가 새로 나타나는 장면입니다. 지게차는 멈출 수 있는 거리 안에 장애물이 있는지 계속 확인하고, 경로가 막히면 멈춘 뒤 그 자리에서 새 경로를 짜서 다시 출발합니다. 회색 선이 이전 경로, 노란 선이 바뀐 경로입니다. 이 실행은 상자를 피해서 임무를 끝까지 마쳤습니다. 다만 한 장면에서 한 번 시연한 것입니다. (전환)
 
@@ -130,7 +130,7 @@ result.json — success, 하역 15.8 mm, 정지 구역 침범 0, 금지 접촉 0
 </div></x-import>
 </section>
 
-<section data-label="본 장애물 기억" data-screen-label="07" data-duration="95" data-speaker-notes="권장 95초
+<section data-label="본 장애물 기억" data-screen-label="07" data-duration="110" data-speaker-notes="권장 110초
 
 다음은 본 장애물을 기억하는 부분입니다. LiDAR가 지금 보고 있는 장애물만으로 경로를 짜면, 운반하면서 이미 본 적재 더미라도 지금 안 보이면 빈 곳으로 판단합니다. 왼쪽이 그런 경우로, 하역 후 돌아가는 첫 경로가 더미 줄을 가로지릅니다. 오른쪽은 경로를 짤 때 그동안 쌓인 관측과 SLAM 지도를 같이 쓰는 경우입니다. 한 번 본 장애물은 그 자리가 다시 비어 보일 때까지 남겨 두기 때문에, 처음부터 더미를 돌아가는 경로를 짭니다. 앞 장의 실행도 이 방식을 쓴 것이고, 멈출지 말지는 지금처럼 실시간 관측으로만 판단합니다. (전환)
 

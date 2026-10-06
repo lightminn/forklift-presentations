@@ -7,7 +7,7 @@
 | 만든 것 | 쓰인 곳 | 원본 |
 |---|---|---|
 | 카메라 화면 2장 (`43_camera_far.jpg`·`43_camera_near.jpg`) + 기존 장착 비교 2장 (`43_before_far.jpg`·`43_before_near.jpg`, `artifacts/20261003_render/seed_2001/camera_rgb.mp4` 16 s·19.5 s, 장착 선택 기능 이전의 고정 장착) | 2쪽 | `videos-from-ws1/20261006T1124Z_p5_slam_seed1_n1_planning_memory_no_pocket_check/camera_rgb.mp4` 39 s·43 s (캐리지 하단 장착, ws1 `l5_video14_nopc`, Slurm 1324) |
-| 지도 작성 영상 (`21_slam_map_pair.mp4`) | 3쪽 | 2026-09-26 Isaac 기록을 2026-09-28 ws1 에서 slam_toolbox 로 재생(`20260928_week05_replay`), `tools/compose_slam_video.py` 합성, 조감·지도 두 칸 8배속 (Slurm 585). 주행은 시뮬레이터 정답 자세 |
+| 지도 작성 영상 (`21_slam_map_pair_fast.mp4`) | 3쪽 | 2026-09-26 Isaac 기록을 2026-09-28 ws1 에서 slam_toolbox 로 재생(`20260928_week05_replay`), `tools/compose_slam_video.py` 합성, 조감·지도 두 칸 8배속 (Slurm 585), 이를 `prepare_clips.py` 가 2.5배 더 빠르게(약 12초). 주행은 시뮬레이터 정답 자세 |
 | SLAM 임무 영상 (`40_slam_mission.mp4`) | 4쪽 | ws1 `artifacts/20261004_slam_s3/seed_1/slam_online_three_panel.mp4` (Slurm 808, 코드 5de6c3a) 전체 360 s 를 8배속 |
 | 새 장애물 영상 (`41_new_obstacle.mp4`) | 6쪽 | 1124Z N1 `slam_online_three_panel.mp4` 66–102 s 를 1.5배속 (Slurm 1324·1327, 코드 4147136) |
 | 기억 비교 영상 (`42_memory_compare.mp4`) | 7쪽 | 조감 칸만 잘라 나란히: 왼쪽 `videos-from-ws1/20261006T0431Z_p5_slam_seed1_n2_new_obstacle` 247–252.5 s(코드 f454062, 기억 없음, 삽입 통로 깊이 확인 켬), 오른쪽 1124Z N2 222–227.5 s(코드 4147136, 기억·SLAM 지도 사용, 삽입 통로 깊이 확인 해제) |

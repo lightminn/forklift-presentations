@@ -82,6 +82,9 @@ def main(repo):
     run(['-ss', '19.5', '-i', str(before), '-frames:v', '1', '-q:v', '2', str(a / '43_before_near.jpg')])
     run(['-ss', '39', '-i', str(n1 / 'camera_rgb.mp4'), '-frames:v', '1', '-q:v', '2', str(a / '43_camera_far.jpg')])
     run(['-ss', '43', '-i', str(n1 / 'camera_rgb.mp4'), '-frames:v', '1', '-q:v', '2', str(a / '43_camera_near.jpg')])
+    # Slide 3: week 5's map clip (30 s, already 8x) 2.5x faster again, ~12 s.
+    run(encode(['-i', str(a / '21_slam_map_pair.mp4'), '-vf', 'setpts=PTS/2.5'], a / '21_slam_map_pair_fast.mp4', crf=24))
+    poster(a / '21_slam_map_pair_fast.mp4', 11.5, a / '21_slam_map_pair_fast_poster.jpg')
     print('done')
 
 
