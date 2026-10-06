@@ -495,3 +495,5 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .cmp6 .rowlab span { font-size:18px; color:#44505c; line-height:1.35; }
 .cmp6 .shot { min-height:0; height:100%; }
 .cmp6 .rowlab span.ref { font-size:16px; color:var(--uos-blue); }
+.why6 { background:var(--uos-surface); padding:8px 16px 10px; border-top:3px solid #c26a1a; }
+.why6 .diagram { width:100%; height:auto; display:block; }

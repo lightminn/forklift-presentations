@@ -120,6 +120,25 @@ def lidar_layout():
             f'앞 왼쪽과 뒤 오른쪽 모서리에 0.08 m 두 대"><g font-family="var(--uos-font)">{"".join(parts)}</g></svg>')
 
 
+# Why wheel-only odometry drifts on the S3 seed 1 run (recomputed 2026-10-06
+# from slam_log.npz joint samples: turn samples with model yaw rate > 0.05 rad/s;
+# shortfall = 1 - sum(true*model)/sum(model^2)). Unloaded 0.998, loaded 0.925.
+TURN_SHORTFALL = [('빈 차', 0.2), ('팔레트 적재', 7.5)]
+
+
+def shortfall_chart():
+    left, width, xmax = 150, 380, 8.0
+    parts = []
+    for i, (name, pct) in enumerate(TURN_SHORTFALL):
+        y = 34 + i * 58
+        colour = ORANGE if pct > 1 else GREY
+        parts.append(f'<text x="{left - 14}" y="{y + 7}" text-anchor="end" font-size="21" font-weight="700" fill="#1b1f24">{name}</text>')
+        parts.append(f'<rect x="{left}" y="{y - 18}" width="{max(4, pct / xmax * width):.1f}" height="36" rx="3" fill="{colour}"/>')
+        parts.append(f'<text x="{left + max(4, pct / xmax * width) + 12:.1f}" y="{y + 8}" font-size="22" font-weight="700" fill="#1b1f24">{pct:.1f} %</text>')
+    return (f'<svg class="diagram" viewBox="0 0 620 120" role="img" aria-label="회전할 때 바퀴·조향으로 계산한 것보다 실제로 덜 돈 비율. 빈 차 0.2 %, 팔레트 적재 7.5 %">'
+            f'<g font-family="var(--uos-font)">{"".join(parts)}</g></svg>')
+
+
 # ----------------------------------------------------------------- 1
 add('개발 진행 보고', '6주차\n자율 지게차 개발', 20, '',
     """안녕하십니까. 6주차 자율 지게차 개발 진행 상황을 발표할 김광민이라고 합니다. 이번 주는 시뮬레이션 소프트웨어 진행만 말씀드리겠습니다. 지난주까지 지게차는 시뮬레이터가 알려 주는 정답 위치로 움직였는데, 이번 주에는 LiDAR로 추정한 위치로 운반 임무를 끝까지 했고 주행 중에 나타난 장애물도 피하게 했습니다. (전환)""",
@@ -185,15 +204,17 @@ add('SLAM 위치 정확도', '04  SLAM 위치 정확도', 55, f"""
 <div class="split grow" style="grid-template-columns:1fr 1.15fr">
 <figure class="shot">{video('45_slam_error.mp4', '같은 임무 동안 slam_toolbox가 만든 지도와 추정 경로. 아래 숫자는 SLAM 추정 오차와 바퀴 회전만으로 추정했을 때의 오차')}<figcaption class="small muted">같은 임무 · 12배속 · 빨강: SLAM 추정 · 파랑: 실제 경로</figcaption></figure>
 <div class="stack" style="justify-content:center;gap:18px">
-{card('9 cm', 'SLAM 추정 위치 오차 (주행 전체 RMSE)')}
-{card('340 cm', '바퀴 회전만으로 추정했을 때 끝 시점 오차')}
-<div class="fact-box"><b>차이가 나는 이유</b><span>바퀴 추정은 오차가 계속 쌓이고, SLAM은 스캔을 지도와 맞춰 위치를 바로잡음</span></div>
+<div class="fact-box"><b>바퀴만 쓰면 왜 3.4 m 어긋나나</b><span>달린 거리는 93 m 중 0.7 m만 틀림 · 방향이 24° 틀어진 것이 대부분</span></div>
+<div class="why6"><p class="chart-cap">회전할 때 계산보다 실제로 덜 돈 비율</p>{shortfall_chart()}<p class="chart-cap">팔레트를 싣고 돌 때 덜 돎 (바퀴 옆 미끄러짐으로 추정) → 방향 오차가 쌓임</p></div>
+<div class="fact-box"><b>SLAM은 9 cm</b><span>LiDAR 스캔을 지도와 맞춰 방향과 위치를 계속 바로잡음</span></div>
 </div>
 </div>
-{cond(SIM, '같은 주행 기록에서 두 방식의 오차를 계산')}
+{cond(SIM, '시뮬 가정값: 차체 24 kg · 팔레트 10 kg · 바닥 마찰 0.7 (실측 아님)', '센서 잡음을 꺼도 346 cm')}
 """,
-    """같은 임무를 위치 추정 쪽에서 본 화면입니다. 왼쪽 지도에서 빨간 SLAM 추정 경로가 파란 실제 경로를 거의 그대로 따라갑니다. 아래 숫자를 보시면, 같은 주행에서 바퀴 회전만으로 위치를 추정했을 때의 오차는 계속 커져서 끝에서 3.4미터가 됩니다. 반면 SLAM은 LiDAR 스캔을 지도와 맞춰 위치를 계속 바로잡기 때문에 주행 전체 오차가 RMSE(제곱평균제곱근)로 약 9센티미터였습니다. 그래서 정답 위치 없이도 임무를 끝까지 할 수 있었습니다. (전환)""",
-    [(SLAM, 'S3 장면 1 — 위치 RMSE 0.088 m · 최대 0.190 m, 358 s 에서 SLAM 4.0 cm 대 바퀴 오도메트리만 340 cm')],
+    """같은 임무를 위치 추정 쪽에서 본 화면입니다. 왼쪽 지도에서 빨간 SLAM 추정 경로가 파란 실제 경로를 거의 그대로 따라갑니다. 아래 숫자를 보시면, 바퀴 회전과 조향각만으로 위치를 추정했을 때는 끝에서 3.4미터가 어긋납니다. 왜 이만큼 어긋나는지 따져 보면, 달린 거리는 93미터 중 0.7미터만 틀렸고 대부분은 방향이 24도 틀어진 탓입니다. 방향은 팔레트를 싣고 돌 때 틀어졌습니다. 빈 차일 때는 계산한 만큼 돌지만, 팔레트를 실으면 실제로는 계산보다 7.5퍼센트 덜 돕니다. 시뮬레이션에서 팔레트 무게(10 kg 가정)가 실리면 바퀴가 옆으로 미끄러지기 때문으로 보입니다. 센서 잡음을 꺼도 오차가 346센티미터로 거의 같아서, 잡음 탓은 아닙니다. 반면 SLAM은 LiDAR 스캔을 지도와 맞춰 방향과 위치를 계속 바로잡기 때문에 오차가 RMSE(제곱평균제곱근)로 약 9센티미터였습니다. 실물에서도 짐을 실으면 같은 일이 생길 수 있어서, SLAM이 필요하다고 판단했습니다. (전환)""",
+    [(SLAM, 'S3 장면 1 — 위치 RMSE 0.088 m · 최대 0.190 m, 358 s 에서 SLAM 4.0 cm 대 바퀴 오도메트리만 340 cm'),
+     ('ws1 artifacts/20261004_slam_s3/seed_1/run/slam_log.npz', '2026-10-06 재계산: 거리 92.9 대 93.6 m, 끝 방향 오차 −24.3°, 잡음 끔 346 cm · −25.2°, 회전 시 실제/계산 비 빈 차 0.998 · 운반 0.925'),
+     ('config/isaac_transport.yaml', '시뮬레이터 전용 가정값 — 팔레트 10 kg, 정지 0.8 · 동마찰 0.7 (차체 24 kg 은 카탈로그)')],
     '화면 생성: 같은 3분할 영상의 SLAM 지도 칸과 오차 표시 12배속 (prepare_clips.py)')
 
 # ----------------------------------------------------------------- 5
