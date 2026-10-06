@@ -1,19 +1,13 @@
-"""Build the week 5 UOS web deck and its Korean speaker script.
+"""Build the week 6 UOS web deck and its Korean speaker script.
 
 Run from any directory with Python 3. No third-party build dependencies.
 
-Week 5 has two strands and keeps them apart on screen. The main path is the
-physical chassis (measurement, wiring), following the roadmap. The simulation
-slides are a technology demonstration: they show what the Isaac factory hall and
-an offline 2D LiDAR SLAM replay can do, not the direction the project has
-committed to. Every demonstration slide carries the same tag and ends with what
-has to be decided on the physical robot.
-
-Slides 3-4 are placeholders until the chassis measurements arrive. The SLAM
-videos come from the ws1 rerun 20260928_week05_replay (the 2026-09-26 Isaac
-records replayed through slam_toolbox again); its twelve evaluations match the
-2026-09-26 table to the third decimal except one odometry value (0.806 vs
-0.807 m), so the numbers below are unchanged.
+Week 6 is a software (simulation) week only: no hardware topics (user,
+2026-10-06). The plan and its three reviews are in PLAN.md. Every result comes
+from a different run with different inputs, so each slide carries a condition
+line saying which of position, obstacles and pallet pose came from the
+simulator's ground truth and which from sensing. The clips are cut by
+prepare_clips.py; the LiDAR map clip is week 5's (prepare_videos.py).
 """
 from html import escape
 from pathlib import Path
@@ -21,349 +15,252 @@ import json
 from hashlib import sha256
 
 ROOT = Path(__file__).resolve().parent
-MAP = 'docs/plans/2026-09-11-development-roadmap.md'
-STATUS = 'docs/plans/2026-09-17-project-status-and-next-steps.md'
-INTAKE = 'docs/validation/2026-09-23-chassis-intake.md'
+NEARMOUNT = 'docs/validation/2026-10-03-near-field-mount-study.md'
+NEARPLAN = 'docs/plans/2026-10-03-near-field-pocket-tracking.md'
 FACTORY = 'docs/validation/2026-09-26-factory-hall-and-isaac-slam.md'
-FACTORY_PLAN = 'docs/plans/2026-09-26-factory-hall-and-isaac-slam.md'
-LIDAR_CFG = 'config/isaac_slam_lidar.yaml'
-MODEL = 'sim/models/dls08_provisional/parameters.yaml'
-VIEWS = 'docs/validation/2026-09-23-isaac-multiview-recording.md'
-ADR3 = 'docs/decisions/0003-target-selection-and-blind-zone-insertion.md'
-FEEDBACK = 'docs/references/week4_feedback.md'
-HW = 'docs/hardware.md'
-D435I = 'https://www.realsenseai.com/products/depth-camera-d435i/'
-CROWN = 'https://patents.google.com/patent/US9990535B2/en'
-ADAPT = 'https://arxiv.org/html/2503.14331v1'
+SLAM = 'docs/validation/2026-10-04-online-slam-closed-loop.md'
+LIDAR = 'docs/plans/2026-10-04-lidar-obstacle-map.md'
+LAYER = 'config/obstacle_layer.yaml'
+N1 = 'videos-from-ws1/20261006T1124Z_p5_slam_seed1_n1_planning_memory_no_pocket_check'
+N2 = 'videos-from-ws1/20261006T1124Z_p5_slam_seed1_n2_planning_memory_no_pocket_check'
+N2_OLD = 'videos-from-ws1/20261006T0431Z_p5_slam_seed1_n2_new_obstacle'
 slides = []
 
-DEMO_TAG = ('<div class="demo-tag"><b>기술 실증</b> · Isaac Sim 합성 장면 · '
-            '로봇 제어에 시뮬레이터 정답 위치 사용</div>')
-SLAM_BLUE, ODOM_ORANGE = '#2f74c0', '#c26a1a'   # validated pair (dataviz)
+SIM = 'Isaac Sim 합성 장면'
+BLUE, ORANGE, GREY = '#2f74c0', '#c26a1a', '#9aa3ad'
 
 
-def add(label, title, seconds, body, notes, sources, foot='측정 결과'):
+def add(label, title, seconds, body, notes, sources, foot):
     slides.append(dict(label=label, title=title, seconds=seconds, body=body,
                        notes=notes, sources=sources, foot=foot))
 
 
-def figure(src, alt, caption, *, video=None, cls='wide'):
-    if video is None:
-        video = src.rsplit('.', 1)[-1].lower() in {'mp4', 'webm'}
-    poster = src.rsplit('.', 1)[0].replace('_seed16', '') + '_poster.jpg'
+def cond(*items):
+    """Condition line: what this result used (ground truth or sensing)."""
+    return ('<div class="demo-tag"><b>조건</b> ' + ' · '.join(items) + '</div>')
+
+
+def video(src, alt, cls='media'):
+    poster = src.rsplit('.', 1)[0] + '_poster.jpg'
     poster_attr = f' poster="assets/{poster}"' if (ROOT / 'assets' / poster).exists() else ''
-    tag = (f'<video class="media" src="assets/{src}"{poster_attr} autoplay loop muted playsinline '
-           f'aria-label="{escape(alt, quote=True)}"></video>' if video else
-           f'<img class="media" src="assets/{src}" alt="{escape(alt, quote=True)}">')
-    cap = f'<figcaption class="small muted">{caption}</figcaption>' if caption else ''
-    return f'<figure class="shot {cls}">{tag}{cap}</figure>'
+    return (f'<video class="{cls}" src="assets/{src}"{poster_attr} autoplay loop muted playsinline '
+            f'aria-label="{escape(alt, quote=True)}"></video>')
 
 
-def placeholder(what, detail, cls='grow'):
-    """A visible slot for material that does not exist yet."""
-    return (f'<div class="placeholder {cls}"><b>{what}</b>'
-            f'<span>{detail}</span></div>')
+def card(big, text):
+    return f'<div class="card6"><b>{big}</b><span>{text}</span></div>'
 
 
 # ----------------------------------------------------------------- charts
-# Drawn from the recorded numbers below, so the bars cannot drift from the
-# source tables. Colours: one series = SLAM blue; the SLAM/odometry pair was
-# checked with the dataviz validator (light surface, all checks pass).
-
-# slam_toolbox replays of the 0.5 m/s survey loop, start-pose-aligned ATE in
-# metres, layout seeds 0-4 (validation record section 6): (seed, clean, noisy).
-REPLAY_ATE = {
-    'SLAM': [(0, 0.025, 0.062), (1, 0.040, 0.050), (2, 0.039, 0.032), (3, 0.046, 0.084), (4, 0.047, 0.045)],
-    '바퀴·조향 추정': [(0, 0.576, 0.651), (1, 0.806, 0.757), (2, 0.807, 0.832), (3, 0.868, 0.853), (4, 0.806, 0.818)],
+# Floor obstacles of the planner (props, stored pallets, clutter) whose height
+# range meets a scan plane, from the S2 v3.8f records of layout seeds 1/3/5
+# (LIDAR plan, section "현재 상태" ①). An upper bound: occlusion is ignored.
+PLANE_REACH = {           # plane height label: reached per seed (1, 3, 5)
+    '0.10–0.18 m': (90, 87, 87),
+    '0.25 m': (74, 67, 70),
+    '0.50 m': (64, 56, 59),
+    '0.75 m': (47, 42, 45),
+    '1.05 m': (42, 37, 38),
 }
+PLANE_TOTAL = (90, 87, 87)
 
 
-def _swarm(xs, radius=6, step=11):
-    """Vertical offsets so no two dots overlap: each dot takes the first lane
-    (0, -step, +step, -2 step, ...) with no dot closer than 2 radius in x."""
-    lanes, placed = [0], []
-    for k in range(1, 6):
-        lanes += [-k * step, k * step]
-    for cx in sorted(xs):
-        for dy in lanes:
-            if all(abs(cx - px) >= 2 * radius or dy != pdy for px, pdy in placed):
-                placed.append((cx, dy))
-                break
-    return placed
-
-
-def ate_chart():
-    """Both rows start at the same zero line: a bar to the ten-run mean with
-    the individual runs as dots on it, so the two rows read as one scale."""
-    left, width, xmax = 170, 1150 - 170, 0.9
-
-    def x(v):
-        return left + v / xmax * width
-    colours = {'SLAM': SLAM_BLUE, '바퀴·조향 추정': ODOM_ORANGE}
+def plane_chart():
+    """One bar per plane height: the three layouts' share as dots on a bar
+    to their mean; the current 1.05 m plane and the added 0.08 m planes marked."""
+    left, width, top, row = 150, 400, 30, 62
+    def x(p):
+        return left + p / 100 * width
     parts = []
-    for tick in (0, 0.2, 0.4, 0.6, 0.8):
-        parts.append(f'<line x1="{x(tick):.1f}" y1="44" x2="{x(tick):.1f}" y2="256" stroke="#e3e6ea" stroke-width="1.5"/>'
-                     f'<text x="{x(tick):.1f}" y="280" text-anchor="middle" font-size="19" fill="#44505c">{tick:.1f} m</text>')
-    parts.append(f'<line x1="{left}" y1="44" x2="{left}" y2="256" stroke="#44505c" stroke-width="2.5"/>')
-    for row, (name, runs) in enumerate(REPLAY_ATE.items()):
-        y = 92 + row * 118
-        colour = colours[name]
-        values = [c for _, c, _ in runs] + [n for _, _, n in runs]
-        mean = sum(values) / len(values)
-        parts.append(f'<text x="{left - 20}" y="{y + 8}" text-anchor="end" font-size="23" font-weight="700" fill="#1b1f24">{name}</text>')
-        parts.append(f'<rect x="{left}" y="{y - 36}" width="{x(mean) - left:.1f}" height="72" rx="4" fill="{colour}" opacity="0.28"/>')
-        parts.append(f'<line x1="{x(mean):.1f}" y1="{y - 38}" x2="{x(mean):.1f}" y2="{y + 38}" stroke="{colour}" stroke-width="3"/>')
-        for cx, dy in _swarm([x(v) for v in values]):
-            parts.append(f'<circle cx="{cx:.1f}" cy="{y + dy}" r="6" fill="{colour}" stroke="#fff" stroke-width="1.5"/>')
-        if x(mean) - left < 140:   # short bar: label beside the dots
-            lx, ly, anchor = x(max(values)) + 18, y + 8, 'start'
-        else:                      # long bar: label above its mean line
-            lx, ly, anchor = x(mean), y - 42, 'middle'
-        parts.append(f'<text x="{lx:.1f}" y="{ly}" text-anchor="{anchor}" font-size="22" font-weight="700" fill="#1b1f24">평균 {mean:.2f} m</text>')
-    note = (f'<text x="{left}" y="24" font-size="19" fill="#44505c">5개 배치(주행 궤적 3종) × 잡음 2조건 · 막대: 10회 평균 · '
-            f'점: 재생 1회 위치 오차(RMSE = 제곱평균제곱근, 출발 자세 정렬)</text>')
-    return (f'<svg class="budget" viewBox="0 0 1200 290" role="img" aria-label="116 m 지도 작성 주행 재생 10회의 위치 오차. '
-            f'같은 0 기준 축에서 SLAM 평균 0.05 m, 바퀴·조향 추정 평균 0.78 m">'
-            f'<g font-family="var(--uos-font)">{note}{"".join(parts)}</g></svg>')
+    for tick in (0, 50, 100):
+        parts.append(f'<line x1="{x(tick):.1f}" y1="{top - 6}" x2="{x(tick):.1f}" y2="{top + row * 5 - 10}" stroke="#e3e6ea" stroke-width="1.5"/>'
+                     f'<text x="{x(tick):.1f}" y="{top + row * 5 + 14}" text-anchor="middle" font-size="18" fill="#44505c">{tick} %</text>')
+    for i, (name, reach) in enumerate(PLANE_REACH.items()):
+        y = top + 22 + i * row
+        shares = [100 * r / t for r, t in zip(reach, PLANE_TOTAL)]
+        mean = sum(shares) / 3
+        colour = ORANGE if name == '1.05 m' else (BLUE if name.startswith('0.10') else GREY)
+        weight = '700' if colour != GREY else '400'
+        parts.append(f'<text x="{left - 14}" y="{y + 7}" text-anchor="end" font-size="20" font-weight="{weight}" fill="#1b1f24">{name}</text>')
+        parts.append(f'<rect x="{left}" y="{y - 18}" width="{x(mean) - left:.1f}" height="36" rx="3" fill="{colour}" opacity="0.35"/>')
+        for s in shares:
+            parts.append(f'<circle cx="{x(s):.1f}" cy="{y}" r="5" fill="{colour}" stroke="#fff" stroke-width="1.2"/>')
+        lo, hi = min(shares), max(shares)
+        txt = f'{lo:.0f}–{hi:.0f} %' if round(lo) != round(hi) else f'{hi:.0f} %'
+        parts.append(f'<text x="{x(hi) + 12:.1f}" y="{y + 7}" font-size="20" font-weight="{weight}" fill="#1b1f24">{txt}</text>')
+    return (f'<svg class="diagram" viewBox="0 0 640 {top + row * 5 + 24}" role="img" aria-label="스캔 평면 높이별로 높이상 평면과 겹치는 바닥 장애물 비율. '
+            f'1.05 m 평면 43–47 %, 0.10–0.18 m 평면 100 %"><g font-family="var(--uos-font)">{"".join(parts)}</g></svg>')
 
 
-# ----------------------------------------------------------------- week 5 visuals
-# Drawn from assets/data_*.json, which prepare_data.py extracts from the Isaac
-# records and the slam_toolbox replays. The deck build itself stays stdlib-only.
-DIR_BLUE, CAM_ORANGE, STOP_GREEN = SLAM_BLUE, ODOM_ORANGE, '#2e9a6b'   # validated trio
-
-
-def _data(name):
-    return json.loads((ROOT / 'assets' / name).read_text())
-
-
-def badge(text='기술 실증 · Isaac Sim'):
-    return f'<span class="badge">{text}</span>'
-
-
-def trajectory_anim():
-    """Top view of the survey loop: truth, SLAM and wheel-only estimate drawn
-    together, so the wheel-only path is seen drifting away."""
-    d = _data('data_survey_seed0.json')
-    pts = d['truth'] + d['slam'] + d['odom']
-    xs, ys = [p[0] for p in pts], [p[1] for p in pts]
-    x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
-    size, pad = 560, 20
-    scale = (size - 2 * pad) / max(x1 - x0, y1 - y0)
-    def path(seq):
-        return 'M' + ' L'.join(f'{pad + (x - x0) * scale:.1f},{size - pad - (y - y0) * scale:.1f}' for x, y in seq)
-    end = d['odom'][-1]
-    ex, ey = pad + (end[0] - x0) * scale, size - pad - (end[1] - y0) * scale
-    return f"""<svg class="diagram grow traj" viewBox="0 0 {size} {size}" role="img" aria-label="위에서 본 116 m 지도 작성 경로. 실제 경로 위로 SLAM 추정이 겹치고, 바퀴·조향 추정은 점점 벗어난다">
-<path d="{path(d['truth'])}" fill="none" stroke="#c9ced4" stroke-width="12" stroke-linejoin="round"/>
-<path class="draw" pathLength="1" d="{path(d['odom'])}" fill="none" stroke="{ODOM_ORANGE}" stroke-width="4" stroke-linejoin="round"/>
-<path class="draw" pathLength="1" d="{path(d['slam'])}" fill="none" stroke="{SLAM_BLUE}" stroke-width="4" stroke-linejoin="round"/>
-<circle class="endmark" cx="{ex:.1f}" cy="{ey:.1f}" r="9" fill="{ODOM_ORANGE}"/>
-</svg>"""
-
-
-def ate_compact():
-    """Ten replays per row on one zero line, sized for a half-width column."""
-    left, width, xmax = 128, 440, 0.9
-    def x(v):
-        return left + v / xmax * width
-    colours = {'SLAM': SLAM_BLUE, '바퀴·조향 추정': ODOM_ORANGE}
-    labels = {'SLAM': 'SLAM', '바퀴·조향 추정': '바퀴·조향'}
-    parts = []
-    for tick in (0, 0.4, 0.8):
-        parts.append(f'<line x1="{x(tick):.1f}" y1="30" x2="{x(tick):.1f}" y2="236" stroke="#e3e6ea" stroke-width="1.5"/>'
-                     f'<text x="{x(tick):.1f}" y="262" text-anchor="middle" font-size="20" fill="#44505c">{tick * 100:.0f} cm</text>')
-    parts.append(f'<line x1="{left}" y1="30" x2="{left}" y2="236" stroke="#44505c" stroke-width="2.5"/>')
-    for row, (name, runs) in enumerate(REPLAY_ATE.items()):
-        y = 80 + row * 104
-        values = [c for _, c, _ in runs] + [n for _, _, n in runs]
-        mean = sum(values) / len(values)
-        colour = colours[name]
-        parts.append(f'<text x="{left - 16}" y="{y + 8}" text-anchor="end" font-size="23" font-weight="700" fill="#1b1f24">{labels[name]}</text>')
-        parts.append(f'<rect x="{left}" y="{y - 34}" width="{x(mean) - left:.1f}" height="68" rx="4" fill="{colour}" opacity="0.28"/>')
-        for cx, dy in _swarm([x(v) for v in values], radius=5, step=10):
-            parts.append(f'<circle cx="{cx:.1f}" cy="{y + dy}" r="5" fill="{colour}" stroke="#fff" stroke-width="1.2"/>')
-        lx = x(max(values)) + 14 if x(mean) - left < 140 else x(mean) - 8
-        anchor = 'start' if x(mean) - left < 140 else 'end'
-        ly = y + 8 if anchor == 'start' else y - 44
-        parts.append(f'<text x="{lx:.1f}" y="{ly}" text-anchor="{anchor}" font-size="24" font-weight="700" fill="#1b1f24">{mean * 100:.0f} cm</text>')
-    return (f'<svg class="diagram" viewBox="0 0 600 272" role="img" aria-label="재생 10회 위치 오차: SLAM 평균 0.05 m, '
-            f'바퀴·조향 추정 평균 0.78 m"><g font-family="var(--uos-font)">{"".join(parts)}</g></svg>')
-
-
-def margin_bar():
-    """Week 4 fork-tip lateral error inside the 45 mm pocket margin."""
-    left, width, full = 20, 1140, 45.0
-    def w(mm):
-        return mm / full * width
-    segs = [(3.58, DIR_BLUE, '차체 방향'), (1.34, CAM_ORANGE, '카메라 추정'), (0.78, STOP_GREEN, '정지 위치')]
-    parts = [f'<rect x="{left}" y="40" width="{width}" height="46" rx="4" fill="#eef1f4"/>']
-    x = left
-    for mm, fill, _ in segs:
-        parts.append(f'<rect x="{x:.1f}" y="40" width="{w(mm):.1f}" height="46" fill="{fill}"/>')
-        x += w(mm)
-    parts.append(f'<line x1="{left + width}" y1="30" x2="{left + width}" y2="96" stroke="#c0392b" stroke-width="4"/>'
-                 f'<text x="{left + width}" y="22" text-anchor="end" font-size="21" font-weight="700" fill="#c0392b">포켓 벽까지 45 mm</text>'
-                 f'<text x="{left + w(5.7) + 14:.1f}" y="72" font-size="24" font-weight="700" fill="#1b1f24">포크 끝 좌우 오차 5.7 mm</text>')
-    lx = left
-    for mm, fill, name in segs:
-        parts.append(f'<rect x="{lx}" y="112" width="18" height="18" fill="{fill}"/>'
-                     f'<text x="{lx + 26}" y="128" font-size="20" fill="#1b1f24">{name} {100 * mm / 5.70:.1f} %</text>')
-        lx += 230
-    return (f'<svg class="diagram" viewBox="0 0 1180 140" role="img" aria-label="포크 끝 옆 오차 5.7 mm는 포켓 벽까지 여유 45 mm의 약 13 %. '
-            f'차체 방향 62.8 %, 카메라 23.5 %, 정지 위치 13.7 %"><g font-family="var(--uos-font)">{"".join(parts)}</g></svg>')
+def lidar_layout():
+    """Top view of the truck outline (simulation model) with the three planes."""
+    s, ox, oy = 230, 150, 175            # px per metre, origin of base_link
+    def p(x, y):
+        return ox + x * s, oy - y * s
+    def rect(x0, y0, x1, y1, fill, extra=''):
+        (a, b), (c, d) = p(x0, y1), p(x1, y0)
+        return f'<rect x="{a:.1f}" y="{b:.1f}" width="{c - a:.1f}" height="{d - b:.1f}" fill="{fill}" {extra}/>'
+    parts = [rect(-0.51, -0.315, 0.44, 0.315, '#dfe3e8', 'rx="6"'),
+             rect(0.53, 0.1175, 0.95, 0.1725, '#8c959e'), rect(0.53, -0.1725, 0.95, -0.1175, '#8c959e')]
+    sensors = [(-0.12, 0.0, 0, ORANGE, '1.05 m', '위치 추정용 (기존)', 'middle', 0, -26),
+               (0.60, 0.355, 45, BLUE, '0.08 m', '앞 왼쪽 모서리', 'start', 22, 8),
+               (-0.50, -0.355, -135, BLUE, '0.08 m', '뒤 오른쪽 모서리', 'start', 22, 8)]
+    import math
+    for x, y, yaw, colour, h, name, anchor, dx, dy in sensors:
+        cx, cy = p(x, y)
+        ex, ey = cx + 46 * math.cos(math.radians(yaw)), cy - 46 * math.sin(math.radians(yaw))
+        parts.append(f'<line x1="{cx:.1f}" y1="{cy:.1f}" x2="{ex:.1f}" y2="{ey:.1f}" stroke="{colour}" stroke-width="3"/>')
+        parts.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="11" fill="{colour}" stroke="#fff" stroke-width="2"/>')
+        parts.append(f'<text x="{cx + dx:.1f}" y="{cy + dy:.1f}" text-anchor="{anchor}" font-size="19" font-weight="700" fill="#1b1f24">{h}'
+                     f'<tspan font-weight="400" fill="#44505c"> {name}</tspan></text>')
+    fx, fy = p(0.74, 0.0)
+    parts.append(f'<text x="{fx:.1f}" y="{fy + 6:.1f}" text-anchor="middle" font-size="17" fill="#44505c">포크 →</text>')
+    return (f'<svg class="diagram" viewBox="0 0 640 330" role="img" aria-label="위에서 본 차체와 2D LiDAR 세 대. 가운데 1.05 m 한 대, '
+            f'앞 왼쪽과 뒤 오른쪽 모서리에 0.08 m 두 대"><g font-family="var(--uos-font)">{"".join(parts)}</g></svg>')
 
 
 # ----------------------------------------------------------------- 1
-add('개발 진행 보고', '5주차\n자율 지게차 개발', 20, '',
-    """이번 주 진행은 두 가지이다. 입고한 차체의 치수와 포크, 동봉 팔레트를 실측하고 조종기 버튼별 신호를 측정하였다. 그리고 시뮬레이션에서 2D LiDAR로 공장 지도를 만들고 그 안에서 자기 위치를 추정하는 데 성공하였다. 마지막으로 중간 미팅에서 확인할 사항을 정리한다.""",
-    [(MAP, '개발 로드맵'), (FACTORY, '공장 홀과 LiDAR 지도 작성 실증')], '진행 보고')
+add('개발 진행 보고', '6주차\n자율 지게차 개발', 20, '',
+    """이번 주는 시뮬레이션 소프트웨어 진행을 보고한다. 지난주까지 지게차는 시뮬레이터가 알려 주는 정답 위치로 움직였다. 이번 주에는 LiDAR로 지도를 만들며 추정한 자기 위치로 운반 임무를 끝까지 수행하였고, 낮은 장애물을 보는 LiDAR를 더해 주행 중 새로 나타난 장애물을 피해 경로를 다시 짜도록 하였다. 모든 결과는 Isaac Sim 합성 장면과 CPU 합성 시험의 결과이다.""",
+    [(SLAM, '온라인 SLAM 폐루프 실행 기록'), (LIDAR, 'LiDAR 장애물 지도 계획')], '진행 보고')
 
-# ----------------------------------------------------------------- 3 (placeholder)
-MEASURE_ROWS = [
-    ('전장 × 전폭 × 전고', '1.46 × 0.63 × 1.01 m (카탈로그)'),
-    ('질량', '24 kg (카탈로그)'),
-    ('축간 거리 · 윤거', '0.64 · 0.51 m (사진 추정)'),
-    ('바퀴 반지름', '0.135 m (사진 추정)'),
-    ('포크 길이 · 폭 · 두께', '420 · 55 · 24 mm (사진 추정)'),
-    ('포크 중심 간격', '290 mm (사진 추정)'),
-    ('승강 범위', '280 mm (사진 추정)'),
-    ('최소 회전 반경', '— (주행 시험 필요)'),
-]
-measure_table = ''.join(f'<tr><td>{k}</td><td class="pending">—</td><td class="muted">{v}</td></tr>'
-                        for k, v in MEASURE_ROWS)
-add('차체 실측', '01  차체 실측', 90, f"""
-<h2 class="headline">차체 실측값과 잠정 모델 비교 <span class="draft">작성 중</span></h2>
-<div class="split grow" style="grid-template-columns:0.8fr 1.2fr">
-{placeholder('치수선 사진', '측정 기준점·치수선 표시')}
-<table class="comparison measure"><tr><th>항목</th><th>실측 (예정)</th><th>잠정 모델</th></tr>{measure_table}</table>
+# ----------------------------------------------------------------- 2
+add('캐리지 하단 카메라', '01  캐리지 하단 카메라', 75, f"""
+<h2 class="headline">카메라를 캐리지 아래로 옮겨 포켓 진입 직전까지 관측</h2>
+<div class="split grow" style="grid-template-columns:1fr 1fr 0.9fr">
+<figure class="shot"><img class="media" src="assets/43_camera_far.jpg" alt="팔레트 앞면까지 1.10 m 거리의 로봇 카메라 화면. 팔레트와 두 포켓을 찾은 표시"><figcaption class="small muted">접근 중 · 포크 끝–앞면 1.10 m (화면 표시)</figcaption></figure>
+<figure class="shot"><img class="media" src="assets/43_camera_near.jpg" alt="포켓 진입 직전의 로봇 카메라 화면. 두 포켓과 윗판이 화면 안에 있음"><figcaption class="small muted">진입 직전 · 포크 끝–앞면 0.03 m (화면 표시)</figcaption></figure>
+<div class="stack" style="justify-content:center;gap:14px">
+<div class="fact-box"><b>기존: 높이 0.50 m · 수평</b><span>삽입 마지막 약 0.25 m 관측 불가</span></div>
+<div class="fact-box"><b>변경: 높이 0.27 m · 아래로 약 6°</b><span>앞면 검출 뒤 윗판 추적으로 넘김</span></div>
+<div class="card6"><b>12 / 12</b><span>CPU 합성 시험에서 윗판 추적으로 인계 · 진입 뒤 오차 20 mm 이하</span></div>
 </div>
-<div class="takeaway">반영 계획: 실측값으로 시뮬레이션 모델·좌표 변환 갱신</div>
+</div>
+{cond('화면: Isaac Sim 시야 예시', '12 / 12: CPU 합성 시험 · 잡음·가림 없음 · 정렬 자세 · 윗판 높이·이동량은 정답 사용')}
 """,
-    """[작성 예정] 차체 실측 결과를 보인다. 측정 대상과 기준점, 측정값을 표로 정리하고, 지금까지 시뮬레이션에 쓴 잠정 모델 값과 비교한다. 잠정 모델은 상품 사진과 카탈로그로 만든 것이므로 실측값으로 바꾼다. 최소 회전 반경은 주행 시험이 필요해 정적 실측과 따로 표시한다.""",
-    [(MODEL, '잠정 모델 치수 — 카탈로그 값과 사진 비례 추정'), (INTAKE, '입고 때 미측정 항목')],
-    '화면 생성: 실물 사진 (작성 예정)')
+    """지난 발표의 카메라는 차체 앞 0.5미터 높이에 수평으로 달려 있어, 포크를 넣는 마지막 약 25센티미터 동안 팔레트가 화면 아래로 빠져 보이지 않았다. 그래서 카메라를 포크를 올리고 내리는 캐리지 아래쪽, 0.27미터 높이로 옮기고 아래로 약 6도 숙였다. 왼쪽은 팔레트에서 1.1미터 떨어진 화면이고, 가운데는 포켓에 들어가기 직전의 화면이다. 가까워지면 팔레트 앞면은 화면 밖으로 나가지만 윗판은 계속 보이므로, 앞면으로 찾던 포켓을 윗판 추적으로 넘겨 받는다. 잡음과 가림이 없고 윗판 높이와 이동량은 정답을 쓴 CPU 합성 시험 12회에서 모두 넘겨 받았고, 진입 뒤 오차는 20밀리미터 이하였다. 화면의 거리는 포크 끝에서 팔레트 앞면까지이고, 노란 포켓 테두리는 앞서 검출한 포켓을 차체가 움직인 만큼 옮겨 그린 표시이다.""",
+    [(NEARPLAN, '기존 장착(0.75, 0, 0.50 m · 틸트 0)의 마지막 약 0.25 m 무관측'),
+     (NEARMOUNT, '장착 연구 — 높이 0.27 m · 틸트 0.10 rad, 12 장면 인계, 오차 ≤ 20 mm (잡음 0 · 정렬 · 승강 0)'),
+     (N1, 'camera_rgb.mp4 39 s · 43 s 프레임')],
+    '화면 생성: 1124Z N1 실행의 로봇 카메라 프레임 (prepare_clips.py)')
 
-# ----------------------------------------------------------------- 3 (placeholder)
-add('포크·동봉 팔레트', '02  포크 · 동봉 팔레트', 80, f"""
-<h2 class="headline">포크·동봉 팔레트 실측 <span class="draft">작성 중</span></h2>
-<div class="split grow" style="grid-template-columns:1fr 1fr">
-{placeholder('포크 사진 · 치수선', '폭 · 두께 · 간격 · 최저·최고 높이')}
-{placeholder('동봉 팔레트 사진 · 치수선', '외형 · 포켓 개구 폭·높이 · 포크와의 여유')}
-</div>
-<div class="takeaway">포크 치수: 시험 팔레트 제작과 삽입 여유 계산의 기준</div>
-""",
-    """[작성 예정] 포크의 폭과 두께, 두 포크의 간격, 최저·최고 높이를 잰 결과를 보인다. 오른쪽은 차체와 함께 온 팔레트의 외형과 포켓 개구이다. 포크 치수와 포켓 개구의 차이가 삽입할 때의 좌우·상하 여유가 되므로, 이 값이 시험 팔레트 제작과 삽입 목표의 기준이 된다.""",
-    [(INTAKE, '입고 때 관찰한 포크·동봉 팔레트'), (MODEL, '잠정 모델 포크 치수 — 사진 추정')],
-    '화면 생성: 실물 사진 (작성 예정)')
-
-# ----------------------------------------------------------------- 4 (placeholder)
-add('버튼별 신호', '03  조종기 버튼별 신호', 100, f"""
-<h2 class="headline">조종기 버튼별 신호 측정 <span class="draft">작성 중</span></h2>
-<div class="split grow" style="grid-template-columns:0.8fr 1.2fr">
-{placeholder('측정 구성 사진', '조종기·수신기 · 로직 애널라이저 연결 지점')}
-{placeholder('버튼별 파형', '전진·후진·조향·승강 버튼을 하나씩 눌렀을 때의 파형')}
-</div>
-<div class="takeaway">다음 작업: 신호 형식 확인 후 컴퓨터 명령 입력 위치 결정</div>
-""",
-    """[작성 예정] 4주차 피드백에 따라 로직 애널라이저로 조종기 버튼을 하나씩 눌러 신호를 측정하였다. 왼쪽은 측정 구성으로, 어디에 탐침을 연결했는지 보인다. 오른쪽은 전진·후진, 조향, 승강 버튼별 파형이다. 버튼마다 신호가 어떤 형식으로 바뀌는지가 컴퓨터가 명령을 넣을 위치와 방식을 정한다.""",
-    [(INTAKE, '입고 때 관찰한 전장 구성'), (FEEDBACK, '§2 로직 애널라이저로 버튼별 신호 측정')],
-    '화면 생성: 실물 사진 · 로직 애널라이저 캡처 (작성 예정)')
-
-# ----------------------------------------------------------------- 5 demo (new clip)
-add('LiDAR가 보는 것', '04  2D LiDAR 스캔', 75, f"""
-<h2 class="headline">2D LiDAR는 1.05 m 높이 한 평면만 관측</h2>
-<div class="split grow" style="grid-template-columns:1.15fr 0.85fr">
-{figure('25_scan_view.mp4', '지게차를 위에서 따라가며 본 LiDAR 스캔. 빨간 선과 점은 한 바퀴 스캔이 닿은 곳이고, 진한 회색 물체만 닿고 옅은 회색 물체는 스캔에 나타나지 않는다', 'Isaac 주행 기록의 스캔 · 시뮬레이터상 실제 위치 기준 · 약 7배속', cls='')}
-<div class="stack lidar-facts">
-<div class="fact"><b>1,600</b><span>빔 / 한 바퀴 (0.225° 간격)</span></div>
-<div class="fact"><b>10 Hz</b><span>한 바퀴 주기</span></div>
-<div class="fact"><b>0.2–12 m</b><span>측정 거리</span></div>
-<p class="vs-note">합성 센서 · A2M12 카탈로그 값 기준, 실측 아님</p>
-</div>
-</div>
-""",
-    """2D LiDAR가 무엇을 보는지부터 보인다. 영상은 Isaac 주행 기록의 스캔을 지게차를 따라가며 그린 것이다. LiDAR는 한 바퀴에 1,600개의 빔을 쏘아 빔마다 처음 닿은 곳까지 거리를 재며, 그 지점이 빨간 점이다. 한 바퀴는 0.1초이다. 빔은 1.05미터 높이의 수평면 하나에만 있으므로, 이 높이에 걸친 진한 회색 물체만 점으로 나타나고, 걸치지 않는 옅은 회색 물체는 바로 옆을 지나가도 보이지 않는다. 또 가까운 물체 뒤에 가려진 면은 찍히지 않는다. 그래서 실물에서는 지도에 담아야 할 물체의 높이를 보고 장착 높이를 정한다. 센서 값은 우리가 쓸 A2M12의 카탈로그 값을 따른 합성 센서이다.""",
-    [(FACTORY, '§3 Isaac SLAM 기록 seed 0 — 스캔 2,454개'),
-     (LIDAR_CFG, '합성 LiDAR 1,600빔 · 10 Hz · 0.2–12 m · 장착 높이 1.05 m (A2M12 카탈로그 값, 실측 아님)')],
-    '화면 생성: slam_log.npz 의 스캔과 정답 레이저 자세를 prepare_videos.py 로 그림 (물체 윤곽은 meta.json 배치)')
-
-# ----------------------------------------------------------------- 7 demo
-add('지도 작성', '05  2D LiDAR 지도 작성', 70, f"""
-<h2 class="headline">LiDAR로 만든 30 × 31 m 공장 지도와 자기 위치</h2>
+# ----------------------------------------------------------------- 3
+add('지도 작성', '02  2D LiDAR 지도 작성', 65, f"""
+<h2 class="headline">LiDAR 스캔을 겹쳐 만든 30 × 31 m 공장 지도와 자기 위치</h2>
 <div class="pair grow"><div class="pair-box">
 <span class="pair-tag left">Isaac 주행 <i>빨간 점: LiDAR 측정점</i></span>
-<span class="pair-tag right">SLAM 지도 <i>파랑 SLAM 추정이 회색 실제 경로와 거의 겹침</i></span>
-<video class="pair-video" src="assets/21_slam_map_pair.mp4" poster="assets/21_slam_map_pair_poster.jpg" autoplay loop muted playsinline aria-label="왼쪽은 공장 홀을 위에서 본 지게차의 시뮬레이션 주행, 오른쪽은 같은 순간까지 slam_toolbox가 만든 지도와 추정 경로"></video>
+<span class="pair-tag right">SLAM 지도 <i>파랑 SLAM 추정 · 회색 실제 경로</i></span>
+<video class="pair-video" src="assets/21_slam_map_pair.mp4" poster="assets/21_slam_map_pair_poster.jpg" autoplay loop muted playsinline aria-label="왼쪽은 공장 홀을 위에서 본 지게차 주행, 오른쪽은 같은 순간까지 slam_toolbox가 만든 지도와 추정 경로"></video>
 </div></div>
-<div class="chips"><span>Isaac 주행 기록</span><i>→</i><span>ROS 2 재생</span><i>→</i><span>slam_toolbox 지도·위치 추정</span><i>→</i><span>정답과 비교</span></div>
+{cond(SIM, '주행 기록을 slam_toolbox로 재생한 영상 · 이 영상의 주행은 시뮬레이터 정답 위치')}
 """,
-    """Isaac의 30 곱하기 31미터 공장에서 지게차가 116미터 경로를 달리며 LiDAR 스캔과 바퀴 회전, 조향각을 기록하고, 이 기록을 ROS 2에서 재생해 공개 SLAM 패키지인 slam_toolbox가 지도와 위치를 추정하게 했다. 왼쪽은 위에서 본 주행이고, 오른쪽은 그 시각까지 만들어진 지도와 추정 경로이다. 지게차가 돌수록 지도가 넓어지고, 파란 SLAM 추정 위치가 회색 실제 경로 위를 따라간다. 다만 기록을 다시 재생해 얻은 결과이고, 주행 자체는 시뮬레이터가 알려 준 정답 위치로 하였다. 즉 SLAM 결과로 차를 움직인 것은 아니다.""",
-    [(FACTORY, '§3 기록 · §4 재생 · §6 3분할 영상'), (FACTORY, '§1 30 × 31 m 공장 홀'),
-     (LIDAR_CFG, '합성 LiDAR 1,600빔 · 10 Hz · 0.2–12 m (A2M12 카탈로그 값, 실측 아님)')],
-    '화면 생성: Isaac Sim 기록 + ROS 2 slam_toolbox 재생 20260928_week05_replay, 3분할 영상에서 조감·지도 두 칸만 잘라 8배속')
+    """다음 장에서 쓸 위치 추정의 원리이다. 지게차가 30 곱하기 31미터 공장을 달리며 LiDAR로 주변 거리를 재고, 공개 SLAM 패키지인 slam_toolbox가 이 스캔을 겹쳐 지도를 만들면서 동시에 그 지도 안에서 자기 위치를 찾는다. 왼쪽은 위에서 본 주행, 오른쪽은 그 시각까지 만들어진 지도이다. 지게차가 돌수록 지도가 넓어지고, 파란 추정 경로가 회색 실제 경로를 따라간다. 이 영상은 주행 기록을 재생해 만든 것이고, 다음 장은 이 추정 위치로 실제로 지게차를 움직인 결과이다.""",
+    [(FACTORY, '§1 30 × 31 m 공장 홀 · §3 기록 · §4 slam_toolbox 재생'),
+     ('week-06/SOURCES.md', '21_slam_map_pair.mp4 제작 경위 (9/26 기록, 9/28 재생, 정답 자세 주행)')],
+    '화면 생성: Isaac 주행 기록 + ROS 2 slam_toolbox 재생, 조감·지도 두 칸 8배속 (5주차 제작)')
 
-# ----------------------------------------------------------------- map compare (new clip)
-add('지도 비교', '06  위치 추정에 따른 지도 차이', 75, f"""
-<h2 class="headline">위치 추정이 틀리면 같은 스캔도 지도가 번짐</h2>
-<div class="pair grow"><div class="pair-box" style="aspect-ratio:1254/732">
-<video class="pair-video" src="assets/26_map_compare.mp4" poster="assets/26_map_compare_poster.jpg" autoplay loop muted playsinline aria-label="같은 스캔을 왼쪽은 바퀴·조향으로 추정한 위치에, 오른쪽은 SLAM이 추정한 위치에 쌓아 지도를 만드는 영상. 왼쪽은 물체 윤곽이 여러 겹으로 번지고 오른쪽은 선명하다"></video>
-</div></div>
-<div class="takeaway">SLAM: 스캔을 이미 만든 지도와 맞춰 위치를 바로잡음 → 물체 윤곽이 한 겹</div>
-""",
-    """SLAM이 왜 필요한지 보이는 장이다. 같은 LiDAR 스캔을 두 가지 위치 추정에 따라 한 장의 지도로 쌓았다. 왼쪽은 바퀴 회전과 조향각만으로 추정한 위치에 쌓은 것으로, 달릴수록 방향 오차가 쌓여 같은 물체가 여러 겹으로 번지고 벽이 비스듬해진다. 오른쪽은 SLAM이 스캔을 이전 지도와 맞춰 가며 추정한 위치에 쌓은 것으로, 물체 윤곽이 한 겹으로 선명하다. 지도가 선명하다는 것은 그 위치 추정이 맞다는 뜻이기도 하다.""",
-    [(FACTORY, '§4 재생 — 같은 기록의 slam_toolbox 궤적과 바퀴 오도메트리'),
-     ('artifacts/20260928_week05_replay/survey_seed_0_clean', 'slam_trajectory.csv · odometry.csv')],
-    '화면 생성: 같은 스캔을 두 궤적에 놓아 prepare_videos.py 로 누적 (slam_toolbox 가 만든 지도가 아님)')
-
-# ----------------------------------------------------------------- 8 demo
-add('위치 추정 오차', '07  위치 추정 오차', 70, f"""
-<h2 class="headline">LiDAR 지도와 맞춘 위치 오차 약 5 cm · 바퀴·조향만으로는 약 78 cm</h2>
-<div class="split grow" style="grid-template-columns:1fr 1.05fr">
-<div class="traj-box">{trajectory_anim()}
-<div class="legend"><span><i style="background:#c9ced4"></i>실제 경로</span><span><i style="background:#2f74c0"></i>SLAM 추정</span><span><i style="background:#c26a1a"></i>바퀴·조향 추정</span></div></div>
-<div class="stack" style="justify-content:center;gap:10px">
-<p class="chart-cap">116 m 주행 기록 10회 재생 · 점 1개 = 재생 1회 · 막대 = 평균</p>
-{ate_compact()}
-<p class="chart-cap">바퀴·조향 추정: 거리는 정확 · 방향이 약 6° 틀어지며 오차 누적</p>
+# ----------------------------------------------------------------- 4
+add('SLAM 위치로 운반', '03  SLAM 위치로 운반 임무', 110, f"""
+<h2 class="headline">SLAM 추정 위치만으로 운반 임무 3개 장면 완주 · 하역 오차 8–22 mm</h2>
+<div class="split grow" style="grid-template-columns:1.62fr 0.78fr">
+<figure class="shot">{video('40_slam_mission.mp4', '공장 홀에서 팔레트를 인식해 들고 목적지에 내린 뒤 출발점으로 돌아오는 전체 임무. 조감, 온라인 SLAM 지도와 추정 경로, 로봇 카메라 RGB·깊이, 위치 오차 그래프')}<figcaption class="small muted">장면 1 · 8배속 · 360초 임무 전체</figcaption></figure>
+<div class="stack" style="justify-content:center;gap:16px">
+{card('3 / 3', '정답 위치로 완주하던 장면 모두 SLAM 위치로 완주 · 포크·팔레트 충돌 0')}
+{card('9 cm · 340 cm', '주행 전체 SLAM 위치 오차(RMSE) · 바퀴 회전만 쓴 끝 시점 오차')}
+<p class="vs-note">하역 정밀도: 목적지 앞에서 미리 찍어 둔 스캔과 맞춘 결과</p>
 </div>
 </div>
-<div class="takeaway">다음 확인: 실물 바퀴·조향 신호로 방향 오차 누적량 측정</div>
+{cond(SIM, '위치: SLAM 추정', '경로 계획의 장애물: 시뮬레이터 정답 지도', '팔레트: 깊이 카메라 인식')}
 """,
-    """왼쪽은 위에서 본 지도 작성 경로이다. 회색 실제 경로 위로 파란 SLAM 추정은 거의 그대로 겹치고, 주황 바퀴·조향 추정은 점점 벗어나 끝에서 약 80센티미터 떨어진다. 오른쪽은 물건 배치가 다른 다섯 공장 장면의 주행 기록을, 잡음 없이와 합성 잡음을 넣어 모두 열 번 재생한 결과이다. 평균 위치 오차는 SLAM이 약 5센티미터, 바퀴와 조향만으로는 약 78센티미터였다. 바퀴·조향 추정은 달린 거리는 정확했지만 방향이 조금씩 틀어지며 오차가 쌓였다. 이것은 시뮬레이터의 관절 값에서 나온 결과이므로, 실물에서는 바퀴와 조향 신호를 직접 측정해 확인한다.""",
-    [(FACTORY, '§6 재생 10회 — 시작 정렬 ATE, 잡음 없음 평균 SLAM 0.040 · 바퀴 0.773 m, 합성 잡음 0.055 · 0.782 m'),
-     (FACTORY, '§4 — 누적 거리 115.92 대 115.98 m, 회전 9.54 대 9.43 rad, 원인 미확정 (seed 0)'),
-     (FACTORY, '합성 잡음: 거리 σ 0.02 m · 뒷바퀴 σ 0.2 rad/s · 조향 σ 0.005 rad (가정값)')],
-    '화면 생성: 재생 평가 수치 도식 (2026-09-28 재실행: 12개 값 중 11개가 소수 셋째 자리까지 일치, 1개는 0.001 m 차)')
+    """지난주까지 지게차는 시뮬레이터가 알려 주는 정답 위치로 움직였다. 이번에는 정답 위치를 쓰지 않고, 앞 장의 방법으로 slam_toolbox가 실시간으로 추정한 위치만으로 지게차를 움직였다. 영상은 팔레트를 인식해 들어 올리고, 목적지에 내린 뒤 출발점으로 돌아오는 360초 임무 전체를 8배 빠르게 보인 것이다. 가운데 지도에서 빨간 추정 경로가 파란 실제 경로를 따라간다. 정답 위치로 완주하던 장면 세 개를 모두 SLAM 위치로 완주했고, 포크와 팔레트의 충돌은 없었으며, 하역 오차는 8에서 22밀리미터였다. 영상 장면에서 주행 전체의 SLAM 위치 오차는 제곱평균제곱근, 즉 RMSE로 약 9센티미터였고, 바퀴 회전만으로 위치를 추정했다면 끝에서 3.4미터 어긋났다. 다만 경로를 짤 때의 장애물은 아직 시뮬레이터 정답 지도를 썼고, 하역 정밀도는 목적지 앞에서 미리 찍어 둔 스캔과 맞춘 덕분이다. 참고로 정답 위치로는 고정 조건 30회 반복 시험을 모두 완주했다.""",
+    [(SLAM, 'S2 v3.8d — 기대 완주 장면 1·3·5 모두 완주, 하역 12.6·22.4·7.8 mm, 안전 위반 0 (장면 0 은 정답 위치로도 실패, 2·4 미실행)'),
+     (SLAM, 'S3 장면 1 — 하역 16.9 mm, 위치 RMSE 0.088 m · 최대 0.190 m, 358 s 에서 SLAM 4.0 cm 대 바퀴 오도메트리만 340 cm'),
+     (SLAM, '범위: 경로 계획 장애물은 정답 사각형, 하역 도킹 기준 스캔은 사전 정보'),
+     ('docs/validation/2026-10-03-fifth-frozen-evaluation.md', '정답 위치 30/30 완주 (단측 95 % 하한 90.5 %)')],
+    '화면 생성: ws1 artifacts/20261004_slam_s3/seed_1 3분할 영상 8배속 (prepare_clips.py)')
 
-# ----------------------------------------------------------------- 11
-add('중간 미팅 확인 사항', '08  중간 미팅 확인 사항', 30, """
-<h2 class="headline">중간 미팅 확인 사항</h2>
-<div class="spread grow"><div class="qcols">
-<article><h3>확인 사항</h3><ul><li>시연 장소·바닥 상태 (실내·실외)</li><li>평가 기준 (성공률 · 시간 · 정밀도)</li><li>시험 팔레트 치수·적재 하중</li><li>다우테크놀로지 사례 공유</li></ul></article>
-<article><h3>자료 요청</h3><ul><li>제어기·조종기 배선·신호 자료</li><li>실제 지게차 운용 영상·데이터</li></ul></article>
-<article><h3>협의 사항</h3><ul><li>시험 공간</li><li>허용 속도 상한</li><li>EPAL 6·축소 T11 시험 조건</li><li>동봉 팔레트 활용</li></ul></article>
+# ----------------------------------------------------------------- 5
+add('낮은 장애물용 LiDAR', '04  낮은 장애물용 LiDAR', 75, f"""
+<h2 class="headline">1.05 m 높이와 겹치는 바닥 장애물 43–47 % · 0.08 m 평면 두 대 추가</h2>
+<div class="split grow" style="grid-template-columns:1fr 1fr">
+<div class="stack" style="justify-content:center;gap:8px"><p class="chart-cap">평면 높이별 · 평면에 걸치는 바닥 장애물 비율 (점: 배치 장면 3개)</p>{plane_chart()}</div>
+<div class="stack" style="justify-content:center;gap:8px"><p class="chart-cap">위에서 본 배치 (시뮬레이션 차체 모델)</p>{lidar_layout()}</div>
 </div>
-<div class="next-strip"><b>다음 작업</b><span class="now">버튼 신호 분석</span><i>→</i><span>하위 제어 (명령 입력·상태 읽기)</span></div>
-</div>
+<div class="takeaway">추가 뒤 확인: 기록 주행 표본의 정지 범위 관측률 운동 조건별 93.8 % 이상 (첫 점유 전까지 · 3 cm 미만 돌출 제외)</div>
+{cond(SIM, '겹침 비율은 높이만 본 상한 · 가림 미고려')}
 """,
-    """마지막으로 추석 이후 중간 미팅에서 확인할 사항이다. 시연 환경과 평가 기준, 시험 팔레트를 확인하고, 제어기·조종기 자료와 운용 영상을 요청하며, 시험 공간과 팔레트 조건은 기업과 함께 정한다. 다음 작업은 측정한 버튼 신호를 분석해 하위 제어를 만드는 것이다.""",
-    [(FEEDBACK, '§1 중간 미팅 준비 — 궁금한 것 · 제공 요청 · 결정 요청'), (MAP, '로드맵 H1–H4 · M4')],
-    '출처: 4주차 피드백 · 개발 로드맵')
+    """앞 장의 임무는 장애물을 시뮬레이터 정답 지도에서 받았다. 이것을 센서로 바꾸려면 장애물을 실제로 볼 수 있어야 한다. 위치 추정용 LiDAR는 1.05미터 높이 한 평면만 보는데, 공장 바닥 장애물 중 이 높이에 걸치는 것은 43에서 47퍼센트뿐이다. 가림을 빼고 높이만 본 상한이다. 낮은 상자나 빈 팔레트는 이 평면 아래를 지나간다. 평면을 낮출수록 더 많이 걸리고, 높이만 보면 0.1에서 0.18미터 평면은 모든 바닥 장애물에 걸친다. 그래서 차체 앞 왼쪽과 뒤 오른쪽 모서리에 0.08미터 높이의 LiDAR 두 대를 더했다. 모서리에 두면 두 대로 차체 둘레를 나눠 본다. 두 대를 더한 구성으로 기록 주행을 다시 확인하니, 지게차가 멈추는 데 필요한 범위가 관측된 주행 표본이 운동 조건마다 93.8퍼센트 이상이었다.""",
+    [(LIDAR, '현재 상태 ① — 장면 1·3·5 의 바닥 장애물 90·87·87 개 중 1.05 m 평면과 겹치는 42·37·38 개 (사각형 기둥 근사 상한)'),
+     (LIDAR, '사용자 결정 2026-10-05 — 센서 배치 D_008, 관측 비율 정의와 93.8 %'),
+     (LAYER, '세 평면 위치·방향')],
+    '화면 생성: 계획서 표 값으로 그린 도표, 배치도는 시뮬레이션 차체 모델 치수')
 
-TITLE = '5주차 자율 지게차 개발'
+# ----------------------------------------------------------------- 6
+add('새 장애물 재계획', '05  새 장애물 감지와 재계획', 105, f"""
+<h2 class="headline">운반 중 경로에 나타난 상자 감지 → 정지 → 새 경로로 재개</h2>
+<div class="split grow" style="grid-template-columns:1.62fr 0.78fr">
+<figure class="shot">{video('41_new_obstacle.mp4', '팔레트를 들고 운반하던 중 경로 위에 상자가 나타나자 멈추고, 노란 새 경로로 바꿔 돌아가는 장면. 회색 선은 이전 경로')}<figcaption class="small muted">1.5배속 · 노랑: 현재 경로 · 회색: 직전 경로 · 주황: LiDAR 장애물 칸</figcaption></figure>
+<div class="stack" style="justify-content:center;gap:16px">
+<div class="fact-box"><b>이 장부터</b><span>경로 계획의 장애물도 LiDAR 격자 · 시뮬레이터 정답 지도 사용 안 함</span></div>
+{card('완주', '하역 오차 15.8 mm · 정지 구역 침범 0 · 포크·팔레트 충돌 0')}
+{card('정지 → 재계획', '상자 출현 뒤 멈춘 자리에서 새 경로를 짜 재개')}
+</div>
+</div>
+{cond(SIM, '위치: SLAM 추정', '장애물: LiDAR 격자', '시연 1회 (장면 1)', '삽입 통로 깊이 확인 해제')}
+""",
+    """이제 장애물도 센서로 본다. 이 장부터 경로를 짤 때 시뮬레이터 정답 지도를 쓰지 않고, 세 대의 LiDAR가 만든 장애물 격자만 쓴다. 영상은 팔레트를 들고 운반하던 중 경로 위에 상자가 새로 나타나는 장면이다. 지게차는 멈출 수 있는 거리 안에 장애물이 있는지 매 순간 확인하고, 경로가 막히면 멈춘 뒤 그 자리에서 새 경로를 짜 다시 출발한다. 회색 선이 이전 경로, 노란 선이 바뀐 경로이다. 이 실행은 임무를 끝까지 마쳤고 하역 오차는 15.8밀리미터였으며, 멈춰야 할 구역에 들어간 적은 없었다. 다만 한 장면의 시연 한 번이고, 포켓 삽입 때의 깊이 확인은 끈 상태로 돌렸다.""",
+    [(N1, 'result.json — success, 하역 15.8 mm, 정지 구역 침범 0, 금지 접촉 0, 새 상자 출현 73.2 s · 그 상자에 대한 재계획 83.6 s (140.0 s 재계획은 다른 이유)'),
+     (LIDAR, '경로 계획: 정답 소품 없는 격자 세계 + LiDAR 점유 (정답·사전 정보 감사)')],
+    '화면 생성: ws1 l5_video14_nopc/seed_1_n1 3분할 영상 66–102 s 1.5배속 (prepare_clips.py)')
+
+# ----------------------------------------------------------------- 7
+add('본 장애물 기억', '06  본 장애물 기억', 95, f"""
+<h2 class="headline">본 장애물을 기억해 복귀 경로가 적재 더미를 우회</h2>
+<div class="split grow" style="grid-template-columns:1.62fr 0.78fr">
+<figure class="shot">{video('42_memory_compare.mp4', '같은 장면에서 하역 후 출발점으로 돌아가는 첫 계획. 왼쪽은 노란 경로가 적재 더미 줄을 가로지르고, 오른쪽은 더미를 돌아간다')}<figcaption class="small muted">같은 장면 · 하역 뒤 복귀 첫 계획 (5초 반복) · 노랑: 계획 경로</figcaption></figure>
+<div class="stack" style="justify-content:center;gap:16px">
+<div class="fact-box"><b>기억 없음</b><span>마지막 관측 뒤 약 0.3초만 유지 · 지금 안 보이는 더미는 빈 곳으로 계획</span></div>
+<div class="fact-box"><b>본 장애물 기억</b><span>경로 계획: 누적 관측 + SLAM 지도 · 정지 판단: 실시간 관측</span></div>
+{card('0.00 → 0.73 m', '복귀 첫 계획 경로와 그때까지 본 장애물 칸 중심의 최소 거리')}
+</div>
+</div>
+{cond(SIM, '시연 1회 (장면 1)', '두 실행은 코드·새 상자 위치도 다름 · 삽입 통로 깊이 확인 왼쪽 켬 / 오른쪽 끔')}
+""",
+    """LiDAR가 지금 보고 있는 장애물만으로 경로를 짜면, 운반하면서 이미 본 적재 더미라도 지금 보이지 않으면 빈 곳으로 여긴다. 왼쪽이 그런 경우로, 하역을 마치고 돌아가는 첫 경로가 더미 줄을 가로지른다. 오른쪽은 경로를 짤 때 그동안 쌓인 관측과 SLAM이 만든 지도를 함께 쓰는 경우이다. 한 번 본 장애물은 그 자리가 다시 비어 보일 때까지 남겨 두므로, 처음부터 더미를 돌아가는 경로를 짠다. 복귀 첫 경로와 그때까지 본 장애물의 최소 거리가 0에서 0.73미터가 되었다. 앞 장의 실행도 이 방식을 쓴 것이다. 멈출지 말지는 지금처럼 실시간 관측으로만 판단한다. 두 실행은 이 기능 말고도 코드와 새 상자 위치가 다르고, 한 장면의 시연이다.""",
+    [(N2_OLD, 'plan_history.json — 복귀 첫 계획 246.5 s, 그 시각 전 관측 점유 칸과 최소 0.00 m'),
+     (N2, 'plan_history.json — 복귀 첫 계획 221.6 s 최소 0.73 m(칸 중심, 0431Z 246.5 s 는 0.00 m), 완주·하역 20.7 mm'),
+     (LIDAR, 'D2/D3 델타 — 계획용 기억과 SLAM 정적 레이어 (주행 허가는 실시간 관측만)')],
+    '화면 생성: 두 실행의 조감 칸을 복귀 첫 계획 직후 5초 나란히 (prepare_clips.py)')
+
+# ----------------------------------------------------------------- 8
+NEXT_ROWS = [
+    ('SLAM 위치로 임무 완주 · 장애물은 정답 지도', 'LiDAR 격자만으로 계획한 임무를 여러 장면에서 반복'),
+    ('새 장애물 감지·재계획 · 본 장애물 기억 시연', '후진 경로·하역 목적지·센서 끊김 상황까지 반복 확인'),
+    ('삽입 통로 깊이 확인을 끈 시연', '깊이 확인을 켠 상태의 삽입 안정성 보완'),
+    ('EPAL 6 팔레트', 'T11 팔레트'),
+]
+next_table = ''.join(f'<tr><td>{a}</td><td class="arrow">→</td><td>{b}</td></tr>' for a, b in NEXT_ROWS)
+add('다음 작업', '07  남은 과제와 다음 작업', 65, f"""
+<h2 class="headline">남은 과제: 센서만으로 계획한 임무의 반복 검증</h2>
+<table class="comparison next6 grow"><tr><th>이번 주 확인</th><th></th><th>다음 단계</th></tr>{next_table}</table>
+""",
+    """정리하면, 이번 주에 지게차는 SLAM으로 추정한 위치로 운반 임무를 끝냈고, LiDAR로 새 장애물을 보고 경로를 다시 짰으며, 본 장애물을 기억해 돌아오는 길을 계획하였다. 다음은 이것을 한 번의 시연이 아니라 반복 검증으로 만드는 일이다. 장애물을 LiDAR 격자만으로 계획한 임무를 여러 장면에서 반복하고, 후진하는 경로나 하역 목적지 위, 센서가 끊기는 상황까지 확인한다. 또 포켓 삽입 때의 깊이 확인을 켠 상태에서 삽입이 안정적으로 되도록 보완하고, 두 번째 팔레트 규격인 T11도 같은 방식으로 확인한다.""",
+    [(LIDAR, '새 장애물 시나리오 목록 · 미해결 항목(삽입 통로 깊이 확인)'),
+     ('CLAUDE.md', 'EPAL 6 과 T11 × 0.6 모두 필수')],
+    '출처: LiDAR 장애물 지도 계획')
+
+TITLE = '6주차 자율 지게차 개발'
 TOTAL = 610
 
 
 def build():
-    assert len(slides) == 9, len(slides)
+    assert len(slides) == 8, len(slides)
     assert sum(s['seconds'] for s in slides) == TOTAL, sum(s['seconds'] for s in slides)
     sections = []
     script = [f'# {TITLE} · 발표 원고', '',
-              f'9장 · 시간 배분 합계 {TOTAL//60}분 {TOTAL%60}초. 쪽별 배정 시간은 발표 연습 후 조정한다.', '',
-              '기준일: 2026-09-29. 2–4쪽은 차체 실측 결과이고, 시뮬레이션 쪽(5–8)은 '
-              'Isaac Sim 합성 장면의 기술 실증이다. 시뮬레이션 수치는 실제 장비 성능이 아니며, '
-              '로봇 제어는 시뮬레이터 정답 위치를 썼다.', '']
+              f'{len(slides)}장 · 시간 배분 합계 {TOTAL//60}분 {TOTAL%60}초. 쪽별 배정 시간은 발표 연습 후 조정한다.', '',
+              '기준일: 2026-10-06. 모든 결과는 Isaac Sim 합성 장면과 CPU 합성 시험의 결과이며 실제 장비 성능이 아니다. '
+              '쪽마다 위치·장애물·팔레트 정보 중 무엇이 시뮬레이터 정답이고 무엇이 센서 추정인지 조건 줄에 적었다.', '']
     elapsed = 0
     for i, s in enumerate(slides, 1):
         source_lines = '\n'.join(f'{label}: {url}' for url, label in s['sources'])

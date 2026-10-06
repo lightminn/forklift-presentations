@@ -1,15 +1,11 @@
-> **보관 메모 (2026-09-29):** 5주차 발표를 HW 중심으로 바꾸면서, 5주차에 만들었던 SW 장(2D LiDAR 스캔 ·
-> 지도 작성 · 위치 추정에 따른 지도 차이 · 위치 추정 오차)과 영상·데이터 자산을 이 초안에 그대로 옮겨 두었다.
-> 영상은 `prepare_videos.py`(스캔·지도 비교)와 ws1 `artifacts/20260929_week05_videos/`(Slurm 585)에서 다시 만들 수 있다.
-> 2–4쪽 HW 자리 표시와 중간 미팅 장은 5주차 것이므로 6주차 작성 시 정리한다.
+# 6주차 발표자료
 
-# 6주차 발표자료 초안
+소프트웨어(시뮬레이션) 진행 보고. 8장 · 610초. 하드웨어 이야기는 넣지 않는다(사용자 지시 2026-10-06). 구성과 검토 기록은 [PLAN.md](PLAN.md).
 
-5주차의 본문·원고·이미지와 UOS 실행 파일을 독립 복사하였다.
-
-- `build_deck.py`: 표지, 본문, 발표 원고, 기준일, 시간 및 장수 검사를 이번 주 내용에 맞게 수정한다.
-- `week.json`: 목록에 표시할 제목과 요약을 작성한다. 현재 상태는 `draft`이다.
-- `SOURCES.md`, `VALIDATION.md`: 이번 주 출처와 실제 검증 결과를 기록한다.
-- 새 자료의 내용과 FHD 화면을 확인한 후 `status`를 `published`로 변경한다.
+- `build_deck.py`: 본문·원고·출처. `index.html`, `SCRIPT.md`, `slide-metadata.json` 을 만든다.
+- `prepare_clips.py`: 4·6·7쪽 영상과 2쪽 카메라 화면을 로봇 저장소의 Isaac 렌더에서 잘라 만든다(ffmpeg).
+  `python prepare_clips.py /path/to/forklift`
+- `assets/21_slam_map_pair.mp4`: 5주차에 만든 지도 작성 영상(ws1 Slurm 585, 3쪽).
+- `SOURCES.md`, `VALIDATION.md`: 출처와 검증 기록.
 
 전체 생성 및 배포 절차는 [레포 안내](../README.md)를 따른다.
