@@ -127,17 +127,17 @@ add('개발 진행 보고', '6주차\n자율 지게차 개발', 20, '',
 # ----------------------------------------------------------------- 2
 add('캐리지 하단 카메라', '01  캐리지 하단 카메라', 75, f"""
 <h2 class="headline">카메라를 캐리지 아래로 옮겨 포켓 진입 직전까지 관측</h2>
-<div class="split grow" style="grid-template-columns:1fr 1fr 0.9fr">
-<figure class="shot"><img class="media" src="assets/43_camera_far.jpg" alt="팔레트 앞면까지 1.10 m 거리의 로봇 카메라 화면. 팔레트와 두 포켓을 찾은 표시"><figcaption class="small muted">접근 중</figcaption></figure>
-<figure class="shot"><img class="media" src="assets/43_camera_near.jpg" alt="포켓 진입 직전의 로봇 카메라 화면. 두 포켓과 윗판이 화면 안에 있음"><figcaption class="small muted">진입 직전</figcaption></figure>
-<div class="stack" style="justify-content:center;gap:14px">
-<div class="fact-box"><b>기존: 차체 앞 높은 위치</b><span>포크가 들어가는 마지막 구간에서 팔레트가 화면 밖</span></div>
-<div class="fact-box"><b>변경: 캐리지 아래, 살짝 아래로</b><span>포켓에 들어가기 직전까지 포켓 위치를 계속 봄</span></div>
-</div>
+<div class="cmp6 grow">
+<div class="rowlab"><b>기존</b><span>차체 앞 높은 위치</span></div>
+<figure class="shot"><img class="media" src="assets/43_before_far.jpg" alt="기존 장착 카메라로 팔레트에 다가가는 화면. 팔레트와 두 포켓이 보임"><figcaption class="small muted">접근 중</figcaption></figure>
+<figure class="shot"><img class="media" src="assets/43_before_near.jpg" alt="기존 장착 카메라로 포크를 넣는 중의 화면. 팔레트가 화면 아래로 빠져 벽과 바닥만 보임"><figcaption class="small muted">삽입 중 · 팔레트가 화면 밖</figcaption></figure>
+<div class="rowlab now"><b>변경</b><span>캐리지 아래, 살짝 아래로</span></div>
+<figure class="shot"><img class="media" src="assets/43_camera_far.jpg" alt="새 장착 카메라로 팔레트에 다가가는 화면. 팔레트와 두 포켓을 찾은 표시"><figcaption class="small muted">접근 중</figcaption></figure>
+<figure class="shot"><img class="media" src="assets/43_camera_near.jpg" alt="새 장착 카메라로 포켓에 들어가기 직전의 화면. 두 포켓과 윗판이 화면 안에 있음"><figcaption class="small muted">진입 직전 · 포켓이 계속 보임</figcaption></figure>
 </div>
 {cond(SIM)}
 """,
-    """먼저 카메라 위치입니다. 지난 발표의 카메라는 차체 앞 높은 곳에 수평으로 달려 있어서, 포크를 넣는 마지막 구간에서는 팔레트가 화면 아래로 빠져 보이지 않았습니다. 그래서 카메라를 캐리지(포크를 올리고 내리는 부분) 아래로 옮기고 살짝 아래로 숙였습니다. 왼쪽은 팔레트에 다가가는 중이고, 가운데는 포켓에 들어가기 직전의 화면입니다. 가까워지면 팔레트 앞면은 화면 밖으로 나가지만 윗판은 계속 보이기 때문에, 윗판을 따라가며 포켓 위치를 끝까지 놓치지 않습니다. (전환)""",
+    """먼저 카메라 위치입니다. 윗줄이 지난 발표의 카메라로, 차체 앞 높은 곳에 수평으로 달려 있었습니다. 다가갈 때는 팔레트가 잘 보이지만, 포크를 넣기 시작하면 오른쪽처럼 팔레트가 화면 아래로 빠져서 벽과 바닥만 보입니다. 그래서 카메라를 캐리지(포크를 올리고 내리는 부분) 아래로 옮기고 살짝 아래로 숙였습니다. 아랫줄이 바꾼 카메라입니다. 포켓에 들어가기 직전까지 포켓이 화면 안에 있고, 가까워지면 팔레트 앞면은 화면 밖으로 나가지만 윗판을 따라가며 포켓 위치를 끝까지 놓치지 않습니다. (전환)""",
     [(NEARPLAN, '기존 장착(0.75, 0, 0.50 m · 틸트 0)의 마지막 약 0.25 m 무관측'),
      (NEARMOUNT, '장착 연구 — 높이 0.27 m · 틸트 0.10 rad, 12 장면 인계, 오차 ≤ 20 mm (잡음 0 · 정렬 · 승강 0)'),
      (N1, 'camera_rgb.mp4 39 s · 43 s 프레임')],

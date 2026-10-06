@@ -20,6 +20,9 @@ Outputs in assets/:
   5.5 s only, so the first return plan stays on screen (the new boxes appear later).
 - 43_camera_far.jpg / 43_camera_near.jpg: the carriage camera at 1.10 m and 0.03 m
   from the pallet (1124Z N1, 39 s and 43 s).
+- 43_before_far.jpg / 43_before_near.jpg: the earlier fixed mount on the same task
+  (artifacts/20261003_render/seed_2001, rendered before the selectable mount existed;
+  16 s approaching, 19.5 s during insertion with the pallet out of view).
 """
 import subprocess
 import sys
@@ -74,6 +77,9 @@ def main(repo):
                 '-map', '[o]'], a / '42_memory_compare.mp4', crf=26))
     poster(a / '42_memory_compare.mp4', 3, a / '42_memory_compare_poster.jpg')
 
+    before = repo / 'artifacts/20261003_render/seed_2001/camera_rgb.mp4'   # old mount (0.75, 0, 0.50 m), before carriage_low
+    run(['-ss', '16', '-i', str(before), '-frames:v', '1', '-q:v', '2', str(a / '43_before_far.jpg')])
+    run(['-ss', '19.5', '-i', str(before), '-frames:v', '1', '-q:v', '2', str(a / '43_before_near.jpg')])
     run(['-ss', '39', '-i', str(n1 / 'camera_rgb.mp4'), '-frames:v', '1', '-q:v', '2', str(a / '43_camera_far.jpg')])
     run(['-ss', '43', '-i', str(n1 / 'camera_rgb.mp4'), '-frames:v', '1', '-q:v', '2', str(a / '43_camera_near.jpg')])
     print('done')

@@ -486,3 +486,11 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .next6 td:first-child { width:44%; font-weight:400; color:#44505c; }
 .next6 td.arrow { width:6%; text-align:center; color:#8c959e; font-weight:700; }
 .next6 td:last-child { font-weight:700; color:#1b1f24; }
+/* Week 6 slide 2: before / after rows of camera frames. */
+.cmp6 { display:grid; grid-template-columns:170px 1fr 1fr; grid-template-rows:1fr 1fr; gap:10px 16px; min-height:0; }
+.cmp6 .rowlab { display:flex; flex-direction:column; justify-content:center; gap:6px; padding-left:14px; border-left:6px solid #9aa3ad; }
+.cmp6 .rowlab.now { border-left-color:var(--uos-blue); }
+.cmp6 .rowlab b { font-size:28px; color:#1b1f24; }
+.cmp6 .rowlab.now b { color:var(--uos-blue); }
+.cmp6 .rowlab span { font-size:18px; color:#44505c; line-height:1.35; }
+.cmp6 .shot { min-height:0; height:100%; }
