@@ -171,7 +171,7 @@ result.json — success, 하역 8.0 mm, 상자 출현 226.0 s · 재계획 227.7
 
 <section data-label="다음 작업" data-screen-label="08" data-duration="70" data-speaker-notes="권장 70초
 
-정리하면, 이번 주에 지게차는 SLAM으로 추정한 위치와 LiDAR 한 대로 만든 장애물 지도로 운반 임무를 끝냈고, 새로 나타난 상자도 피했습니다. 소프트웨어 쪽 다음 단계는 이것을 여러 장면과 과제의 C, D 상황에서 반복해서 확인하는 것입니다. 또 바꾼 카메라로 포크를 넣는 동안 위치를 다시 보고 바로잡게 하고, 두 번째 팔레트 규격인 T11도 치수가 정해지면 같은 방식으로 확인하겠습니다. 하드웨어 쪽은 5주차에 그린 모터 드라이버와 엔코더 보드 회로를 모터 전류를 잰 뒤 전류 제한과 방열까지 확정해서 PCB로 만들겠습니다. 또 시뮬레이션에서 가정으로 둔 바퀴 마찰과 센서 잡음을 실측값으로 바꾸고, 시뮬레이션에서 정한 LiDAR와 카메라 위치대로 실물 브래킷을 만들어 달고 좌표를 보정하겠습니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.
+정리하면, 이번 주에 지게차는 SLAM으로 추정한 위치와 LiDAR 한 대로 만든 장애물 지도로 운반 임무를 끝냈고, 새로 나타난 상자도 피했습니다. 소프트웨어 쪽 다음 단계는 이것을 여러 장면과 과제의 C, D 상황에서 반복해서 확인하는 것입니다. 실측 조향각이 15도로 작아 회전 반경이 크기 때문에, 좁은 곳에서는 제자리에서 앞뒤로 여러 번 움직이며 방향을 맞추는 경로를 적극적으로 쓰도록 바꾸겠습니다. 또 바꾼 카메라로 포크를 넣는 동안 위치를 다시 보고 바로잡게 하고, 두 번째 팔레트 규격인 T11도 치수가 정해지면 같은 방식으로 확인하겠습니다. 하드웨어 쪽은 5주차에 그린 모터 드라이버와 엔코더 보드 회로를 모터 전류를 잰 뒤 전류 제한과 방열까지 확정해서 PCB로 만들겠습니다. 또 시뮬레이션에서 가정으로 둔 바퀴 마찰과 센서 잡음을 실측값으로 바꾸고, 시뮬레이션에서 정한 LiDAR와 카메라 위치대로 실물 브래킷을 만들어 달고 좌표를 보정하겠습니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.
 
 [Sources]
 출처: 5주차 발표 · 하드웨어 기록
@@ -183,7 +183,7 @@ LiDAR·카메라 실물 장착 위치 미확정: docs/hardware.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="07  남은 과제와 다음 작업"><div class="slide-body">
 <h2 class="headline">다음 작업: 여러 장면 반복 검증 · 삽입 중 위치 보정 · 구동부 PCB 제작</h2>
-<table class="comparison plan6 grow"><tr><th class="c1">구분</th><th class="c2">현재</th><th class="c3"></th><th class="c4">다음 단계</th></tr><tr><td class="grp" rowspan="3">소프트웨어</td><td class="cur">LiDAR 1대 장애물 지도로 상자 회피</td><td class="arrow">→</td><td class="nxt">여러 장면 · 과제 상황 C · D에서 반복</td></tr><tr><td class="cur">약 2 m 앞에서 다시 본 위치로 삽입</td><td class="arrow">→</td><td class="nxt">넣는 동안 카메라로 다시 보고 위치 보정</td></tr><tr><td class="cur">EPAL 6 팔레트</td><td class="arrow">→</td><td class="nxt">T11 팔레트 (규격 치수 확정 후)</td></tr><tr><td class="grp" rowspan="3">하드웨어</td><td class="cur">모터 드라이버 · 엔코더 보드 회로 초안 (5주차)</td><td class="arrow">→</td><td class="nxt">모터 전류 실측 → 전류 제한 · 방열 확정 → PCB 제작</td></tr><tr><td class="cur">바퀴 마찰 · 센서 잡음은 가정값</td><td class="arrow">→</td><td class="nxt">실측 후 시뮬레이션 값 교체</td></tr><tr><td class="cur">센서 위치는 시뮬레이션 값</td><td class="arrow">→</td><td class="nxt">실물 브래킷 제작 · 장착 후 좌표 보정</td></tr></table>
+<table class="comparison plan6 grow"><tr><th class="c1">구분</th><th class="c2">현재</th><th class="c3"></th><th class="c4">다음 단계</th></tr><tr><td class="grp" rowspan="4">소프트웨어</td><td class="cur">LiDAR 1대 장애물 지도로 상자 회피</td><td class="arrow">→</td><td class="nxt">여러 장면 · 과제 상황 C · D에서 반복</td></tr><tr><td class="cur">실측 조향각 15°: 좁은 곳에서 방향 맞추기 어려움</td><td class="arrow">→</td><td class="nxt">제자리에서 앞뒤로 반복하며 방향 맞추는 경로 적극 사용</td></tr><tr><td class="cur">약 2 m 앞에서 다시 본 위치로 삽입</td><td class="arrow">→</td><td class="nxt">넣는 동안 카메라로 다시 보고 위치 보정</td></tr><tr><td class="cur">EPAL 6 팔레트</td><td class="arrow">→</td><td class="nxt">T11 팔레트 (규격 치수 확정 후)</td></tr><tr><td class="grp" rowspan="3">하드웨어</td><td class="cur">모터 드라이버 · 엔코더 보드 회로 초안 (5주차)</td><td class="arrow">→</td><td class="nxt">모터 전류 실측 → 전류 제한 · 방열 확정 → PCB 제작</td></tr><tr><td class="cur">바퀴 마찰 · 센서 잡음은 가정값</td><td class="arrow">→</td><td class="nxt">실측 후 시뮬레이션 값 교체</td></tr><tr><td class="cur">센서 위치는 시뮬레이션 값</td><td class="arrow">→</td><td class="nxt">실물 브래킷 제작 · 장착 후 좌표 보정</td></tr></table>
 <div class="takeaway">다음 목표: 여러 장면에서 같은 임무 반복 확인 → 구동부 실물 제작</div>
 </div></x-import>
 </section>
