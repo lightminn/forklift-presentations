@@ -82,8 +82,8 @@ def plane_chart():
         lo, hi = min(shares), max(shares)
         txt = f'{lo:.0f}–{hi:.0f} %' if round(lo) != round(hi) else f'{hi:.0f} %'
         parts.append(f'<text x="{x(hi) + 12:.1f}" y="{y + 7}" font-size="20" font-weight="{weight}" fill="#1b1f24">{txt}</text>')
-    return (f'<svg class="diagram" viewBox="0 0 640 {top + row * 5 + 24}" role="img" aria-label="스캔 평면 높이별로 높이상 평면과 겹치는 바닥 장애물 비율. '
-            f'1.05 m 평면 43–47 %, 0.10–0.18 m 평면 100 %"><g font-family="var(--uos-font)">{"".join(parts)}</g></svg>')
+    return (f'<svg class="diagram" viewBox="0 0 640 {top + row * 5 + 24}" role="img" aria-label="LiDAR 설치 높이별로 레이저에 걸리는 바닥 장애물 비율. '
+            f'1.05 m 43–47 %, 0.10–0.18 m 100 %"><g font-family="var(--uos-font)">{"".join(parts)}</g></svg>')
 
 
 # Why wheel-only odometry drifts on the S3 seed 1 run (recomputed 2026-10-06
@@ -183,9 +183,9 @@ add('지도 작성', '03  2D LiDAR 지도 작성', 35, f"""
 <video class="pair-video" src="assets/21_slam_map_pair_fast.mp4" poster="assets/21_slam_map_pair_fast_poster.jpg" autoplay loop muted playsinline aria-label="왼쪽은 공장 홀을 위에서 본 지게차 주행, 오른쪽은 같은 순간까지 slam_toolbox가 만든 지도와 추정 경로"></video>
 </div></div>
 <p class="cap6">주행 기록을 slam_toolbox로 다시 돌린 영상 (주행 자체는 시뮬레이터 정답 위치) · 20배속</p>
-<div class="takeaway">지도에 없는 더미: 높이 0.7–0.96 m로 스캔 평면 (1.05 m) 아래 → 06 LiDAR 1대의 장애물 감지 범위</div>
+<div class="takeaway">일부 더미가 지도에 없는 이유: 더미(높이 0.7–0.96 m)가 LiDAR(높이 1.05 m)보다 낮아 레이저가 위로 지나감</div>
 """,
-    """다음은 위치를 추정하는 방법입니다. 지게차가 공장을 돌면서 LiDAR로 주변 거리를 재면, slam_toolbox(공개 SLAM 패키지)가 이 스캔을 겹쳐 지도를 만들면서 그 지도 안에서 자기 위치를 찾습니다. 오른쪽처럼 돌수록 지도가 넓어지고, 파란 추정 경로가 회색 실제 경로를 따라갑니다. 다만 왼쪽에 있는 더미 중 일부는 지도에 나오지 않는데, 높이가 0.7에서 0.96미터라 1.05미터 높이의 스캔 평면 아래에 있기 때문입니다. 이 문제는 뒤의 낮은 장애물용 LiDAR에서 다룹니다. (전환)""",
+    """다음은 위치를 추정하는 방법입니다. 지게차가 공장을 돌면서 LiDAR로 주변 거리를 재면, slam_toolbox(공개 SLAM 패키지)가 이 스캔을 겹쳐 지도를 만들면서 그 지도 안에서 자기 위치를 찾습니다. 오른쪽처럼 돌수록 지도가 넓어지고, 파란 추정 경로가 회색 실제 경로를 따라갑니다. 다만 왼쪽에 있는 더미 중 일부는 지도에 나오지 않습니다. LiDAR는 1.05미터 높이에서 수평으로 레이저를 쏘는데, 이 더미들은 높이가 0.7에서 0.96미터라 레이저가 그 위로 지나가기 때문입니다. 이 문제는 뒤에서 다시 말씀드리겠습니다. (전환)""",
     [(FACTORY, '§1 30 × 31 m 공장 홀 · §3 기록 · §4 slam_toolbox 재생'),
      ('week-06/SOURCES.md', '21_slam_map_pair.mp4 제작 경위 (9/26 기록, 9/28 재생, 정답 자세 주행)')],
     '화면 생성: Isaac 주행 기록 + ROS 2 slam_toolbox 재생, 조감·지도 두 칸 20배속 (5주차 영상을 2.5배 더 빠르게, prepare_clips.py)')
@@ -239,7 +239,7 @@ add('SLAM 위치 정확도', '05  SLAM 위치 정확도', 55, f"""
 add('LiDAR 1대의 장애물 감지 범위', '06  LiDAR 1대의 장애물 감지 범위', 70, f"""
 <h2 class="headline">LiDAR 1대에 걸리는 바닥 장애물 43–47 % · 더 낮은 장애물은 없다고 가정</h2>
 <div class="split grow" style="grid-template-columns:1.05fr 1fr;gap:36px">
-<div class="stack" style="gap:6px"><p class="panel-h">LiDAR 높이별 · 스캔 평면에 걸치는 바닥 장애물 비율</p>{plane_chart()}<p class="cap6">높이만 본 상한 (가림 제외) · 점: 물건 배치가 다른 세 공장</p></div>
+<div class="stack" style="gap:6px"><p class="panel-h">LiDAR 설치 높이별 · 레이저에 걸리는 바닥 장애물 비율</p>{plane_chart()}<p class="cap6">높이만 본 상한 (가림 제외) · 점: 물건 배치가 다른 세 공장</p></div>
 <div class="stack">
 <table class="comparison t6 assume6">
 <tr><th>구분</th><th>내용</th></tr>
@@ -251,7 +251,7 @@ add('LiDAR 1대의 장애물 감지 범위', '06  LiDAR 1대의 장애물 감지
 </div>
 <div class="takeaway">센서 규격: RGB-D 카메라 1대 · 2D LiDAR 1대 (위치 추정과 장애물 감지 겸용)</div>
 """,
-    """그렇다면 장애물도 센서로 보려면 어떻게 해야 할까요? 과제 규격의 LiDAR는 한 대이고, 지금은 위치 추정을 위해 1.05미터 높이에 달려 있어서 그 높이 한 평면만 봅니다. 공장 바닥 장애물 중 이 높이와 겹치는 것은 43에서 47퍼센트뿐입니다(가림은 빼고 높이만 본 상한). 낮은 상자나 빈 팔레트는 이 평면 아래로 지나갑니다. 그래서 이번 시뮬레이션은 바닥에 LiDAR 높이보다 낮은 장애물은 없다고 가정하고, 그런 소품은 장면에서 뺐습니다. 이 가정을 풀려면 LiDAR를 낮게 달거나 RGB-D 카메라의 깊이 영상을 같이 써야 하는데, 둘 다 센서 규격 안에서 할 수 있는 방법이라 다음 과제로 검토하겠습니다. (전환)""",
+    """그렇다면 장애물도 센서로 보려면 어떻게 해야 할까요? 과제 규격의 LiDAR는 한 대이고, 지금은 위치 추정을 위해 1.05미터 높이에 달려 있어서 그 높이로 수평으로 쏜 레이저에 걸리는 것만 봅니다. 공장 바닥 장애물 중 이 높이와 겹치는 것은 43에서 47퍼센트뿐입니다(가림은 빼고 높이만 본 상한). 낮은 상자나 빈 팔레트는 레이저가 그 위로 지나갑니다. 그래서 이번 시뮬레이션은 바닥에 LiDAR 높이보다 낮은 장애물은 없다고 가정하고, 그런 소품은 장면에서 뺐습니다. 이 가정을 풀려면 LiDAR를 낮게 달거나 RGB-D 카메라의 깊이 영상을 같이 써야 하는데, 둘 다 센서 규격 안에서 할 수 있는 방법이라 다음 과제로 검토하겠습니다. (전환)""",
     [(LIDAR, '현재 상태 ① — 장면 1·3·5 의 바닥 장애물 90·87·87 개 중 1.05 m 평면과 겹치는 42·37·38 개 (사각형 기둥 근사 상한)'),
      ('forklift bc4cc64', '--min-obstacle-height-m 1.15: 꼭대기 1.15 m 미만 소품 제거 (적재 더미 꼭대기 0.96 m 다음이 1.21 m 라 1.05 m 기준과 같은 결과), config/obstacle_layer_single.yaml'),
      ('docs/hardware.md', '2D LiDAR: RPLIDAR A2 계열 1대 (브리프)')],
