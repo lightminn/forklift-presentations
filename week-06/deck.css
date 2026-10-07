@@ -508,3 +508,4 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .cam6-grid .shot { min-height:0; height:100%; }
 .phase-flow.vert { flex-direction:column; align-items:flex-start; justify-content:center; align-self:start; gap:10px; font-size:22px; padding:24px 26px; }
 .phase-flow.vert .arrow { padding-left:10px; }
+.comparison.assume6 td:first-child { width:30%; }
