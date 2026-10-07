@@ -181,7 +181,7 @@ add('캐리지 하단 카메라', '02  캐리지 하단 카메라', 65, f"""
 # ----------------------------------------------------------------- 3
 add('지도 작성', '03  2D LiDAR 지도 작성', 35, f"""
 <h2 class="headline">LiDAR 스캔을 겹쳐 지도를 만들며 그 안에서 자기 위치 추정</h2>
-<figure class="shot grow">{video('48_map_single.mp4', '왼쪽은 공장 홀을 위에서 본 지게차 주행, 오른쪽은 같은 순간까지 slam_toolbox가 만든 지도와 추정 경로')}<figcaption class="small muted">8배속 · 임무 처음 2분 · 빨강: SLAM 추정 · 파랑: 실제 경로 · 초록: 현재 스캔</figcaption></figure>
+<figure class="shot grow">{video('48_map_single.mp4', '왼쪽은 공장 홀을 위에서 본 지게차 주행, 오른쪽은 같은 순간까지 slam_toolbox가 만든 지도와 추정 경로')}<figcaption class="small muted">빨강: SLAM 추정 · 파랑: 실제 경로 · 초록: 현재 스캔</figcaption></figure>
 <div class="takeaway">지도는 주행하면서 실시간으로 만들고, 위치 추정과 경로 계획에 바로 사용</div>
 """,
     """다음은 위치를 추정하는 방법입니다. 지게차가 움직이면서 LiDAR로 주변 거리를 재면, slam_toolbox(공개 SLAM 패키지)가 이 스캔을 겹쳐 지도를 만들면서 그 지도 안에서 자기 위치를 찾습니다. 오른쪽처럼 움직일수록 지도가 넓어지고, 빨간 추정 경로가 파란 실제 경로를 따라갑니다. 이 지도는 주행하면서 실시간으로 만들어지고, 뒤에서 보실 위치 추정과 경로 계획에 그대로 쓰입니다. (전환)""",
@@ -193,7 +193,7 @@ add('지도 작성', '03  2D LiDAR 지도 작성', 35, f"""
 add('SLAM 위치로 운반', '04  SLAM 위치로 운반 임무', 50, f"""
 <h2 class="headline">SLAM 위치 · LiDAR 1대 장애물 지도로 운반 임무 완주</h2>
 <div class="split grow" style="grid-template-columns:0.72fr 1.28fr;gap:32px">
-<figure class="shot">{video('47_mission_single.mp4', '공장 홀을 위에서 본 지게차. 팔레트를 인식해 들고, 목적지에 내린 뒤 출발점으로 돌아온다')}<figcaption class="small muted">12배속 · 임무 전체</figcaption></figure>
+<figure class="shot">{video('47_mission_single.mp4', '공장 홀을 위에서 본 지게차. 팔레트를 인식해 들고, 목적지에 내린 뒤 출발점으로 돌아온다')}</figure>
 <div class="stack">
 <table class="comparison t6">
 <tr><th>입력</th><th>4주차</th><th>6주차</th></tr>
@@ -216,7 +216,7 @@ add('SLAM 위치로 운반', '04  SLAM 위치로 운반 임무', 50, f"""
 add('SLAM 위치 정확도', '05  SLAM 위치 정확도', 55, f"""
 <h2 class="headline">바퀴 회전만으로는 3.4 m 어긋나는 위치를 SLAM은 9 cm 오차로 유지</h2>
 <div class="split grow" style="grid-template-columns:0.85fr 1.15fr">
-<figure class="shot">{video('45_slam_error.mp4', '같은 임무 동안 slam_toolbox가 만든 지도와 추정 경로. 아래 숫자는 SLAM 추정 오차와 바퀴 회전만으로 추정했을 때의 오차')}<figcaption class="small muted">SLAM 운반 임무 · 12배속 · 빨강: SLAM 추정 · 파랑: 실제 경로</figcaption></figure>
+<figure class="shot">{video('45_slam_error.mp4', '같은 임무 동안 slam_toolbox가 만든 지도와 추정 경로. 아래 숫자는 SLAM 추정 오차와 바퀴 회전만으로 추정했을 때의 오차')}<figcaption class="small muted">빨강: SLAM 추정 · 파랑: 실제 경로</figcaption></figure>
 <div class="stack" style="gap:26px">
 <table class="comparison t6 causes6">
 <tr><th>위치 추정</th><th>오차</th><th>이유</th></tr>
@@ -240,7 +240,7 @@ S1N2 = 'videos-from-ws1/20261007_l7_single_seed1_n2'
 add('새 장애물 재계획', '06  새 장애물 감지와 재계획', 90, f"""
 <h2 class="headline">LiDAR 1대 장애물 지도로 운반 중 나타난 상자 감지 → 정지 → 새 경로로 재개</h2>
 <div class="split grow" style="grid-template-columns:1.75fr 1fr;gap:28px">
-<figure class="shot">{video('46_new_obstacle_single.mp4', '팔레트를 들고 운반하던 중 경로 위에 상자가 나타나자 멈추고, 새 경로로 바꿔 돌아가는 장면. 왼쪽은 위에서 본 주행, 오른쪽은 SLAM 지도와 LiDAR 장애물 칸')}<figcaption class="small muted">1.5배속 · 노랑: 현재 경로 · 회색: 직전 경로 · 주황: LiDAR 장애물 칸</figcaption></figure>
+<figure class="shot">{video('46_new_obstacle_single.mp4', '팔레트를 들고 운반하던 중 경로 위에 상자가 나타나자 멈추고, 새 경로로 바꿔 돌아가는 장면. 왼쪽은 위에서 본 주행, 오른쪽은 SLAM 지도와 LiDAR 장애물 칸')}<figcaption class="small muted">노랑: 현재 경로 · 회색: 직전 경로 · 주황: LiDAR 장애물 칸</figcaption></figure>
 <div class="phase-flow vert"><b>① LiDAR가 경로 위 상자 감지</b><span class="arrow">↓</span><b>② 정지</b><span class="arrow">↓</span><b>③ 멈춘 자리에서 새 경로 계획</b><span class="arrow">↓</span><b>④ 운반 재개</b></div>
 </div>
 <div class="takeaway">결과: 운반 중 · 복귀 중 상자 모두 피해서 완주 · 경로 계획은 LiDAR 1대 장애물 지도 + SLAM 지도</div>
