@@ -1,5 +1,22 @@
 # 6주차 자료 출처
 
+## 최종 구성 (2026-10-07) — 아래 표보다 이 절이 우선
+
+LiDAR 3대(D_008) 구성의 결과와 삭제한 장(LiDAR 감지 범위 · 본 장애물 기억 등)의 자산 · 수치는 아래 이전 표에 기록으로만 남는다. 지금 화면에 쓰는 것:
+
+| 쪽 | 화면 | 원본 |
+|---|---|---|
+| 2 | 설정표 (규격 값 · 사진 추정 축간 · 바퀴 · 조향각 26° · 가정값 · 바닥 장애물 가정) | 로봇 저장소 `sim/models/dls08_provisional`, `config/isaac_transport.yaml`, 5주차 실측(조향각 15°, `dls08_measured`) |
+| 3 | 카메라 사진 `43_before_*`(기존 장착, 20261003_render/seed_2001), `43_camera_far/near`(LiDAR 1대 장면 1 임무 camera_rgb 36 s · 43 s) | `videos-from-ws1/20261007_l7_single_seed1_m` · 근접 계획(보류): 이번 임무는 2.1 m 직진 시작에서 한 번 더 관측 후 그 위치로 삽입 |
+| 4 | `48_map_single.mp4` (처음 120 s 조감 · SLAM 지도) | 같은 실행 3분할 영상 |
+| 5 | `47_mission_single.mp4` (조감), 하역 12–39 mm | LiDAR 1대 실행 다섯 번: 장면 1 임무 35.1 · 장면 1 운반 중 상자 38.6 · 장면 1 복귀 중 상자 11.8 · 장면 3 운반 중 상자 22.7 · 장면 5 운반 중 상자 30.2 mm (ws1 `artifacts/20261005_p5_l3/l7_single`, 로봇 저장소 bc4cc64). 하역 정밀도는 목적지에서 미리 등록한 LiDAR 스캔 정합(등록 위치는 시뮬레이터 정답) |
+| 6 | `45_slam_error.mp4` — **이전 S3 실행**(20261004_slam_s3 seed 1, 장애물은 시뮬레이터 정답), 끝 시점 SLAM 약 4 cm · 바퀴 계산 3.4 m · 임무 평균 9 cm | `--draw-odometry`(df109cf)로 재합성, slam_log.npz 재계산(거리 0.7/93 m, 방향 −24°, 회전 비 0.998 · 0.925) |
+| 7 | `46_new_obstacle_single.mp4` (장면 5 운반 중 상자 1.3 m, 출현 58.9 s · 정지 59.5 s · 재계획 64.3 s 후 후진) | `videos-from-ws1/20261007_l7_single_seed5_n1`; 복귀 중 상자는 `..._seed1_n2` (재계획 246.5 s) |
+
+참고: LiDAR 1대 실행의 result.json `"feedback": "simulator_ground_truth"` 는 초기값이 덮어쓰이지 않고 남은 키다(run_transport.py). 실제 제어 위치는 SLAM(`slam_rear()`)이고 정답은 안전 검사 · 평가에만 쓴다.
+
+## 이전 기록
+
 수치는 로봇 저장소(`forklift/`)의 검증 기록·계획 문서와 실행 결과(`result.json`, `plan_history.json`)에서 가져왔다. 모든 결과는 Isaac Sim 합성 장면과 CPU 합성 시험(2쪽 12/12)의 결과이고, 쪽마다 조건 줄에 무엇이 시뮬레이터 정답이고 무엇이 센서 추정인지 적었다.
 
 ## 화면을 만든 것

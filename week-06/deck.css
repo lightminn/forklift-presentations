@@ -510,7 +510,7 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .phase-flow.vert .arrow { padding-left:10px; }
 .comparison.assume6 td:first-child { width:30%; }
 .plan6 { table-layout:fixed; }
-.plan6 td { font-size:21px; vertical-align:middle; padding:10px 14px; }
+.plan6 td { font-size:20px; vertical-align:middle; padding:7px 14px; }
 .plan6 td:first-child { width:auto; }
 .plan6 th.c1 { width:12%; } .plan6 th.c2 { width:40%; } .plan6 th.c3 { width:5%; padding:0; } .plan6 th.c4 { width:43%; }
 .plan6 td.grp { font-weight:700; color:var(--uos-blue); border-right:1px solid var(--uos-rule); }

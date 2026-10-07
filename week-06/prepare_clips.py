@@ -72,7 +72,14 @@ def main(repo):
     # The map panel recomposed with --draw-odometry (forklift df109cf): the
     # wheel-odometry-only path in orange beside the SLAM estimate.
     s3_odom = s3.with_name('slam_online_three_panel_odom.mp4')
-    run(encode(['-i', str(s3_odom), '-vf', 'crop=620:770:650:70,setpts=PTS/12'], a / '45_slam_error.mp4'))
+    # Development captions covered: the panel title, the two error labels
+    # renamed (values kept), the key-frame line and the small legend cut off.
+    relabel = (f"drawbox=x=0:y=636:w=280:h=34:color=0x0f1219:t=fill,"
+               f"drawtext=fontfile={FONT}:text='SLAM 위치 오차':x=10:y=640:fontsize=24:fontcolor=0xe6e6e6,"
+               f"drawbox=x=0:y=672:w=266:h=34:color=0x0f1219:t=fill,"
+               f"drawtext=fontfile={FONT}:text='바퀴 회전만 계산':x=10:y=676:fontsize=24:fontcolor=0xe6e6e6")
+    run(encode(['-i', str(s3_odom), '-vf', f"crop=620:770:650:70,{label('SLAM 지도', 14, 0, 500)},{relabel},crop=620:708:0:0,setpts=PTS/12"],
+               a / '45_slam_error.mp4'))
     poster(a / '45_slam_error.mp4', 29.5, a / '45_slam_error_poster.jpg')
 
     # Overhead + online map only (camera panels, error plot and status text left out).
@@ -94,8 +101,11 @@ def main(repo):
     before = repo / 'artifacts/20261003_render/seed_2001/camera_rgb.mp4'   # old mount (0.75, 0, 0.50 m), before carriage_low
     run(['-ss', '16', '-i', str(before), '-frames:v', '1', '-q:v', '2', str(a / '43_before_far.jpg')])
     run(['-ss', '19.5', '-i', str(before), '-frames:v', '1', '-q:v', '2', str(a / '43_before_near.jpg')])
-    run(['-ss', '39', '-i', str(n1 / 'camera_rgb.mp4'), '-frames:v', '1', '-q:v', '2', str(a / '43_camera_far.jpg')])
-    run(['-ss', '43', '-i', str(n1 / 'camera_rgb.mp4'), '-frames:v', '1', '-q:v', '2', str(a / '43_camera_near.jpg')])
+    # Carriage camera frames from the single-LiDAR run (low props removed): 36 s
+    # approaching (0.85 m), 43 s with the forks in (top boards in view).
+    m1 = repo / 'videos-from-ws1/20261007_l7_single_seed1_m'
+    run(['-ss', '36', '-i', str(m1 / 'camera_rgb.mp4'), '-frames:v', '1', '-q:v', '2', str(a / '43_camera_far.jpg')])
+    run(['-ss', '43', '-i', str(m1 / 'camera_rgb.mp4'), '-frames:v', '1', '-q:v', '2', str(a / '43_camera_near.jpg')])
     # Slide 3: week 5's map clip (30 s, already 8x) 2.5x faster again, ~12 s.
     run(encode(['-i', str(a / '21_slam_map_pair.mp4'), '-vf', 'setpts=PTS/2.5'], a / '21_slam_map_pair_fast.mp4', crf=24))
     poster(a / '21_slam_map_pair_fast.mp4', 11.5, a / '21_slam_map_pair_fast_poster.jpg')
