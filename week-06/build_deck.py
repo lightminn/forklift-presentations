@@ -237,22 +237,38 @@ add('SLAM 위치 정확도', '05  SLAM 위치 정확도', 55, f"""
     '화면 생성: 같은 3분할 영상의 SLAM 지도 칸과 오차 표시 12배속 (prepare_clips.py)')
 
 # ----------------------------------------------------------------- 8
+# (group, current, next). Hardware rows: week 5 drafts and this deck's assumptions.
 NEXT_ROWS = [
-    ('SLAM 위치로 운반 임무 완주', 'LiDAR 1대로 장애물까지 감지한 임무 반복'),
-    ('EPAL 6 팔레트', 'T11 팔레트'),
+    ('소프트웨어', 'SLAM 위치로 운반 임무 완주', 'LiDAR 1대로 장애물까지 감지한 임무 반복'),
+    ('소프트웨어', 'EPAL 6 팔레트', 'T11 팔레트'),
+    ('하드웨어', '모터 드라이버 · 엔코더 보드 회로 초안 (5주차)', '모터 전류 실측 → 전류 제한 · 방열 확정 → PCB 제작'),
+    ('하드웨어', '마찰 · 센서 잡음 가정값 · 축간 거리 · 바퀴 사진 추정', '마찰 · 센서 잡음 실측 · 실측 치수로 모델 교체'),
+    ('하드웨어', '센서 위치는 시뮬레이션 값 (LiDAR 1.05 m · 카메라 캐리지 하단)', '실물 브래킷 제작 · 장착 후 좌표 보정'),
 ]
-next_table = ''.join(f'<tr><td>{a}</td><td class="arrow">→</td><td>{b}</td></tr>' for a, b in NEXT_ROWS)
-add('다음 작업', '06  남은 과제와 다음 작업', 60, f"""
-<h2 class="headline">남은 과제: 규격 센서로 장애물까지 감지한 임무</h2>
-<table class="comparison next6 grow"><tr><th>이번 주 확인</th><th></th><th>다음 단계</th></tr>{next_table}</table>
+def _next_table():
+    rows, seen = [], {}
+    for g, a, b in NEXT_ROWS:
+        seen[g] = seen.get(g, 0) + 1
+    done = set()
+    for g, a, b in NEXT_ROWS:
+        head = '' if g in done else f'<td class="grp" rowspan="{seen[g]}">{g}</td>'
+        done.add(g)
+        rows.append(f'<tr>{head}<td class="cur">{a}</td><td class="arrow">→</td><td class="nxt">{b}</td></tr>')
+    return ''.join(rows)
+add('다음 작업', '06  남은 과제와 다음 작업', 75, f"""
+<h2 class="headline">다음 작업: LiDAR 1대 장애물 감지 · 구동부 PCB 제작 · 추정값 실측</h2>
+<table class="comparison plan6 grow"><tr><th class="c1">구분</th><th class="c2">현재</th><th class="c3"></th><th class="c4">다음 단계</th></tr>{_next_table()}</table>
 """,
-    """정리하면, 이번 주에 지게차는 SLAM으로 추정한 위치로 운반 임무를 끝냈습니다. 다만 장애물 정보는 아직 시뮬레이터 값을 썼습니다. 다음 단계는 과제 규격인 LiDAR 1대만으로 장애물까지 감지하는 임무를 반복해서 확인하는 것입니다. 또 두 번째 팔레트 규격인 T11도 같은 방식으로 확인하겠습니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.""",
+    """정리하면, 이번 주에 지게차는 SLAM으로 추정한 위치로 운반 임무를 끝냈습니다. 다만 장애물 정보는 아직 시뮬레이터 값을 썼습니다. 소프트웨어 쪽 다음 단계는 과제 규격인 LiDAR 1대만으로 장애물까지 감지하는 임무를 반복해서 확인하고, 두 번째 팔레트 규격인 T11도 같은 방식으로 확인하는 것입니다. 하드웨어 쪽은 5주차에 그린 모터 드라이버와 엔코더 보드 회로를 모터 전류를 잰 뒤 전류 제한과 방열까지 확정해서 PCB로 만들겠습니다. 또 시뮬레이션에서 가정으로 둔 바퀴 마찰과 센서 잡음을 실측해서 바꾸고, 지난주에 잰 축간 거리와 바퀴 반지름도 모델에 반영하겠습니다. 마지막으로 시뮬레이션에서 정한 LiDAR와 카메라 위치대로 실물 브래킷을 만들어 달고 좌표를 보정하겠습니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.""",
     [('forklift bc4cc64', '--min-obstacle-height-m 1.15 · config/obstacle_layer_single.yaml (LiDAR 1대)'),
-     ('CLAUDE.md', 'EPAL 6 과 T11 × 0.6 모두 필수')],
-    '출처: LiDAR 장애물 지도 계획')
+     ('CLAUDE.md', 'EPAL 6 과 T11 × 0.6 모두 필수'),
+     ('week-05/build_deck.py', 'DRV8244 3채널 드라이버 보드 초안 · 엔코더 보드 두 가지 · "조건: 모터 전류 실측 후 확정"(전류 제한·방열)'),
+     ('sim/models/dls08_measured/README.md', '실측 축간 0.66 m · 바퀴 반지름 0.125 m (이번 실행 미반영)'),
+     ('docs/hardware.md', 'LiDAR·카메라 실물 장착 위치 미확정')],
+    '출처: 5주차 발표 · 하드웨어 기록')
 
 TITLE = '6주차 자율 지게차 개발'
-TOTAL = 345
+TOTAL = 360
 
 
 def build():

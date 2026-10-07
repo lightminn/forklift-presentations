@@ -3,7 +3,7 @@
 <link rel="icon" href="data:,">
 <script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>6주차 자율 지게차 개발</title>
-<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=ef9c488462cb"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=d139b6e2e710"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 <section class="title-section" data-label="개발 진행 보고" data-screen-label="01" data-duration="20" data-speaker-notes="권장 20초
 
@@ -151,18 +151,21 @@ S3 장면 1 — 위치 RMSE 0.088 m · 최대 0.190 m, 358 s 에서 SLAM 4.0 cm 
 </div></x-import>
 </section>
 
-<section data-label="다음 작업" data-screen-label="07" data-duration="60" data-speaker-notes="권장 60초
+<section data-label="다음 작업" data-screen-label="07" data-duration="75" data-speaker-notes="권장 75초
 
-정리하면, 이번 주에 지게차는 SLAM으로 추정한 위치로 운반 임무를 끝냈습니다. 다만 장애물 정보는 아직 시뮬레이터 값을 썼습니다. 다음 단계는 과제 규격인 LiDAR 1대만으로 장애물까지 감지하는 임무를 반복해서 확인하는 것입니다. 또 두 번째 팔레트 규격인 T11도 같은 방식으로 확인하겠습니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.
+정리하면, 이번 주에 지게차는 SLAM으로 추정한 위치로 운반 임무를 끝냈습니다. 다만 장애물 정보는 아직 시뮬레이터 값을 썼습니다. 소프트웨어 쪽 다음 단계는 과제 규격인 LiDAR 1대만으로 장애물까지 감지하는 임무를 반복해서 확인하고, 두 번째 팔레트 규격인 T11도 같은 방식으로 확인하는 것입니다. 하드웨어 쪽은 5주차에 그린 모터 드라이버와 엔코더 보드 회로를 모터 전류를 잰 뒤 전류 제한과 방열까지 확정해서 PCB로 만들겠습니다. 또 시뮬레이션에서 가정으로 둔 바퀴 마찰과 센서 잡음을 실측해서 바꾸고, 지난주에 잰 축간 거리와 바퀴 반지름도 모델에 반영하겠습니다. 마지막으로 시뮬레이션에서 정한 LiDAR와 카메라 위치대로 실물 브래킷을 만들어 달고 좌표를 보정하겠습니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.
 
 [Sources]
-출처: LiDAR 장애물 지도 계획
+출처: 5주차 발표 · 하드웨어 기록
 --min-obstacle-height-m 1.15 · config/obstacle_layer_single.yaml (LiDAR 1대): forklift bc4cc64
 EPAL 6 과 T11 × 0.6 모두 필수: CLAUDE.md
+DRV8244 3채널 드라이버 보드 초안 · 엔코더 보드 두 가지 · &quot;조건: 모터 전류 실측 후 확정&quot;(전류 제한·방열): week-05/build_deck.py
+실측 축간 0.66 m · 바퀴 반지름 0.125 m (이번 실행 미반영): sim/models/dls08_measured/README.md
+LiDAR·카메라 실물 장착 위치 미확정: docs/hardware.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="06  남은 과제와 다음 작업"><div class="slide-body">
-<h2 class="headline">남은 과제: 규격 센서로 장애물까지 감지한 임무</h2>
-<table class="comparison next6 grow"><tr><th>이번 주 확인</th><th></th><th>다음 단계</th></tr><tr><td>SLAM 위치로 운반 임무 완주</td><td class="arrow">→</td><td>LiDAR 1대로 장애물까지 감지한 임무 반복</td></tr><tr><td>EPAL 6 팔레트</td><td class="arrow">→</td><td>T11 팔레트</td></tr></table>
+<h2 class="headline">다음 작업: LiDAR 1대 장애물 감지 · 구동부 PCB 제작 · 추정값 실측</h2>
+<table class="comparison plan6 grow"><tr><th class="c1">구분</th><th class="c2">현재</th><th class="c3"></th><th class="c4">다음 단계</th></tr><tr><td class="grp" rowspan="2">소프트웨어</td><td class="cur">SLAM 위치로 운반 임무 완주</td><td class="arrow">→</td><td class="nxt">LiDAR 1대로 장애물까지 감지한 임무 반복</td></tr><tr><td class="cur">EPAL 6 팔레트</td><td class="arrow">→</td><td class="nxt">T11 팔레트</td></tr><tr><td class="grp" rowspan="3">하드웨어</td><td class="cur">모터 드라이버 · 엔코더 보드 회로 초안 (5주차)</td><td class="arrow">→</td><td class="nxt">모터 전류 실측 → 전류 제한 · 방열 확정 → PCB 제작</td></tr><tr><td class="cur">마찰 · 센서 잡음 가정값 · 축간 거리 · 바퀴 사진 추정</td><td class="arrow">→</td><td class="nxt">마찰 · 센서 잡음 실측 · 실측 치수로 모델 교체</td></tr><tr><td class="cur">센서 위치는 시뮬레이션 값 (LiDAR 1.05 m · 카메라 캐리지 하단)</td><td class="arrow">→</td><td class="nxt">실물 브래킷 제작 · 장착 후 좌표 보정</td></tr></table>
 </div></x-import>
 </section>
 </x-import></x-dc></body></html>
