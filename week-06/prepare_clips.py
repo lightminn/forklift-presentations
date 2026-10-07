@@ -101,11 +101,11 @@ def main(repo):
     before = repo / 'artifacts/20261003_render/seed_2001/camera_rgb.mp4'   # old mount (0.75, 0, 0.50 m), before carriage_low
     run(['-ss', '16', '-i', str(before), '-frames:v', '1', '-q:v', '2', str(a / '43_before_far.jpg')])
     run(['-ss', '19.5', '-i', str(before), '-frames:v', '1', '-q:v', '2', str(a / '43_before_near.jpg')])
-    # Carriage camera frames from the single-LiDAR run (low props removed): 36 s
-    # approaching (0.85 m), 43 s with the forks in (top boards in view).
-    m1 = repo / 'videos-from-ws1/20261007_l7_single_seed1_m'
-    run(['-ss', '36', '-i', str(m1 / 'camera_rgb.mp4'), '-frames:v', '1', '-q:v', '2', str(a / '43_camera_far.jpg')])
-    run(['-ss', '43', '-i', str(m1 / 'camera_rgb.mp4'), '-frames:v', '1', '-q:v', '2', str(a / '43_camera_near.jpg')])
+    # Carriage camera frames from the measured-chassis run (low props removed): 43 s
+    # approaching (1.32 m), 51 s with the forks in (top boards in view).
+    m1 = repo / 'videos-from-ws1/20261007_l8_measured_seed1_m'
+    run(['-ss', '43', '-i', str(m1 / 'camera_rgb.mp4'), '-frames:v', '1', '-q:v', '2', str(a / '43_camera_far.jpg')])
+    run(['-ss', '51', '-i', str(m1 / 'camera_rgb.mp4'), '-frames:v', '1', '-q:v', '2', str(a / '43_camera_near.jpg')])
     # Slide 3: week 5's map clip (30 s, already 8x) 2.5x faster again, ~12 s.
     run(encode(['-i', str(a / '21_slam_map_pair.mp4'), '-vf', 'setpts=PTS/2.5'], a / '21_slam_map_pair_fast.mp4', crf=24))
     poster(a / '21_slam_map_pair_fast.mp4', 11.5, a / '21_slam_map_pair_fast_poster.jpg')
@@ -117,16 +117,17 @@ def single_lidar(repo):
     than it removed; ws1 artifacts/20261005_p5_l3/l7_single, 2026-10-07)."""
     a = HERE / 'assets'
     v = repo / 'videos-from-ws1'
-    n1 = v / '20261007_l7_single_seed5_n1'   # box spawn 58.9 s, stop 59.5 s, replan 64.3 s
-    run(encode(['-ss', '54', '-t', '36', '-i', str(n1 / 'slam_online_three_panel.mp4'),
+    # Measured chassis (dls08_measured: steering 15 deg) runs, ws1 l8_measured (forklift df109cf).
+    n1 = v / '20261007_l8_measured_seed5_n1'   # box spawn 77.2 s, stop ~78 s, replan 94.3 s, then reverse
+    run(encode(['-ss', '73', '-t', '45', '-i', str(n1 / 'slam_online_three_panel.mp4'),
                 '-vf', "crop=1250:620:20:70,"
-                       f"{label('주행 화면', 14)},{label('SLAM 지도 · LiDAR 장애물', 644, 630, 500)},setpts=PTS/1.5"],
+                       f"{label('주행 화면', 14)},{label('SLAM 지도 · LiDAR 장애물', 644, 630, 500)},setpts=PTS/2"],
                a / '46_new_obstacle_single.mp4', crf=26))
     poster(a / '46_new_obstacle_single.mp4', 5, a / '46_new_obstacle_single_poster.jpg')
-    m1 = v / '20261007_l7_single_seed1_m'     # the mission without a new box, overhead only
+    m1 = v / '20261007_l8_measured_seed1_m'   # the mission without a new box, overhead only
     run(encode(['-i', str(m1 / 'slam_online_three_panel.mp4'), '-vf', f"{PANEL1},{label('주행 화면', 14)},setpts=PTS/12"],
                a / '47_mission_single.mp4'))
-    poster(a / '47_mission_single.mp4', 25, a / '47_mission_single_poster.jpg')
+    poster(a / '47_mission_single.mp4', 15, a / '47_mission_single_poster.jpg')
     # Map building: the first two minutes, overhead + online map, 8x.
     run(encode(['-t', '120', '-i', str(m1 / 'slam_online_three_panel.mp4'),
                 '-vf', "crop=1250:620:20:70,"
