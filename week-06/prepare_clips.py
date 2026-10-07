@@ -69,7 +69,10 @@ def main(repo):
     # SLAM/odometry error text (both at 12x).
     run(encode(['-i', str(s3), '-vf', f"{PANEL1},{label('주행 화면', 14)},setpts=PTS/12"], a / '44_mission_overview.mp4'))
     poster(a / '44_mission_overview.mp4', 25, a / '44_mission_overview_poster.jpg')
-    run(encode(['-i', str(s3), '-vf', 'crop=620:770:650:70,setpts=PTS/12'], a / '45_slam_error.mp4'))
+    # The map panel recomposed with --draw-odometry (forklift df109cf): the
+    # wheel-odometry-only path in orange beside the SLAM estimate.
+    s3_odom = s3.with_name('slam_online_three_panel_odom.mp4')
+    run(encode(['-i', str(s3_odom), '-vf', 'crop=620:770:650:70,setpts=PTS/12'], a / '45_slam_error.mp4'))
     poster(a / '45_slam_error.mp4', 29.5, a / '45_slam_error_poster.jpg')
 
     # Overhead + online map only (camera panels, error plot and status text left out).

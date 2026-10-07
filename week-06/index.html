@@ -124,7 +124,7 @@ LiDAR 1대(1.05 m) 장애물 지도 + SLAM 지도로 경로 계획, 1.15 m 미�
 
 <section data-label="SLAM 위치 정확도" data-screen-label="06" data-duration="55" data-speaker-notes="권장 55초
 
-SLAM 위치로 운반한 임무를 위치 추정 쪽에서 본 화면입니다. 왼쪽 지도에서 빨간 SLAM 추정 경로가 파란 실제 경로를 거의 그대로 따라갑니다. 아래 숫자를 보시면, 바퀴 회전과 조향각만으로 위치를 추정했을 때는 끝에서 3.4미터가 어긋납니다. 왜 이만큼 어긋나는지 따져 보면, 달린 거리는 93미터 중 0.7미터만 틀렸고 대부분은 방향이 24도 틀어진 탓입니다. 방향은 팔레트를 싣고 돌 때 틀어졌습니다. 빈 차일 때는 계산한 만큼 돌지만, 팔레트를 실으면 실제로는 계산보다 7.5퍼센트 덜 돕니다. 시뮬레이션에서 팔레트 무게(실물과 같은 10 kg)가 실리면 바퀴가 옆으로 미끄러지기 때문으로 보이고, 이 미끄러짐은 앞 장에서 말씀드린 가정값인 바퀴 마찰에 따라 달라집니다. 센서 잡음을 꺼도 오차가 346센티미터로 거의 같아서, 잡음 탓은 아닙니다. 반면 SLAM은 LiDAR 스캔을 지도와 맞춰 방향과 위치를 계속 바로잡기 때문에 오차가 RMSE(제곱평균제곱근)로 약 9센티미터였습니다. 실물에서도 짐을 실으면 같은 일이 생길 수 있어서, SLAM이 필요하다고 판단했습니다. (전환)
+SLAM 위치로 운반한 임무를 위치 추정 쪽에서 본 화면입니다. 왼쪽 지도에서 빨간 SLAM 추정 경로는 파란 실제 경로를 거의 그대로 따라가지만, 주황색으로 그린 바퀴 회전만으로 추정한 경로는 갈수록 벗어납니다. 아래 숫자를 보시면, 바퀴 회전과 조향각만으로 위치를 추정했을 때는 끝에서 3.4미터가 어긋납니다. 왜 이만큼 어긋나는지 따져 보면, 달린 거리는 93미터 중 0.7미터만 틀렸고 대부분은 방향이 24도 틀어진 탓입니다. 방향은 팔레트를 싣고 돌 때 틀어졌습니다. 빈 차일 때는 계산한 만큼 돌지만, 팔레트를 실으면 실제로는 계산보다 7.5퍼센트 덜 돕니다. 시뮬레이션에서 팔레트 무게(실물과 같은 10 kg)가 실리면 바퀴가 옆으로 미끄러지기 때문으로 보이고, 이 미끄러짐은 앞 장에서 말씀드린 가정값인 바퀴 마찰에 따라 달라집니다. 센서 잡음을 꺼도 오차가 346센티미터로 거의 같아서, 잡음 탓은 아닙니다. 반면 SLAM은 LiDAR 스캔을 지도와 맞춰 방향과 위치를 계속 바로잡기 때문에 오차가 RMSE(제곱평균제곱근)로 약 9센티미터였습니다. 실물에서도 짐을 실으면 같은 일이 생길 수 있어서, SLAM이 필요하다고 판단했습니다. (전환)
 
 [Sources]
 화면 생성: 같은 3분할 영상의 SLAM 지도 칸과 오차 표시 12배속 (prepare_clips.py)
@@ -135,7 +135,7 @@ S3 장면 1 — 위치 RMSE 0.088 m · 최대 0.190 m, 358 s 에서 SLAM 4.0 cm 
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="05  SLAM 위치 정확도"><div class="slide-body">
 <h2 class="headline">바퀴 회전만으로는 3.4 m 어긋나는 위치를 SLAM은 9 cm 오차로 유지</h2>
 <div class="split grow" style="grid-template-columns:0.85fr 1.15fr">
-<figure class="shot"><video class="media" src="assets/45_slam_error.mp4" poster="assets/45_slam_error_poster.jpg" autoplay loop muted playsinline aria-label="같은 임무 동안 slam_toolbox가 만든 지도와 추정 경로. 아래 숫자는 SLAM 추정 오차와 바퀴 회전만으로 추정했을 때의 오차"></video><figcaption class="small muted">빨강: SLAM 추정 · 파랑: 실제 경로</figcaption></figure>
+<figure class="shot"><video class="media" src="assets/45_slam_error.mp4" poster="assets/45_slam_error_poster.jpg" autoplay loop muted playsinline aria-label="같은 임무 동안 slam_toolbox가 만든 지도와 추정 경로. 아래 숫자는 SLAM 추정 오차와 바퀴 회전만으로 추정했을 때의 오차"></video><figcaption class="small muted">빨강: SLAM 추정 · 주황: 바퀴 오도메트리만 · 파랑: 실제 경로</figcaption></figure>
 <div class="stack" style="gap:26px">
 <table class="comparison t6 causes6">
 <tr><th>위치 추정</th><th>오차</th><th>이유</th></tr>
