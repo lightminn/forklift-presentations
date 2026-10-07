@@ -99,5 +99,22 @@ def main(repo):
     print('done')
 
 
+def single_lidar(repo):
+    """Week 6 single-LiDAR runs (forklift bc4cc64: one 1.05 m LiDAR, props lower
+    than it removed; ws1 artifacts/20261005_p5_l3/l7_single, 2026-10-07)."""
+    a = HERE / 'assets'
+    v = repo / 'videos-from-ws1'
+    n1 = v / '20261007_l7_single_seed5_n1'   # box spawn 58.9 s, stop 59.5 s, replan 64.3 s
+    run(encode(['-ss', '54', '-t', '36', '-i', str(n1 / 'slam_online_three_panel.mp4'),
+                '-vf', "crop=1250:620:20:70,"
+                       f"{label('주행 화면', 14)},{label('SLAM 지도 · LiDAR 장애물', 644, 630, 500)},setpts=PTS/1.5"],
+               a / '46_new_obstacle_single.mp4', crf=26))
+    poster(a / '46_new_obstacle_single.mp4', 5, a / '46_new_obstacle_single_poster.jpg')
+    print('done')
+
+
 if __name__ == '__main__':
-    main(Path(sys.argv[1]))
+    if len(sys.argv) > 2 and sys.argv[2] == 'single':
+        single_lidar(Path(sys.argv[1]))
+    else:
+        main(Path(sys.argv[1]))
