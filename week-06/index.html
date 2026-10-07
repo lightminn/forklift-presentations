@@ -45,7 +45,7 @@ hfov 1.204 rad(69°) — D435i 컬러 화각, 보정값 아님: config/isaac_per
 
 <section data-label="캐리지 하단 카메라" data-screen-label="03" data-duration="65" data-speaker-notes="권장 65초
 
-먼저 카메라 위치입니다. 왼쪽 열이 4주차까지 쓴 카메라로, 차체 앞 높은 곳에 수평으로 달려 있었습니다. 다가갈 때는 팔레트가 잘 보이지만, 포크를 넣기 시작하면 왼쪽 아래처럼 팔레트가 화면 아래로 빠져서 벽과 바닥만 보입니다. 그래서 4주차에 소개한 Crown 특허처럼 카메라를 캐리지(포크를 올리고 내리는 부분) 아래로 옮기고 살짝 아래로 숙였습니다. 오른쪽 열이 바꾼 카메라입니다. 다가갈 때는 포켓이 보이고, 포크를 넣는 동안에도 팔레트 윗판이 화면에 남습니다. 그래서 과제가 요구한 삽입 중 포켓 추적을 할 수 있는 화면을 확보했습니다. 지금 임무는 팔레트 약 2미터 앞에서 한 번 더 보고 그 위치로 넣고 있고, 삽입 중 추적을 임무에 연결하는 것은 다음 단계입니다. (전환)
+먼저 카메라 위치입니다. 왼쪽 열이 4주차까지 쓴 카메라로, 차체 앞 높은 곳에 수평으로 달려 있었습니다. 다가갈 때는 팔레트가 잘 보이지만, 포크를 넣기 시작하면 왼쪽 아래처럼 팔레트가 화면 아래로 빠져서 벽과 바닥만 보입니다. 그래서 4주차에 소개한 Crown 특허처럼 카메라를 캐리지(포크를 올리고 내리는 부분) 아래로 옮기고 살짝 아래로 숙였습니다. 오른쪽 열이 바꾼 카메라입니다. 다가갈 때는 포켓이 보이고, 포크를 넣는 동안에도 팔레트 윗판이 화면에 남습니다. 그래서 과제가 요구한 삽입 중 포켓 추적을 할 수 있는 화면을 확보했습니다. 다만 이번 시뮬레이션에서는 아직 팔레트 약 2미터 앞에서 한 번 더 본 위치로 넣고 있고, 넣는 동안 카메라로 다시 보고 바로잡는 기능은 다음 단계에서 넣겠습니다. (전환)
 
 [Sources]
 화면 생성: LiDAR 1대 장면 1 임무의 로봇 카메라 프레임 (prepare_clips.py)
@@ -75,7 +75,7 @@ camera_rgb.mp4 36 s(접근, 0.85 m) · 43 s(삽입 중) 프레임 — LiDAR 1대
 <p class="cap6" style="text-align:left;margin-top:10px">4주차 장착 사례 ② Crown 특허 방식 참고</p>
 </div>
 </div>
-<div class="takeaway">좋아진 점: 포크를 넣는 동안에도 포켓 · 윗판이 화면 안에 남음 → 삽입 중 추적 가능 (임무 연결은 다음 단계)</div>
+<div class="takeaway">좋아진 점: 포크를 넣는 동안에도 팔레트가 화면에 남음 → 넣으면서 위치를 다시 보고 바로잡을 수 있음 (다음 단계에서 적용)</div>
 </div></x-import>
 </section>
 
@@ -172,7 +172,7 @@ LiDAR 1대(1.05 m) 장애물 지도 + SLAM 지도로 경로 계획, 1.15 m 미�
 
 <section data-label="다음 작업" data-screen-label="08" data-duration="70" data-speaker-notes="권장 70초
 
-정리하면, 이번 주에 지게차는 SLAM으로 추정한 위치와 LiDAR 한 대로 만든 장애물 지도로 운반 임무를 끝냈고, 새로 나타난 상자도 피했습니다. 소프트웨어 쪽 다음 단계는 이것을 여러 장면과 과제의 C, D 상황에서 반복하고, 실측 조향각 15도로 경로를 다시 확인하는 것입니다. 또 바꾼 카메라로 삽입 중 포켓 추적을 임무에 연결하고, 두 번째 팔레트 규격인 T11도 치수가 정해지면 같은 방식으로 확인하겠습니다. 하드웨어 쪽은 5주차에 그린 모터 드라이버와 엔코더 보드 회로를 모터 전류를 잰 뒤 전류 제한과 방열까지 확정해서 PCB로 만들겠습니다. 또 시뮬레이션에서 가정으로 둔 바퀴 마찰과 센서 잡음, 사진으로 추정한 치수를 실측값으로 바꾸고, 시뮬레이션에서 정한 LiDAR와 카메라 위치대로 실물 브래킷을 만들어 달고 좌표를 보정하겠습니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.
+정리하면, 이번 주에 지게차는 SLAM으로 추정한 위치와 LiDAR 한 대로 만든 장애물 지도로 운반 임무를 끝냈고, 새로 나타난 상자도 피했습니다. 소프트웨어 쪽 다음 단계는 이것을 여러 장면과 과제의 C, D 상황에서 반복하고, 실측 조향각 15도로 경로를 다시 확인하는 것입니다. 또 바꾼 카메라로 포크를 넣는 동안 위치를 다시 보고 바로잡게 하고, 두 번째 팔레트 규격인 T11도 치수가 정해지면 같은 방식으로 확인하겠습니다. 하드웨어 쪽은 5주차에 그린 모터 드라이버와 엔코더 보드 회로를 모터 전류를 잰 뒤 전류 제한과 방열까지 확정해서 PCB로 만들겠습니다. 또 시뮬레이션에서 가정으로 둔 바퀴 마찰과 센서 잡음, 사진으로 추정한 치수를 실측값으로 바꾸고, 시뮬레이션에서 정한 LiDAR와 카메라 위치대로 실물 브래킷을 만들어 달고 좌표를 보정하겠습니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.
 
 [Sources]
 출처: 5주차 발표 · 하드웨어 기록
@@ -183,8 +183,8 @@ DRV8244 3채널 드라이버 보드 초안 · 엔코더 보드 두 가지 · &qu
 LiDAR·카메라 실물 장착 위치 미확정: docs/hardware.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="07  남은 과제와 다음 작업"><div class="slide-body">
-<h2 class="headline">다음 작업: 실측값으로 다시 검증 · 삽입 중 추적 연결 · 구동부 PCB 제작</h2>
-<table class="comparison plan6 grow"><tr><th class="c1">구분</th><th class="c2">현재</th><th class="c3"></th><th class="c4">다음 단계</th></tr><tr><td class="grp" rowspan="4">소프트웨어</td><td class="cur">LiDAR 1대 장애물 지도로 상자 회피</td><td class="arrow">→</td><td class="nxt">여러 장면 · 과제 상황 C · D에서 반복</td></tr><tr><td class="cur">최대 조향각 26° (사진 추정)로 경로 계획</td><td class="arrow">→</td><td class="nxt">실측 15° (회전 반경 약 2.5 m)로 다시 계획 · 검증</td></tr><tr><td class="cur">약 2 m 앞에서 다시 본 위치로 삽입</td><td class="arrow">→</td><td class="nxt">삽입 중 포켓 · 윗판 추적을 임무에 연결</td></tr><tr><td class="cur">EPAL 6 팔레트</td><td class="arrow">→</td><td class="nxt">T11 팔레트 (규격 치수 확정 후)</td></tr><tr><td class="grp" rowspan="3">하드웨어</td><td class="cur">모터 드라이버 · 엔코더 보드 회로 초안 (5주차)</td><td class="arrow">→</td><td class="nxt">모터 전류 실측 → 전류 제한 · 방열 확정 → PCB 제작</td></tr><tr><td class="cur">마찰 · 잡음 가정, 치수 · 조향각 사진 추정</td><td class="arrow">→</td><td class="nxt">실측 후 시뮬레이션 모델 교체</td></tr><tr><td class="cur">센서 위치는 시뮬레이션 값</td><td class="arrow">→</td><td class="nxt">실물 브래킷 제작 · 장착 후 좌표 보정</td></tr></table>
+<h2 class="headline">다음 작업: 실측값으로 다시 검증 · 삽입 중 위치 보정 · 구동부 PCB 제작</h2>
+<table class="comparison plan6 grow"><tr><th class="c1">구분</th><th class="c2">현재</th><th class="c3"></th><th class="c4">다음 단계</th></tr><tr><td class="grp" rowspan="4">소프트웨어</td><td class="cur">LiDAR 1대 장애물 지도로 상자 회피</td><td class="arrow">→</td><td class="nxt">여러 장면 · 과제 상황 C · D에서 반복</td></tr><tr><td class="cur">최대 조향각 26° (사진 추정)로 경로 계획</td><td class="arrow">→</td><td class="nxt">실측 15° (회전 반경 약 2.5 m)로 다시 계획 · 검증</td></tr><tr><td class="cur">약 2 m 앞에서 다시 본 위치로 삽입</td><td class="arrow">→</td><td class="nxt">넣는 동안 카메라로 다시 보고 위치 보정</td></tr><tr><td class="cur">EPAL 6 팔레트</td><td class="arrow">→</td><td class="nxt">T11 팔레트 (규격 치수 확정 후)</td></tr><tr><td class="grp" rowspan="3">하드웨어</td><td class="cur">모터 드라이버 · 엔코더 보드 회로 초안 (5주차)</td><td class="arrow">→</td><td class="nxt">모터 전류 실측 → 전류 제한 · 방열 확정 → PCB 제작</td></tr><tr><td class="cur">마찰 · 잡음 가정, 치수 · 조향각 사진 추정</td><td class="arrow">→</td><td class="nxt">실측 후 시뮬레이션 모델 교체</td></tr><tr><td class="cur">센서 위치는 시뮬레이션 값</td><td class="arrow">→</td><td class="nxt">실물 브래킷 제작 · 장착 후 좌표 보정</td></tr></table>
 <div class="takeaway">다음 목표: 실측 차체 모델로 같은 임무 재확인 → 구동부 실물 제작</div>
 </div></x-import>
 </section>
