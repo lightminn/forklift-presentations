@@ -48,8 +48,10 @@ def video(src, alt, cls='media'):
             f'aria-label="{escape(alt, quote=True)}"></video>')
 
 
-def card(big, text):
-    return f'<div class="card6"><b>{big}</b><span>{text}</span></div>'
+def brief(title, *items):
+    """A Korean IR-style block: a coloured heading and one-line bullets ending in nouns."""
+    lis = ''.join(f'<li>{i}</li>' for i in items)
+    return f'<div class="brief6"><p class="bh">{title}</p><ul>{lis}</ul></div>'
 
 
 # ----------------------------------------------------------------- charts
@@ -187,10 +189,10 @@ add('시뮬레이션 설정', '01  시뮬레이션 설정과 근거', 60, f"""
 add('캐리지 하단 카메라', '02  캐리지 하단 카메라', 65, f"""
 <h2 class="headline">카메라를 캐리지 아래로 옮겨 포켓 진입 직전까지 관측</h2>
 <div class="cmp6 grow">
-<div class="rowlab"><b>기존</b><span>차체 앞 높은 위치</span></div>
+<div class="rowlab"><b>기존 장착</b><span>차체 앞 높은 위치</span><span>수평 장착</span></div>
 <figure class="shot"><img class="media" src="assets/43_before_far.jpg" alt="기존 장착 카메라로 팔레트에 다가가는 화면. 팔레트와 두 포켓이 보임"><figcaption class="small muted">접근 중</figcaption></figure>
 <figure class="shot"><img class="media" src="assets/43_before_near.jpg" alt="기존 장착 카메라로 포크를 넣는 중의 화면. 팔레트가 화면 아래로 빠져 벽과 바닥만 보임"><figcaption class="small muted">삽입 중 · 팔레트가 화면 밖</figcaption></figure>
-<div class="rowlab now"><b>변경</b><span>캐리지 아래, 살짝 아래로</span><span class="ref">4주차 Crown 특허 방식 참고</span></div>
+<div class="rowlab now"><b>변경 장착</b><span>캐리지 아래</span><span>아래로 약 6° 숙임</span><span class="ref">4주차 Crown 특허 참고</span></div>
 <figure class="shot"><img class="media" src="assets/43_camera_far.jpg" alt="새 장착 카메라로 팔레트에 다가가는 화면. 팔레트와 두 포켓을 찾은 표시"><figcaption class="small muted">접근 중</figcaption></figure>
 <figure class="shot"><img class="media" src="assets/43_camera_near.jpg" alt="새 장착 카메라로 포켓에 들어가기 직전의 화면. 두 포켓과 윗판이 화면 안에 있음"><figcaption class="small muted">진입 직전 · 포켓이 계속 보임</figcaption></figure>
 </div>
@@ -225,9 +227,7 @@ add('SLAM 위치로 운반', '04  SLAM 위치로 운반 임무', 50, f"""
 <div class="split grow" style="grid-template-columns:1fr 1.15fr">
 <figure class="shot">{video('44_mission_overview.mp4', '공장 홀을 위에서 본 지게차. 팔레트를 인식해 들고, 목적지에 내린 뒤 출발점으로 돌아온다')}<figcaption class="small muted">12배속 · 360초 임무 전체</figcaption></figure>
 <div class="stack" style="justify-content:center;gap:18px">
-<div class="chips" style="justify-content:flex-start"><span>팔레트 인식</span><i>→</i><span>들기</span><i>→</i><span>운반</span><i>→</i><span>하역</span><i>→</i><span>복귀</span></div>
-{card('8–22 mm', '팔레트를 내려놓은 위치 오차')}
-<div class="fact-box"><b>포크·팔레트 충돌 없음</b><span>정답 위치 없이 인식부터 복귀까지 끝까지 수행</span></div>
+{brief('임무 결과', '정답 위치 없이 인식 → 들기 → 운반 → 하역 → 복귀까지 완주', '팔레트 하역 위치 오차 8–22 mm', '포크·팔레트 충돌 없음')}
 </div>
 </div>
 {cond(SIM, '위치: SLAM 추정', '경로 계획의 장애물: 시뮬레이터 정답 지도', '팔레트: 깊이 카메라 인식')}
@@ -244,9 +244,9 @@ add('SLAM 위치 정확도', '05  SLAM 위치 정확도', 55, f"""
 <div class="split grow" style="grid-template-columns:1fr 1.15fr">
 <figure class="shot">{video('45_slam_error.mp4', '같은 임무 동안 slam_toolbox가 만든 지도와 추정 경로. 아래 숫자는 SLAM 추정 오차와 바퀴 회전만으로 추정했을 때의 오차')}<figcaption class="small muted">같은 임무 · 12배속 · 빨강: SLAM 추정 · 파랑: 실제 경로</figcaption></figure>
 <div class="stack" style="justify-content:center;gap:18px">
-<div class="fact-box"><b>바퀴만 쓰면 왜 3.4 m 어긋나나</b><span>달린 거리는 93 m 중 0.7 m만 틀림 · 방향이 24° 틀어진 것이 대부분</span></div>
+{brief('바퀴 회전만 쓴 추정의 오차 원인', '주행 거리 : 93 m 중 0.7 m 오차로 작음', '방향 : 끝 시점 24° 오차, 위치 오차 3.4 m의 대부분 차지')}
 <div class="why6"><p class="chart-cap">회전할 때 계산보다 실제로 덜 돈 비율</p>{shortfall_chart()}<p class="chart-cap">팔레트를 싣고 돌 때 덜 돎 (바퀴 옆 미끄러짐으로 추정) → 방향 오차가 쌓임</p></div>
-<div class="fact-box"><b>SLAM은 9 cm</b><span>LiDAR 스캔을 지도와 맞춰 방향과 위치를 계속 바로잡음</span></div>
+{brief('SLAM 추정', 'LiDAR 스캔을 지도와 맞춰 방향·위치 계속 보정', '위치 오차 9 cm (RMSE)로 유지')}
 </div>
 </div>
 {cond(SIM, '팔레트 10 kg (실물 EPAL 6 무게) · 바퀴 마찰 0.7 (가정)', '센서 잡음을 꺼도 346 cm')}
@@ -278,9 +278,8 @@ add('새 장애물 재계획', '07  새 장애물 감지와 재계획', 100, f""
 <div class="split grow" style="grid-template-columns:1.62fr 0.78fr">
 <figure class="shot">{video('41_new_obstacle.mp4', '팔레트를 들고 운반하던 중 경로 위에 상자가 나타나자 멈추고, 노란 새 경로로 바꿔 돌아가는 장면. 회색 선은 이전 경로')}<figcaption class="small muted">1.5배속 · 노랑: 현재 경로 · 회색: 직전 경로 · 주황: LiDAR 장애물 칸</figcaption></figure>
 <div class="stack" style="justify-content:center;gap:16px">
-<div class="fact-box"><b>이 장부터</b><span>경로 계획의 장애물도 LiDAR 격자 · 시뮬레이터 정답 지도 사용 안 함</span></div>
-{card('완주', '상자를 피해 목적지까지 운반하고 출발점으로 복귀')}
-{card('정지 → 재계획', '상자 출현 뒤 멈춘 자리에서 새 경로를 짜 재개')}
+{brief('경로 계획 장애물', 'LiDAR 격자만 사용 (정답 지도 미사용)')}
+{brief('실행 결과', '상자 출현 시 정지 후 경로 재계획', '상자 회피, 운반·하역·복귀까지 완주')}
 </div>
 </div>
 {cond(SIM, '위치: SLAM 추정', '장애물: LiDAR')}
@@ -296,8 +295,8 @@ add('본 장애물 기억', '08  본 장애물 기억', 95, f"""
 <div class="split grow" style="grid-template-columns:1.62fr 0.78fr">
 <figure class="shot">{video('42_memory_compare.mp4', '같은 장면에서 하역 후 출발점으로 돌아가는 첫 계획. 왼쪽은 노란 경로가 적재 더미 줄을 가로지르고, 오른쪽은 더미를 돌아간다')}<figcaption class="small muted">같은 장면 · 하역 뒤 복귀 경로 · 노랑: 계획 경로</figcaption></figure>
 <div class="stack" style="justify-content:center;gap:16px">
-<div class="fact-box"><b>기억 없음</b><span>지금 안 보이는 더미는 빈 곳으로 보고 가로질러 계획</span></div>
-<div class="fact-box"><b>본 장애물 기억</b><span>한 번 본 더미는 기억해 처음부터 돌아가는 경로</span></div>
+{brief('기억 없음 (왼쪽)', '현재 안 보이는 더미는 빈 곳으로 판단', '더미 줄을 가로지르는 복귀 경로')}
+{brief('본 장애물 기억 (오른쪽)', '한 번 본 더미는 다시 비어 보일 때까지 유지', '처음부터 더미를 우회하는 복귀 경로')}
 </div>
 </div>
 {cond(SIM)}
