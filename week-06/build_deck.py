@@ -96,9 +96,9 @@ def lidar_layout():
         return f'<rect x="{a:.1f}" y="{b:.1f}" width="{c - a:.1f}" height="{d - b:.1f}" fill="{fill}" {extra}/>'
     parts = [rect(-0.51, -0.315, 0.44, 0.315, '#dfe3e8', 'rx="6"'),
              rect(0.53, 0.1175, 0.95, 0.1725, '#8c959e'), rect(0.53, -0.1725, 0.95, -0.1175, '#8c959e')]
-    sensors = [(-0.12, 0.0, 0, ORANGE, '1.05 m', '위치 추정용 (기존)', 'middle', 0, -26),
-               (0.60, 0.355, 45, BLUE, '0.08 m', '앞 왼쪽 모서리', 'start', 22, 8),
-               (-0.50, -0.355, -135, BLUE, '0.08 m', '뒤 오른쪽 모서리', 'start', 22, 8)]
+    sensors = [(-0.12, 0.0, 0, ORANGE, '높이 1.05 m', '위치 추정용', 'middle', 0, -26),
+               (0.60, 0.355, 45, BLUE, '높이 0.08 m', '장애물용', 'start', 22, 8),
+               (-0.50, -0.355, -135, BLUE, '높이 0.08 m', '장애물용', 'start', 22, 8)]
     import math
     for x, y, yaw, colour, h, name, anchor, dx, dy in sensors:
         cx, cy = p(x, y)
@@ -109,8 +109,8 @@ def lidar_layout():
                      f'<tspan font-weight="400" fill="#44505c"> {name}</tspan></text>')
     fx, fy = p(0.74, 0.0)
     parts.append(f'<text x="{fx:.1f}" y="{fy + 6:.1f}" text-anchor="middle" font-size="17" fill="#44505c">포크 →</text>')
-    return (f'<svg class="diagram" viewBox="0 0 640 330" role="img" aria-label="위에서 본 차체와 2D LiDAR 세 대. 가운데 1.05 m 한 대, '
-            f'앞 왼쪽과 뒤 오른쪽 모서리에 0.08 m 두 대"><g font-family="var(--uos-font)">{"".join(parts)}</g></svg>')
+    return (f'<svg class="diagram" viewBox="0 0 640 330" role="img" aria-label="위에서 본 차체와 2D LiDAR 세 대. 가운데 높이 1.05 m 위치 추정용 한 대, '
+            f'앞 왼쪽과 뒤 오른쪽 모서리에 높이 0.08 m 장애물용 두 대"><g font-family="var(--uos-font)">{"".join(parts)}</g></svg>')
 
 
 # Why wheel-only odometry drifts on the S3 seed 1 run (recomputed 2026-10-06
@@ -144,9 +144,9 @@ add('개발 진행 보고', '6주차\n자율 지게차 개발', 20, '',
 # Values taken as-is from a catalogue, standard or datasheet share one row
 # (user, 2026-10-07: they were presented last week and need no itemising).
 SIM_PARAMS = [
-    ('규격이 있는 값', '차체 외형·무게 · 팔레트 · LiDAR · 카메라', 'spec', '카탈로그 · EPAL 6 규격 · 데이터시트 수치 그대로'),
+    ('규격이 있는 값', '차체 · 팔레트 · 위치 추정 LiDAR · 카메라', 'spec', '카탈로그 · EPAL 6 규격 · 데이터시트 수치 그대로'),
     ('축간 거리 · 바퀴 반지름', '0.64 m · 0.135 m', 'photo', '이번 실행은 사진 추정값 (지난주 실측값으로 교체 예정)'),
-    ('장애물 LiDAR 배치', '0.08 m 두 대 (+ 1.05 m)', 'test', '대수·높이 후보별 정지 거리 안 장애물 관측 비교'),
+    ('장애물 LiDAR', '높이 0.08 m 2대 (위치 추정용과 별도)', 'test', '대수·높이 후보별 정지 거리 안 장애물 관측 비교'),
     ('바퀴 · 팔레트 마찰', '정지 0.8 · 운동 0.7', 'assume', '고무–콘크리트 일반 범위 (약 0.6–0.9) 안의 값'),
     ('구동 토크', '바퀴당 3 N·m (네 바퀴)', 'assume', '적재 34 kg을 0.3 m/s²로 가속하는 힘의 약 9배'),
     ('운반 속도', '0.3 m/s', 'assume', '카탈로그 최고 5 km/h (1.4 m/s)의 약 1/5'),
@@ -265,10 +265,10 @@ add('SLAM 위치 정확도', '05  SLAM 위치 정확도', 55, f"""
 
 # ----------------------------------------------------------------- 5
 add('낮은 장애물용 LiDAR', '06  낮은 장애물용 LiDAR', 70, f"""
-<h2 class="headline">1.05 m 높이와 겹치는 바닥 장애물 43–47 % · 0.08 m 평면 두 대 추가</h2>
+<h2 class="headline">1.05 m 높이와 겹치는 바닥 장애물 43–47 % · 높이 0.08 m LiDAR 2대 추가</h2>
 <div class="split grow" style="grid-template-columns:1fr 1fr;gap:40px">
-<div class="stack" style="gap:6px"><p class="panel-h">평면 높이별 · 평면에 걸치는 바닥 장애물 비율</p>{plane_chart()}</div>
-<div class="stack" style="gap:6px"><p class="panel-h">위에서 본 LiDAR 배치 (시뮬레이션 차체 모델)</p>{lidar_layout()}</div>
+<div class="stack" style="gap:6px"><p class="panel-h">LiDAR 높이별 · 스캔 평면에 걸치는 바닥 장애물 비율</p>{plane_chart()}</div>
+<div class="stack" style="gap:6px"><p class="panel-h">위에서 본 LiDAR 3대 배치 (시뮬레이션 차체 모델)</p>{lidar_layout()}</div>
 </div>
 <div class="takeaway">비율은 높이만 본 상한 (가림 제외) · 점은 물건 배치가 다른 세 공장</div>
 """,
