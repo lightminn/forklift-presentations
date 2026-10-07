@@ -216,7 +216,7 @@ add('SLAM 위치로 운반', '04  SLAM 위치로 운반 임무', 50, f"""
 add('SLAM 위치 정확도', '05  SLAM 위치 정확도', 90, f"""
 <h2 class="headline">끝 시점 위치 오차: 바퀴 회전만 계산하면 3.4 m → SLAM은 약 4 cm</h2>
 <div class="split grow" style="grid-template-columns:0.85fr 1.15fr">
-<figure class="shot">{video('45_slam_error.mp4', '이전 SLAM 운반 실행에서 slam_toolbox가 만든 지도와 추정 경로. 아래 숫자는 SLAM 위치 오차와 바퀴 회전만으로 계산한 위치의 오차')}<figcaption class="small muted">이전 SLAM 운반 실행 (사진 추정 차체 · 장애물은 시뮬레이터 정답) · 빨강: SLAM · 주황: 바퀴 회전만 계산 · 파랑: 실제</figcaption></figure>
+<figure class="shot">{video('45_slam_error.mp4', '이전 SLAM 운반 실행에서 slam_toolbox가 만든 지도와 추정 경로. 아래 숫자는 SLAM 위치 오차와 바퀴 회전만으로 계산한 위치의 오차')}<figcaption class="small muted">빨강: SLAM · 주황: 바퀴 회전만 · 파랑: 실제</figcaption></figure>
 <div class="stack" style="gap:26px">
 <table class="comparison t6 causes6">
 <tr><th>위치 추정</th><th>오차</th><th>이유</th></tr>
