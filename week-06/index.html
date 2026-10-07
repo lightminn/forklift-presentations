@@ -98,7 +98,7 @@ camera_rgb.mp4 39 s · 43 s 프레임: videos-from-ws1/20261006T1124Z_p5_slam_se
 
 <section data-label="SLAM 위치로 운반" data-screen-label="05" data-duration="50" data-speaker-notes="권장 50초
 
-이번 주 가장 큰 진전입니다. 오른쪽 표처럼 4주차와 달라진 것은 로봇 위치입니다. 시뮬레이터가 알려 주던 정답 위치 대신, slam_toolbox가 실시간으로 추정한 위치만으로 지게차를 움직였습니다. 영상은 팔레트를 인식해 들어 올리고, 목적지에 내린 뒤 출발점으로 돌아오는 360초 임무 전체를 위에서 본 것입니다. 정답 위치 없이 임무를 끝까지 마쳤고, 포크와 팔레트 충돌은 없었으며 팔레트를 내려놓은 위치 오차는 8에서 22밀리미터였습니다. 다만 경로를 짤 때 장애물은 아직 시뮬레이터 정답 지도를 썼습니다. (전환)
+이번 주 가장 큰 진전입니다. 오른쪽 표처럼 4주차와 달라진 것은 로봇 위치와 장애물입니다. 시뮬레이터가 알려 주던 정답 위치 대신 slam_toolbox가 실시간으로 추정한 위치로 지게차를 움직이고, 장애물은 LiDAR로 감지합니다. 영상은 팔레트를 인식해 들어 올리고, 목적지에 내린 뒤 출발점으로 돌아오는 360초 임무 전체를 위에서 본 것입니다. 정답 위치 없이 임무를 끝까지 마쳤고, 포크와 팔레트 충돌은 없었으며 팔레트를 내려놓은 위치 오차는 8에서 22밀리미터였습니다. 장애물 감지는 뒤에서 따로 말씀드리겠습니다. (전환)
 
 [Sources]
 화면 생성: ws1 artifacts/20261004_slam_s3/seed_1 3분할 영상의 조감 칸만(상태 글자 제외) 12배속 (prepare_clips.py)
@@ -115,7 +115,7 @@ S2 v3.8d — 기대 완주 장면 1·3·5 모두 완주, 하역 12.6·22.4·7.8 
 <tr><th>입력</th><th>4주차</th><th>6주차</th></tr>
 <tr><td>팔레트 위치</td><td>카메라 추정</td><td>카메라 추정</td></tr>
 <tr><td>로봇 위치</td><td>시뮬레이터</td><td class="blue"><b>SLAM 추정</b></td></tr>
-<tr><td>장애물</td><td>시뮬레이터</td><td>시뮬레이터 (07장부터 LiDAR)</td></tr>
+<tr><td>장애물</td><td>시뮬레이터</td><td class="blue"><b>LiDAR 감지</b></td></tr>
 <tr><td>목적지</td><td>시뮬레이터</td><td>시뮬레이터</td></tr>
 </table>
 </div>
@@ -173,7 +173,7 @@ S3 장면 1 — 위치 RMSE 0.088 m · 최대 0.190 m, 358 s 에서 SLAM 4.0 cm 
 
 <section data-label="새 장애물 재계획" data-screen-label="08" data-duration="100" data-speaker-notes="권장 100초
 
-이 장부터는 경로를 짤 때 시뮬레이터 정답 지도를 쓰지 않고, LiDAR 세 대가 만든 장애물 격자만 씁니다. 영상은 팔레트를 들고 운반하던 중 경로 위에 상자가 새로 나타나는 장면입니다. 지게차는 멈출 수 있는 거리 안에 장애물이 있는지 계속 확인하고, 경로가 막히면 멈춘 뒤 그 자리에서 새 경로를 짜서 다시 출발합니다. 회색 선이 이전 경로, 노란 선이 바뀐 경로입니다. 이 실행은 상자를 피해서 임무를 끝까지 마쳤습니다. (전환)
+경로를 짤 때 장애물은 시뮬레이터 정답 지도를 쓰지 않고, LiDAR 세 대가 만든 장애물 격자만 씁니다. 영상은 팔레트를 들고 운반하던 중 경로 위에 상자가 새로 나타나는 장면입니다. 지게차는 멈출 수 있는 거리 안에 장애물이 있는지 계속 확인하고, 경로가 막히면 멈춘 뒤 그 자리에서 새 경로를 짜서 다시 출발합니다. 회색 선이 이전 경로, 노란 선이 바뀐 경로입니다. 이 실행은 상자를 피해서 임무를 끝까지 마쳤습니다. (전환)
 
 [Sources]
 화면 생성: ws1 l5_video14_nopc/seed_1_n1 3분할 영상 66–102 s 의 조감·SLAM 지도 두 칸 1.5배속 (prepare_clips.py)
@@ -227,7 +227,7 @@ EPAL 6 과 T11 × 0.6 모두 필수: CLAUDE.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="09  남은 과제와 다음 작업"><div class="slide-body">
 <h2 class="headline">남은 과제: 센서만으로 계획한 임무의 반복 검증</h2>
-<table class="comparison next6 grow"><tr><th>이번 주 확인</th><th></th><th>다음 단계</th></tr><tr><td>SLAM 위치로 임무 완주 · 장애물은 정답 지도</td><td class="arrow">→</td><td>LiDAR 격자만으로 계획한 임무를 여러 장면에서 반복</td></tr><tr><td>새 장애물 감지·재계획 · 본 장애물 기억 시연</td><td class="arrow">→</td><td>후진 경로·하역 목적지·센서 끊김 상황까지 반복 확인</td></tr><tr><td>포켓 안이 비었는지 보는 확인은 끄고 시연</td><td class="arrow">→</td><td>확인을 켜도 삽입이 멈추지 않도록 보완</td></tr><tr><td>EPAL 6 팔레트</td><td class="arrow">→</td><td>T11 팔레트</td></tr></table>
+<table class="comparison next6 grow"><tr><th>이번 주 확인</th><th></th><th>다음 단계</th></tr><tr><td>SLAM 위치 · LiDAR 장애물로 임무 완주</td><td class="arrow">→</td><td>같은 임무를 여러 장면에서 반복</td></tr><tr><td>새 장애물 감지·재계획 · 본 장애물 기억 시연</td><td class="arrow">→</td><td>후진 경로·하역 목적지·센서 끊김 상황까지 반복 확인</td></tr><tr><td>포켓 안이 비었는지 보는 확인은 끄고 시연</td><td class="arrow">→</td><td>확인을 켜도 삽입이 멈추지 않도록 보완</td></tr><tr><td>EPAL 6 팔레트</td><td class="arrow">→</td><td>T11 팔레트</td></tr></table>
 </div></x-import>
 </section>
 </x-import></x-dc></body></html>
