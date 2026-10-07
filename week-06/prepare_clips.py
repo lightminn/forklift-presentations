@@ -110,6 +110,16 @@ def single_lidar(repo):
                        f"{label('주행 화면', 14)},{label('SLAM 지도 · LiDAR 장애물', 644, 630, 500)},setpts=PTS/1.5"],
                a / '46_new_obstacle_single.mp4', crf=26))
     poster(a / '46_new_obstacle_single.mp4', 5, a / '46_new_obstacle_single_poster.jpg')
+    m1 = v / '20261007_l7_single_seed1_m'     # the mission without a new box, overhead only
+    run(encode(['-i', str(m1 / 'slam_online_three_panel.mp4'), '-vf', f"{PANEL1},{label('주행 화면', 14)},setpts=PTS/12"],
+               a / '47_mission_single.mp4'))
+    poster(a / '47_mission_single.mp4', 25, a / '47_mission_single_poster.jpg')
+    # Map building: the first two minutes, overhead + online map, 8x.
+    run(encode(['-t', '120', '-i', str(m1 / 'slam_online_three_panel.mp4'),
+                '-vf', "crop=1250:620:20:70,"
+                       f"{label('주행 화면', 14)},{label('SLAM 지도', 644, 630, 500)},setpts=PTS/8"],
+               a / '48_map_single.mp4', crf=26))
+    poster(a / '48_map_single.mp4', 14, a / '48_map_single_poster.jpg')
     print('done')
 
 
