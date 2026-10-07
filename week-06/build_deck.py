@@ -36,11 +36,6 @@ def add(label, title, seconds, body, notes, sources, foot):
                        notes=notes, sources=sources, foot=foot))
 
 
-def cond(*items):
-    """Condition line: what this result used (ground truth or sensing)."""
-    return ('<div class="demo-tag"><b>조건</b> ' + ' · '.join(items) + '</div>')
-
-
 def video(src, alt, cls='media'):
     poster = src.rsplit('.', 1)[0] + '_poster.jpg'
     poster_attr = f' poster="assets/{poster}"' if (ROOT / 'assets' / poster).exists() else ''
@@ -48,10 +43,6 @@ def video(src, alt, cls='media'):
             f'aria-label="{escape(alt, quote=True)}"></video>')
 
 
-def brief(title, *items):
-    """A Korean IR-style block: a coloured heading and one-line bullets ending in nouns."""
-    lis = ''.join(f'<li>{i}</li>' for i in items)
-    return f'<div class="brief6"><p class="bh">{title}</p><ul>{lis}</ul></div>'
 
 
 # ----------------------------------------------------------------- charts
@@ -188,15 +179,22 @@ add('시뮬레이션 설정', '01  시뮬레이션 설정과 근거', 60, f"""
 # ----------------------------------------------------------------- 2
 add('캐리지 하단 카메라', '02  캐리지 하단 카메라', 65, f"""
 <h2 class="headline">카메라를 캐리지 아래로 옮겨 포켓 진입 직전까지 관측</h2>
-<div class="cmp6 grow">
-<div class="rowlab"><b>기존 장착</b><span>차체 앞 높은 위치</span><span>수평 장착</span></div>
+<div class="cam6 grow">
+<div class="cam6-grid">
+<p class="ch">기존 장착</p><p class="ch now">변경 장착</p>
 <figure class="shot"><img class="media" src="assets/43_before_far.jpg" alt="기존 장착 카메라로 팔레트에 다가가는 화면. 팔레트와 두 포켓이 보임"><figcaption class="small muted">접근 중</figcaption></figure>
-<figure class="shot"><img class="media" src="assets/43_before_near.jpg" alt="기존 장착 카메라로 포크를 넣는 중의 화면. 팔레트가 화면 아래로 빠져 벽과 바닥만 보임"><figcaption class="small muted">삽입 중 · 팔레트가 화면 밖</figcaption></figure>
-<div class="rowlab now"><b>변경 장착</b><span>캐리지 아래</span><span>아래로 약 6° 숙임</span><span class="ref">4주차 Crown 특허 참고</span></div>
 <figure class="shot"><img class="media" src="assets/43_camera_far.jpg" alt="새 장착 카메라로 팔레트에 다가가는 화면. 팔레트와 두 포켓을 찾은 표시"><figcaption class="small muted">접근 중</figcaption></figure>
-<figure class="shot"><img class="media" src="assets/43_camera_near.jpg" alt="새 장착 카메라로 포켓에 들어가기 직전의 화면. 두 포켓과 윗판이 화면 안에 있음"><figcaption class="small muted">진입 직전 · 포켓이 계속 보임</figcaption></figure>
+<figure class="shot"><img class="media" src="assets/43_before_near.jpg" alt="기존 장착 카메라로 포크를 넣는 중의 화면. 팔레트가 화면 아래로 빠져 벽과 바닥만 보임"><figcaption class="small muted">삽입 중</figcaption></figure>
+<figure class="shot"><img class="media" src="assets/43_camera_near.jpg" alt="새 장착 카메라로 포켓에 들어가기 직전의 화면. 두 포켓과 윗판이 화면 안에 있음"><figcaption class="small muted">진입 직전</figcaption></figure>
 </div>
-{cond(SIM)}
+<table class="comparison t6">
+<tr><th>항목</th><th>기존</th><th>변경</th></tr>
+<tr><td>장착 위치</td><td>차체 앞 높은 곳</td><td class="blue"><b>캐리지 아래</b></td></tr>
+<tr><td>기울기</td><td>수평</td><td class="blue"><b>아래로 약 6°</b></td></tr>
+<tr><td>근접 시</td><td>팔레트가 화면 밖</td><td class="blue"><b>포켓이 화면 안</b></td></tr>
+</table>
+</div>
+<div class="takeaway">참고: 4주차 장착 사례 ② Crown 특허 (포크 캐리지 하단 장착)</div>
 """,
     """먼저 카메라 위치입니다. 윗줄이 지난 발표의 카메라로, 차체 앞 높은 곳에 수평으로 달려 있었습니다. 다가갈 때는 팔레트가 잘 보이지만, 포크를 넣기 시작하면 오른쪽처럼 팔레트가 화면 아래로 빠져서 벽과 바닥만 보입니다. 그래서 4주차에 소개한 Crown 특허처럼 카메라를 캐리지(포크를 올리고 내리는 부분) 아래로 옮기고 살짝 아래로 숙였습니다. 아랫줄이 바꾼 카메라입니다. 포켓에 들어가기 직전까지 포켓이 화면 안에 있고, 가까워지면 팔레트 앞면은 화면 밖으로 나가지만 윗판을 따라가며 포켓 위치를 끝까지 놓치지 않습니다. (전환)""",
     [(CROWN, 'Crown 특허 US9990535B2 — 포크 캐리지 하단 장착 (4주차 장착 사례 ②)'),
@@ -213,8 +211,8 @@ add('지도 작성', '03  2D LiDAR 지도 작성', 35, f"""
 <span class="pair-tag right">SLAM 지도 <i>파랑 SLAM 추정 · 회색 실제 경로</i></span>
 <video class="pair-video" src="assets/21_slam_map_pair_fast.mp4" poster="assets/21_slam_map_pair_fast_poster.jpg" autoplay loop muted playsinline aria-label="왼쪽은 공장 홀을 위에서 본 지게차 주행, 오른쪽은 같은 순간까지 slam_toolbox가 만든 지도와 추정 경로"></video>
 </div></div>
+<p class="cap6">주행 기록을 slam_toolbox로 다시 돌린 영상 (주행 자체는 시뮬레이터 정답 위치) · 20배속</p>
 <div class="takeaway">지도에 없는 더미: 높이 0.7–0.96 m로 스캔 평면 (1.05 m) 아래 → 06 낮은 장애물용 LiDAR</div>
-{cond(SIM, '주행 기록을 slam_toolbox로 다시 돌린 영상 (주행 자체는 시뮬레이터 정답 위치)')}
 """,
     """다음은 위치를 추정하는 방법입니다. 지게차가 공장을 돌면서 LiDAR로 주변 거리를 재면, slam_toolbox(공개 SLAM 패키지)가 이 스캔을 겹쳐 지도를 만들면서 그 지도 안에서 자기 위치를 찾습니다. 오른쪽처럼 돌수록 지도가 넓어지고, 파란 추정 경로가 회색 실제 경로를 따라갑니다. 다만 왼쪽에 있는 더미 중 일부는 지도에 나오지 않는데, 높이가 0.7에서 0.96미터라 1.05미터 높이의 스캔 평면 아래에 있기 때문입니다. 이 문제는 뒤의 낮은 장애물용 LiDAR에서 다룹니다. (전환)""",
     [(FACTORY, '§1 30 × 31 m 공장 홀 · §3 기록 · §4 slam_toolbox 재생'),
@@ -223,33 +221,42 @@ add('지도 작성', '03  2D LiDAR 지도 작성', 35, f"""
 
 # ----------------------------------------------------------------- 4
 add('SLAM 위치로 운반', '04  SLAM 위치로 운반 임무', 50, f"""
-<h2 class="headline">SLAM 추정 위치만으로 운반 임무 완주</h2>
-<div class="split grow" style="grid-template-columns:1fr 1.15fr">
+<h2 class="headline">로봇 위치를 SLAM 추정으로 바꿔 운반 임무 완주</h2>
+<div class="split grow" style="grid-template-columns:0.72fr 1.28fr;gap:32px">
 <figure class="shot">{video('44_mission_overview.mp4', '공장 홀을 위에서 본 지게차. 팔레트를 인식해 들고, 목적지에 내린 뒤 출발점으로 돌아온다')}<figcaption class="small muted">12배속 · 360초 임무 전체</figcaption></figure>
-<div class="stack" style="justify-content:center;gap:18px">
-{brief('임무 결과', '정답 위치 없이 인식 → 들기 → 운반 → 하역 → 복귀까지 완주', '팔레트 하역 위치 오차 8–22 mm', '포크·팔레트 충돌 없음')}
+<div class="stack">
+<table class="comparison t6">
+<tr><th>입력</th><th>4주차</th><th>6주차</th></tr>
+<tr><td>팔레트 위치</td><td>카메라 추정</td><td>카메라 추정</td></tr>
+<tr><td>로봇 위치</td><td>시뮬레이터</td><td class="blue"><b>SLAM 추정</b></td></tr>
+<tr><td>장애물</td><td>시뮬레이터</td><td>시뮬레이터 (07장부터 LiDAR)</td></tr>
+<tr><td>목적지</td><td>시뮬레이터</td><td>시뮬레이터</td></tr>
+</table>
 </div>
 </div>
-{cond(SIM, '위치: SLAM 추정', '경로 계획의 장애물: 시뮬레이터 정답 지도', '팔레트: 깊이 카메라 인식')}
+<div class="takeaway">결과: 관측부터 복귀까지 완주 · 팔레트 하역 위치 오차 8–22 mm · 포크·팔레트 충돌 없음</div>
 """,
-    """이번 주 가장 큰 진전입니다. 이번에는 정답 위치를 쓰지 않고, slam_toolbox가 실시간으로 추정한 위치만으로 지게차를 움직였습니다. 영상은 팔레트를 인식해 들어 올리고, 목적지에 내린 뒤 출발점으로 돌아오는 360초 임무 전체를 위에서 본 것입니다. 정답 위치 없이 임무를 끝까지 마쳤고, 포크와 팔레트 충돌은 없었으며 팔레트를 내려놓은 위치 오차는 8에서 22밀리미터였습니다. 다만 경로를 짤 때 장애물은 아직 시뮬레이터 정답 지도를 썼습니다. (전환)""",
+    """이번 주 가장 큰 진전입니다. 오른쪽 표처럼 4주차와 달라진 것은 로봇 위치입니다. 시뮬레이터가 알려 주던 정답 위치 대신, slam_toolbox가 실시간으로 추정한 위치만으로 지게차를 움직였습니다. 영상은 팔레트를 인식해 들어 올리고, 목적지에 내린 뒤 출발점으로 돌아오는 360초 임무 전체를 위에서 본 것입니다. 정답 위치 없이 임무를 끝까지 마쳤고, 포크와 팔레트 충돌은 없었으며 팔레트를 내려놓은 위치 오차는 8에서 22밀리미터였습니다. 다만 경로를 짤 때 장애물은 아직 시뮬레이터 정답 지도를 썼습니다. (전환)""",
     [(SLAM, 'S2 v3.8d — 기대 완주 장면 1·3·5 모두 완주, 하역 12.6·22.4·7.8 mm, 안전 위반 0 (장면 0 은 정답 위치로도 실패, 2·4 미실행)'),
      (SLAM, '범위: 경로 계획 장애물은 정답 사각형, 하역 도킹 기준 스캔은 사전 정보'),
      ('docs/validation/2026-10-03-fifth-frozen-evaluation.md', '정답 위치 30/30 완주 (단측 95 % 하한 90.5 %)')],
-    '화면 생성: ws1 artifacts/20261004_slam_s3/seed_1 3분할 영상의 조감 칸 12배속 (prepare_clips.py)')
+    '화면 생성: ws1 artifacts/20261004_slam_s3/seed_1 3분할 영상의 조감 칸만(상태 글자 제외) 12배속 (prepare_clips.py)')
 
 # ----------------------------------------------------------------- 4b
 add('SLAM 위치 정확도', '05  SLAM 위치 정확도', 55, f"""
 <h2 class="headline">바퀴 회전만으로는 3.4 m 어긋나는 위치를 SLAM은 9 cm 오차로 유지</h2>
-<div class="split grow" style="grid-template-columns:1fr 1.15fr">
+<div class="split grow" style="grid-template-columns:0.85fr 1.15fr">
 <figure class="shot">{video('45_slam_error.mp4', '같은 임무 동안 slam_toolbox가 만든 지도와 추정 경로. 아래 숫자는 SLAM 추정 오차와 바퀴 회전만으로 추정했을 때의 오차')}<figcaption class="small muted">같은 임무 · 12배속 · 빨강: SLAM 추정 · 파랑: 실제 경로</figcaption></figure>
-<div class="stack" style="justify-content:center;gap:18px">
-{brief('바퀴 회전만 쓴 추정의 오차 원인', '주행 거리 : 93 m 중 0.7 m 오차로 작음', '방향 : 끝 시점 24° 오차, 위치 오차 3.4 m의 대부분 차지')}
-<div class="why6"><p class="chart-cap">회전할 때 계산보다 실제로 덜 돈 비율</p>{shortfall_chart()}<p class="chart-cap">팔레트를 싣고 돌 때 덜 돎 (바퀴 옆 미끄러짐으로 추정) → 방향 오차가 쌓임</p></div>
-{brief('SLAM 추정', 'LiDAR 스캔을 지도와 맞춰 방향·위치 계속 보정', '위치 오차 9 cm (RMSE)로 유지')}
+<div class="stack" style="gap:26px">
+<table class="comparison t6 causes6">
+<tr><th>위치 추정</th><th>오차</th><th>이유</th></tr>
+<tr><td>바퀴 회전만</td><td>3.4 m<br>(끝 시점)</td><td>팔레트를 싣고 돌 때 계산보다 덜 돌아 방향이 24° 틀어짐 (주행 거리 오차는 93 m 중 0.7 m)</td></tr>
+<tr><td>SLAM</td><td>9 cm<br>(RMSE)</td><td>LiDAR 스캔을 지도와 맞춰 방향·위치를 계속 보정</td></tr>
+</table>
+<div class="why6"><p class="panel-h">회전할 때 계산보다 실제로 덜 돈 비율</p>{shortfall_chart()}</div>
 </div>
 </div>
-{cond(SIM, '팔레트 10 kg (실물 EPAL 6 무게) · 바퀴 마찰 0.7 (가정)', '센서 잡음을 꺼도 346 cm')}
+<div class="takeaway">덜 도는 원인: 적재 회전 시 바퀴 옆 미끄러짐 (추정, 바퀴 마찰 0.7 가정) · 센서 잡음을 꺼도 오차 거의 같음</div>
 """,
     """같은 임무를 위치 추정 쪽에서 본 화면입니다. 왼쪽 지도에서 빨간 SLAM 추정 경로가 파란 실제 경로를 거의 그대로 따라갑니다. 아래 숫자를 보시면, 바퀴 회전과 조향각만으로 위치를 추정했을 때는 끝에서 3.4미터가 어긋납니다. 왜 이만큼 어긋나는지 따져 보면, 달린 거리는 93미터 중 0.7미터만 틀렸고 대부분은 방향이 24도 틀어진 탓입니다. 방향은 팔레트를 싣고 돌 때 틀어졌습니다. 빈 차일 때는 계산한 만큼 돌지만, 팔레트를 실으면 실제로는 계산보다 7.5퍼센트 덜 돕니다. 시뮬레이션에서 팔레트 무게(실물과 같은 10 kg)가 실리면 바퀴가 옆으로 미끄러지기 때문으로 보이고, 이 미끄러짐은 앞 장에서 말씀드린 가정값인 바퀴 마찰에 따라 달라집니다. 센서 잡음을 꺼도 오차가 346센티미터로 거의 같아서, 잡음 탓은 아닙니다. 반면 SLAM은 LiDAR 스캔을 지도와 맞춰 방향과 위치를 계속 바로잡기 때문에 오차가 RMSE(제곱평균제곱근)로 약 9센티미터였습니다. 실물에서도 짐을 실으면 같은 일이 생길 수 있어서, SLAM이 필요하다고 판단했습니다. (전환)""",
     [(SLAM, 'S3 장면 1 — 위치 RMSE 0.088 m · 최대 0.190 m, 358 s 에서 SLAM 4.0 cm 대 바퀴 오도메트리만 340 cm'),
@@ -260,11 +267,11 @@ add('SLAM 위치 정확도', '05  SLAM 위치 정확도', 55, f"""
 # ----------------------------------------------------------------- 5
 add('낮은 장애물용 LiDAR', '06  낮은 장애물용 LiDAR', 70, f"""
 <h2 class="headline">1.05 m 높이와 겹치는 바닥 장애물 43–47 % · 0.08 m 평면 두 대 추가</h2>
-<div class="split grow" style="grid-template-columns:1fr 1fr">
-<div class="stack" style="justify-content:center;gap:8px"><p class="chart-cap">평면 높이별 · 평면에 걸치는 바닥 장애물 비율 (점: 물건 배치가 다른 공장)</p>{plane_chart()}</div>
-<div class="stack" style="justify-content:center;gap:8px"><p class="chart-cap">위에서 본 배치 (시뮬레이션 차체 모델)</p>{lidar_layout()}</div>
+<div class="split grow" style="grid-template-columns:1fr 1fr;gap:40px">
+<div class="stack" style="gap:6px"><p class="panel-h">평면 높이별 · 평면에 걸치는 바닥 장애물 비율</p>{plane_chart()}</div>
+<div class="stack" style="gap:6px"><p class="panel-h">위에서 본 LiDAR 배치 (시뮬레이션 차체 모델)</p>{lidar_layout()}</div>
 </div>
-{cond(SIM, '겹치는 비율은 높이만 본 상한 (가림은 빼고 계산)')}
+<div class="takeaway">비율은 높이만 본 상한 (가림 제외) · 점은 물건 배치가 다른 세 공장</div>
 """,
     """그렇다면 장애물도 센서로 보려면 어떻게 해야 할까요? 위치 추정용 LiDAR는 1.05미터 높이 한 평면만 봅니다. 공장 바닥 장애물 중 이 높이와 겹치는 것은 43에서 47퍼센트뿐입니다(가림은 빼고 높이만 본 상한). 낮은 상자나 빈 팔레트는 이 평면 아래로 지나갑니다. 도표처럼 평면을 낮출수록 많이 걸리고, 높이만 보면 0.1에서 0.18미터 평면은 모든 바닥 장애물에 걸칩니다. 그래서 차체 앞 왼쪽과 뒤 오른쪽 모서리에 0.08미터 높이 LiDAR 두 대를 추가했습니다. 이렇게 하면 차체 둘레의 낮은 장애물까지 볼 수 있습니다. (전환)""",
     [(LIDAR, '현재 상태 ① — 장면 1·3·5 의 바닥 장애물 90·87·87 개 중 1.05 m 평면과 겹치는 42·37·38 개 (사각형 기둥 근사 상한)'),
@@ -274,32 +281,32 @@ add('낮은 장애물용 LiDAR', '06  낮은 장애물용 LiDAR', 70, f"""
 
 # ----------------------------------------------------------------- 6
 add('새 장애물 재계획', '07  새 장애물 감지와 재계획', 100, f"""
-<h2 class="headline">운반 중 경로에 나타난 상자 감지 → 정지 → 새 경로로 재개</h2>
-<div class="split grow" style="grid-template-columns:1.62fr 0.78fr">
-<figure class="shot">{video('41_new_obstacle.mp4', '팔레트를 들고 운반하던 중 경로 위에 상자가 나타나자 멈추고, 노란 새 경로로 바꿔 돌아가는 장면. 회색 선은 이전 경로')}<figcaption class="small muted">1.5배속 · 노랑: 현재 경로 · 회색: 직전 경로 · 주황: LiDAR 장애물 칸</figcaption></figure>
-<div class="stack" style="justify-content:center;gap:16px">
-{brief('경로 계획 장애물', 'LiDAR 격자만 사용 (정답 지도 미사용)')}
-{brief('실행 결과', '상자 출현 시 정지 후 경로 재계획', '상자 회피, 운반·하역·복귀까지 완주')}
+<h2 class="headline">경로 계획 장애물을 LiDAR 격자로 · 운반 중 나타난 상자에 재계획</h2>
+<div class="split grow" style="grid-template-columns:1.75fr 1fr;gap:28px">
+<figure class="shot">{video('41_new_obstacle.mp4', '팔레트를 들고 운반하던 중 경로 위에 상자가 나타나자 멈추고, 노란 새 경로로 바꿔 돌아가는 장면. 왼쪽은 위에서 본 주행, 오른쪽은 SLAM 지도와 LiDAR 장애물 칸. 회색 선은 이전 경로')}<figcaption class="small muted">1.5배속 · 노랑: 현재 경로 · 회색: 직전 경로 · 주황: LiDAR 장애물 칸</figcaption></figure>
+<div class="phase-flow vert"><b>① LiDAR가 경로 위 상자 감지</b><span class="arrow">↓</span><b>② 정지</b><span class="arrow">↓</span><b>③ 멈춘 자리에서 새 경로 계획</b><span class="arrow">↓</span><b>④ 운반 재개</b></div>
 </div>
-</div>
-{cond(SIM, '위치: SLAM 추정', '장애물: LiDAR')}
+<div class="takeaway">결과: 상자를 피해 운반·하역 후 출발점 복귀까지 완주 · 시뮬레이터 정답 지도 미사용</div>
 """,
     """이 장부터는 경로를 짤 때 시뮬레이터 정답 지도를 쓰지 않고, LiDAR 세 대가 만든 장애물 격자만 씁니다. 영상은 팔레트를 들고 운반하던 중 경로 위에 상자가 새로 나타나는 장면입니다. 지게차는 멈출 수 있는 거리 안에 장애물이 있는지 계속 확인하고, 경로가 막히면 멈춘 뒤 그 자리에서 새 경로를 짜서 다시 출발합니다. 회색 선이 이전 경로, 노란 선이 바뀐 경로입니다. 이 실행은 상자를 피해서 임무를 끝까지 마쳤습니다. (전환)""",
     [(N1, 'result.json — success, 하역 15.8 mm, 정지 구역 침범 0, 금지 접촉 0, 새 상자 출현 73.2 s · 그 상자에 대한 재계획 83.6 s (140.0 s 재계획은 다른 이유)'),
      (LIDAR, '경로 계획: 정답 소품 없는 격자 세계 + LiDAR 점유 (정답·사전 정보 감사)')],
-    '화면 생성: ws1 l5_video14_nopc/seed_1_n1 3분할 영상 66–102 s 1.5배속 (prepare_clips.py)')
+    '화면 생성: ws1 l5_video14_nopc/seed_1_n1 3분할 영상 66–102 s 의 조감·SLAM 지도 두 칸 1.5배속 (prepare_clips.py)')
 
 # ----------------------------------------------------------------- 7
 add('본 장애물 기억', '08  본 장애물 기억', 95, f"""
 <h2 class="headline">본 장애물을 기억해 복귀 경로가 적재 더미를 우회</h2>
-<div class="split grow" style="grid-template-columns:1.62fr 0.78fr">
+<div class="split grow" style="grid-template-columns:2fr 1fr">
 <figure class="shot">{video('42_memory_compare.mp4', '같은 장면에서 하역 후 출발점으로 돌아가는 첫 계획. 왼쪽은 노란 경로가 적재 더미 줄을 가로지르고, 오른쪽은 더미를 돌아간다')}<figcaption class="small muted">같은 장면 · 하역 뒤 복귀 경로 · 노랑: 계획 경로</figcaption></figure>
-<div class="stack" style="justify-content:center;gap:16px">
-{brief('기억 없음 (왼쪽)', '현재 안 보이는 더미는 빈 곳으로 판단', '더미 줄을 가로지르는 복귀 경로')}
-{brief('본 장애물 기억 (오른쪽)', '한 번 본 더미는 다시 비어 보일 때까지 유지', '처음부터 더미를 우회하는 복귀 경로')}
+<div class="stack">
+<table class="comparison t6 mem6">
+<tr><th>구분</th><th>복귀 경로 계획</th></tr>
+<tr><td>기억 없음<br>(왼쪽)</td><td>안 보이는 더미를 빈 곳으로 보고 가로지름</td></tr>
+<tr><td>본 장애물 기억<br>(오른쪽)</td><td class="blue"><b>본 더미와 SLAM 지도로 처음부터 우회</b></td></tr>
+</table>
 </div>
 </div>
-{cond(SIM)}
+<div class="takeaway">본 장애물은 그 자리가 다시 비어 보일 때까지 유지 · 정지 판단은 실시간 관측만 사용</div>
 """,
     """다음은 본 장애물을 기억하는 부분입니다. LiDAR가 지금 보고 있는 장애물만으로 경로를 짜면, 운반하면서 이미 본 적재 더미라도 지금 안 보이면 빈 곳으로 판단합니다. 왼쪽이 그런 경우로, 하역 후 돌아가는 첫 경로가 더미 줄을 가로지릅니다. 오른쪽은 경로를 짤 때 그동안 쌓인 관측과 SLAM 지도를 같이 쓰는 경우입니다. 한 번 본 장애물은 그 자리가 다시 비어 보일 때까지 남겨 두기 때문에, 처음부터 더미를 돌아가는 경로를 짭니다. 앞 장의 실행도 이 방식을 쓴 것이고, 멈출지 말지는 지금처럼 실시간 관측으로만 판단합니다. (전환)""",
     [(N2_OLD, 'plan_history.json — 복귀 첫 계획 246.5 s, 그 시각 전 관측 점유 칸과 최소 0.00 m'),

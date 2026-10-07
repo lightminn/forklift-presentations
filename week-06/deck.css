@@ -484,16 +484,6 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .next6 td.arrow { width:6%; text-align:center; color:#8c959e; font-weight:700; }
 .next6 td:last-child { font-weight:700; color:#1b1f24; }
 /* Week 6 slide 2: before / after rows of camera frames. */
-.cmp6 { display:grid; grid-template-columns:170px 1fr 1fr; grid-template-rows:1fr 1fr; gap:10px 16px; min-height:0; }
-.cmp6 .rowlab { display:flex; flex-direction:column; justify-content:center; gap:6px; padding-left:14px; border-left:6px solid #9aa3ad; }
-.cmp6 .rowlab.now { border-left-color:var(--uos-blue); }
-.cmp6 .rowlab b { font-size:28px; color:#1b1f24; }
-.cmp6 .rowlab.now b { color:var(--uos-blue); }
-.cmp6 .rowlab span { font-size:18px; color:#44505c; line-height:1.35; }
-.cmp6 .shot { min-height:0; height:100%; }
-.cmp6 .rowlab span.ref { font-size:16px; color:var(--uos-blue); }
-.why6 { background:var(--uos-surface); padding:8px 16px 10px; border-top:3px solid #c26a1a; }
-.why6 .diagram { width:100%; height:auto; display:block; }
 /* Week 6 slide 2: simulation parameters and their basis. */
 .params6 { font-size:19px; }
 .params6 th { padding:4px 14px; }
@@ -501,11 +491,20 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .params6 td:first-child { width:20%; }
 .params6 td:nth-child(2) { width:33%; font-variant-numeric:tabular-nums; }
 .params6 .kind { display:inline-block; color:#fff; font-size:15px; font-weight:700; padding:2px 8px; border-radius:3px; margin-right:6px; }
-/* Korean IR-style text block: coloured heading, one-line bullets, one type size. */
-.brief6 .bh { font-size:21px; font-weight:700; color:var(--uos-blue); margin:0 0 6px; }
-.brief6 ul { margin:0; padding:0 0 0 1.1em; }
-.brief6 li { font-size:20px; line-height:1.5; color:#1b1f24; }
-.brief6 li::marker { color:#6b7580; }
-.cmp6 .rowlab b, .cmp6 .rowlab span { font-size:20px; }
-.cmp6 .rowlab { gap:2px; }
-.cmp6 .rowlab b { margin-bottom:4px; }
+/* Week 6 layouts follow weeks 2–5: media beside a compact table, a blue takeaway band. */
+.panel-h { font-size:20px; font-weight:700; color:var(--uos-blue); padding-bottom:6px; border-bottom:2px solid var(--uos-blue); margin:0; }
+.why6 { display:flex; flex-direction:column; gap:6px; }
+.why6 .diagram { width:100%; height:auto; display:block; }
+.cap6 { font-size:17px; color:var(--uos-ink-muted); text-align:center; margin:-6px 0 0; }
+.comparison.t6 { font-size:20px; line-height:1.4; }
+.comparison.t6 th, .comparison.t6 td { padding:11px 12px; }
+.comparison.t6 td:first-child { width:auto; white-space:nowrap; }
+.comparison.causes6 td:nth-child(2) { white-space:nowrap; font-weight:700; color:var(--uos-blue); }
+.comparison.mem6 td:first-child { width:34%; }
+.cam6 { display:grid; grid-template-columns:auto 1fr; gap:28px; align-items:center; min-height:0; }
+.cam6-grid { display:grid; grid-template-columns:repeat(2,300px); grid-template-rows:auto 1fr 1fr; gap:6px 14px; height:100%; min-height:0; }
+.cam6-grid .ch { font-size:20px; font-weight:700; color:#44505c; padding-bottom:5px; border-bottom:2px solid #9aa3ad; margin:0; }
+.cam6-grid .ch.now { color:var(--uos-blue); border-bottom-color:var(--uos-blue); }
+.cam6-grid .shot { min-height:0; height:100%; }
+.phase-flow.vert { flex-direction:column; align-items:flex-start; justify-content:center; align-self:start; gap:10px; font-size:22px; padding:24px 26px; }
+.phase-flow.vert .arrow { padding-left:10px; }

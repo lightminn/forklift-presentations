@@ -14,8 +14,9 @@ Inputs (paths relative to the robot repository):
 
 Outputs in assets/:
 - 44_mission_overview.mp4 / 45_slam_error.mp4: the SLAM mission (S3 seed 1) split in two --
-  overhead with the phase text, online map with the live SLAM / wheel-odometry error text.
-- 41_new_obstacle.mp4: new box on the transport path (spawn 73.2 s, replan 83.6 s) at 1.5x.
+  the overhead panel alone, online map with the live SLAM / wheel-odometry error text.
+- 41_new_obstacle.mp4: new box on the transport path (spawn 73.2 s, replan 83.6 s) at 1.5x,
+  overhead and online map panels side by side.
 - 42_memory_compare.mp4: the overhead panel from just after the first return plan,
   before (0431Z, return plan 246.5 s) and with the memory (1124Z, 221.6 s), side by side;
   5.5 s only, so the first return plan stays on screen (the new boxes appear later).
@@ -47,9 +48,9 @@ def poster(video, at, out):
     run(['-ss', str(at), '-i', str(video), '-frames:v', '1', '-q:v', '3', str(out)])
 
 
-def label(text, x):
+def label(text, x, cover_x=0, cover_w=320):
     # cover the composite's own panel caption first
-    return ("drawbox=x=0:y=0:w=320:h=48:color=0x1b1f24:t=fill,"
+    return (f"drawbox=x={cover_x}:y=0:w={cover_w}:h=48:color=0x1b1f24:t=fill,"
             f"drawtext=fontfile={FONT}:text='{text}':x={x}:y=14:fontsize=30:fontcolor=white:"
             f"box=1:boxcolor=0x1b1f24cc:boxborderw=10")
 
@@ -63,15 +64,19 @@ def main(repo):
     old = v / '20261006T0431Z_p5_slam_seed1_n2_new_obstacle'
 
 
-    # The SLAM mission split over two slides: overhead + phase text, and the
-    # online map + live SLAM/odometry error text (both at 12x).
-    run(encode(['-i', str(s3), '-vf', 'crop=620:750:20:70,setpts=PTS/12'], a / '44_mission_overview.mp4'))
+    # The SLAM mission split over two slides: the overhead panel alone (the
+    # status text below it is left out), and the online map + live
+    # SLAM/odometry error text (both at 12x).
+    run(encode(['-i', str(s3), '-vf', f"{PANEL1},{label('주행 화면', 14)},setpts=PTS/12"], a / '44_mission_overview.mp4'))
     poster(a / '44_mission_overview.mp4', 25, a / '44_mission_overview_poster.jpg')
     run(encode(['-i', str(s3), '-vf', 'crop=620:770:650:70,setpts=PTS/12'], a / '45_slam_error.mp4'))
     poster(a / '45_slam_error.mp4', 29.5, a / '45_slam_error_poster.jpg')
 
+    # Overhead + online map only (camera panels, error plot and status text left out).
     run(encode(['-ss', '66', '-t', '36', '-i', str(n1 / 'slam_online_three_panel.mp4'),
-                '-vf', 'setpts=PTS/1.5,scale=1280:-2'], a / '41_new_obstacle.mp4'))
+                '-vf', "crop=1250:620:20:70,"
+                       f"{label('주행 화면', 14)},{label('SLAM 지도 · LiDAR 장애물', 644, 630, 500)},setpts=PTS/1.5"],
+               a / '41_new_obstacle.mp4', crf=26))
     poster(a / '41_new_obstacle.mp4', 14, a / '41_new_obstacle_poster.jpg')
 
     run(encode(['-ss', '247.0', '-t', '5.5', '-i', str(old / 'slam_online_three_panel.mp4'),
