@@ -7,7 +7,7 @@
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 <section class="title-section" data-label="개발 진행 보고" data-screen-label="01" data-duration="20" data-speaker-notes="권장 20초
 
-안녕하십니까. 6주차 자율 지게차 개발 진행 상황을 발표할 김광민이라고 합니다. 이번 주는 시뮬레이션 소프트웨어 진행만 말씀드리겠습니다. 지난주까지 지게차는 시뮬레이터가 알려 주는 정답 위치로 움직였는데, 이번 주에는 LiDAR로 추정한 위치로 운반 임무를 끝까지 했고, LiDAR 한 대로 장애물을 어디까지 볼 수 있는지 확인했습니다. (전환)
+안녕하십니까. 6주차 자율 지게차 개발 진행 상황을 발표할 김광민이라고 합니다. 이번 주는 시뮬레이션 소프트웨어 진행만 말씀드리겠습니다. 지난주까지 지게차는 시뮬레이터가 알려 주는 정답 위치로 움직였는데, 이번 주에는 LiDAR로 추정한 위치로 운반 임무를 끝까지 했습니다. (전환)
 
 [Sources]
 진행 보고
@@ -20,7 +20,7 @@ LiDAR 장애물 지도 계획: docs/plans/2026-10-04-lidar-obstacle-map.md
 
 <section data-label="시뮬레이션 설정" data-screen-label="02" data-duration="60" data-speaker-notes="권장 60초
 
-오늘 보여 드리는 결과는 모두 시뮬레이션이라서, 먼저 시뮬레이션에 넣은 값과 그 근거부터 말씀드리겠습니다. 차체 외형과 무게, 팔레트, LiDAR와 카메라처럼 카탈로그나 데이터시트에 정확한 수치가 있는 값은 그대로 넣었습니다. 축간 거리와 바퀴 반지름은 이번 실행에서는 상품 사진으로 추정한 값을 썼고, 지난주에 말씀드린 실측값으로 바꿀 예정입니다. 주황색은 가정값입니다. 바퀴 마찰은 고무와 콘크리트 사이의 일반적인 마찰 범위 안에서 잡았고, 구동 토크는 팔레트를 실은 34킬로그램을 정한 가속도로 움직이기에 충분하도록, 운반 속도는 카탈로그 최고 속도의 5분의 1 정도로 잡았습니다. 센서 잡음은 센서를 실제로 측정하기 전이라 가정값을 넣었습니다. 다만 바퀴 마찰과 센서 잡음은 뒤에서 보실 위치 추정 오차에 영향을 주므로 실측값이 나오면 먼저 바꿀 항목입니다. (전환)
+오늘 보여 드리는 결과는 모두 시뮬레이션이라서, 먼저 시뮬레이션에 넣은 값과 그 근거부터 말씀드리겠습니다. 차체 외형과 무게, 팔레트, LiDAR와 카메라처럼 카탈로그나 데이터시트에 정확한 수치가 있는 값은 그대로 넣었습니다. 축간 거리와 바퀴 반지름은 이번 실행에서는 상품 사진으로 추정한 값을 썼고, 지난주에 말씀드린 실측값으로 바꿀 예정입니다. 주황색은 가정값입니다. 바닥에는 LiDAR 높이보다 낮은 장애물이 없다고 가정하고, 그런 소품은 시뮬레이션 장면에서 뺐습니다. 바퀴 마찰은 고무와 콘크리트 사이의 일반적인 마찰 범위 안에서 잡았고, 구동 토크는 팔레트를 실은 34킬로그램을 정한 가속도로 움직이기에 충분하도록, 운반 속도는 카탈로그 최고 속도의 5분의 1 정도로 잡았습니다. 센서 잡음은 센서를 실제로 측정하기 전이라 가정값을 넣었습니다. 다만 바퀴 마찰과 센서 잡음은 뒤에서 보실 위치 추정 오차에 영향을 주므로 실측값이 나오면 먼저 바꿀 항목입니다. (전환)
 
 [Sources]
 근거 조사: 저장소 설정·결정·검증 문서 (2026-10-06)
@@ -38,7 +38,7 @@ hfov 1.204 rad(69°) — D435i 컬러 화각, 보정값 아님: config/isaac_per
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="01  시뮬레이션 설정과 근거"><div class="slide-body">
 <h2 class="headline">시뮬레이션에 넣은 값과 그 근거</h2>
-<table class="comparison params6 grow"><tr><th>항목</th><th>값</th><th>근거</th></tr><tr><td>규격이 있는 값</td><td>차체 · 팔레트 · LiDAR · 카메라</td><td><span class="kind" style="background:#2f74c0">규격·사양</span> 카탈로그 · EPAL 6 규격 · 데이터시트 수치 그대로</td></tr><tr><td>축간 거리 · 바퀴 반지름</td><td>0.64 m · 0.135 m</td><td><span class="kind" style="background:#6a4fb3">사진 추정</span> 이번 실행은 사진 추정값 (지난주 실측값으로 교체 예정)</td></tr><tr><td>바퀴 · 팔레트 마찰</td><td>정지 0.8 · 운동 0.7</td><td><span class="kind" style="background:#c26a1a">가정</span> 고무–콘크리트 일반 범위 (약 0.6–0.9) 안의 값</td></tr><tr><td>구동 토크</td><td>바퀴당 3 N·m (네 바퀴)</td><td><span class="kind" style="background:#c26a1a">가정</span> 적재 34 kg을 0.3 m/s²로 가속하는 힘의 약 9배</td></tr><tr><td>운반 속도</td><td>0.3 m/s</td><td><span class="kind" style="background:#c26a1a">가정</span> 카탈로그 최고 5 km/h (1.4 m/s)의 약 1/5</td></tr><tr><td>센서 잡음</td><td>바퀴 0.2 rad/s · 조향 0.005 rad · 거리 2 cm</td><td><span class="kind" style="background:#c26a1a">가정</span> 센서 실측 전 가정값 (실측 후 교체)</td></tr></table>
+<table class="comparison params6 grow"><tr><th>항목</th><th>값</th><th>근거</th></tr><tr><td>규격이 있는 값</td><td>차체 · 팔레트 · LiDAR · 카메라</td><td><span class="kind" style="background:#2f74c0">규격·사양</span> 카탈로그 · EPAL 6 규격 · 데이터시트 수치 그대로</td></tr><tr><td>축간 거리 · 바퀴 반지름</td><td>0.64 m · 0.135 m</td><td><span class="kind" style="background:#6a4fb3">사진 추정</span> 이번 실행은 사진 추정값 (지난주 실측값으로 교체 예정)</td></tr><tr><td>바닥 장애물</td><td>LiDAR 높이 (1.05 m) 이상만</td><td><span class="kind" style="background:#c26a1a">가정</span> 운용 가정 · 더 낮은 소품은 장면에서 뺌</td></tr><tr><td>바퀴 · 팔레트 마찰</td><td>정지 0.8 · 운동 0.7</td><td><span class="kind" style="background:#c26a1a">가정</span> 고무–콘크리트 일반 범위 (약 0.6–0.9) 안의 값</td></tr><tr><td>구동 토크</td><td>바퀴당 3 N·m (네 바퀴)</td><td><span class="kind" style="background:#c26a1a">가정</span> 적재 34 kg을 0.3 m/s²로 가속하는 힘의 약 9배</td></tr><tr><td>운반 속도</td><td>0.3 m/s</td><td><span class="kind" style="background:#c26a1a">가정</span> 카탈로그 최고 5 km/h (1.4 m/s)의 약 1/5</td></tr><tr><td>센서 잡음</td><td>바퀴 0.2 rad/s · 조향 0.005 rad · 거리 2 cm</td><td><span class="kind" style="background:#c26a1a">가정</span> 센서 실측 전 가정값 (실측 후 교체)</td></tr></table>
 <div class="takeaway">결과에 영향이 큰 가정값: 바퀴 마찰 · 센서 잡음 — 실측값이 나오면 먼저 교체</div>
 </div></x-import>
 </section>
@@ -77,7 +77,7 @@ camera_rgb.mp4 39 s · 43 s 프레임: videos-from-ws1/20261006T1124Z_p5_slam_se
 
 <section data-label="지도 작성" data-screen-label="04" data-duration="35" data-speaker-notes="권장 35초
 
-다음은 위치를 추정하는 방법입니다. 지게차가 공장을 돌면서 LiDAR로 주변 거리를 재면, slam_toolbox(공개 SLAM 패키지)가 이 스캔을 겹쳐 지도를 만들면서 그 지도 안에서 자기 위치를 찾습니다. 오른쪽처럼 돌수록 지도가 넓어지고, 파란 추정 경로가 회색 실제 경로를 따라갑니다. 다만 왼쪽에 있는 더미 중 일부는 지도에 나오지 않습니다. LiDAR는 1.05미터 높이에서 수평으로 레이저를 쏘는데, 이 더미들은 높이가 0.7에서 0.96미터라 레이저가 그 위로 지나가기 때문입니다. 이 문제는 뒤에서 다시 말씀드리겠습니다. (전환)
+다음은 위치를 추정하는 방법입니다. 지게차가 공장을 돌면서 LiDAR로 주변 거리를 재면, slam_toolbox(공개 SLAM 패키지)가 이 스캔을 겹쳐 지도를 만들면서 그 지도 안에서 자기 위치를 찾습니다. 오른쪽처럼 돌수록 지도가 넓어지고, 파란 추정 경로가 회색 실제 경로를 따라갑니다. 다만 왼쪽에 있는 더미 중 일부는 지도에 나오지 않습니다. LiDAR는 1.05미터 높이에서 수평으로 레이저를 쏘는데, 이 더미들은 높이가 0.7에서 0.96미터라 레이저가 그 위로 지나가기 때문입니다. 그래서 앞에서 말씀드린 것처럼, LiDAR보다 낮은 장애물은 없다고 가정했습니다. (전환)
 
 [Sources]
 화면 생성: Isaac 주행 기록 + ROS 2 slam_toolbox 재생, 조감·지도 두 칸 20배속 (5주차 영상을 2.5배 더 빠르게, prepare_clips.py)
@@ -151,45 +151,18 @@ S3 장면 1 — 위치 RMSE 0.088 m · 최대 0.190 m, 358 s 에서 SLAM 4.0 cm 
 </div></x-import>
 </section>
 
-<section data-label="LiDAR 1대의 장애물 감지 범위" data-screen-label="07" data-duration="70" data-speaker-notes="권장 70초
+<section data-label="다음 작업" data-screen-label="07" data-duration="60" data-speaker-notes="권장 60초
 
-그렇다면 장애물도 센서로 보려면 어떻게 해야 할까요? 과제 규격의 LiDAR는 한 대이고, 지금은 위치 추정을 위해 1.05미터 높이에 달려 있어서 그 높이로 수평으로 쏜 레이저에 걸리는 것만 봅니다. 공장 바닥 장애물 중 이 높이와 겹치는 것은 43에서 47퍼센트뿐입니다(가림은 빼고 높이만 본 상한). 낮은 상자나 빈 팔레트는 레이저가 그 위로 지나갑니다. 그래서 이번 시뮬레이션은 바닥에 LiDAR 높이보다 낮은 장애물은 없다고 가정하고, 그런 소품은 장면에서 뺐습니다. 이 가정을 풀려면 LiDAR를 낮게 달거나 RGB-D 카메라의 깊이 영상을 같이 써야 하는데, 둘 다 센서 규격 안에서 할 수 있는 방법이라 다음 과제로 검토하겠습니다. (전환)
-
-[Sources]
-화면 생성: 계획서 표 값으로 그린 도표
-현재 상태 ① — 장면 1·3·5 의 바닥 장애물 90·87·87 개 중 1.05 m 평면과 겹치는 42·37·38 개 (사각형 기둥 근사 상한): docs/plans/2026-10-04-lidar-obstacle-map.md
---min-obstacle-height-m 1.15: 꼭대기 1.15 m 미만 소품 제거 (적재 더미 꼭대기 0.96 m 다음이 1.21 m 라 1.05 m 기준과 같은 결과), config/obstacle_layer_single.yaml: forklift bc4cc64
-2D LiDAR: RPLIDAR A2 계열 1대 (브리프): docs/hardware.md
-[/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="06  LiDAR 1대의 장애물 감지 범위"><div class="slide-body">
-<h2 class="headline">LiDAR 1대에 걸리는 바닥 장애물 43–47 % · 더 낮은 장애물은 없다고 가정</h2>
-<div class="split grow" style="grid-template-columns:1.05fr 1fr;gap:36px">
-<div class="stack" style="gap:6px"><p class="panel-h">LiDAR 설치 높이별 · 레이저에 걸리는 바닥 장애물 비율</p><svg class="diagram" viewBox="0 0 640 364" role="img" aria-label="LiDAR 설치 높이별로 레이저에 걸리는 바닥 장애물 비율. 1.05 m 43–47 %, 0.10–0.18 m 100 %"><g font-family="var(--uos-font)"><line x1="150.0" y1="24" x2="150.0" y2="330" stroke="#e3e6ea" stroke-width="1.5"/><text x="150.0" y="354" text-anchor="middle" font-size="18" fill="#44505c">0 %</text><line x1="350.0" y1="24" x2="350.0" y2="330" stroke="#e3e6ea" stroke-width="1.5"/><text x="350.0" y="354" text-anchor="middle" font-size="18" fill="#44505c">50 %</text><line x1="550.0" y1="24" x2="550.0" y2="330" stroke="#e3e6ea" stroke-width="1.5"/><text x="550.0" y="354" text-anchor="middle" font-size="18" fill="#44505c">100 %</text><text x="136" y="59" text-anchor="end" font-size="20" font-weight="700" fill="#1b1f24">0.10–0.18 m</text><rect x="150" y="34" width="400.0" height="36" rx="3" fill="#2f74c0" opacity="0.35"/><circle cx="550.0" cy="52" r="5" fill="#2f74c0" stroke="#fff" stroke-width="1.2"/><circle cx="550.0" cy="52" r="5" fill="#2f74c0" stroke="#fff" stroke-width="1.2"/><circle cx="550.0" cy="52" r="5" fill="#2f74c0" stroke="#fff" stroke-width="1.2"/><text x="562.0" y="59" font-size="20" font-weight="700" fill="#1b1f24">100 %</text><text x="136" y="121" text-anchor="end" font-size="20" font-weight="400" fill="#1b1f24">0.25 m</text><rect x="150" y="96" width="319.6" height="36" rx="3" fill="#9aa3ad" opacity="0.35"/><circle cx="478.9" cy="114" r="5" fill="#9aa3ad" stroke="#fff" stroke-width="1.2"/><circle cx="458.0" cy="114" r="5" fill="#9aa3ad" stroke="#fff" stroke-width="1.2"/><circle cx="471.8" cy="114" r="5" fill="#9aa3ad" stroke="#fff" stroke-width="1.2"/><text x="490.9" y="121" font-size="20" font-weight="400" fill="#1b1f24">77–82 %</text><text x="136" y="183" text-anchor="end" font-size="20" font-weight="400" fill="#1b1f24">0.50 m</text><rect x="150" y="158" width="271.1" height="36" rx="3" fill="#9aa3ad" opacity="0.35"/><circle cx="434.4" cy="176" r="5" fill="#9aa3ad" stroke="#fff" stroke-width="1.2"/><circle cx="407.5" cy="176" r="5" fill="#9aa3ad" stroke="#fff" stroke-width="1.2"/><circle cx="421.3" cy="176" r="5" fill="#9aa3ad" stroke="#fff" stroke-width="1.2"/><text x="446.4" y="183" font-size="20" font-weight="400" fill="#1b1f24">64–71 %</text><text x="136" y="245" text-anchor="end" font-size="20" font-weight="400" fill="#1b1f24">0.75 m</text><rect x="150" y="220" width="203.0" height="36" rx="3" fill="#9aa3ad" opacity="0.35"/><circle cx="358.9" cy="238" r="5" fill="#9aa3ad" stroke="#fff" stroke-width="1.2"/><circle cx="343.1" cy="238" r="5" fill="#9aa3ad" stroke="#fff" stroke-width="1.2"/><circle cx="356.9" cy="238" r="5" fill="#9aa3ad" stroke="#fff" stroke-width="1.2"/><text x="370.9" y="245" font-size="20" font-weight="400" fill="#1b1f24">48–52 %</text><text x="136" y="307" text-anchor="end" font-size="20" font-weight="700" fill="#1b1f24">1.05 m</text><rect x="150" y="282" width="177.2" height="36" rx="3" fill="#c26a1a" opacity="0.35"/><circle cx="336.7" cy="300" r="5" fill="#c26a1a" stroke="#fff" stroke-width="1.2"/><circle cx="320.1" cy="300" r="5" fill="#c26a1a" stroke="#fff" stroke-width="1.2"/><circle cx="324.7" cy="300" r="5" fill="#c26a1a" stroke="#fff" stroke-width="1.2"/><text x="348.7" y="307" font-size="20" font-weight="700" fill="#1b1f24">43–47 %</text></g></svg><p class="cap6">높이만 본 상한 (가림 제외) · 점: 물건 배치가 다른 세 공장</p></div>
-<div class="stack">
-<table class="comparison t6 assume6">
-<tr><th>구분</th><th>내용</th></tr>
-<tr><td>운용 가정</td><td class="blue"><b>바닥에 LiDAR 높이보다 낮은 장애물 없음</b></td></tr>
-<tr><td>시뮬레이션</td><td>꼭대기가 LiDAR 높이보다 낮은 소품을 장면에서 제거</td></tr>
-<tr><td>가정을 풀려면</td><td>LiDAR를 낮게 장착하거나 RGB-D 깊이 영상 활용 (센서 규격 안)</td></tr>
-</table>
-</div>
-</div>
-<div class="takeaway">센서 규격: RGB-D 카메라 1대 · 2D LiDAR 1대 (위치 추정과 장애물 감지 겸용)</div>
-</div></x-import>
-</section>
-
-<section data-label="다음 작업" data-screen-label="08" data-duration="60" data-speaker-notes="권장 60초
-
-정리하면, 이번 주에 지게차는 SLAM으로 추정한 위치로 운반 임무를 끝냈습니다. 다만 장애물 정보는 아직 시뮬레이터 값을 썼고, 위치 추정용 LiDAR 한 대로는 바닥 장애물의 절반 정도만 보입니다. 다음 단계는 과제 규격인 LiDAR 1대와 RGB-D 카메라 1대만으로 장애물까지 감지하는 임무를 반복해서 확인하고, 낮은 장애물을 볼 방법을 정하는 것입니다. 또 두 번째 팔레트 규격인 T11도 같은 방식으로 확인하겠습니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.
+정리하면, 이번 주에 지게차는 SLAM으로 추정한 위치로 운반 임무를 끝냈습니다. 다만 장애물 정보는 아직 시뮬레이터 값을 썼습니다. 다음 단계는 과제 규격인 LiDAR 1대만으로 장애물까지 감지하는 임무를 반복해서 확인하는 것입니다. 또 두 번째 팔레트 규격인 T11도 같은 방식으로 확인하겠습니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.
 
 [Sources]
 출처: LiDAR 장애물 지도 계획
-현재 상태 ① — 1.05 m 평면과 겹치는 바닥 장애물 비율: docs/plans/2026-10-04-lidar-obstacle-map.md
+--min-obstacle-height-m 1.15 · config/obstacle_layer_single.yaml (LiDAR 1대): forklift bc4cc64
 EPAL 6 과 T11 × 0.6 모두 필수: CLAUDE.md
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="07  남은 과제와 다음 작업"><div class="slide-body">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="06  남은 과제와 다음 작업"><div class="slide-body">
 <h2 class="headline">남은 과제: 규격 센서로 장애물까지 감지한 임무</h2>
-<table class="comparison next6 grow"><tr><th>이번 주 확인</th><th></th><th>다음 단계</th></tr><tr><td>SLAM 위치로 운반 임무 완주</td><td class="arrow">→</td><td>LiDAR 1대로 장애물까지 감지한 임무 반복</td></tr><tr><td>LiDAR 높이보다 낮은 장애물은 없다고 가정</td><td class="arrow">→</td><td>낮은 장애물 감지 방법 결정 (LiDAR 높이 · RGB-D 깊이)</td></tr><tr><td>EPAL 6 팔레트</td><td class="arrow">→</td><td>T11 팔레트</td></tr></table>
+<table class="comparison next6 grow"><tr><th>이번 주 확인</th><th></th><th>다음 단계</th></tr><tr><td>SLAM 위치로 운반 임무 완주</td><td class="arrow">→</td><td>LiDAR 1대로 장애물까지 감지한 임무 반복</td></tr><tr><td>EPAL 6 팔레트</td><td class="arrow">→</td><td>T11 팔레트</td></tr></table>
 </div></x-import>
 </section>
 </x-import></x-dc></body></html>

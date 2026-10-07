@@ -1,6 +1,6 @@
 {
   "week": 6,
   "title": "6주차 개발 진행 보고",
-  "summary": "캐리지 하단 카메라 · SLAM 위치로 운반 임무 완주 · LiDAR 1대의 장애물 감지 범위 (시뮬레이션)",
+  "summary": "캐리지 하단 카메라 · SLAM 위치로 운반 임무 완주 (시뮬레이션)",
   "status": "published"
 }
