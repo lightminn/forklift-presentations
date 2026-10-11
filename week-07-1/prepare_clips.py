@@ -8,7 +8,8 @@ depth -- the S4b smoke run (forklift b66271f, ws1 artifacts/20261011_s4b/smoke/s
   (run/pocket_frames, 506 reads at 10 Hz, 30.38-80.88 s) were coloured on ws1 by depth_clip/render_depth.py
   into depth_raw.mp4 (ws1 artifacts/20261011_meeting_video/depth_clip, video time = stamp - first stamp).
   The tracker's events (run/near_tracking.json) are written over the frames for about 3 s each, the last
-  frame is held 3.2 s, then the clip is played at 2x -> assets/61_insert_depth.mp4.
+  frame is held 3.2 s, then the clip is played at 2x -> assets/61_insert_depth.mp4. The 640 x 480 frames
+  are cropped to 548 x 480 (floor at the sides) so the clip fills its panel at the stage height.
 mission -- the recorded mission (ws1 artifacts/20261011_meeting_video/seed_N_d7: the d7 arm of
   artifacts/20261008_d7_isaac with --video --robot-camera; near-field tracking is off because its
   measured bounds condition requires video off) -> assets/71_mission.mp4 (overhead panel) and stills.
@@ -24,6 +25,8 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 FONT = '/usr/share/fonts/noto-cjk/NotoSansCJK-Bold.ttc'
 PANEL1 = 'crop=620:620:20:70'          # overhead panel of the 1920 x 1080 three-panel composite
+DEPTH_CROP = 'crop=548:480:46:0'       # the depth panel's aspect at the stage height (slide 8)
+HALL_CROP = 'crop=568:720:356:0'       # the hall still's aspect at the stage height (slide 6)
 
 
 def run(args):
@@ -46,7 +49,7 @@ def text(t, start, end, y=18, size=30):
 
 # The tracker's events, as shown on the clip (near_tracking.json events / corrections).
 EVENT_TEXT = {   # numbered as the step strip beside the clip (build_deck.py slide 6)
-    'armed': '② 근접 추적 시작',
+    'armed': '포켓 추적 시작',   # armed in front mode: not the table's step ② (roof tracking)
     'correction:1.0': '③ 앞면 1.0 m 보정',
     'correction:0.6': '③ 앞면 0.6 m 보정',
     'protect': '④ 포켓 벽 간격 감시',
@@ -68,12 +71,12 @@ def depth(src):
         if key in EVENT_TEXT:
             marks.append((event['time_s'] - t0, EVENT_TEXT[key]))
     marks.sort()
-    filters = [f'tpad=stop_mode=clone:stop_duration={HOLD_S}']   # hold the insertion end on screen
+    filters = [DEPTH_CROP, f'tpad=stop_mode=clone:stop_duration={HOLD_S}']   # hold the insertion end on screen
     for i, (start, words) in enumerate(marks):
         last = i + 1 == len(marks)
         end = t_end - t0 + HOLD_S + 1 if last else min(start + HOLD_S, marks[i + 1][0])
         filters.append(text(words, start, end))
-    filters.append(f"drawtext=fontfile={FONT}:text='깊이 영상 · 빨강 가까움 · 파랑 멂':x=w-text_w-14:y=h-text_h-14:"
+    filters.append(f"drawtext=fontfile={FONT}:text='빨강\\: 가까움 · 파랑\\: 멂':x=w-text_w-14:y=h-text_h-14:"
                    f"fontsize=22:fontcolor=white:box=1:boxcolor=0x1b1f24b0:boxborderw=8")
     out = HERE / 'assets/61_insert_depth.mp4'
     run(encode(['-i', str(src / 'depth_raw.mp4'), '-vf', ','.join(filters) + ',setpts=PTS/2'], out, crf=24))
@@ -96,7 +99,7 @@ def mission(src):
     run(encode(['-i', str(src / 'slam_online_three_panel.mp4'),
                 '-vf', f"{PANEL1},{label('주행 화면', 14)},setpts=PTS/12"], out))
     poster(out, 8, HERE / 'assets/71_mission_poster.jpg')
-    run(['-ss', '0.5', '-i', str(src / 'transport.mp4'), '-frames:v', '1', '-vf', 'crop=700:720:290:0',
+    run(['-ss', '0.5', '-i', str(src / 'transport.mp4'), '-frames:v', '1', '-vf', HALL_CROP,
          '-q:v', '2', str(HERE / 'assets/70_hall.jpg')])
 
 

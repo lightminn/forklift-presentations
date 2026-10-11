@@ -11,6 +11,14 @@ Writes figures/ (inlined into the page by build_deck.py so the deck font applies
 2. 53_goal_fix.svg -- the D7 test case (tests/unit/planning/test_d7_planner_options.py:
    l8_measured seed 1 + N1 stall replan, goal 1 cm ahead and 0.023 rad off) planned with the
    original forward-only goal connection and with D7_PLANNER_OPTIONS (Reeds-Shepp, 4 m cap).
+
+    python prepare_figures.py stages
+
+3. assets/20_pipeline_stages_crop.png -- the week 3 pocket-detection figure
+   (week-03/assets/20_pipeline_stages.png, drawn by forklift tools/deck/pipeline_stages.py from
+   Gazebo scene s003) without its title band and step captions (rows 98-410; the step names are
+   HTML). The small labels are redrawn for projection: the arrow captions are removed, the
+   viewpoint tags are drawn larger, and the two colour legends move to the HTML legend.
 """
 import json
 import math
@@ -128,7 +136,7 @@ def reverse_obstacle(repo):
     bx, by = px(box)
     parts.append(f'<text x="{bx + 26:.0f}" y="{by + 8:.0f}" font-size="21" font-weight="700" fill="{RED}">새 상자</text>')
     for xy, text, colour, anchor in (((0.70, 0.60), '멈춘 위치', INK, 'middle'),
-                                     ((-1.05, 0.30), f'① 후진 {reverse_len:.2f} m', ORANGE, 'middle'),
+                                     ((-1.05, 0.62), f'① 후진 {reverse_len:.2f} m', ORANGE, 'middle'),   # above the box's left edge
                                      ((0.92, -1.85), '② 전진', BLUE, 'end'),
                                      ((3.05, -1.55), '원래 경로', '#6b7480', 'start')):
         x, y = px(xy)
@@ -188,7 +196,8 @@ def goal_fix(repo):
     parts.append(f'<text x="{lcx}" y="372" font-size="21" fill="#44505c" text-anchor="middle">한 바퀴 {plans["forward"]["length"]:.1f} m</text>')
     parts.append(f'<line x1="262" y1="60" x2="262" y2="360" stroke="#e3e6ea" stroke-width="2"/>')
 
-    # Right: the forward-and-reverse connection as a concept (angle exaggerated): start pose
+    # Right: the forward-and-reverse connection as a concept (angle exaggerated; the drawn tilt is
+    # not the case's sign, so the moves are named one way / the other way): start pose
     # (tilted, dashed) and end pose (on the goal heading) at the same rear axle; the two moves,
     # forward steering right then reverse steering left, both lower the heading
     # (curvature x signed travel).
@@ -226,10 +235,10 @@ def goal_fix(repo):
     xa, xb = 286, 380
     parts.append(f'<path d="M{xa},{ya - 8} Q{(xa + xb) / 2},{ya + 6} {xb},{ya + 8}" fill="none" stroke="{BLUE}" '
                  f'stroke-width="5" marker-end="url(#gf-ah-b)"/>')
-    parts.append(f'<text x="{xb + 16}" y="{ya + 9}" font-size="20" font-weight="700" fill="{BLUE}">① 오른쪽으로 꺾으며 전진</text>')
+    parts.append(f'<text x="{xb + 16}" y="{ya + 9}" font-size="20" font-weight="700" fill="{BLUE}">① 한쪽으로 꺾으며 전진</text>')
     parts.append(f'<path d="M{xb},{yb + 8} Q{(xa + xb) / 2},{yb + 6} {xa},{yb - 8}" fill="none" stroke="{ORANGE}" '
                  f'stroke-width="5" marker-end="url(#gf-ah-o)"/>')
-    parts.append(f'<text x="{xb + 16}" y="{yb + 9}" font-size="20" font-weight="700" fill="{ORANGE}">② 왼쪽으로 꺾으며 후진</text>')
+    parts.append(f'<text x="{xb + 16}" y="{yb + 9}" font-size="20" font-weight="700" fill="{ORANGE}">② 반대로 꺾으며 후진</text>')
     parts.append(f'<text x="{rcx}" y="372" font-size="21" fill="#44505c" text-anchor="middle">앞뒤 {plans["d7"]["length"]:.1f} m · 각도는 크게 그림</text>')
 
     meta = dict(forward_m=round(plans['forward']['length'], 2), d7_m=round(plans['d7']['length'], 2),
@@ -254,5 +263,37 @@ def main(repo):
     print(json.dumps(meta, ensure_ascii=False, indent=1))
 
 
+# Week 3 figure geometry (forklift tools/deck/pipeline_stages.py): four 385 px panels with 88 px
+# arrow gaps, panels pasted at y 100 of the canvas; the crop keeps canvas rows 98-432.
+PANEL_W, GAP_W, CROP_ROWS = 385, 88, (98, 410)   # 410: below it only floor, and the table needs the room
+TAG_FONT = '/usr/share/fonts/TTF/NanumGothic.ttf'
+VIEWS = ('카메라에서 본 모습', '위에서 본 모습', '앞면을 좌우로 나눈 결과', '카메라에서 본 모습')
+
+
+def pocket_stages():
+    from PIL import Image, ImageDraw, ImageFont
+    src = ROOT.parent / 'week-03/assets/20_pipeline_stages.png'
+    img = Image.open(src).convert('RGB')
+    img = img.crop((0, CROP_ROWS[0], img.width, CROP_ROWS[1]))
+    d = ImageDraw.Draw(img)
+    old, new = ImageFont.truetype(TAG_FONT, 19), ImageFont.truetype(TAG_FONT, 26)
+    for i, view in enumerate(VIEWS):
+        x = i * (PANEL_W + GAP_W)
+        if i in (1, 2):   # flat panel background: clear both old tag rows (view + colour legend)
+            d.rectangle([x + 6, 10, x + PANEL_W - 6, 80], fill=(26, 29, 36))
+        w = d.textlength(view, font=new)
+        d.rectangle([x + 8, 10, x + 8 + w + 16, 10 + 26 + 11], fill=(16, 18, 23))
+        d.text((x + 16, 14), view, font=new, fill=(232, 236, 244))
+        if i < 3:         # the arrow's caption (15 px) above the arrow in the gap
+            ax = x + PANEL_W
+            d.rectangle([ax + 1, 120, ax + GAP_W - 1, 155], fill=(18, 20, 24))
+    out = ROOT / 'assets/20_pipeline_stages_crop.png'
+    img.save(out, optimize=True)
+    print(out.name, img.size)
+
+
 if __name__ == '__main__':
-    main(sys.argv[1])
+    if sys.argv[1] == 'stages':
+        pocket_stages()
+    else:
+        main(sys.argv[1])

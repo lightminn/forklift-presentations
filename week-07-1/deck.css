@@ -637,3 +637,9 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .m7-info > .m7-media { flex:1; }
 .m7-media > .m7-svg { flex:1; min-height:0; padding:8px 10px; }
 .m7-params td:nth-child(1), .m7-params td:nth-child(2) { white-space:nowrap; }
+/* 16: questions grouped as the week 4 feedback asked (asked / decided / provided); the rows to
+   ask first are tinted, the group cell spans tinted and plain rows so it stays plain */
+.m7-q tr.pri td.item { background:#e6eef9; }
+.m7-q tr.pri td.grp { background:transparent; }
+/* 2: a case reached only in part (B: curved approach, but it stops before the insertion) */
+.m7-tag.part { background:#5b8fd0; }
