@@ -568,3 +568,8 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .m7-params th:nth-child(1) { width:20%; } .m7-params th:nth-child(2) { width:33%; } .m7-params th:nth-child(3) { width:47%; }
 .m7-params td:nth-child(2) { width:auto; }
 .m7-params td { white-space:nowrap; }
+.m7-q td.grp { width:22%; }
+.m7-q tr.pri td.item { font-weight:700; color:#1b1f24; background:#f3f6fb; }
+.m7-q tr.pri td.grp { background:#f3f6fb; }
+.m7-q { table-layout:fixed; }
+.m7-q th:first-child { width:22%; }

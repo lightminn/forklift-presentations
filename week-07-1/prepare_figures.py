@@ -18,7 +18,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-BLUE, ORANGE, GREY, RED, INK = '#2f74c0', '#c26a1a', '#9aa3ad', '#c0392b', '#1b1f24'
+BLUE, ORANGE, GREY, RED, INK, GREEN = '#2f74c0', '#c26a1a', '#9aa3ad', '#c0392b', '#1b1f24', '#2e9a6b'
 FONT = 'var(--uos-font)'
 
 
@@ -82,7 +82,7 @@ def arrows(prefix):
     return '<defs>' + ''.join(
         f'<marker id="{prefix}-{name}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" '
         f'orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="{colour}"/></marker>'
-        for name, colour in (('ah', INK), ('ah-b', BLUE), ('ah-o', ORANGE))) + '</defs>'
+        for name, colour in (('ah', INK), ('ah-b', BLUE), ('ah-o', ORANGE), ('ah-g', '#2e9a6b'))) + '</defs>'
 
 
 def reverse_obstacle(repo):
@@ -167,54 +167,78 @@ def goal_fix(repo):
         return (c * (p[0] - start.x_m) + s * (p[1] - start.y_m), -s * (p[0] - start.x_m) + c * (p[1] - start.y_m))
 
     loop = [local(p) for p in plans['forward']['poses']]
-    short = [local(p) for p in plans['d7']['poses']]
-    xs = [p[0] for p in loop]
-    ys = [p[1] for p in loop]
-    pad = 0.9
-    xmin, xmax, ymin, ymax = min(xs) - pad, max(xs) + pad + 1.2, min(ys) - pad, max(ys) + pad + 0.6
-    width = 640
-    scale = width / (xmax - xmin)
-    height = round((ymax - ymin) * scale)
-
-    def px(p):
-        return ((p[0] - xmin) * scale, (ymax - p[1]) * scale)
-
-    runs = split_by_gear(short, 0.0)
-    gears = [(gear, length(points)) for gear, points in runs]
-    parts = [arrows('gf'), truck(0.0, 0.0, 0.0, px, 'gf', fill='#eef3fa'),
-             polyline([px(p) for p in loop], GREY, 4, '10 8')]
     gl = local((goal.x_m, goal.y_m))
-    gx, gy = px(gl)
-    parts.append(f'<circle cx="{gx:.1f}" cy="{gy:.1f}" r="7" fill="#2e9a6b"/>')
-    # Inset (not to scale): the D7 plan's gears in order, each as an arrow with its length.
-    cx, cy = px(((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2))
-    box_w, box_h = 300, 64 + 52 * len(gears)
-    x0b, y0b = cx - box_w / 2, cy - box_h / 2 + 10
-    parts.append(f'<rect x="{x0b:.0f}" y="{y0b:.0f}" width="{box_w}" height="{box_h}" rx="8" fill="#ffffff" '
-                 f'stroke="#c9ced6" stroke-width="2"/>')
-    parts.append(f'<text x="{cx:.0f}" y="{y0b + 34:.0f}" font-size="20" font-weight="700" fill="{INK}" '
-                 f'text-anchor="middle">후진 · 전진 연결 (확대)</text>')
-    for i, (gear, run_len) in enumerate(gears):
-        y = y0b + 72 + 52 * i
-        colour = ORANGE if gear < 0 else BLUE
-        a, b = (x0b + 40, x0b + 150) if gear > 0 else (x0b + 150, x0b + 40)
-        marker = 'gf-ah-o' if gear < 0 else 'gf-ah-b'
-        parts.append(f'<line x1="{a:.0f}" y1="{y:.0f}" x2="{b:.0f}" y2="{y:.0f}" stroke="{colour}" stroke-width="6" '
-                     f'marker-end="url(#{marker})"/>')
-        word = '전진' if gear > 0 else '후진'
-        parts.append(f'<text x="{x0b + 172:.0f}" y="{y + 7:.0f}" font-size="20" font-weight="700" fill="{colour}">'
-                     f'{i + 1}. {word} {run_len:.2f} m</text>')
-    lx, ly = px(((min(xs) + max(xs)) / 2, min(ys) - 0.55))
-    parts.append(f'<text x="{lx:.0f}" y="{ly:.0f}" font-size="21" font-weight="700" fill="#6b7480" '
-                 f'text-anchor="middle">전진만 쓴 경로 (한 바퀴)</text>')
-    tx, ty = px((0.70, 0.62))
-    parts.append(f'<text x="{tx:.0f}" y="{ty:.0f}" font-size="20" fill="{INK}" text-anchor="middle">현재 위치</text>')
+    width, height = 640, 400
+    parts = [arrows('gf')]
+
+    # Left: the forward-only plan, to scale -- the whole loop with the truck at its start.
+    xs, ys = [p[0] for p in loop], [p[1] for p in loop]
+    span = max(max(xs) - min(xs), max(ys) - min(ys)) + 2.2
+    lsc = 220 / span
+    lcx, lcy = 125, 215
+
+    def lp(q):
+        return (lcx + (q[0] - (min(xs) + max(xs)) / 2) * lsc, lcy - (q[1] - (min(ys) + max(ys)) / 2) * lsc)
+
+    parts.append(f'<text x="{lcx}" y="40" font-size="22" font-weight="700" fill="#6b7480" text-anchor="middle">전진만</text>')
+    parts.append(polyline([lp(q) for q in loop], GREY, 4, '9 7'))
+    parts.append(truck(0.0, 0.0, 0.0, lp, 'gf', fill='#eef3fa'))
+    gx, gy = lp(gl)
+    parts.append(f'<circle cx="{gx:.1f}" cy="{gy:.1f}" r="6" fill="{GREEN}"/>')
+    parts.append(f'<text x="{lcx}" y="372" font-size="21" fill="#44505c" text-anchor="middle">한 바퀴 {plans["forward"]["length"]:.1f} m</text>')
+    parts.append(f'<line x1="262" y1="60" x2="262" y2="360" stroke="#e3e6ea" stroke-width="2"/>')
+
+    # Right: the forward-and-reverse connection as a concept (angle exaggerated): start pose
+    # (tilted, dashed) and end pose (on the goal heading) at the same rear axle; the two moves,
+    # forward steering right then reverse steering left, both lower the heading
+    # (curvature x signed travel).
+    rcx = 460
+    parts.append(f'<text x="{rcx}" y="40" font-size="22" font-weight="700" fill="{INK}" text-anchor="middle">전진 · 후진 (개념도)</text>')
+    sc, tilt = 105.0, math.radians(16)
+    ox, oy = 300, 175
+
+    def ip(q):
+        return (ox + q[0] * sc, oy - q[1] * sc)
+
+    def body(yaw, colour, fill, dash=None):
+        front, rear, half = 1.56, 0.17, 0.30
+        mid = (front - rear) / 2
+        c_, s_ = math.cos(yaw), math.sin(yaw)
+        pts = [ip((mid * c_ + c_ * u - s_ * v, mid * s_ + s_ * u + c_ * v))
+               for u, v in (((front + rear) / 2, half), (-(front + rear) / 2, half),
+                            (-(front + rear) / 2, -half), ((front + rear) / 2, -half))]
+        d = ' '.join(f'{x:.1f},{y:.1f}' for x, y in pts)
+        extra = f' stroke-dasharray="{dash}"' if dash else ''
+        tip0, tip1 = ip((front * c_, front * s_)), ip(((front + 0.3) * c_, (front + 0.3) * s_))
+        return (f'<polygon points="{d}" fill="{fill}" stroke="{colour}" stroke-width="2.5"{extra}/>'
+                f'<line x1="{tip0[0]:.1f}" y1="{tip0[1]:.1f}" x2="{tip1[0]:.1f}" y2="{tip1[1]:.1f}" '
+                f'stroke="{colour}" stroke-width="3" marker-end="url(#gf-{"ah-g" if colour == GREEN else "ah"})"/>')
+
+    g0, g1 = ip((-0.25, 0.0)), ip((3.15, 0.0))
+    parts.append(f'<line x1="{g0[0]:.1f}" y1="{g0[1]:.1f}" x2="{g1[0]:.1f}" y2="{g1[1]:.1f}" stroke="{GREEN}" '
+                 f'stroke-width="2" stroke-dasharray="7 6"/>')
+    parts.append(body(tilt, '#8c959e', 'none', dash='6 5'))
+    parts.append(body(0.0, GREEN, '#eaf6f0'))
+    t1 = ip((1.95 * math.cos(tilt), 1.95 * math.sin(tilt)))
+    parts.append(f'<text x="{t1[0] + 6:.0f}" y="{t1[1] - 4:.0f}" font-size="19" fill="#6b7480">처음</text>')
+    parts.append(f'<text x="{g1[0]:.0f}" y="{g1[1] + 26:.0f}" font-size="19" fill="{GREEN}" text-anchor="end">목표 방향</text>')
+    ya, yb = 268, 312
+    xa, xb = 286, 380
+    parts.append(f'<path d="M{xa},{ya - 8} Q{(xa + xb) / 2},{ya + 6} {xb},{ya + 8}" fill="none" stroke="{BLUE}" '
+                 f'stroke-width="5" marker-end="url(#gf-ah-b)"/>')
+    parts.append(f'<text x="{xb + 16}" y="{ya + 9}" font-size="20" font-weight="700" fill="{BLUE}">① 오른쪽으로 꺾으며 전진</text>')
+    parts.append(f'<path d="M{xb},{yb + 8} Q{(xa + xb) / 2},{yb + 6} {xa},{yb - 8}" fill="none" stroke="{ORANGE}" '
+                 f'stroke-width="5" marker-end="url(#gf-ah-o)"/>')
+    parts.append(f'<text x="{xb + 16}" y="{yb + 9}" font-size="20" font-weight="700" fill="{ORANGE}">② 왼쪽으로 꺾으며 후진</text>')
+    parts.append(f'<text x="{rcx}" y="372" font-size="21" fill="#44505c" text-anchor="middle">앞뒤 {plans["d7"]["length"]:.1f} m · 각도는 크게 그림</text>')
+
     meta = dict(forward_m=round(plans['forward']['length'], 2), d7_m=round(plans['d7']['length'], 2),
                 d7_gear_changes=plans['d7']['gear_changes'],
                 heading_fix_rad=round(goal.yaw_rad - start.yaw_rad, 3),
                 goal_ahead_m=round(gl[0], 3), goal_left_m=round(gl[1], 3))
-    label = (f'목적지 앞에서 방향 {abs(meta["heading_fix_rad"]):.3f} rad 를 맞추는 경로. 전진만 쓰면 회색 점선처럼 '
-             f'{meta["forward_m"]:.1f} m 를 한 바퀴 돌고, 후진과 전진을 이으면 {meta["d7_m"]:.2f} m')
+    label = (f'목적지 앞에서 방향 {abs(meta["heading_fix_rad"]):.3f} rad 를 맞추는 경로. 전진만 쓰면 '
+             f'{meta["forward_m"]:.1f} m 를 한 바퀴 돌고, 한쪽으로 꺾으며 전진한 뒤 반대로 꺾으며 후진하면 '
+             f'{meta["d7_m"]:.2f} m 로 제자리에서 방향이 맞는다(개념도)')
     return svg(width, height, ''.join(parts), label), meta
 
 

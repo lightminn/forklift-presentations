@@ -1619,10 +1619,11 @@
           if (!this._printing && index === activeIndex) {
             // The x-import hydration layer preserves string attributes but
             // drops boolean media attributes. Restore the runtime contract
-            // before play() so muted autoplay is permitted and the native
-            // controls/loop remain available to the presenter.
+            // before play() so muted autoplay is permitted. Week 7-1 loops
+            // without native controls: a hovering pointer would otherwise
+            // raise the control bar over the clips' bottom captions.
             video.muted = true;
-            video.controls = true;
+            video.controls = false;
             video.loop = true;
             video.playsInline = true;
             const started = video.play();
