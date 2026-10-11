@@ -102,6 +102,58 @@ class WeeklyTests(unittest.TestCase):
             self.assertNotEqual(result.returncode, 0)
         self.assertEqual(snapshot(self.root), original)
 
+    def create_part(self, number, part, *extra):
+        result = self.run_tool('tools/new_week.py', str(number), '--part', str(part), '--from', '2',
+                               '--title', f'{number}-{part} 별도 발표', *extra)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        return self.root / f'week-{number:02d}-{part}'
+
+    def test_part_deck_is_a_separate_draft_beside_the_weekly_deck(self):
+        week = self.create_week(7)
+        part = self.create_part(7, 1)
+        info = json.loads((part / 'week.json').read_text())
+        self.assertEqual((info['week'], info['part'], info['status']), (7, 1, 'draft'))
+        self.assertTrue((part / 'index.html').is_file())
+        self.assertTrue((week / 'index.html').is_file())
+        result = self.run_tool('tools/new_week.py', '7', '--part', '1', '--from', '2')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('already exists', result.stderr)
+
+    def test_published_part_is_listed_but_latest_stays_on_weekly_decks(self):
+        part = self.create_part(7, 1)
+        metadata = part / 'week.json'
+        info = json.loads(metadata.read_text())
+        info['status'] = 'published'
+        metadata.write_text(json.dumps(info, ensure_ascii=False))
+        result = self.run_tool('build_deck.py')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        result = self.run_tool('tools/build_site.py', '--output', '_site')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        site = self.root / '_site'
+        html = (site / 'index.html').read_text()
+        self.assertLess(html.index('data-week="7-1"'), html.index('data-week="2"'))
+        self.assertIn('href="week-07-1/"', html)
+        self.assertIn('../week-02/', (site / 'latest/index.html').read_text())
+        self.assertTrue((site / 'week-07-1/index.html').is_file())
+
+    def test_part_must_match_its_directory_and_range(self):
+        part = self.create_part(7, 1)
+        metadata = part / 'week.json'
+        info = json.loads(metadata.read_text())
+        info['part'] = 2
+        metadata.write_text(json.dumps(info))
+        result = self.run_tool('tools/build_site.py', '--output', '_site')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('directory name', result.stderr)
+        self.assertFalse((self.root / '_site').exists())
+        info['part'] = 1
+        metadata.write_text(json.dumps(info))
+        original = snapshot(self.root)
+        for value in ('0', '10', 'abc'):
+            result = self.run_tool('tools/new_week.py', '8', '--part', value)
+            self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(snapshot(self.root), original)
+
     def test_invalid_status_blocks_publication_before_output_is_created(self):
         week = self.create_week(3)
         metadata = week / 'week.json'

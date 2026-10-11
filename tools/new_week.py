@@ -5,26 +5,27 @@ import json
 import shutil
 import subprocess
 import sys
-from weekly import ROOT, load_weeks, published_weeks, week_number
+from weekly import ROOT, directory_name, load_weeks, part_number, published_weeks, week_number
 
 
-def create_week(number, title=None, source_number=None):
-    destination = ROOT / f'week-{number:02d}'
+def create_week(number, title=None, source_number=None, part=0):
+    destination = ROOT / directory_name(number, part)
     if destination.exists():
         raise SystemExit(f'already exists: {destination.name}; existing files were preserved')
     weeks = load_weeks(ROOT)
     if source_number is None:
         source = published_weeks(weeks)[0]
     else:
-        source = next((week for week in weeks if week['week'] == source_number), None)
+        source = next((week for week in weeks
+                       if week['week'] == source_number and not week['part']), None)
         if source is None:
             raise SystemExit(f'source week does not exist: {source_number}')
-    if number <= source['week']:
+    if (number, part) <= (source['week'], source['part']):
         raise SystemExit('new week must be later than the source week')
     shutil.copytree(source['directory'], destination,
                     ignore=shutil.ignore_patterns('__pycache__', '*.pyc', '.DS_Store'))
-    info = {'week': number, 'title': title or f'{number}주차 개발 진행 보고',
-            'summary': '', 'status': 'draft'}
+    info = {'week': number, **({'part': part} if part else {}),
+            'title': title or f'{number}주차 개발 진행 보고', 'summary': '', 'status': 'draft'}
     (destination / 'week.json').write_text(json.dumps(info, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     (destination / 'VALIDATION.md').write_text(
         f'# {number}주차 발표자료 검증 기록\n\n미검증. {source["week"]}주차 자료를 복사한 초안이며, '
@@ -50,8 +51,10 @@ def main():
     parser.add_argument('week', type=week_number)
     parser.add_argument('--title')
     parser.add_argument('--from', dest='source_week', type=week_number)
+    parser.add_argument('--part', type=part_number, default=0,
+                        help='a separate deck of the same week, created as week-NN-PART')
     args = parser.parse_args()
-    create_week(args.week, args.title, args.source_week)
+    create_week(args.week, args.title, args.source_week, args.part)
 
 
 if __name__ == '__main__':

@@ -13,6 +13,18 @@ def week_number(value):
     return number
 
 
+def part_number(value):
+    number = int(value)
+    if not 1 <= number <= 9:
+        raise ValueError('part must be between 1 and 9')
+    return number
+
+
+def directory_name(week, part=0):
+    """week-07 for a weekly deck, week-07-1 for a separate deck of that week (part 1)."""
+    return f'week-{week:02d}' + (f'-{part}' if part else '')
+
+
 def load_weeks(root):
     weeks = []
     for directory in sorted(root.glob('week-*')):
@@ -23,8 +35,13 @@ def load_weeks(root):
             if type(info['week']) is not int:
                 raise ValueError('week must be an integer')
             number = week_number(info['week'])
-            if directory.name != f'week-{number:02d}':
-                raise ValueError('directory name must match week')
+            part = info.get('part', 0)
+            if 'part' in info:
+                if type(part) is not int:
+                    raise ValueError('part must be an integer')
+                part = part_number(part)
+            if directory.name != directory_name(number, part):
+                raise ValueError('directory name must match week and part')
             if info['status'] not in ('draft', 'published'):
                 raise ValueError('status must be draft or published')
             if not isinstance(info['title'], str) or not info['title'].strip():
@@ -33,10 +50,10 @@ def load_weeks(root):
                 raise ValueError('summary must be a string')
         except (OSError, ValueError, KeyError, TypeError) as error:
             raise SystemExit(f'{directory.name}/week.json: {error}') from error
-        weeks.append({**info, 'directory': directory, 'path': directory.name + '/'})
+        weeks.append({**info, 'part': part, 'directory': directory, 'path': directory.name + '/'})
     if not weeks:
         raise SystemExit('no weekly presentations found')
-    return sorted(weeks, key=lambda week: week['week'], reverse=True)
+    return sorted(weeks, key=lambda week: (week['week'], week['part']), reverse=True)
 
 
 def published_weeks(weeks):
@@ -46,16 +63,28 @@ def published_weeks(weeks):
     return published
 
 
+def latest_week(weeks):
+    """The deck latest/ opens: the newest published weekly deck. A part deck (a separate
+    presentation of a week, week-NN-P) is listed in the archive but never becomes latest."""
+    published = published_weeks(weeks)
+    return next((week for week in published if not week['part']), published[0])
+
+
+def week_label(week):
+    return f"{week['week']:02d}" + (f"-{week['part']}" if week['part'] else '')
+
+
 def archive_html(weeks):
     published = published_weeks(weeks)
-    latest = published[0]
+    latest = latest_week(weeks)
     rows = []
     for week in published:
         path, title = escape(week['path'], quote=True), escape(week['title'])
         summary = escape(week.get('summary', ''))
         label = '<span class="current">최근 발표</span>' if week is latest else ''
-        rows.append(f'''<li data-week="{week['week']}"><a class="week-link" href="{path}">
-<span class="week-number"><b>{week['week']:02d}</b><span>주차</span></span>
+        key = f"{week['week']}-{week['part']}" if week['part'] else str(week['week'])
+        rows.append(f'''<li data-week="{key}"><a class="week-link" href="{path}">
+<span class="week-number"><b>{week_label(week)}</b><span>주차</span></span>
 <div class="week-content"><div class="week-heading"><h3>{title}</h3>{label}</div><span class="summary">{summary}</span></div>
 <span class="open-deck">발표자료 열기 <span aria-hidden="true">↗</span></span></a></li>''')
     legacy = next((week for week in published if week['week'] == 2), None)
@@ -101,7 +130,7 @@ def redirect_html(week):
 
 def write_archive(output, weeks):
     html = archive_html(weeks)
-    redirect = redirect_html(published_weeks(weeks)[0])
+    redirect = redirect_html(latest_week(weeks))
     (output / 'index.html').write_text(html, encoding='utf-8')
     (output / 'latest').mkdir(exist_ok=True)
     (output / 'latest/index.html').write_text(redirect, encoding='utf-8')

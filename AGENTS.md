@@ -9,7 +9,7 @@ This repository contains weekly UOS web presentations for the autonomous forklif
 ## Weekly architecture
 
 - `week-NN/`: independent presentation snapshot, including source, narration, provenance, assets, styles and local runtime. The existing development proposal is `week-02/`. Add a new directory for each following week; do not overwrite previous weeks to prepare the next presentation.
-- `week-NN/week.json`: integer week (1–99), title, summary, and status (`draft` or `published`). Directory name must match the week. Drafts are excluded from the Pages bundle and index; this does not hide files committed to the public GitHub repository.
+- `week-NN/week.json`: integer week (1–99), title, summary, and status (`draft` or `published`). Directory name must match the week. A second deck of the same week (e.g. a company meeting) is a part deck `week-NN-P/` with `"part": P` (1–9) in its `week.json`, created with `tools/new_week.py NN --part P`; it is listed in the archive but `latest/` only follows weekly decks (no `part`). Drafts are excluded from the Pages bundle and index; this does not hide files committed to the public GitHub repository.
 - `week-NN/build_deck.py`: editable slide HTML, Korean narration, timing, and sources. Generates that week's `index.html`, `SCRIPT.md`, and `slide-metadata.json`.
 - `week-NN/deck.css`: body layout on the official 1280 × 720 UOS canvas.
 - `week-NN/support.js`, `deck-stage.js`, `vendor/`: local UOS/React runtime and fonts. Preserve official geometry and logos. Keep weekly copies independent so later changes cannot affect earlier decks.
