@@ -225,7 +225,7 @@ param_rows = ''.join(
     for a, v, k, why in SIM_PARAMS)
 add('시뮬레이션 환경', '시뮬레이션 환경', 55, f"""
 <h2 class="headline">Isaac Sim 공장 홀에 실측 차체 · 규격 센서를 넣고 SLAM까지 맞물려 실행</h2>
-{stage(mpanel(f'<img class="media" src="assets/{SIM_STILL}" alt="Isaac Sim 공장 홀을 위에서 본 장면. 지게차와 팔레트, 적재물이 보인다">'),
+{stage(mpanel(f'<img class="media" src="assets/{SIM_STILL}" alt="Isaac Sim 공장 홀을 위에서 본 장면. 지게차와 팔레트, 적재물이 보인다">', light=True),
         ipanel('시뮬레이션 설정과 근거', f'<table class="comparison params6 m7-params"><tr><th>항목</th><th>값</th><th>근거</th></tr>{param_rows}</table>'), 360)}
 <div class="takeaway">실측으로 먼저 바꿀 가정값: 바퀴 마찰 · 구동 토크 · 센서 잡음</div>
 """,
@@ -246,7 +246,7 @@ INSERT_ROWS = [  # step, method, reason (the values are in the narration and sou
     ('① 지연 보정', '촬영 시점의 위치로 보정', '움직여도 위치가 안 밀림'),
     ('② 이어 추적', '윗판 가장자리로 위치 추적', '포켓 입구가 화면 밖'),
     ('③ 경로 보정', '1.0 · 0.6 m 정지 → 경로 보정', '먼 거리 오차를 줄임'),
-    ('④ 간격 감시', '정지 거리 · 오차를 포함해 간격 판단', '닿기 전에 멈춤'),
+    ('④ 간격 감시', '정지 거리 · 오차 반영 → 간격 판단', '닿기 전에 멈춤'),
     ('⑤ 삽입 끝', '캐리지 앞 여유를 남겨 정지', '팔레트를 밀지 않음'),
 ]
 insert_rows = ''.join(f'<tr><td>{a}</td><td>{b}</td><td class="muted">{c}</td></tr>' for a, b, c in INSERT_ROWS)
