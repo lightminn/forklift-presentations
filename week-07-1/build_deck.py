@@ -46,6 +46,22 @@ def video(src, alt, cls='media'):
             f'aria-label="{escape(alt, quote=True)}"></video>')
 
 
+def stage(media, info, media_w):
+    """Media panel and info panel sharing the space between headline and band (same top and
+    bottom edges); the media panel's width follows the clip's aspect at the stage height."""
+    return f'<div class="m7-stage grow" style="grid-template-columns:{media_w}px 1fr">{media}{info}</div>'
+
+
+def mpanel(inner, legend=None, light=False):
+    leg = f'<figcaption class="legend">{legend}</figcaption>' if legend else ''
+    tone = {False: '', True: ' light', 'white': ' white'}[light]
+    return f'<figure class="m7-media{tone}">{inner}{leg}</figure>'
+
+
+def ipanel(title, table, cls=''):
+    return f'<div class="m7-info {cls}"><p class="ph">{title}</p><div class="tb">{table}</div></div>'
+
+
 def figure_svg(name):
     """An SVG from prepare_figures.py, inlined (an <img> would not see the deck font)."""
     return (ROOT / 'figures' / name).read_text(encoding='utf-8').replace(
@@ -81,9 +97,11 @@ pipe_html = ''.join(
     for i, (step, sim, real) in enumerate(PIPE))
 add('과제 이해와 진행 현황', '과제 이해와 진행 현황', 55, f"""
 <h2 class="headline">과제 5단계를 시뮬레이션에서 한 임무로 연결 · 실물은 구동부 제작 단계</h2>
-<div class="m7-pipe grow">{pipe_html}</div>
-<table class="comparison m7-cases"><tr><th>접근 상황 (과제)</th><th>A 정면 정렬</th><th>B 옆으로 비켜 있음</th><th>C 너무 가까움</th><th>D 가깝고 뒤에 장애물</th></tr>
-<tr><td>시뮬레이션</td><td>{tag("ok")}직진 삽입</td><td>{tag("ok")}곡선 접근 후 삽입</td><td>{tag("next")}후진 후 삽입</td><td>{tag("next")}공간 안에서 재정렬</td></tr></table>
+<div class="m7-rows grow">
+<div class="m7-info"><p class="ph">과제 5단계 진행 상태</p><div class="m7-pipe">{pipe_html}</div></div>
+<div class="m7-info"><p class="ph">과제의 접근 상황 A–D</p><table class="comparison m7-cases"><tr><th>구분</th><th>A 정면 정렬</th><th>B 옆으로 비켜 있음</th><th>C 너무 가까움</th><th>D 가깝고 뒤에 장애물</th></tr>
+<tr><td>시뮬레이션</td><td>{tag("ok")}직진 삽입</td><td>{tag("ok")}곡선 접근 후 삽입</td><td>{tag("next")}후진 후 삽입</td><td>{tag("next")}공간 안에서 재정렬</td></tr></table></div>
+</div>
 <div class="takeaway">남은 것: 접근 상황 C · D · 실물 센서 시험 · 실차 주행</div>
 """,
     """먼저 과제를 어떻게 이해했고 어디까지 왔는지입니다. 과제 문서의 순서대로 팔레트 인식부터 운반과 하역까지 다섯 단계로 나눴고, 다섯 단계 모두 시뮬레이션에서 한 임무로 이어서 돌아갑니다. 실물은 차체를 재고 기존 제어기를 분석한 단계입니다. 아래 표는 과제의 네 가지 접근 상황입니다. A와 B는 시뮬레이션에서 확인했고, 먼저 후진해야 하는 C와 뒤에 장애물이 있는 D는 다음 단계에서 확인합니다. (전환)""",
@@ -180,10 +198,8 @@ CHASSIS_ROWS = [  # item, measured / selected, reason / effect
 chassis_rows = ''.join(f'<tr><td>{a}</td><td><b>{b}</b></td><td>{c}</td></tr>' for a, b, c in CHASSIS_ROWS)
 add('실물 차체와 구동부', '실물 차체와 구동부', 75, f"""
 <h2 class="headline">실측 조향각 15° → 회전 반경 약 2.5 m · 속도 제어를 위해 구동 보드 새로 제작</h2>
-<div class="split grow" style="grid-template-columns:0.56fr 1.44fr;gap:26px">
-<figure class="shot" style="justify-content:center"><img class="media" src="assets/30_chassis_pallet.jpg" alt="입고한 지게차 차체와 앞에 놓인 동봉 플라스틱 팔레트"></figure>
-<div class="stack" style="justify-content:center"><table class="comparison t6 m7-chassis"><tr><th>항목</th><th>실측 · 선정</th><th>이유 · 영향</th></tr>{chassis_rows}</table></div>
-</div>
+{stage(mpanel('<img class="media" src="assets/30_chassis_pallet.jpg" alt="입고한 지게차 차체와 앞에 놓인 동봉 플라스틱 팔레트">', light=True),
+        ipanel('실측과 부품 선정', f'<table class="comparison t6 m7-chassis"><tr><th>항목</th><th>실측 · 선정</th><th>이유 · 영향</th></tr>{chassis_rows}</table>'), 346)}
 <div class="takeaway">실물 진행: 차체 실측 · 제어기 분석 · 부품 선정 완료 → 모터 전류 실측 후 PCB → 실차 주행 (예정)</div>
 """,
     """실물 쪽입니다. 들어온 차체를 직접 재 보니 가장 큰 차이는 조향각이었습니다. 최대 조향각이 15도라 최소 회전 반경이 약 2.5미터로, 사진으로 추정했던 모델의 두 배 가까이 됩니다. 그래서 좁은 곳에서는 앞뒤로 움직이며 방향을 맞춰야 하고, 이 내용은 뒤의 경로 계획에서 다시 말씀드리겠습니다. 포크는 36센티미터라 삽입 목표를 33센티미터로 잡았습니다. 또 기존 제어기를 로직 애널라이저로 분석해 보니, 무선 조종기 신호로 릴레이를 켜고 끄기만 해서 속도를 조절할 수 없었습니다. 그래서 기존 제어기 대신 구동 보드를 새로 만듭니다. 모터 드라이버는 TI의 DRV8244를 골랐습니다. 비교한 제품 중 켜졌을 때 저항이 47밀리옴으로 가장 작아 열이 덜 납니다. 전류는 별도 저항 없이 읽고, SPI로 전류 제한을 설정하고 결함 상태를 확인합니다. 엔코더는 자석식 MT6701로, 한 칩이 절대각과 증분 출력을 모두 내서 조향축에서는 켜자마자 각도를 알고 바퀴에서는 회전 수를 셉니다. 지금은 회로 초안 단계이고, 모터 전류를 잰 뒤 전류 제한과 방열을 정해 PCB로 만듭니다. (전환)""",
@@ -197,8 +213,8 @@ add('실물 차체와 구동부', '실물 차체와 구동부', 75, f"""
 SIM_STILL = '70_hall.jpg'   # the recorded run's hall at the start (prepare_clips.py mission)
 SIM_PARAMS = [
     ('차체', '실측 축간 · 바퀴 · 조향각', 'measure', '외형 · 무게는 카탈로그 값'),
-    ('물리', 'Isaac Sim 5.1 · 120 Hz', 'impl', '바퀴 토크로 주행 · 팔레트도 물리로 들기'),
-    ('센서', '깊이 카메라 · LiDAR 10 Hz', 'spec', 'D435i · RPLIDAR A2 사양으로 합성'),
+    ('물리', 'Isaac Sim 5.1 · 120 Hz', 'impl', '바퀴 토크 주행 · 팔레트 물리로 들기'),
+    ('센서', '깊이 카메라 · LiDAR 10 Hz', 'spec', 'D435i · A2 사양으로 합성'),
     ('SLAM 연결', 'ROS 2 slam_toolbox', 'impl', '스캔 전송 → SLAM 응답 후 진행'),
     ('바닥 장애물', 'LiDAR 높이 (1.05 m) 이상만', 'assume', '운용 가정 · 낮은 소품은 장면에서 뺌'),
     ('마찰 · 토크 · 잡음', '마찰 0.8 / 0.7 · 3 N·m', 'assume', '일반 범위 값 · 실측 후 교체'),
@@ -209,10 +225,8 @@ param_rows = ''.join(
     for a, v, k, why in SIM_PARAMS)
 add('시뮬레이션 환경', '시뮬레이션 환경', 55, f"""
 <h2 class="headline">Isaac Sim 공장 홀에 실측 차체 · 규격 센서를 넣고 SLAM까지 맞물려 실행</h2>
-<div class="split grow" style="grid-template-columns:0.5fr 1.5fr;gap:24px">
-<figure class="shot"><img class="media" src="assets/{SIM_STILL}" alt="Isaac Sim 공장 홀을 위에서 본 장면. 지게차와 팔레트, 적재물이 보인다"></figure>
-<div class="stack" style="justify-content:center"><table class="comparison params6 m7-params"><tr><th>항목</th><th>값</th><th>근거</th></tr>{param_rows}</table></div>
-</div>
+{stage(mpanel(f'<img class="media" src="assets/{SIM_STILL}" alt="Isaac Sim 공장 홀을 위에서 본 장면. 지게차와 팔레트, 적재물이 보인다">'),
+        ipanel('시뮬레이션 설정과 근거', f'<table class="comparison params6 m7-params"><tr><th>항목</th><th>값</th><th>근거</th></tr>{param_rows}</table>'), 360)}
 <div class="takeaway">실측으로 먼저 바꿀 가정값: 바퀴 마찰 · 구동 토크 · 센서 잡음</div>
 """,
     """실차 주행 전까지는 Isaac Sim에서 개발합니다. 공장 홀 장면에 실측한 차체 값을 넣었고, 물리는 120헤르츠로 돌립니다. 지게차는 바퀴에 토크를 걸어 실제로 굴러가고, 팔레트도 고정하지 않고 포크로 물리적으로 들어 올립니다. 카메라 깊이 영상과 LiDAR 스캔은 D435i와 RPLIDAR A2의 사양으로 합성하고, SLAM은 ROS 2 컨테이너의 slam_toolbox가 스캔이 들어올 때마다 시뮬레이터와 맞물려 돌아갑니다. 주황색은 가정값입니다. LiDAR 높이보다 낮은 바닥 장애물은 없다고 가정했고, 바퀴 마찰과 구동 토크, 센서 잡음은 실측 전이라 일반적인 범위의 값을 넣었습니다. 이 값들은 실측이 나오면 먼저 바꿉니다. (전환)""",
@@ -238,10 +252,8 @@ INSERT_ROWS = [  # step, method, reason (the values are in the narration and sou
 insert_rows = ''.join(f'<tr><td>{a}</td><td>{b}</td><td class="muted">{c}</td></tr>' for a, b, c in INSERT_ROWS)
 add('삽입 중 포켓 추적', '삽입 중 포켓 추적', 90, f"""
 <h2 class="headline">캐리지 하단 카메라로 삽입 끝까지 포켓 추적 · 삽입 직전 두 번 경로 보정</h2>
-<div class="split grow" style="grid-template-columns:0.82fr 1.18fr;gap:22px">
-<figure class="shot">{video('61_insert_depth.mp4', '캐리지 하단 카메라의 깊이 영상. 팔레트에 다가가며 두 번 멈춰 다시 보고, 포크가 들어가는 동안 팔레트 윗판이 화면에 남는다')}</figure>
-<div class="stack" style="justify-content:center"><table class="comparison m7-ins"><tr><th>단계</th><th>방법</th><th>이유</th></tr>{insert_rows}</table></div>
-</div>
+{stage(mpanel(video('61_insert_depth.mp4', '캐리지 하단 카메라의 깊이 영상. 팔레트에 다가가며 두 번 멈춰 다시 보고, 포크가 들어가는 동안 팔레트 윗판이 화면에 남는다')),
+        ipanel('구현 단계', f'<table class="comparison m7-ins"><tr><th>단계</th><th>방법</th><th>이유</th></tr>{insert_rows}</table>'), 520)}
 <div class="takeaway">결과: 포크 · 팔레트 접촉 없이 삽입 · 하역 오차 7 mm (깊이 잡음 없는 합성 영상)</div>
 """,
     """과제가 강조한 삽입 중 포켓 추적입니다. 처음에는 카메라를 차체 앞 높은 곳에 달았는데, 포크를 넣기 시작하면 팔레트가 화면 밖으로 빠져 마지막 약 25센티미터를 보지 못했습니다. 그래서 Crown 특허처럼 카메라를 캐리지 하단으로 옮겼고, 영상처럼 포크를 넣는 동안에도 윗판이 화면에 남습니다. 구현은 표의 다섯 단계입니다. 먼저 카메라 영상이 들어오기까지의 지연을 91.7밀리초로 재서, 각 영상을 실제로 찍힌 순간의 차 위치에 놓습니다. 포켓 입구가 화면 밖으로 나가면 윗판 판재의 가장자리로 팔레트 위치를 이어서 잽니다. 앞면에서 1미터와 0.6미터 떨어진 지점에서는 멈춰서 다시 보고 남은 직진 경로를 다시 그립니다. 포크 끝이 들어간 뒤에는 포크와 포켓 벽 사이 간격을 관측 오차와 정지 거리, 여유 11밀리미터와 비교해 모자라면 멈추고, 캐리지 앞면이 팔레트에 16밀리미터 남으면 삽입을 끝냅니다. 접근 속도 0.055미터 매 초도 영상 사이에 움직이는 거리와 정지 거리가 이 여유 안에 들도록 정한 값입니다. 이 실행에서 포크는 팔레트에 닿지 않았고, 하역 오차는 7밀리미터였습니다. 다만 깊이 잡음이 없는 합성 영상이라 실제 카메라 잡음을 넣은 확인이 남아 있습니다. (전환)""",
@@ -265,9 +277,11 @@ WHY_POCKET = [
 why_rows = ''.join(f'<tr><td>{a}</td><td>{b}</td></tr>' for a, b in WHY_POCKET)
 add('포켓 인식', '포켓 인식 처리 과정', 65, f"""
 <h2 class="headline">포켓 인식: 학습 모델 대신 팔레트 규격 치수로 앞면 → 빈 공간 → 포켓 위치 · 방향</h2>
-<figure class="m7-pipe2"><img src="assets/20_pipeline_stages_crop.png" alt="깊이 영상, 팔레트 앞면, 받침목과 빈 공간, 판정된 포켓 위치의 네 단계">
+<div class="m7-rows grow" style="grid-template-rows:auto 1fr">
+<figure class="m7-media m7-pipe2"><img src="assets/20_pipeline_stages_crop.png" alt="깊이 영상, 팔레트 앞면, 받침목과 빈 공간, 판정된 포켓 위치의 네 단계">
 <div class="steps"><b>① 깊이 영상</b><i></i><b>② 앞면 추출</b><i></i><b>③ 빈 공간 구분</b><i></i><b>④ 포켓 위치 · 방향</b></div></figure>
-<table class="comparison t6 m7-why"><tr><th>근거</th><th>내용</th></tr>{why_rows}</table>
+{ipanel('규격 치수 방식을 택한 근거', f'<table class="comparison t6 m7-why"><tr><th>근거</th><th>내용</th></tr>{why_rows}</table>')}
+</div>
 <div class="takeaway">한계: 가까워져 포켓 입구가 화면 밖으로 나가면 검출 불가 → 근접 추적이 이어 받음</div>
 """,
     """팔레트를 찾는 방법입니다. 학습 모델 대신 팔레트 규격의 치수와 형상 규칙을 씁니다. 그림처럼 먼저 깊이 영상에서 작업 범위의 점만 남기고, 그 안에서 수직 평면을 찾아 팔레트 앞면으로 삼습니다. 다음으로 앞면을 세로 칸으로 나눠 받침목과 빈 공간을 가르고, 빈 공간의 폭이 규격 범위 안에 드는지 확인해 두 포켓의 중심과 삽입 방향을 구합니다. 이렇게 만든 이유는 학습 데이터 없이도 EPAL 6과 T11을 치수만 바꿔 같은 코드로 다룰 수 있기 때문입니다. 판정 기준값도 상수로 두지 않고 규격에서 계산합니다. 깊이 잡음이 없는 합성 장면 평가에서 놓친 포켓과 잘못 찾은 경우는 없었고, 위치 오차는 95퍼센트가 8밀리미터 이하였습니다. 다만 가까워져 포켓 입구가 화면 밖으로 나가면 이 방법으로는 찾을 수 없어서, 다음 장의 근접 추적이 이어 받습니다. (전환)""",
@@ -367,11 +381,8 @@ SLAM_COMPARE = [  # item, 2D LiDAR SLAM, camera (visual) SLAM -- datasheets, BKM
 slam_rows = ''.join(f'<tr><td>{a}</td><td class="blue"><b>{b}</b></td><td>{c}</td></tr>' for a, b, c in SLAM_COMPARE)
 add('위치 추정', '위치 추정: LiDAR SLAM', 65, f"""
 <h2 class="headline">끝 시점 위치 오차: 바퀴 회전만 계산하면 3.4 m → LiDAR SLAM은 약 4 cm</h2>
-<div class="split grow" style="grid-template-columns:0.72fr 1.28fr;gap:26px">
-<figure class="shot">{video('45_slam_error.mp4', 'SLAM 운반 실행에서 slam_toolbox가 만든 지도와 추정 경로. 아래 숫자는 SLAM 위치 오차와 바퀴 회전만으로 계산한 위치의 오차')}<figcaption class="small muted">빨강: SLAM · 주황: 바퀴 회전만 · 파랑: 실제</figcaption></figure>
-<div class="stack" style="gap:8px;justify-content:center"><p class="panel-h">위치 추정에 LiDAR SLAM을 선택한 이유</p>
-<table class="comparison t6 m7-slam"><tr><th>항목</th><th>2D LiDAR (선택)</th><th>카메라 (비전)</th></tr>{slam_rows}</table></div>
-</div>
+{stage(mpanel(video('45_slam_error.mp4', 'SLAM 운반 실행에서 slam_toolbox가 만든 지도와 추정 경로. 아래 숫자는 SLAM 위치 오차와 바퀴 회전만으로 계산한 위치의 오차'), legend='빨강: SLAM · 주황: 바퀴 회전만 · 파랑: 실제'),
+        ipanel('위치 추정에 LiDAR SLAM을 고른 이유', f'<table class="comparison t6 m7-slam"><tr><th>항목</th><th>2D LiDAR (선택)</th><th>카메라 (비전)</th></tr>{slam_rows}</table>'), 380)}
 <div class="takeaway">3.4 m의 원인: 짐 싣고 돌 때 방향이 24° 틀어짐 → 위치 추정은 LiDAR · 카메라는 팔레트 인식에 집중</div>
 """,
     """이 구조로 위치를 추정한 결과와 LiDAR를 고른 이유입니다. 먼저 왼쪽 영상을 보시면, 빨간 SLAM 경로는 파란 실제 경로를 따라가지만 주황색 바퀴 회전만 계산한 경로는 갈수록 벗어납니다. 임무가 끝날 때 바퀴 회전만 계산한 위치는 3.4미터 어긋났고 SLAM은 약 4센티미터였습니다. 3.4미터의 대부분은 팔레트를 싣고 돌 때 계산보다 덜 돌아 방향이 24도 틀어진 탓입니다. 다음으로 오른쪽 표에서 LiDAR SLAM을 고른 이유를 보겠습니다. 카메라 깊이는 3미터 안팎까지만 재고 멀수록 오차가 빠르게 커지지만, LiDAR는 12미터까지 360도를 재고 2D 지도를 경로 계획에 그대로 씁니다. 그래서 위치 추정은 LiDAR로 하고, 카메라는 팔레트 인식에 집중하도록 나눴습니다. (전환)""",
@@ -399,10 +410,8 @@ PLANNER_ROWS = [  # item, implementation
 planner_rows = ''.join(f'<tr><td>{a}</td><td>{b}</td></tr>' for a, b in PLANNER_ROWS)
 add('새 장애물 대응', '경로 계획 구현과 새 장애물', 65, f"""
 <h2 class="headline">Hybrid A*로 계획 · 뒤차축으로 추종 → 새 상자 앞에서 정지 · 재계획 후 재개</h2>
-<div class="split grow" style="grid-template-columns:1.4fr 1fr;gap:22px">
-<figure class="shot">{video('46_new_obstacle_single.mp4', '팔레트를 들고 운반하던 중 경로 위에 상자가 나타나자 멈추고, 새 경로로 바꿔 돌아가는 장면. 왼쪽은 위에서 본 주행, 오른쪽은 SLAM 지도와 LiDAR 장애물 칸')}<figcaption class="small muted">노랑: 현재 경로 · 회색: 직전 경로 · 주황: LiDAR 장애물 칸</figcaption></figure>
-<div class="stack" style="justify-content:center"><table class="comparison t6 m7-plan"><tr><th>경로 계획 · 추종</th><th>구현</th></tr>{planner_rows}</table></div>
-</div>
+{stage(mpanel(video('46_new_obstacle_single.mp4', '팔레트를 들고 운반하던 중 경로 위에 상자가 나타나자 멈추고, 새 경로로 바꿔 돌아가는 장면. 왼쪽은 위에서 본 주행, 오른쪽은 SLAM 지도와 LiDAR 장애물 칸'), legend='노랑: 현재 경로 · 회색: 직전 경로 · 주황: LiDAR 장애물 칸'),
+        ipanel('경로 계획 · 추종 구현', f'<table class="comparison t6 m7-plan"><tr><th>항목</th><th>구현</th></tr>{planner_rows}</table>'), 720)}
 <div class="takeaway">결과: 운반 중 · 복귀 중 나타난 상자 (높이 1.3 m) 모두 피해서 완주</div>
 """,
     """경로 계획과 추종의 구현입니다. 경로는 Hybrid A*로 짭니다. 뒤차축 기준 자전거 모델로 차가 돌 수 있는 곡률 안에서 0.25미터짜리 전진과 후진 호를 이어 붙이며, 0.2미터와 10도 격자 위에서 길을 찾습니다. 충돌은 차체와 실은 짐까지 덮는 사각형에 0.1미터 여유를 두고 검사하고, 목표 근처에서는 전진과 후진을 섞은 Reeds–Shepp 곡선으로 바로 잇습니다. 만든 경로는 뒤차축 기준 pure pursuit로 따라갑니다. 뒤차축에서 경로 위 앞쪽 목표점을 보고 조향각을 계산하며, 전진과 후진이 바뀌는 점에서는 멈춥니다. 영상은 운반 중 경로 위에 키 1.3미터 상자가 나타난 경우입니다. 지금 곡률로 멈추는 궤적이 막히자 지게차가 멈추고, 그 자리에서 다시 계획해 조금 후진한 뒤 상자를 피해 갑니다. 복귀 중 상자도 같은 방식으로 피했습니다. 그런데 왜 바로 돌아가지 않고 후진할까요? (전환)""",
@@ -418,11 +427,11 @@ add('새 장애물 대응', '경로 계획 구현과 새 장애물', 65, f"""
 # ----------------------------------------------------------------- 9
 add('후진을 고르는 이유', '경로 계획: 후진을 고르는 이유', 85, f"""
 <h2 class="headline">회전 반경이 커서 전진만으로 비킬 거리가 없을 때 후진 · 앞뒤 전환으로 방향 맞춤</h2>
-<div class="split grow m7-paths">
-<div class="stack m7-fig"><p class="panel-h">새 상자 앞: 후진으로 거리 확보 → 상자를 피해 전진</p><div class="m7-svg">{figure_svg('52_reverse_obstacle.svg')}</div>
-<p class="m7-cap">주황: 후진 · 파랑: 전진 · 회색 점선: 원래 경로</p></div>
-<div class="stack m7-fig"><p class="panel-h">목적지 앞 방향 맞춤: 한 바퀴 대신 앞뒤로</p><div class="m7-svg">{figure_svg('53_goal_fix.svg')}</div>
-<p class="m7-cap">회색 점선: 전진만 쓴 경로 · 초록: 목적지 · 목표 방향</p></div>
+<div class="m7-stage grow" style="grid-template-columns:1fr 1fr">
+<div class="m7-info"><p class="ph">새 상자 앞: 후진으로 거리 확보 → 상자를 피해 전진</p>
+{mpanel(f'<div class="m7-svg">{figure_svg("52_reverse_obstacle.svg")}</div>', legend='주황: 후진 · 파랑: 전진 · 회색 점선: 원래 경로', light='white')}</div>
+<div class="m7-info"><p class="ph">목적지 앞 방향 맞춤: 한 바퀴 대신 앞뒤로</p>
+{mpanel(f'<div class="m7-svg">{figure_svg("53_goal_fix.svg")}</div>', legend='회색 점선: 전진만 쓴 경로 · 초록: 목적지 · 목표 방향', light='white')}</div>
 </div>
 <div class="takeaway">경로 비용: 후진 거리 1.3배 · 전진 · 후진 전환마다 1 m 추가 → 전진만으로 못 가거나 훨씬 멀 때만 후진</div>
 """,
@@ -448,10 +457,8 @@ MISSION_ROWS = [  # stage, how it is done in this run
 mission_rows = ''.join(f'<tr><td>{a}</td><td>{b}</td></tr>' for a, b in MISSION_ROWS)
 add('운반 임무 전체', '운반 임무 전체', 55, f"""
 <h2 class="headline">실측 차체로 인식 → 삽입 → 들기 → 운반 → 하역 → 복귀를 사람 개입 없이 완주</h2>
-<div class="split grow" style="grid-template-columns:1fr 1fr;gap:32px">
-<figure class="shot">{video(MISSION_VIDEO, '공장 홀을 위에서 본 지게차. 팔레트를 인식해 들고, 목적지에 내린 뒤 출발점으로 돌아온다')}</figure>
-<div class="stack" style="justify-content:center"><table class="comparison t6 m7-mission"><tr><th>단계</th><th>구현 (이 실행)</th></tr>{mission_rows}</table></div>
-</div>
+{stage(mpanel(video(MISSION_VIDEO, '공장 홀을 위에서 본 지게차. 팔레트를 인식해 들고, 목적지에 내린 뒤 출발점으로 돌아온다')),
+        ipanel('단계별 구현 (이 실행)', f'<table class="comparison t6 m7-mission"><tr><th>단계</th><th>구현</th></tr>{mission_rows}</table>'), 461)}
 <div class="takeaway">결과: 하역 오차 19 mm · 출발점 복귀 오차 3 cm · 포크 · 팔레트 충돌 없음</div>
 """,
     """현재 연결된 운반 임무를 먼저 보여 드리겠습니다. 실측 차체 모델로 팔레트를 인식하고, 포크를 넣어 들어 올린 뒤, 목적지에 내려놓고 출발점으로 돌아옵니다. 오른쪽 표는 단계마다 무엇으로 구현했는지입니다. 팔레트는 깊이 영상에서 규격 치수로 찾고, 위치는 바퀴 오도메트리에 SLAM 보정을 반영해 구합니다. 장애물은 LiDAR 한 대로 만든 격자로 보고, 경로는 Hybrid A*로 짠 뒤 뒤차축 기준으로 따라갑니다. 목적지에서는 미리 등록한 스캔과 지금 스캔을 맞춰 하역 위치를 보정합니다. 이 실행에서 하역 오차는 19밀리미터, 출발점 복귀 오차는 3센티미터였고 충돌은 없었습니다. 각 단계를 차례로 말씀드리겠습니다. (전환)""",
@@ -477,7 +484,7 @@ exam_rows = ''.join(f'<tr><td>{a}</td><td>{b}</td><td>{c}</td><td><span class="m
                     for a, b, c, v in EXAM)
 add('자격시험 기준 비교', '지게차운전기능사 실기 기준과 비교', 50, f"""
 <h2 class="headline">지게차운전기능사 실기 실격 기준 대비: 하역 · 삽입 · 접촉은 기준 안 · 틸트 기구는 없음</h2>
-<table class="comparison m7-exam grow"><tr><th>항목</th><th>실기시험 (2025 공개문제)</th><th>우리 지게차 (시뮬레이션)</th><th>비교</th></tr>{exam_rows}</table>
+{ipanel('실격 기준 대비', f'<table class="comparison m7-exam"><tr><th>항목</th><th>실기시험 (2025 공개문제)</th><th>우리 지게차 (시뮬레이션)</th><th>비교</th></tr>{exam_rows}</table>', 'grow')}
 <div class="takeaway">제안: 시험 코스는 모든 치수가 차폭 (바깥 타이어 간 거리)의 배수 → 우리 차 기준으로 줄인 코스를 시뮬레이션 평가에 사용</div>
 """,
     """지난 발표에서 실제 지게차 운전 기준과 비교해 보라는 의견을 받아, 지게차운전기능사 실기시험의 실격 기준과 대조했습니다. 시험은 팔레트를 싣고 코스를 돈 뒤 내려놓는 과제라 작업 흐름이 우리 임무와 비슷합니다. 하역 위치가 20센티미터 넘게 어긋나거나, 포크를 20센티미터 넘게 덜 넣거나, 팔레트를 건드리면 실격인데, 우리는 모두 이 기준 안에 있습니다. 다른 점은 틸트입니다. 우리 차체에는 마스트를 기울이는 기구가 없어서 짐을 안정시키는 다른 방법이 필요합니다. 시험 코스는 치수가 모두 차폭의 배수라, 우리 차 크기로 줄인 코스를 시뮬레이션 평가에 쓰는 것을 제안드립니다. (전환)""",
@@ -502,7 +509,7 @@ concl_rows = ''.join(f'<tr><td>{a}</td><td class="cur">{b}</td><td class="arrow"
                      for a, b, c in CONCLUSION)
 add('결론', '결론', 40, f"""
 <h2 class="headline">결론: 실측 차체 · 규격 센서의 제약에 맞춰 경로 · 카메라 · 위치 추정 · 구동부를 바꿈</h2>
-<table class="comparison plan6 m7-concl grow"><tr><th class="c1">확인한 것</th><th class="c2">그래서</th><th class="c3"></th><th class="c4">바꾼 방향</th></tr>{concl_rows}</table>
+{ipanel('처음 계획에서 바꾼 다섯 가지', f'<table class="comparison plan6 m7-concl"><tr><th class="c1">확인한 것</th><th class="c2">그래서</th><th class="c3"></th><th class="c4">바꾼 방향</th></tr>{concl_rows}</table>', 'grow')}
 <div class="takeaway">다음 목표: 시뮬레이션에서 이어 놓은 임무를 실차로 (구동 보드 제작 → 실차 주행 → 실물 센서 시험)</div>
 """,
     """정리하면, 실제 차체와 센서 조건에 맞춰 다섯 가지를 바꿨습니다. 회전 반경이 커서 전진·후진 경로를 넣고, 삽입 끝까지 보도록 카메라를 캐리지 하단으로 옮겼습니다. 바퀴 회전만 계산하면 위치가 어긋나므로 LiDAR SLAM을 쓰고, 속도를 조절할 수 없는 기존 제어기 대신 구동 보드를 만듭니다. LiDAR보다 낮은 바닥 장애물은 없다고 가정했습니다. 다음 목표는 이 임무를 실차로 옮기는 것입니다. (전환)""",
@@ -529,7 +536,7 @@ sched_rows = ''.join(
      f'<tr><td>{p}</td><td>{s}</td><td>{h}</td></tr>') for p, s, h in SCHEDULE)
 add('남은 과제와 일정', '남은 과제와 일정', 40, f"""
 <h2 class="headline">남은 일정: 중간고사 전 구동 보드 설계 → 11월 실차 주행 → 12월 중순 최종 시연</h2>
-<table class="comparison m7-sched grow"><tr><th>기간</th><th>소프트웨어</th><th>하드웨어</th></tr>{sched_rows}</table>
+{ipanel('기간별 계획', f'<table class="comparison m7-sched"><tr><th>기간</th><th>소프트웨어</th><th>하드웨어</th></tr>{sched_rows}</table>', 'grow')}
 <div class="takeaway">일정 조건: 구동 보드 제작 시점에 따라 실차 단계 조정 · 최종 시연일은 15주차로 가정</div>
 """,
     """남은 일정입니다. 중간고사 전에는 모터 전류를 재서 구동 보드 PCB를 설계하고, 시뮬레이션에서 C, D 상황을 확인합니다. 중간고사 뒤에는 구동 보드를 만들고 Jetson에 센서를 연결합니다. 11월 중순부터 실차로 위치 추정과 팔레트 인식을, 12월 초까지 실차 전체 임무를 확인하고, 마지막 주에 최종 시연을 준비합니다. 일정은 실물 진행에 따라 조정될 수 있습니다. (전환)""",
@@ -549,7 +556,7 @@ q_rows = ''.join(
             for i, item in enumerate(items)) for g, (group, items) in enumerate(QUESTIONS))
 add('확인 요청', '리보틱스 확인 요청', 65, f"""
 <h2 class="headline">확인 요청: 작업 범위 · 입력 조건 · 운용 · 평가 기준</h2>
-<table class="comparison m7-q grow"><tr><th>구분</th><th>질문</th></tr>{q_rows}</table>
+{ipanel('미팅에서 확인할 것', f'<table class="comparison m7-q"><tr><th>구분</th><th>질문</th></tr>{q_rows}</table>', 'grow')}
 <div class="takeaway">합의 목표: 다음 실차 시험에 적용할 운용 조건과 판정 기준</div>
 """,
     """마지막으로 리보틱스 측에 여쭤볼 것입니다. 우선 세 가지입니다. 첫째, 오늘 보여 드린 운반 임무가 실제 작업 흐름과 맞는지입니다. 둘째, 팔레트 위치와 목적지를 시스템이 받는지, 아니면 로봇이 직접 찾아야 하는지입니다. 셋째, 낮은 장애물이나 사람이 섞인 환경인지, 포크를 어디까지 넣어야 하는지, 시연을 어떤 기준으로 판정하는지입니다. 작업장 규모와 팔레트 종류 같은 운용 조건도 알고 싶습니다. 작업장 도면과 운용 영상, 사용하는 팔레트 도면을 받을 수 있는지도 여쭤봅니다. 특히 T11 팔레트는 포크 진입구 폭을 235밀리미터로 볼지 350밀리미터로 볼지 아직 정하지 못했습니다. 원격 정지 수준과 여러 대 동시 운용 여부도 알려 주시면 설계에 반영하겠습니다. 우선 이 작업 범위와 입력 조건이 실제 요구와 맞는지 의견을 부탁드립니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.""",

@@ -597,3 +597,43 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .m7-pipe2 .steps b { color:var(--uos-blue); text-align:center; }
 .m7-ins { font-size:19px; }
 .comparison.t6.m7-why th, .comparison.t6.m7-why td { padding:6px 12px; }
+
+/* ---- week 7-1 layout system (2026-10-11): one stage between headline and band ---- */
+.m7-stage { display:grid; gap:22px; min-height:0; align-items:stretch; }
+.m7-rows { display:grid; grid-template-rows:1fr auto; gap:16px; min-height:0; }
+.m7-media { position:relative; margin:0; background:#15181c; border-radius:4px; overflow:hidden;
+  display:flex; flex-direction:column; min-height:0; min-width:0; }
+.m7-media.light { background:#eef1f5; }
+.m7-media > .media { flex:1; min-height:0; width:100%; height:100%; object-fit:contain; border:0; display:block; }
+.m7-media .legend { flex-shrink:0; padding:7px 12px; background:#0f1215; color:#e8ecf1; font-size:16px; line-height:1.3; text-align:center; }
+.m7-info { display:flex; flex-direction:column; min-height:0; min-width:0; }
+.m7-info .ph { flex-shrink:0; margin:0 0 4px; font-size:21px; font-weight:700; line-height:1.25; color:var(--uos-blue); }
+.m7-info .tb { flex:1; min-height:0; display:flex; flex-direction:column; }
+.m7-info .tb > table { flex:1; height:100%; }
+.m7-info .tb > .m7-pipe { flex:1; }
+.m7-info.grow { flex:1; }
+.m7-info .comparison th { padding-top:8px; padding-bottom:8px; }
+.m7-pipe { align-content:stretch; }
+.m7-pipe article { background:#f4f6f9; border-top:4px solid var(--uos-blue); padding:12px 14px; gap:10px; }
+.m7-pipe article:not(:last-child)::after { right:-14px; top:12px; }
+.m7-pipe2.m7-media { padding:0; }
+.m7-pipe2 img { width:100%; height:auto; display:block; }
+.m7-pipe2 .steps { padding:8px 0 10px; background:#15181c; }
+.m7-pipe2 .steps b { color:#ffffff; }
+/* 2: five stage cards fill the panel, content spread top to bottom */
+.m7-rows > .m7-info:first-child .m7-pipe { height:100%; }
+.m7-pipe article { justify-content:flex-start; }
+.m7-pipe h3 { font-size:25px; min-height:66px; }
+.m7-pipe p { font-size:19.5px; }
+.m7-pipe p.real { margin-top:auto; }
+/* 6: wrap long reasons instead of clipping */
+.m7-params td { white-space:normal; }
+.m7-params { font-size:18.5px; }
+/* 7: a shorter step row and table header so the last row clears the band */
+.m7-pipe2 .steps { padding:5px 0 6px; font-size:19px; }
+.comparison.t6.m7-why th { padding:5px 12px; }
+.m7-media.white { background:#ffffff; border:1px solid #dfe3e8; }
+.m7-media.white .legend { background:#f3f5f8; color:#44505c; }
+.m7-info > .m7-media { flex:1; }
+.m7-media > .m7-svg { flex:1; min-height:0; padding:8px 10px; }
+.m7-params td:nth-child(1), .m7-params td:nth-child(2) { white-space:nowrap; }
