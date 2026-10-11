@@ -573,3 +573,27 @@ a:focus-visible { outline:3px solid var(--uos-blue); outline-offset:4px; }
 .m7-q tr.pri td.grp { background:#f3f6fb; }
 .m7-q { table-layout:fixed; }
 .m7-q th:first-child { width:22%; }
+.m7-mission td { padding:9px 12px; vertical-align:middle; }
+.m7-mission td:first-child { white-space:nowrap; }
+.m7-pipeimg .media { max-height:100%; }
+.m7-why { font-size:19px; }
+.m7-why th, .m7-why td { padding:6px 12px; vertical-align:middle; }
+.m7-why td:first-child { white-space:nowrap; width:18%; }
+.m7-ins { font-size:18px; table-layout:fixed; }
+.m7-ins th, .m7-ins td { padding:9px 10px; vertical-align:middle; line-height:1.35; }
+.m7-ins th:nth-child(1) { width:20%; } .m7-ins th:nth-child(2) { width:47%; } .m7-ins th:nth-child(3) { width:33%; }
+.m7-ins td:first-child { white-space:nowrap; color:var(--uos-blue); }
+.m7-ins td.muted { color:#5d6670; }
+.m7-plan { font-size:19px; }
+.m7-plan th, .m7-plan td { padding:8px 12px; vertical-align:middle; }
+.m7-plan td:first-child { white-space:nowrap; }
+/* week 7-1 runs clips without native controls (deck-stage.js); hide them even if a stale runtime sets them */
+video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display:none !important; }
+.m7-plan th:first-child { white-space:nowrap; }
+.m7-ins { font-size:17.5px; }
+.m7-pipe2 { display:flex; flex-direction:column; gap:4px; margin:0; flex-shrink:0; }
+.m7-pipe2 img { width:100%; height:auto; display:block; }
+.m7-pipe2 .steps { display:grid; grid-template-columns:385fr 88fr 385fr 88fr 385fr 88fr 385fr; font-size:21px; }
+.m7-pipe2 .steps b { color:var(--uos-blue); text-align:center; }
+.m7-ins { font-size:19px; }
+.comparison.t6.m7-why th, .comparison.t6.m7-why td { padding:6px 12px; }

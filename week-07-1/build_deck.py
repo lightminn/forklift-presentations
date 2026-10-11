@@ -152,7 +152,7 @@ def block_diagram():
 WIFI_LINE = '내장 Wi-Fi · 상태 · 지도만 전송'
 ESTOP_LINE = 'Wi-Fi와 별도 · 신호 끊기면 정지'
 
-add('시스템 구성', '시스템 구성', 75, f"""
+add('시스템 구성', '시스템 구성', 70, f"""
 <h2 class="headline">센서 2종 (과제 규격) → Jetson (인식 · 위치 · 경로) → STM32 (모터 · 엔코더)</h2>
 <div class="grow m7-fill">{block_diagram()}</div>
 <div class="takeaway">확인할 조건: 원격 정지 수준 · 여러 대 동시 운용 여부</div>
@@ -170,22 +170,23 @@ add('시스템 구성', '시스템 구성', 75, f"""
     '출처: 하드웨어 기록 · 5주차 회로 초안 · 공식 문서 조사 (2026-10-11)')
 
 # ----------------------------------------------------------------- 4
-CHASSIS_ROWS = [
+CHASSIS_ROWS = [  # item, measured / selected, reason / effect
     ('최대 조향각', '15° → 최소 회전 반경 약 2.5 m', '예상의 2배 → 앞뒤로 방향 맞춤'),
     ('포크 길이', '36 cm', '삽입 목표 33 cm (차체 한계 기준)'),
     ('기존 제어기', '릴레이로 켜기 · 끄기만', '속도 조절 불가 → 자체 구동 보드'),
-    ('구동 보드', '드라이버 DRV8244 × 3 · 엔코더 MT6701', '회로 초안 → 모터 전류 실측 후 PCB'),
+    ('모터 드라이버', 'DRV8244 × 3 (SPI형)', '저항 47 mΩ · 전류 감지 · 결함 진단'),
+    ('엔코더', 'MT6701 (자석식)', '한 칩으로 절대각(조향) · 증분(바퀴)'),
 ]
 chassis_rows = ''.join(f'<tr><td>{a}</td><td><b>{b}</b></td><td>{c}</td></tr>' for a, b, c in CHASSIS_ROWS)
-add('실물 차체와 구동부', '실물 차체와 구동부', 60, f"""
+add('실물 차체와 구동부', '실물 차체와 구동부', 75, f"""
 <h2 class="headline">실측 조향각 15° → 회전 반경 약 2.5 m · 속도 제어를 위해 구동 보드 새로 제작</h2>
 <div class="split grow" style="grid-template-columns:0.56fr 1.44fr;gap:26px">
 <figure class="shot" style="justify-content:center"><img class="media" src="assets/30_chassis_pallet.jpg" alt="입고한 지게차 차체와 앞에 놓인 동봉 플라스틱 팔레트"></figure>
-<div class="stack" style="justify-content:center"><table class="comparison t6 m7-chassis"><tr><th>항목</th><th>실측 · 분석</th><th>영향</th></tr>{chassis_rows}</table></div>
+<div class="stack" style="justify-content:center"><table class="comparison t6 m7-chassis"><tr><th>항목</th><th>실측 · 선정</th><th>이유 · 영향</th></tr>{chassis_rows}</table></div>
 </div>
-<div class="takeaway">실물 진행: 차체 실측 · 제어기 분석 완료 → 구동 보드 제작 → 실차 주행 (예정)</div>
+<div class="takeaway">실물 진행: 차체 실측 · 제어기 분석 · 부품 선정 완료 → 모터 전류 실측 후 PCB → 실차 주행 (예정)</div>
 """,
-    """실물 쪽입니다. 들어온 차체를 직접 재 보니 가장 큰 차이는 조향각이었습니다. 최대 조향각이 15도라 최소 회전 반경이 약 2.5미터로, 사진으로 추정했던 모델의 두 배 가까이 됩니다. 그래서 좁은 곳에서는 앞뒤로 움직이며 방향을 맞춰야 하고, 이 내용은 뒤의 경로 계획에서 다시 말씀드리겠습니다. 포크는 36센티미터라 삽입 목표를 33센티미터로 잡았습니다. 또 기존 제어기를 로직 애널라이저로 분석해 보니, 무선 조종기 신호로 릴레이를 켜고 끄기만 해서 속도를 조절할 수 없었습니다. 그래서 기존 제어기 대신 모터 드라이버 DRV8244 세 개와 자석식 엔코더 MT6701로 구동 보드를 새로 만들고 있습니다. 지금은 회로 초안 단계이고, 모터 전류를 잰 뒤 전류 제한과 방열을 정해 PCB로 만듭니다. (전환)""",
+    """실물 쪽입니다. 들어온 차체를 직접 재 보니 가장 큰 차이는 조향각이었습니다. 최대 조향각이 15도라 최소 회전 반경이 약 2.5미터로, 사진으로 추정했던 모델의 두 배 가까이 됩니다. 그래서 좁은 곳에서는 앞뒤로 움직이며 방향을 맞춰야 하고, 이 내용은 뒤의 경로 계획에서 다시 말씀드리겠습니다. 포크는 36센티미터라 삽입 목표를 33센티미터로 잡았습니다. 또 기존 제어기를 로직 애널라이저로 분석해 보니, 무선 조종기 신호로 릴레이를 켜고 끄기만 해서 속도를 조절할 수 없었습니다. 그래서 기존 제어기 대신 구동 보드를 새로 만듭니다. 모터 드라이버는 TI의 DRV8244를 골랐습니다. 비교한 제품 중 켜졌을 때 저항이 47밀리옴으로 가장 작아 열이 덜 납니다. 전류는 별도 저항 없이 읽고, SPI로 전류 제한을 설정하고 결함 상태를 확인합니다. 엔코더는 자석식 MT6701로, 한 칩이 절대각과 증분 출력을 모두 내서 조향축에서는 켜자마자 각도를 알고 바퀴에서는 회전 수를 셉니다. 지금은 회로 초안 단계이고, 모터 전류를 잰 뒤 전류 제한과 방열을 정해 PCB로 만듭니다. (전환)""",
     [(MEASURED, '실측 축간 0.66 m · 윤거 0.53 m · 바퀴 0.125 m · 최대 조향 15° · 포크 360 × 55 × 25 mm'),
      ('계산', '최소 회전 반경 = L / tan δ: 0.66 / tan 15° = 2.46 m, 사진 추정 0.64 / tan 0.45 = 1.32 m (뒤차축, 자전거 모델)'),
      ('forklift CLAUDE.md', '삽입 깊이 규칙 min(깊이 × 0.6, 캐리지 한계 − 16 mm): dls08_measured 346 − 16 = 330 mm (EPAL 6 깊이 600 × 0.6 = 360 mm 보다 작음)'),
@@ -196,48 +197,164 @@ add('실물 차체와 구동부', '실물 차체와 구동부', 60, f"""
 SIM_STILL = '70_hall.jpg'   # the recorded run's hall at the start (prepare_clips.py mission)
 SIM_PARAMS = [
     ('차체', '실측 축간 · 바퀴 · 조향각', 'measure', '외형 · 무게는 카탈로그 값'),
-    ('센서', '카메라 1대 · LiDAR 1대', 'spec', '과제 규격 · 제품 사양 그대로'),
-    ('팔레트', 'EPAL 6 (T11 은 추후)', 'spec', '공식 제품 시트 치수 그대로'),
+    ('물리', 'Isaac Sim 5.1 · 120 Hz', 'impl', '바퀴 토크로 주행 · 팔레트도 물리로 들기'),
+    ('센서', '깊이 카메라 · LiDAR 10 Hz', 'spec', 'D435i · RPLIDAR A2 사양으로 합성'),
+    ('SLAM 연결', 'ROS 2 slam_toolbox', 'impl', '스캔 전송 → SLAM 응답 후 진행'),
     ('바닥 장애물', 'LiDAR 높이 (1.05 m) 이상만', 'assume', '운용 가정 · 낮은 소품은 장면에서 뺌'),
-    ('마찰 · 토크', '마찰 0.8 / 0.7 · 3 N·m', 'assume', '고무–콘크리트 일반 범위 · 가속에 충분'),
-    ('센서 잡음', '바퀴 · 조향 · 거리', 'assume', '센서 실측 전 가정값 (실측 후 교체)'),
+    ('마찰 · 토크 · 잡음', '마찰 0.8 / 0.7 · 3 N·m', 'assume', '일반 범위 값 · 실측 후 교체'),
 ]
-KIND = {'spec': ('규격·사양', '#2f74c0'), 'measure': ('실측', '#6a4fb3'), 'assume': ('가정', '#c26a1a')}
+KIND = {'spec': ('규격·사양', '#2f74c0'), 'measure': ('실측', '#6a4fb3'), 'impl': ('구현', '#2e9a6b'), 'assume': ('가정', '#c26a1a')}
 param_rows = ''.join(
     f'<tr><td>{a}</td><td>{v}</td><td><span class="kind" style="background:{KIND[k][1]}">{KIND[k][0]}</span> {why}</td></tr>'
     for a, v, k, why in SIM_PARAMS)
-add('시뮬레이션 환경', '시뮬레이션 환경', 45, f"""
-<h2 class="headline">Isaac Sim 공장 홀에 실측 차체 · 과제 규격 센서를 넣어 개발</h2>
-<div class="split grow" style="grid-template-columns:0.62fr 1.38fr;gap:26px">
+add('시뮬레이션 환경', '시뮬레이션 환경', 55, f"""
+<h2 class="headline">Isaac Sim 공장 홀에 실측 차체 · 규격 센서를 넣고 SLAM까지 맞물려 실행</h2>
+<div class="split grow" style="grid-template-columns:0.5fr 1.5fr;gap:24px">
 <figure class="shot"><img class="media" src="assets/{SIM_STILL}" alt="Isaac Sim 공장 홀을 위에서 본 장면. 지게차와 팔레트, 적재물이 보인다"></figure>
 <div class="stack" style="justify-content:center"><table class="comparison params6 m7-params"><tr><th>항목</th><th>값</th><th>근거</th></tr>{param_rows}</table></div>
 </div>
 <div class="takeaway">실측으로 먼저 바꿀 가정값: 바퀴 마찰 · 구동 토크 · 센서 잡음</div>
 """,
-    """실차 주행 전까지는 Isaac Sim에서 개발합니다. 공장 홀 장면에 실측한 차체 값과 과제 규격의 센서를 넣었고, 팔레트는 EPAL 6를 씁니다. 두 번째 팔레트인 T11은 치수가 정해지면 같은 방식으로 확인합니다. 주황색은 가정값입니다. LiDAR 높이보다 낮은 바닥 장애물은 없다고 가정했고, 바퀴 마찰과 구동 토크, 센서 잡음은 실측 전이라 일반적인 범위의 값을 넣었습니다. 이 값들은 실측이 나오면 먼저 바꿉니다. (전환)""",
+    """실차 주행 전까지는 Isaac Sim에서 개발합니다. 공장 홀 장면에 실측한 차체 값을 넣었고, 물리는 120헤르츠로 돌립니다. 지게차는 바퀴에 토크를 걸어 실제로 굴러가고, 팔레트도 고정하지 않고 포크로 물리적으로 들어 올립니다. 카메라 깊이 영상과 LiDAR 스캔은 D435i와 RPLIDAR A2의 사양으로 합성하고, SLAM은 ROS 2 컨테이너의 slam_toolbox가 스캔이 들어올 때마다 시뮬레이터와 맞물려 돌아갑니다. 주황색은 가정값입니다. LiDAR 높이보다 낮은 바닥 장애물은 없다고 가정했고, 바퀴 마찰과 구동 토크, 센서 잡음은 실측 전이라 일반적인 범위의 값을 넣었습니다. 이 값들은 실측이 나오면 먼저 바꿉니다. (전환)""",
     [(MEASURED, '실측 반영 모델 dls08_measured (실측하지 않은 항목은 추정값, 필드별 출처)'),
      ('config/isaac_transport.yaml', '마찰 0.8 / 0.7 (지게차 · 팔레트 충돌 형상), 바퀴 토크 3 N·m — 시뮬레이터 전용 가정값'),
      ('config/pallet_geometry_epal6.yaml', 'EPAL 6 공식 제품 시트'),
      ('forklift CLAUDE.md', 'EPAL 6 과 T11 × 0.6 모두 필수, T11 정본 치수 미확정'),
+     ('result.json settings_synthetic', 'physics_hz 120, physical_wheel_drive true, pallet_fixed_attachment false, pose_teleportation_after_reset false (S4b · 녹화 실행)'),
+     ('config/isaac_slam_lidar.yaml', 'RPLIDAR A2M12 카탈로그 1,600빔 · 10 Hz · 0.2–12 m'),
+     ('tools/slam_bridge_container.sh · ros2/src/forklift_bringup/config/slam_toolbox_isaac_online.yaml', 'slam_toolbox online_sync, mapping, 해상도 0.05 m, Ceres, 루프 닫기; Isaac 은 스캔마다 브리지 응답을 기다림 (sim/isaac · slam_link.py)'),
+     ('ws1 Isaac Sim', '5.1 (Kit 로그 Isaac-Sim Python/5.1)'),
      ('forklift bc4cc64', '--min-obstacle-height-m 1.15 — 1.05 m 평면에 닿지 않는 소품 제거 (운용 가정)')],
     '출처: 저장소 설정 · 모델 기록 (6주차 1쪽 이어 받음)')
 
 # ----------------------------------------------------------------- 6
-add('삽입 중 포켓 추적', '팔레트 인식과 삽입 중 추적', 75, f"""
+INSERT_ROWS = [  # step, method, reason (the values are in the narration and sources)
+    ('① 지연 보정', '촬영 시점의 위치로 보정', '움직여도 위치가 안 밀림'),
+    ('② 이어 추적', '윗판 가장자리로 위치 추적', '포켓 입구가 화면 밖'),
+    ('③ 경로 보정', '1.0 · 0.6 m 정지 → 경로 보정', '먼 거리 오차를 줄임'),
+    ('④ 간격 감시', '정지 거리 · 오차를 포함해 간격 판단', '닿기 전에 멈춤'),
+    ('⑤ 삽입 끝', '캐리지 앞 여유를 남겨 정지', '팔레트를 밀지 않음'),
+]
+insert_rows = ''.join(f'<tr><td>{a}</td><td>{b}</td><td class="muted">{c}</td></tr>' for a, b, c in INSERT_ROWS)
+add('삽입 중 포켓 추적', '삽입 중 포켓 추적', 90, f"""
 <h2 class="headline">캐리지 하단 카메라로 삽입 끝까지 포켓 추적 · 삽입 직전 두 번 경로 보정</h2>
-<div class="split grow" style="grid-template-columns:1.2fr 0.8fr;gap:26px">
+<div class="split grow" style="grid-template-columns:0.82fr 1.18fr;gap:22px">
 <figure class="shot">{video('61_insert_depth.mp4', '캐리지 하단 카메라의 깊이 영상. 팔레트에 다가가며 두 번 멈춰 다시 보고, 포크가 들어가는 동안 팔레트 윗판이 화면에 남는다')}</figure>
-<div class="phase-flow vert m7-steps"><b>① 2 m 앞 위치 재측정</b><span class="arrow">↓</span><b>② 근접 추적</b><span class="arrow">↓</span><b>③ 정지 · 경로 보정 (1.0 · 0.6 m)</b><span class="arrow">↓</span><b>④ 포켓 벽 간격 감시</b><span class="arrow">↓</span><b>⑤ 삽입 끝 (포크 약 32 cm)</b></div>
+<div class="stack" style="justify-content:center"><table class="comparison m7-ins"><tr><th>단계</th><th>방법</th><th>이유</th></tr>{insert_rows}</table></div>
 </div>
 <div class="takeaway">결과: 포크 · 팔레트 접촉 없이 삽입 · 하역 오차 7 mm (깊이 잡음 없는 합성 영상)</div>
 """,
-    """과제가 강조한 삽입 중 포켓 추적입니다. 처음에는 카메라를 차체 앞 높은 곳에 달았는데, 포크를 넣기 시작하면 팔레트가 화면 밖으로 빠져 마지막 약 25센티미터를 보지 못했습니다. 그래서 Crown 특허처럼 카메라를 캐리지 하단으로 옮겼고, 영상처럼 포크를 넣는 동안에도 포켓과 윗판이 화면에 남습니다. 팔레트 앞면에서 1미터와 0.6미터 떨어진 지점에서는 잠깐 멈춥니다. 깊이 영상으로 팔레트 위치를 다시 확인하고, 남은 삽입 경로를 다시 그립니다. 포크 끝이 앞면에 닿기 직전부터는 포크와 포켓 벽 사이 간격을 계속 감시하고, 간격이 모자라면 멈춥니다. 이 실행에서 포크는 팔레트에 닿지 않고 약 32센티미터 들어갔고, 팔레트를 목적지에 7밀리미터 오차로 내려놓았습니다. 다만 깊이 잡음이 없는 합성 영상이라, 실제 카메라 잡음을 넣은 확인이 남아 있습니다. (전환)""",
+    """과제가 강조한 삽입 중 포켓 추적입니다. 처음에는 카메라를 차체 앞 높은 곳에 달았는데, 포크를 넣기 시작하면 팔레트가 화면 밖으로 빠져 마지막 약 25센티미터를 보지 못했습니다. 그래서 Crown 특허처럼 카메라를 캐리지 하단으로 옮겼고, 영상처럼 포크를 넣는 동안에도 윗판이 화면에 남습니다. 구현은 표의 다섯 단계입니다. 먼저 카메라 영상이 들어오기까지의 지연을 91.7밀리초로 재서, 각 영상을 실제로 찍힌 순간의 차 위치에 놓습니다. 포켓 입구가 화면 밖으로 나가면 윗판 판재의 가장자리로 팔레트 위치를 이어서 잽니다. 앞면에서 1미터와 0.6미터 떨어진 지점에서는 멈춰서 다시 보고 남은 직진 경로를 다시 그립니다. 포크 끝이 들어간 뒤에는 포크와 포켓 벽 사이 간격을 관측 오차와 정지 거리, 여유 11밀리미터와 비교해 모자라면 멈추고, 캐리지 앞면이 팔레트에 16밀리미터 남으면 삽입을 끝냅니다. 접근 속도 0.055미터 매 초도 영상 사이에 움직이는 거리와 정지 거리가 이 여유 안에 들도록 정한 값입니다. 이 실행에서 포크는 팔레트에 닿지 않았고, 하역 오차는 7밀리미터였습니다. 다만 깊이 잡음이 없는 합성 영상이라 실제 카메라 잡음을 넣은 확인이 남아 있습니다. (전환)""",
     [(S4B, 'forklift b66271f, 실측 차체 · SLAM 위치 · LiDAR 1대 · 근접 추적(보정점 1.0 / 0.6 m), 포켓 깊이 확인(D5) 끔. result.json: success, 삽입 끝 진입 323.5 / 322.2 mm, 금지 접촉 0, 하역 6.74 mm'),
      (f'{S4B}/run/near_tracking.json', '근접 추적 시작 44.3 s, 1.0 m 보정 54.03 s(정지 0.37 s), 0.6 m 보정 61.73 s, 포크 끝 보호 시작 70.62 s(앞면 0.149 m), 삽입 끝 80.69 s'),
      (NEARPLAN, '기존 장착(높이 0.50 m · 수평)은 삽입 마지막 약 0.25 m 무관측'),
      (CROWN, 'Crown 특허 US9990535B2 — 포크 캐리지 하단 장착 (4주차 장착 사례 ②)'),
+     ('config/near_field_bounds_measured.json · forklift 2313dc9', '카메라 지연 L = 91.668 ms (11 틱, 120 Hz) — 측정 대역 84.43–98.94 ms'),
+     ('src/forklift_core/perception/roof_tracking.py', '윗판 뒤 가장자리로 거리, 판재 · 틈 가장자리로 방향과 좌우 위치, 가려진 포켓은 팔레트 모델로 추정'),
+     ('forklift b66271f · sim/isaac/near_tracking.py', '보정점 1.0 / 0.6 m(포크 끝 추정 – 앞면), 정지 후 새 관측으로 직진 다시 그림 + 모의 주행 도착 확인; 보호 구간 0.15 m 부터 포크–벽 간격 < b_t + 정지 휩쓸림 + 0.011 m 면 정지; 캐리지 앞 모서리 여유 0.016 m 에서 삽입 끝'),
+     ('config/near_field_drive_terms.json', '접근 속도 0.055 m/s — 관측 주기의 모든 틱에서 정지 예산이 성립하는 가장 큰 0.005 단계'),
      ('memory: D8 범위 (2026-10-10 사용자 결정)', '추적 프레임에는 깊이 잡음을 넣지 않음 — 잡음 없는 합성 깊이에서의 추적 흐름 실증')],
     '화면 생성: 위 실행의 근접 깊이 프레임 506장(10 Hz)을 색 지도로, 사건 시각에 글자, 2배속 (prepare_clips.py depth)')
+
+# ----------------------------------------------------------------- pocket recognition (week 3 figure)
+WHY_POCKET = [
+    ('규격 치수 기반', '학습 데이터 없이 EPAL 6 · T11을 치수만 바꿔 처리'),
+    ('판정 기준값', '상수 대신 규격에서 계산 (길이는 규격 비례 · 점 수는 보이는 면적 비례)'),
+    ('합성 장면 평가', '놓친 포켓 · 잘못 검출 없음 · 위치 오차 95 %가 8 mm 이하'),
+]
+why_rows = ''.join(f'<tr><td>{a}</td><td>{b}</td></tr>' for a, b in WHY_POCKET)
+add('포켓 인식', '포켓 인식 처리 과정', 65, f"""
+<h2 class="headline">포켓 인식: 학습 모델 대신 팔레트 규격 치수로 앞면 → 빈 공간 → 포켓 위치 · 방향</h2>
+<figure class="m7-pipe2"><img src="assets/20_pipeline_stages_crop.png" alt="깊이 영상, 팔레트 앞면, 받침목과 빈 공간, 판정된 포켓 위치의 네 단계">
+<div class="steps"><b>① 깊이 영상</b><i></i><b>② 앞면 추출</b><i></i><b>③ 빈 공간 구분</b><i></i><b>④ 포켓 위치 · 방향</b></div></figure>
+<table class="comparison t6 m7-why"><tr><th>근거</th><th>내용</th></tr>{why_rows}</table>
+<div class="takeaway">한계: 가까워져 포켓 입구가 화면 밖으로 나가면 검출 불가 → 근접 추적이 이어 받음</div>
+""",
+    """팔레트를 찾는 방법입니다. 학습 모델 대신 팔레트 규격의 치수와 형상 규칙을 씁니다. 그림처럼 먼저 깊이 영상에서 작업 범위의 점만 남기고, 그 안에서 수직 평면을 찾아 팔레트 앞면으로 삼습니다. 다음으로 앞면을 세로 칸으로 나눠 받침목과 빈 공간을 가르고, 빈 공간의 폭이 규격 범위 안에 드는지 확인해 두 포켓의 중심과 삽입 방향을 구합니다. 이렇게 만든 이유는 학습 데이터 없이도 EPAL 6과 T11을 치수만 바꿔 같은 코드로 다룰 수 있기 때문입니다. 판정 기준값도 상수로 두지 않고 규격에서 계산합니다. 깊이 잡음이 없는 합성 장면 평가에서 놓친 포켓과 잘못 찾은 경우는 없었고, 위치 오차는 95퍼센트가 8밀리미터 이하였습니다. 다만 가까워져 포켓 입구가 화면 밖으로 나가면 이 방법으로는 찾을 수 없어서, 다음 장의 근접 추적이 이어 받습니다. (전환)""",
+    [('src/forklift_core/perception/pocket_detector.py', 'Depth-only geometric baseline for a known, horizontal pallet shape — 작업 범위 → 앞면 평면 → 세로 칸(받침목 · 빈 공간) → 포켓 중심 · 방향'),
+     ('src/forklift_core/perception/pallet_geometry.py', '판정 기준을 규격 치수에서 계산 (3주차 6쪽: 길이는 규격 비례, 측정점 수는 관측 면적 비례)'),
+     ('week-03/SCRIPT.md', '4쪽 처리 과정(빈 공간 220 mm, 규격 허용 207.5–247.5 mm) · 8쪽 평가: EPAL 6 Gazebo 장면 100개, 검출 대상 60개 모두 검출, 비대상 40개 오검출 0, 위치 오차 p95 8.17 mm · 방향 p95 0.053°, 깊이 잡음 미포함'),
+     ('week-03/assets/20_pipeline_stages.png', '3주차 그림의 위 제목 띠와 아래 단계 설명을 잘라 내고 단계명은 HTML 로 (Gazebo 장면 s003 의 실제 중간 결과)')],
+    '화면: 3주차 4쪽 그림 · 근거는 3주차 6 · 8쪽')
+
+
+# ----------------------------------------------------------------- localization and obstacle structure
+def structure_diagram():
+    W, H = 1180, 430
+    parts = ['<defs><marker id="sd-ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" '
+             'orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5d6670"/></marker></defs>']
+
+    def box(x, y, w, h, title, lines=(), tone='#ffffff', edge='#44505c', bold=True):
+        out = [f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="6" fill="{tone}" stroke="{edge}" stroke-width="2"/>',
+               f'<text x="{x + 12}" y="{y + 27}" font-size="19" font-weight="{700 if bold else 400}" fill="#1b1f24">{title}</text>']
+        for i, line in enumerate(lines):
+            out.append(f'<text x="{x + 12}" y="{y + 52 + 22 * i}" font-size="16" fill="#44505c">{line}</text>')
+        return ''.join(out)
+
+    def link(points, label=None, at=None, anchor='middle'):
+        d = ' '.join(f'{x},{y}' for x, y in points)
+        out = f'<polyline points="{d}" fill="none" stroke="#5d6670" stroke-width="2.5" marker-end="url(#sd-ah)"/>'
+        if label:
+            out += f'<text x="{at[0]}" y="{at[1]}" font-size="15" fill="#44505c" text-anchor="{anchor}">{label}</text>'
+        return out
+
+    def tag_label(x, y, text):
+        w = 15 * len(text) + 10
+        return (f'<rect x="{x - w / 2:.0f}" y="{y - 15}" width="{w}" height="20" rx="3" fill="#ffffff"/>'
+                f'<text x="{x}" y="{y}" font-size="15" font-weight="700" fill="#2f74c0" text-anchor="middle">{text}</text>')
+
+    for x, label in ((0, '입력'), (280, '처리'), (690, '판단'), (1035, '제어')):
+        parts.append(f'<text x="{x}" y="14" font-size="16" font-weight="700" fill="#2f74c0">{label}</text>')
+    # inputs
+    parts.append(box(0, 26, 210, 74, '바퀴 · 조향 엔코더', ['주행 · 조향 각도']))
+    parts.append(box(0, 150, 210, 110, '2D LiDAR 스캔', ['10 Hz · 1,600점', '높이 1.05 m']))
+    parts.append(box(0, 330, 210, 74, '목적지 등록 스캔', ['하역 위치에서 미리 찍음']))
+    # processing
+    parts.append(box(280, 20, 310, 74, '오도메트리', ['스캔 사이 차체 이동량 계산']))
+    parts.append(box(280, 112, 310, 92, 'slam_toolbox (ROS 2)', ['스캔마다 지도와 맞춰 보정 계산', '5 cm 격자 · 루프 닫기']))
+    parts.append(box(280, 222, 310, 92, '장애물 격자', ['오래된 스캔일수록 크게 부풀림', '지나간 칸은 0.3 s 뒤 지움']))
+    parts.append(box(280, 330, 310, 74, 'ICP 정합 (점–선)', ['등록 스캔 ↔ 지금 스캔']))
+    # decisions
+    parts.append(box(690, 20, 290, 112, '제어 위치', ['오도메트리에 SLAM 보정 반영', '보정이 0.25 s 넘게 끊기면 정지'], tone='#eef3fa', edge='#2f74c0'))
+    parts.append(box(690, 150, 290, 84, '주행 허가', ['입력: 현재 관측 (격자)', '멈추는 궤적이 비어야 그 속도 허용'], tone='#fff4ea', edge='#c26a1a'))
+    parts.append(box(690, 252, 290, 74, '경로 계획 (Hybrid A*)', ['입력: 장애물 기억 · SLAM 지도']))
+    parts.append(box(690, 344, 290, 60, '하역 위치 보정', []))
+    # control
+    parts.append(box(1035, 120, 145, 150, '경로 추종', ['속도 · 조향 명령', '→ STM32'], tone='#eef3fa', edge='#2f74c0'))
+    # links
+    parts.append(link([(210, 63), (280, 57)]))
+    parts.append(link([(210, 180), (245, 180), (245, 158), (280, 158)]))
+    parts.append(link([(210, 225), (245, 225), (245, 268), (280, 268)]))
+    parts.append(link([(210, 245), (232, 245), (232, 357), (280, 357)]))
+    parts.append(link([(210, 380), (280, 380)]))
+    parts.append(link([(590, 57), (690, 57)]))
+    parts.append(link([(590, 158), (625, 158), (625, 100), (690, 100)]))
+    parts.append(link([(590, 250), (640, 250), (640, 192), (690, 192)]))
+    parts.append(link([(590, 292), (690, 292)]))
+    parts.append(link([(590, 367), (690, 374)]))
+    parts.append(link([(835, 344), (835, 326)]))
+    parts.append(link([(980, 76), (1005, 76), (1005, 165), (1035, 165)]))
+    parts.append(link([(980, 192), (1035, 195)]))
+    parts.append(link([(980, 289), (1005, 289), (1005, 245), (1035, 245)]))
+    return (f'<svg class="diagram" viewBox="0 0 {W} {H}" role="img" aria-label="위치 추정과 장애물 지도의 구조. 엔코더 오도메트리와 '
+            f'slam_toolbox 보정을 곱해 제어 위치를 만들고, LiDAR 장애물 격자로 주행 허가와 경로 계획을 하며, 목적지 등록 스캔과 ICP 로 하역 위치를 보정한다">'
+            f'<g font-family="var(--uos-font)">{"".join(parts)}</g></svg>')
+
+
+add('위치 · 장애물 구조', '위치 추정 · 장애물 지도 구조', 75, f"""
+<h2 class="headline">오도메트리에 SLAM 보정 반영 · LiDAR 격자로 장애물 판단 · 끊기거나 막히면 정지</h2>
+<div class="grow m7-fill">{structure_diagram()}</div>
+<div class="takeaway">원칙: 주행 허가는 지금 보이는 것만 사용 · 오래된 장애물 기억은 경로 계획에만 사용</div>
+""",
+    """위치 추정과 장애물 지도의 구조입니다. 오도메트리로 계산한 위치에 SLAM 보정을 반영합니다. 바퀴와 조향 엔코더로 계산한 이동량, 즉 오도메트리가 스캔 사이를 메우고, LiDAR 스캔이 들어올 때마다 ROS 2의 slam_toolbox가 지도와 맞춰 오도메트리의 누적 오차를 바로잡는 보정을 돌려줍니다. 이 보정이 0.25초 넘게 끊기면 계산 위치만으로 달리지 않고 멈춥니다. 같은 LiDAR 스캔으로 장애물 격자도 만듭니다. 오래된 스캔일수록 그동안 쌓였을 위치 오차만큼 장애물을 크게 잡고, 지금 곡률로 멈췄을 때 지나갈 칸이 모두 비어 있어야 그 속도로 달리게 합니다. 경로 계획에는 지나온 곳의 장애물 기억과 SLAM 지도를 함께 써서, 돌아오는 길에 본 장애물을 잊지 않게 했습니다. 목적지에서는 미리 등록한 스캔과 지금 스캔을 점과 선 사이 거리로 맞추는 ICP로 하역 위치를 보정합니다. (전환)""",
+    [('src/forklift_core/localization/slam_pose.py', 'map<-base(t) = map<-odom(마지막 SLAM 응답) × odom<-base(t, 오도메트리); 보정이 max_age_s(실행 0.25 s)보다 오래되면 LocalizationStale 로 정지'),
+     ('src/forklift_core/localization/slam_link.py', 'Isaac 은 LiDAR 주기마다 스캔을 보내고 같은 스캔의 응답(map<-odom)을 받을 때까지 물리를 진행하지 않음 (lockstep)'),
+     ('ros2/src/forklift_bringup/config/slam_toolbox_isaac_online.yaml', 'online_sync · mapping · 해상도 0.05 m · Ceres · do_loop_closing true'),
+     ('src/forklift_core/perception/obstacle_grid.py', '점유 칸을 r = e(age) + 2ρ sin(ψ(age)/2) + 센서 한계로 부풀림(오도메트리 표류의 측정값), occupied_max_age_s 0.3 s, 빔이 지나간 칸은 FREE'),
+     ('src/forklift_core/control/drive_permission.py', '비상정지 원호(현재 곡률로 멈추는 궤적)와 앞 경로의 칸이 FREE 여야 그 속도 허용'),
+     ('src/forklift_core/perception/planning_memory.py', '경로 계획에만: 칸별 마지막 끝점 · 마지막 FREE 시각 기억 + SLAM 정적 층 (주행 허가는 실시간 관측만)'),
+     ('src/forklift_core/localization/scan_match.py · scan_docking.py', 'point-to-line ICP(Gauss–Newton), 여러 초기값이 같은 답일 때만 사용, 벽 하나뿐이면 퇴화로 거부')],
+    '화면 생성: 코드 구조를 그린 흐름도 (build_deck.py structure_diagram)')
 
 # ----------------------------------------------------------------- 7
 SLAM_COMPARE = [  # item, 2D LiDAR SLAM, camera (visual) SLAM -- datasheets, BKM, RTAB-Map paper (SOURCES.md)
@@ -248,7 +365,7 @@ SLAM_COMPARE = [  # item, 2D LiDAR SLAM, camera (visual) SLAM -- datasheets, BKM
     ('연산', 'CPU만 (소형 보드도 가능)', 'GPU 권장 · 팔레트 인식과 나눠 씀'),
 ]
 slam_rows = ''.join(f'<tr><td>{a}</td><td class="blue"><b>{b}</b></td><td>{c}</td></tr>' for a, b, c in SLAM_COMPARE)
-add('위치 추정', '위치 추정: LiDAR SLAM', 80, f"""
+add('위치 추정', '위치 추정: LiDAR SLAM', 65, f"""
 <h2 class="headline">끝 시점 위치 오차: 바퀴 회전만 계산하면 3.4 m → LiDAR SLAM은 약 4 cm</h2>
 <div class="split grow" style="grid-template-columns:0.72fr 1.28fr;gap:26px">
 <figure class="shot">{video('45_slam_error.mp4', 'SLAM 운반 실행에서 slam_toolbox가 만든 지도와 추정 경로. 아래 숫자는 SLAM 위치 오차와 바퀴 회전만으로 계산한 위치의 오차')}<figcaption class="small muted">빨강: SLAM · 주황: 바퀴 회전만 · 파랑: 실제</figcaption></figure>
@@ -257,7 +374,7 @@ add('위치 추정', '위치 추정: LiDAR SLAM', 80, f"""
 </div>
 <div class="takeaway">3.4 m의 원인: 짐 싣고 돌 때 방향이 24° 틀어짐 → 위치 추정은 LiDAR · 카메라는 팔레트 인식에 집중</div>
 """,
-    """위치 추정입니다. 먼저 왼쪽 영상에서 위치 추정이 필요한 이유를 보겠습니다. 빨간 SLAM 경로는 파란 실제 경로를 따라가지만, 주황색으로 그린 바퀴 회전만으로 계산한 경로는 갈수록 벗어납니다. 임무가 끝날 때 바퀴 회전만으로 계산한 위치는 3.4미터 어긋났고 SLAM은 약 4센티미터였습니다. 3.4미터의 대부분은 팔레트를 싣고 돌 때 계산보다 덜 돌아서 방향이 24도 틀어진 탓입니다. 다음으로 오른쪽 표에서 LiDAR SLAM을 선택한 이유를 보겠습니다. 카메라 깊이는 3미터 안팎까지만 재고 멀수록 오차가 빠르게 커지는 반면, LiDAR는 12미터까지 360도를 재고 만든 2D 지도를 경로 계획에 그대로 쓸 수 있습니다. 두 센서 모두 약한 환경이 있어서, LiDAR는 긴 복도나 넓은 빈 공간, 카메라는 흰 벽이나 어두운 곳에 약합니다. 그래서 공장처럼 넓은 곳의 위치 추정은 LiDAR로 하고, 카메라는 팔레트 인식에 집중하도록 나눴습니다. (전환)""",
+    """이 구조로 위치를 추정한 결과와 LiDAR를 고른 이유입니다. 먼저 왼쪽 영상을 보시면, 빨간 SLAM 경로는 파란 실제 경로를 따라가지만 주황색 바퀴 회전만 계산한 경로는 갈수록 벗어납니다. 임무가 끝날 때 바퀴 회전만 계산한 위치는 3.4미터 어긋났고 SLAM은 약 4센티미터였습니다. 3.4미터의 대부분은 팔레트를 싣고 돌 때 계산보다 덜 돌아 방향이 24도 틀어진 탓입니다. 다음으로 오른쪽 표에서 LiDAR SLAM을 고른 이유를 보겠습니다. 카메라 깊이는 3미터 안팎까지만 재고 멀수록 오차가 빠르게 커지지만, LiDAR는 12미터까지 360도를 재고 2D 지도를 경로 계획에 그대로 씁니다. 그래서 위치 추정은 LiDAR로 하고, 카메라는 팔레트 인식에 집중하도록 나눴습니다. (전환)""",
     [(SLAM, 'S3 장면 1 — 358 s 에서 SLAM 4.0 cm 대 바퀴 회전만 340 cm, 위치 RMSE 0.088 m'),
      ('ws1 artifacts/20261004_slam_s3/seed_1/run/slam_log.npz', '2026-10-06 재계산: 거리 92.9 대 93.6 m, 끝 방향 오차 −24.3°, 회전 시 실제/계산 비 빈 차 0.998 · 운반 0.925'),
      ('week-06/SOURCES.md', '영상은 이전 S3 실행(사진 추정 차체, 장애물은 시뮬레이터 정답) — 6주차 5쪽과 같음'),
@@ -271,18 +388,31 @@ add('위치 추정', '위치 추정: LiDAR SLAM', 80, f"""
     '화면: 6주차 5쪽 영상 그대로 · 비교표는 데이터시트 · 논문 조사 (2026-10-11)')
 
 # ----------------------------------------------------------------- 8
-add('새 장애물 대응', '새 장애물 감지와 재계획', 50, f"""
-<h2 class="headline">운반 중 나타난 상자 감지 → 정지 → 후진 후 새 경로로 재개</h2>
-<div class="split grow" style="grid-template-columns:1.75fr 1fr;gap:28px">
-<figure class="shot">{video('46_new_obstacle_single.mp4', '팔레트를 들고 운반하던 중 경로 위에 상자가 나타나자 멈추고, 새 경로로 바꿔 돌아가는 장면. 왼쪽은 위에서 본 주행, 오른쪽은 SLAM 지도와 LiDAR 장애물 칸')}<figcaption class="small muted">노랑: 현재 경로 · 회색: 직전 경로 (재계획 직후) · 주황: LiDAR 장애물 칸</figcaption></figure>
-<div class="phase-flow vert"><b>① LiDAR가 경로 위 상자 감지</b><span class="arrow">↓</span><b>② 정지</b><span class="arrow">↓</span><b>③ 멈춘 자리에서 새 경로 계획</b><span class="arrow">↓</span><b>④ 후진 후 새 경로로 운반 재개</b></div>
+PLANNER_ROWS = [  # item, implementation
+    ('모델', '자전거 모델 · 곡률 ≤ 0.29 /m'),
+    ('탐색', '0.2 m · 10° 격자 · 호 0.25 m'),
+    ('충돌', '차체 + 짐 사각형 · 여유 0.1 m'),
+    ('목표 연결', 'Reeds–Shepp (전진 · 후진)'),
+    ('추종', '뒤차축 기준 pure pursuit'),
+    ('재계획', '정지 위치에서 재계획'),
+]
+planner_rows = ''.join(f'<tr><td>{a}</td><td>{b}</td></tr>' for a, b in PLANNER_ROWS)
+add('새 장애물 대응', '경로 계획 구현과 새 장애물', 65, f"""
+<h2 class="headline">Hybrid A*로 계획 · 뒤차축으로 추종 → 새 상자 앞에서 정지 · 재계획 후 재개</h2>
+<div class="split grow" style="grid-template-columns:1.4fr 1fr;gap:22px">
+<figure class="shot">{video('46_new_obstacle_single.mp4', '팔레트를 들고 운반하던 중 경로 위에 상자가 나타나자 멈추고, 새 경로로 바꿔 돌아가는 장면. 왼쪽은 위에서 본 주행, 오른쪽은 SLAM 지도와 LiDAR 장애물 칸')}<figcaption class="small muted">노랑: 현재 경로 · 회색: 직전 경로 · 주황: LiDAR 장애물 칸</figcaption></figure>
+<div class="stack" style="justify-content:center"><table class="comparison t6 m7-plan"><tr><th>경로 계획 · 추종</th><th>구현</th></tr>{planner_rows}</table></div>
 </div>
 <div class="takeaway">결과: 운반 중 · 복귀 중 나타난 상자 (높이 1.3 m) 모두 피해서 완주</div>
 """,
-    """임무 중에 새 장애물이 나타나는 경우입니다. 팔레트를 들고 가는 경로 위에 키 1.3미터 상자가 새로 나타나면, LiDAR가 상자를 보고 지게차가 멈춘 뒤 그 자리에서 새 경로를 짭니다. 영상처럼 조금 후진했다가 상자를 피해 다시 출발합니다. 복귀하는 길에 상자가 나타난 경우도 같은 방식으로 피해서 임무를 마쳤습니다. 그런데 왜 바로 돌아가지 않고 후진할까요? (전환)""",
+    """경로 계획과 추종의 구현입니다. 경로는 Hybrid A*로 짭니다. 뒤차축 기준 자전거 모델로 차가 돌 수 있는 곡률 안에서 0.25미터짜리 전진과 후진 호를 이어 붙이며, 0.2미터와 10도 격자 위에서 길을 찾습니다. 충돌은 차체와 실은 짐까지 덮는 사각형에 0.1미터 여유를 두고 검사하고, 목표 근처에서는 전진과 후진을 섞은 Reeds–Shepp 곡선으로 바로 잇습니다. 만든 경로는 뒤차축 기준 pure pursuit로 따라갑니다. 뒤차축에서 경로 위 앞쪽 목표점을 보고 조향각을 계산하며, 전진과 후진이 바뀌는 점에서는 멈춥니다. 영상은 운반 중 경로 위에 키 1.3미터 상자가 나타난 경우입니다. 지금 곡률로 멈추는 궤적이 막히자 지게차가 멈추고, 그 자리에서 다시 계획해 조금 후진한 뒤 상자를 피해 갑니다. 복귀 중 상자도 같은 방식으로 피했습니다. 그런데 왜 바로 돌아가지 않고 후진할까요? (전환)""",
     [(S5N1, 'result.json — success, 하역 64.9 mm, 상자 출현 77.2 s · 정지 약 78 s · 재계획 94.3 s 후 후진 (운반 중)'),
      (S1N2, 'result.json — success, 하역 8.0 mm, 상자 출현 226.0 s · 재계획 227.7 s (복귀 중)'),
-     ('forklift bc4cc64', '실측 차체(dls08_measured), LiDAR 1대(1.05 m) 장애물 지도 + SLAM 지도로 경로 계획, 새 상자 0.4 × 0.4 × 1.3 m, 포켓 깊이 확인 끔')],
+     ('forklift bc4cc64', '실측 차체(dls08_measured), LiDAR 1대(1.05 m) 장애물 지도 + SLAM 지도로 경로 계획, 새 상자 0.4 × 0.4 × 1.3 m, 포켓 깊이 확인 끔'),
+     ('result.json travel_planner_config (S4b · 녹화 실행)', 'curvature_limit 0.29, xy 0.2 m, yaw 10°, primitive 0.25 m, clearance 0.1 m, heuristic weight 1.8, reverse ×1.3, gear change 1.0 m, goal_connection reeds_shepp, shot_cap 4 m'),
+     ('src/forklift_core/planning/hybrid_astar.py', 'Dolgov et al., Practical Search Techniques in Path Planning for Autonomous Driving (2008) 기준, 참고 Nav2 Smac Hybrid-A* — docs/design/2026-09-17-hybrid-astar-transport.md'),
+     ('src/forklift_core/control/path_tracking.py · tracker_configs', '뒤차축 pure pursuit, 곡률 한계 0.36 /m, 전방 주시 0.28 m(접근), 전환점 정지 허용 0.03 m · 0.05 rad'),
+     ('src/forklift_core/control/drive_permission.py', '비상정지 원호(현재 곡률로 멈추는 궤적)의 칸이 모두 FREE 여야 그 속도 허용 · 앞 경로도 같은 검사')],
     '화면: 6주차 7쪽 영상 그대로 (week-06/prepare_clips.py single)')
 
 # ----------------------------------------------------------------- 9
@@ -296,7 +426,7 @@ add('후진을 고르는 이유', '경로 계획: 후진을 고르는 이유', 8
 </div>
 <div class="takeaway">경로 비용: 후진 거리 1.3배 · 전진 · 후진 전환마다 1 m 추가 → 전진만으로 못 가거나 훨씬 멀 때만 후진</div>
 """,
-    """경로 계획에는 Hybrid A*를 씁니다. 차가 실제로 돌 수 있는 반경을 지키면서 전진과 후진 동작을 이어 붙여 길을 찾는 방법입니다. 후진 거리는 1.3배로 계산하고, 전진과 후진을 바꿀 때마다 1미터만큼 비용을 더합니다. 그래서 전진만으로 갈 수 있으면 전진을 고릅니다. 왼쪽은 앞의 상자 장면입니다. 멈춘 자리에서 상자는 앞으로 2미터, 오른쪽으로 0.6미터에 있었고, 원래 경로는 상자 위를 지나고 있었습니다. 회전 반경이 커서 이 거리 안에서는 옆으로 충분히 비킬 수 없으므로, 1.25미터 후진해 거리를 번 뒤 상자 안쪽으로 꺾어 나갑니다. 오른쪽은 앞뒤로 움직일 때의 특성입니다. 목적지 바로 앞에서 방향이 1.3도만 틀어져도, 전진만 쓰면 지름 약 7미터 원을 한 바퀴, 21.7미터를 돌아야 맞출 수 있습니다. 그래서 목적지에 붙는 마지막 연결에 앞뒤 전환을 허용했습니다. 오른쪽 개념도처럼 한쪽으로 꺾으며 조금 전진한 뒤 반대로 꺾으며 후진하면, 거의 제자리에서 방향만 바뀝니다. 이 경우 0.5미터씩 앞뒤로 움직여 1미터로 끝났고, 목적지 앞 계획을 모아 시험해 보니 이런 한 바퀴 경로가 모두 사라졌습니다. (전환)""",
+    """후진 거리는 1.3배로 계산하고, 전진과 후진을 바꿀 때마다 1미터만큼 비용을 더합니다. 그래서 전진만으로 갈 수 있으면 전진을 고릅니다. 왼쪽은 앞의 상자 장면입니다. 멈춘 자리에서 상자는 앞으로 2미터, 오른쪽으로 0.6미터에 있었고, 원래 경로는 상자 위를 지나고 있었습니다. 회전 반경이 커서 이 거리 안에서는 옆으로 충분히 비킬 수 없으므로, 1.25미터 후진해 거리를 번 뒤 상자 안쪽으로 꺾어 나갑니다. 오른쪽은 앞뒤로 움직일 때의 특성입니다. 목적지 바로 앞에서 방향이 1.3도만 틀어져도, 전진만 쓰면 지름 약 7미터 원을 한 바퀴, 21.7미터를 돌아야 맞출 수 있습니다. 그래서 목적지에 붙는 마지막 연결에 앞뒤 전환을 허용했습니다. 오른쪽 개념도처럼 한쪽으로 꺾으며 조금 전진한 뒤 반대로 꺾으며 후진하면, 거의 제자리에서 방향만 바뀝니다. 이 경우 0.5미터씩 앞뒤로 움직여 1미터로 끝났고, 목적지 앞 계획을 모아 시험해 보니 이런 한 바퀴 경로가 모두 사라졌습니다. (전환)""",
     [('src/forklift_core/planning/hybrid_astar.py', 'PlannerConfig: reverse_penalty 1.3, gear_change_penalty_m 1.0; D7_PLANNER_OPTIONS = Reeds–Shepp 목표 연결 + 연결 상한 4 m'),
      ('config/isaac_transport_measured.yaml', 'planner_curvature_inv_m 0.29 (계획 회전 반경 3.45 m, 차체 한계 15° = 2.46 m 에 추종 여유)'),
      (f'{S5N1}/plan_history.json', '재계획 94.3 s: 뒤차축 기준 상자 앞 1.97 m · 오른쪽 0.61 m, 후진 1.25 m → 전진 22.95 m, 원래 경로의 상자 중심 최소 거리 0.01 m (prepare_figures.py)'),
@@ -307,26 +437,31 @@ add('후진을 고르는 이유', '경로 계획: 후진을 고르는 이유', 8
 
 # ----------------------------------------------------------------- 10
 MISSION_VIDEO = '71_mission.mp4'
-MISSION_ROWS = [  # input, source
-    ('팔레트 위치', '카메라 깊이 인식'),
-    ('로봇 위치', 'SLAM 추정'),
-    ('장애물', 'LiDAR 1대 + SLAM 지도'),
-    ('경로', '전진 · 후진 경로 연결 · 도킹 재시도'),
-    ('목적지', '미리 등록한 위치 (LiDAR 스캔 정합)'),
+MISSION_ROWS = [  # stage, how it is done in this run
+    ('팔레트 인식', '깊이 영상 · 규격 치수 기반 형상 규칙'),
+    ('로봇 위치', '바퀴 오도메트리에 SLAM 보정 반영'),
+    ('장애물', 'LiDAR 1대 격자 · 멈추는 궤적 검사'),
+    ('경로', 'Hybrid A* (전진 · 후진) + 뒤차축 추종'),
+    ('삽입', '2 m 앞에서 다시 측정 → 직진 삽입'),
+    ('하역', '등록 스캔과 ICP 정합 → 위치 보정'),
 ]
 mission_rows = ''.join(f'<tr><td>{a}</td><td>{b}</td></tr>' for a, b in MISSION_ROWS)
 add('운반 임무 전체', '운반 임무 전체', 55, f"""
 <h2 class="headline">실측 차체로 인식 → 삽입 → 들기 → 운반 → 하역 → 복귀를 사람 개입 없이 완주</h2>
 <div class="split grow" style="grid-template-columns:1fr 1fr;gap:32px">
 <figure class="shot">{video(MISSION_VIDEO, '공장 홀을 위에서 본 지게차. 팔레트를 인식해 들고, 목적지에 내린 뒤 출발점으로 돌아온다')}</figure>
-<div class="stack" style="justify-content:center"><table class="comparison t6"><tr><th>항목</th><th>사용 정보 · 처리 방식</th></tr>{mission_rows}</table></div>
+<div class="stack" style="justify-content:center"><table class="comparison t6 m7-mission"><tr><th>단계</th><th>구현 (이 실행)</th></tr>{mission_rows}</table></div>
 </div>
 <div class="takeaway">결과: 하역 오차 19 mm · 출발점 복귀 오차 3 cm · 포크 · 팔레트 충돌 없음</div>
 """,
-    """현재 연결된 운반 임무를 먼저 보여 드리겠습니다. 실측 차체 모델로 팔레트를 인식하고, 포크를 넣어 들어 올린 뒤, 목적지에 내려놓고 출발점으로 돌아옵니다. 오른쪽 표처럼 팔레트 위치는 카메라로, 로봇 위치는 SLAM으로, 장애물은 LiDAR 한 대로 구하고, 목적지는 미리 등록해 둔 위치를 LiDAR 스캔과 맞춰 찾습니다. 이 실행에서 하역 오차는 19밀리미터, 출발점 복귀 오차는 3센티미터였고 포크와 팔레트의 충돌은 없었습니다. 이 임무가 어떤 구성으로 돌아가는지 차례로 말씀드리겠습니다. (전환)""",
+    """현재 연결된 운반 임무를 먼저 보여 드리겠습니다. 실측 차체 모델로 팔레트를 인식하고, 포크를 넣어 들어 올린 뒤, 목적지에 내려놓고 출발점으로 돌아옵니다. 오른쪽 표는 단계마다 무엇으로 구현했는지입니다. 팔레트는 깊이 영상에서 규격 치수로 찾고, 위치는 바퀴 오도메트리에 SLAM 보정을 반영해 구합니다. 장애물은 LiDAR 한 대로 만든 격자로 보고, 경로는 Hybrid A*로 짠 뒤 뒤차축 기준으로 따라갑니다. 목적지에서는 미리 등록한 스캔과 지금 스캔을 맞춰 하역 위치를 보정합니다. 이 실행에서 하역 오차는 19밀리미터, 출발점 복귀 오차는 3센티미터였고 충돌은 없었습니다. 각 단계를 차례로 말씀드리겠습니다. (전환)""",
     [('ws1 artifacts/20261011_meeting_video/seed_5_d7', 'forklift b66271f 스냅숏, 실측 차체 · SLAM 위치 · LiDAR 1대 · --d7-planner --d7-docking · --video --robot-camera (근접 추적 끔). result.json: success, complete, 하역 19.4 mm, 복귀 2.7 cm · 0.040 rad, 금지 접촉 0, 진입 319.9 / 318.1 mm, 시뮬 219.6 s'),
      ('ws1 artifacts/20261011_meeting_video/seed_1_d7', '같은 조건 장면 1: success, 하역 27.0 mm, 복귀 5.1 cm, 금지 접촉 0, 시뮬 273.8 s'),
-     ('config/isaac_transport_measured.yaml', '목적지 도킹: 미리 등록한 위치의 LiDAR 스캔 정합 (등록 위치는 시뮬레이터 값)')],
+     ('config/isaac_transport_measured.yaml', '목적지 도킹: 미리 등록한 위치의 LiDAR 스캔 정합 (등록 위치는 시뮬레이터 값)'),
+     ('src/forklift_core/perception/pocket_detector.py', 'Depth-only geometric baseline for a known, horizontal pallet shape'),
+     ('src/forklift_core/localization/slam_pose.py · scan_match.py · scan_docking.py', 'map<-base = map<-odom(SLAM) × odom<-base(odometry); point-to-line ICP 목적지 도킹'),
+     ('src/forklift_core/control/path_tracking.py', 'RearAxlePathTracker — 뒤차축 pure pursuit (곡률 = 2 · 횡오차 / 거리²), 전환점마다 정지'),
+     ('sim/isaac/run_transport.py', '이 녹화 실행은 근접 추적 끔: 정렬 직진 시작(2.1 m)에서 한 번 더 관측(near capture) 후 그 위치로 삽입')],
     '화면 생성: 위 장면 5 3분할 영상의 조감 칸 12배속 (prepare_clips.py mission)')
 
 # ----------------------------------------------------------------- 11
@@ -340,7 +475,7 @@ EXAM = [  # item, exam (disqualification unless noted), ours (simulation), verdi
 VERDICT = {'ok': ('기준 안', 'ok'), 'like': ('비슷', 'like'), 'diff': ('다름', 'diff')}
 exam_rows = ''.join(f'<tr><td>{a}</td><td>{b}</td><td>{c}</td><td><span class="m7-v {VERDICT[v][1]}">{VERDICT[v][0]}</span></td></tr>'
                     for a, b, c, v in EXAM)
-add('자격시험 기준 비교', '지게차운전기능사 실기 기준과 비교', 55, f"""
+add('자격시험 기준 비교', '지게차운전기능사 실기 기준과 비교', 50, f"""
 <h2 class="headline">지게차운전기능사 실기 실격 기준 대비: 하역 · 삽입 · 접촉은 기준 안 · 틸트 기구는 없음</h2>
 <table class="comparison m7-exam grow"><tr><th>항목</th><th>실기시험 (2025 공개문제)</th><th>우리 지게차 (시뮬레이션)</th><th>비교</th></tr>{exam_rows}</table>
 <div class="takeaway">제안: 시험 코스는 모든 치수가 차폭 (바깥 타이어 간 거리)의 배수 → 우리 차 기준으로 줄인 코스를 시뮬레이션 평가에 사용</div>
@@ -392,7 +527,7 @@ sched_rows = ''.join(
     (f'<tr class="exam"><td>{p}</td><td colspan="2">{s}</td></tr>' if not h and s == '중간고사' else
      f'<tr><td>{p}</td><td colspan="2">{s}</td></tr>' if not h else
      f'<tr><td>{p}</td><td>{s}</td><td>{h}</td></tr>') for p, s, h in SCHEDULE)
-add('남은 과제와 일정', '남은 과제와 일정', 45, f"""
+add('남은 과제와 일정', '남은 과제와 일정', 40, f"""
 <h2 class="headline">남은 일정: 중간고사 전 구동 보드 설계 → 11월 실차 주행 → 12월 중순 최종 시연</h2>
 <table class="comparison m7-sched grow"><tr><th>기간</th><th>소프트웨어</th><th>하드웨어</th></tr>{sched_rows}</table>
 <div class="takeaway">일정 조건: 구동 보드 제작 시점에 따라 실차 단계 조정 · 최종 시연일은 15주차로 가정</div>
@@ -412,7 +547,7 @@ QUESTIONS = [  # group, items; the first group is what the company is asked to a
 q_rows = ''.join(
     ''.join(f'<tr{" class=pri" if g == 0 else ""}>{f"<td class=grp rowspan={len(items)}>{group}</td>" if i == 0 else ""}<td class="item">{item}</td></tr>'
             for i, item in enumerate(items)) for g, (group, items) in enumerate(QUESTIONS))
-add('확인 요청', '리보틱스 확인 요청', 70, f"""
+add('확인 요청', '리보틱스 확인 요청', 65, f"""
 <h2 class="headline">확인 요청: 작업 범위 · 입력 조건 · 운용 · 평가 기준</h2>
 <table class="comparison m7-q grow"><tr><th>구분</th><th>질문</th></tr>{q_rows}</table>
 <div class="takeaway">합의 목표: 다음 실차 시험에 적용할 운용 조건과 판정 기준</div>
@@ -425,12 +560,12 @@ add('확인 요청', '리보틱스 확인 요청', 70, f"""
     '출처: 4–6주차 피드백 · 5주차 미팅 질문 이어 받음')
 
 TITLE = '리보틱스 중간 미팅 · 자율 지게차 중간 점검'
-N_SLIDES = 14
+N_SLIDES = 16
 
 
 ORDER = ['리보틱스 중간 미팅', '과제 이해와 진행 현황', '운반 임무 전체', '시스템 구성', '실물 차체와 구동부',
-         '시뮬레이션 환경', '삽입 중 포켓 추적', '위치 추정', '새 장애물 대응', '후진을 고르는 이유',
-         '자격시험 기준 비교', '결론', '남은 과제와 일정', '확인 요청']
+         '시뮬레이션 환경', '포켓 인식', '삽입 중 포켓 추적', '위치 · 장애물 구조', '위치 추정', '새 장애물 대응',
+         '후진을 고르는 이유', '자격시험 기준 비교', '결론', '남은 과제와 일정', '확인 요청']
 
 
 def build():
