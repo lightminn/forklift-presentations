@@ -206,9 +206,9 @@ def goal_fix(repo):
                      f'{i + 1}. {word} {run_len:.2f} m</text>')
     lx, ly = px(((min(xs) + max(xs)) / 2, min(ys) - 0.55))
     parts.append(f'<text x="{lx:.0f}" y="{ly:.0f}" font-size="21" font-weight="700" fill="#6b7480" '
-                 f'text-anchor="middle">회색 점선 · 전진만: 한 바퀴 {plans["forward"]["length"]:.1f} m</text>')
+                 f'text-anchor="middle">전진만 쓴 경로 (한 바퀴)</text>')
     tx, ty = px((0.70, 0.62))
-    parts.append(f'<text x="{tx:.0f}" y="{ty:.0f}" font-size="20" fill="{INK}" text-anchor="middle">현재 위치 · 목적지(초록)</text>')
+    parts.append(f'<text x="{tx:.0f}" y="{ty:.0f}" font-size="20" fill="{INK}" text-anchor="middle">현재 위치</text>')
     meta = dict(forward_m=round(plans['forward']['length'], 2), d7_m=round(plans['d7']['length'], 2),
                 d7_gear_changes=plans['d7']['gear_changes'],
                 heading_fix_rad=round(goal.yaw_rad - start.yaw_rad, 3),

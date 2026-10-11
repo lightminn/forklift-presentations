@@ -45,12 +45,12 @@ def text(t, start, end, y=18, size=30):
 
 
 # The tracker's events, as shown on the clip (near_tracking.json events / corrections).
-EVENT_TEXT = {
-    'armed': '근접 추적 시작',
-    'correction:1.0': '앞면 1.0 m · 멈춰서 다시 보고 경로 다시 그림',
-    'correction:0.6': '앞면 0.6 m · 한 번 더 다시 그림',
-    'protect': '포크 끝이 앞면에 닿기 직전 · 포켓 벽 간격 감시',
-    'insert_end_arrival': '삽입 끝 · 포크 약 32 cm 진입',
+EVENT_TEXT = {   # numbered as the step strip beside the clip (build_deck.py slide 6)
+    'armed': '② 근접 추적 시작',
+    'correction:1.0': '③ 앞면 1.0 m 보정',
+    'correction:0.6': '③ 앞면 0.6 m 보정',
+    'protect': '④ 포켓 벽 간격 감시',
+    'insert_end_arrival': '⑤ 삽입 끝',
 }
 HOLD_S = 3.2
 
