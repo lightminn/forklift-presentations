@@ -62,10 +62,9 @@ def ipanel(title, table, cls=''):
     return f'<div class="m7-info {cls}"><p class="ph">{title}</p><div class="tb">{table}</div></div>'
 
 
-def figure_svg(name):
-    """An SVG from prepare_figures.py, inlined (an <img> would not see the deck font)."""
-    return (ROOT / 'figures' / name).read_text(encoding='utf-8').replace(
-        '<svg xmlns="http://www.w3.org/2000/svg" ', '<svg class="diagram" ')
+def figure(name, alt):
+    """A PNG drawn by prepare_figures.py (matplotlib) in assets/."""
+    return f'<img class="m7-figimg" src="assets/{name}" alt="{escape(alt, quote=True)}">'
 
 
 def tag(kind):
@@ -113,67 +112,9 @@ add('과제 이해와 진행 현황', '과제 이해와 진행 현황', 50, f"""
     '출처: 과제 문서 · 로봇 저장소 실행 기록')
 
 # ----------------------------------------------------------------- 3
-def block_diagram():
-    W, H = 1180, 470
-    parts = ['<defs><marker id="bd-ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" '
-             'orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5d6670"/></marker></defs>']
-    colours = {'fixed': '#2f74c0', 'chosen': '#6a4fb3', 'draft': '#c26a1a', 'buy': '#8c959e',
-               'reuse': '#2e9a6b', 'plan': '#c26a1a'}
-
-    def box(x, y, w, h, title, lines, kind, dashed=False, fill='#ffffff'):
-        dash = ' stroke-dasharray="8 6"' if dashed else ''
-        out = [f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="6" fill="{fill}" stroke="#44505c" stroke-width="2"{dash}/>',
-               f'<text x="{x + 14}" y="{y + 30}" font-size="21" font-weight="700" fill="#1b1f24">{title}</text>']
-        tw = 16 * len(TAGS[kind]) + 16
-        out.append(f'<rect x="{x + w - tw - 10}" y="{y + 11}" width="{tw}" height="25" rx="3" fill="{colours[kind]}"/>'
-                   f'<text x="{x + w - tw / 2 - 10}" y="{y + 29}" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">{TAGS[kind]}</text>')
-        for i, line in enumerate(lines):
-            out.append(f'<text x="{x + 14}" y="{y + 58 + 25 * i}" font-size="18" fill="#44505c">{line}</text>')
-        return ''.join(out)
-
-    def link(points, label=None, at=None, dashed=False, both=False, anchor='middle'):
-        d = ' '.join(f'{x},{y}' for x, y in points)
-        dash = ' stroke-dasharray="8 6"' if dashed else ''
-        start = ' marker-start="url(#bd-ah)"' if both else ''
-        out = f'<polyline points="{d}" fill="none" stroke="#5d6670" stroke-width="2.5"{dash}{start} marker-end="url(#bd-ah)"/>'
-        if label:
-            x, y = at
-            out += f'<text x="{x}" y="{y}" font-size="16" fill="#44505c" text-anchor="{anchor}">{label}</text>'
-        return out
-
-    # sensors (left), upper computer (centre), lower control and drive (right), wireless (bottom)
-    parts.append(f'<text x="0" y="16" font-size="17" font-weight="700" fill="#2f74c0">센서</text>'
-                 f'<text x="410" y="16" font-size="17" font-weight="700" fill="#2f74c0">상위 연산</text>'
-                 f'<text x="820" y="16" font-size="17" font-weight="700" fill="#2f74c0">하위 제어 · 구동</text>')
-    parts.append(box(0, 30, 300, 112, 'RGB-D 카메라', ['RealSense D435i', '캐리지 하단 장착 (시뮬 선정)'], 'fixed'))
-    parts.append(box(0, 168, 300, 112, '2D LiDAR', ['RPLIDAR A2 (A2M12 예상)', '높이 1.05 m (시뮬 값)'], 'fixed'))
-    parts.append(box(410, 30, 310, 250, 'Jetson Orin Nano', ['ROS 2 Jazzy', '팔레트 · 포켓 인식', 'SLAM (slam_toolbox)',
-                                                          '경로 계획 (Hybrid A*)', '경로 추종 · 삽입 추적'], 'buy'))
-    parts.append(box(820, 30, 360, 112, 'STM32 Nucleo-64', ['속도 · 조향 · 승강 제어', '엔코더 읽기 · 비상 차단'], 'draft'))
-    parts.append(box(820, 168, 360, 112, '구동 · 엔코더 보드', ['드라이버 DRV8244 × 3', '엔코더 MT6701 (바퀴 · 조향각)'], 'draft'))
-    parts.append(box(820, 306, 360, 70, '모터 3개 · 12 V 배터리', [], 'reuse'))
-    parts.append(link([(300, 86), (410, 86)], 'USB 3', (355, 76)))
-    parts.append(link([(300, 224), (410, 224)], 'USB 시리얼', (355, 214)))
-    parts.append(link([(720, 86), (820, 86)], '명령 · 상태', (770, 74), both=True))
-    parts.append(link([(1000, 142), (1000, 168)], both=True))
-    parts.append(link([(1000, 280), (1000, 306)], both=True))
-    # wireless (not yet designed in: week 6 feedback §5)
-    parts.append(f'<text x="0" y="436" font-size="17" font-weight="700" fill="#c26a1a">무선 (추가 설계)</text>')
-    parts.append(box(410, 392, 310, 76, '감시 PC', [WIFI_LINE], 'plan', dashed=True, fill='#fff8f0'))
-    parts.append(box(820, 392, 360, 76, '무선 비상정지', [ESTOP_LINE], 'plan', dashed=True, fill='#fff8f0'))
-    parts.append(link([(565, 392), (565, 280)], 'Wi-Fi', (596, 340), dashed=True, both=True))
-    parts.append(link([(820, 430), (790, 430), (790, 236), (820, 236)], '출력 차단', (780, 340), dashed=True, anchor='end'))
-    return (f'<svg class="diagram" viewBox="0 0 {W} {H}" role="img" aria-label="시스템 구성. 카메라와 LiDAR가 Jetson에, '
-            f'Jetson이 STM32 보드에 연결되고, STM32가 드라이버 세 개로 모터를 돌리며 엔코더를 읽는다. 무선 감시 PC와 무선 비상정지는 추가 설계 항목">'
-            f'<g font-family="var(--uos-font)">{"".join(parts)}</g></svg>')
-
-
-WIFI_LINE = '내장 Wi-Fi · 상태 · 지도만 전송'
-ESTOP_LINE = 'Wi-Fi와 별도 · 신호 끊기면 정지'
-
 add('시스템 구성', '시스템 구성', 60, f"""
 <h2 class="headline">센서 2종 (과제 규격) → Jetson (인식 · 위치 · 경로) → STM32 (모터 · 엔코더)</h2>
-<div class="grow m7-fill">{block_diagram()}</div>
+<div class="grow m7-fill">{figure('40_system.png', '시스템 구성. 카메라와 LiDAR가 USB로 Jetson에, Jetson이 명령 · 상태로 STM32 보드에, STM32가 구동 · 엔코더 보드와 모터 3개에 이어진다. 아래 무선 칸에 감시 PC(Wi-Fi)와 출력을 끊는 무선 비상정지')}</div>
 <div class="takeaway">확인할 조건: 원격 정지 수준 · 여러 대 동시 운용 여부</div>
 """,
     """전체 시스템 구성입니다. 왼쪽 센서는 과제 규격대로 RGB-D 카메라 한 대와 2D LiDAR 한 대입니다. 가운데 Jetson은 인식과 위치 추정, 경로 계획을 맡습니다. 오른쪽 STM32 보드는 Jetson의 명령을 받아 주행, 조향, 승강 모터를 제어하고, 엔코더로 바퀴 회전과 조향각을 읽습니다. 아래 점선은 이번에 새로 넣은 무선 부분입니다. 감시 PC와는 Wi-Fi로 상태와 지도만 주고받습니다. 무압축 깊이 영상은 초당 약 200메가비트라 Wi-Fi로 보내지 않고 차에서 기록합니다. 비상정지는 Wi-Fi와 따로 두어 신호가 끊기면 바로 멈추게 합니다. 원격 정지를 어느 수준으로 갖춰야 하는지, 여러 대를 함께 운용하는지는 마지막에 여쭤보겠습니다. (전환)""",
@@ -298,71 +239,9 @@ add('포켓 인식', '포켓 인식 처리 과정', 70, f"""
 
 
 # ----------------------------------------------------------------- localization and obstacle structure
-def structure_diagram():
-    W, H = 1180, 430
-    parts = ['<defs><marker id="sd-ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" '
-             'orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5d6670"/></marker></defs>']
-
-    def box(x, y, w, h, title, lines=(), tone='#ffffff', edge='#44505c', bold=True):
-        out = [f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="6" fill="{tone}" stroke="{edge}" stroke-width="2"/>',
-               f'<text x="{x + 12}" y="{y + 27}" font-size="19" font-weight="{700 if bold else 400}" fill="#1b1f24">{title}</text>']
-        for i, line in enumerate(lines):
-            out.append(f'<text x="{x + 12}" y="{y + 52 + 22 * i}" font-size="16" fill="#44505c">{line}</text>')
-        return ''.join(out)
-
-    def link(points, label=None, at=None, anchor='middle'):
-        d = ' '.join(f'{x},{y}' for x, y in points)
-        out = f'<polyline points="{d}" fill="none" stroke="#5d6670" stroke-width="2.5" marker-end="url(#sd-ah)"/>'
-        if label:
-            out += f'<text x="{at[0]}" y="{at[1]}" font-size="15" fill="#44505c" text-anchor="{anchor}">{label}</text>'
-        return out
-
-    def tag_label(x, y, text):
-        w = 15 * len(text) + 10
-        return (f'<rect x="{x - w / 2:.0f}" y="{y - 15}" width="{w}" height="20" rx="3" fill="#ffffff"/>'
-                f'<text x="{x}" y="{y}" font-size="15" font-weight="700" fill="#2f74c0" text-anchor="middle">{text}</text>')
-
-    for x, label in ((0, '입력'), (280, '처리'), (690, '판단'), (1035, '제어')):
-        parts.append(f'<text x="{x}" y="14" font-size="16" font-weight="700" fill="#2f74c0">{label}</text>')
-    # inputs
-    parts.append(box(0, 26, 210, 74, '바퀴 · 조향 엔코더', ['주행 · 조향 각도']))
-    parts.append(box(0, 150, 210, 110, '2D LiDAR 스캔', ['10 Hz · 1,600점', '높이 1.05 m']))
-    parts.append(box(0, 330, 210, 74, '목적지 등록 스캔', ['하역 위치에서 미리 찍음']))
-    # processing
-    parts.append(box(280, 20, 310, 74, '오도메트리', ['바퀴 회전 · 조향각으로 이동량 계산']))
-    parts.append(box(280, 112, 310, 92, 'slam_toolbox (ROS 2)', ['0.45 m 이동 · 0.5 rad 회전마다 보정', '5 cm 격자 · 루프 닫기']))
-    parts.append(box(280, 222, 310, 92, '장애물 격자', ['오래된 스캔일수록 크게 부풀림', '장애물 칸은 0.3 s만 유지']))
-    parts.append(box(280, 330, 310, 74, 'ICP 정합 (점–선)', ['등록 스캔 ↔ 지금 스캔']))
-    # decisions
-    parts.append(box(690, 20, 290, 112, '제어 위치', ['오도메트리에 SLAM 보정 반영', 'SLAM 응답이 0.25 s 끊기면 정지'], tone='#eef3fa', edge='#2f74c0'))
-    parts.append(box(690, 150, 290, 84, '주행 허가', ['입력: 현재 관측 (격자)', '멈추는 궤적이 비어야 그 속도 허용'], tone='#fff4ea', edge='#c26a1a'))
-    parts.append(box(690, 252, 290, 74, '경로 계획 (Hybrid A*)', ['입력: 장애물 기억 · SLAM 지도']))
-    parts.append(box(690, 344, 290, 60, '하역 위치 보정', []))
-    # control
-    parts.append(box(1035, 120, 145, 150, '경로 추종', ['속도 · 조향 명령', '→ STM32'], tone='#eef3fa', edge='#2f74c0'))
-    # links
-    parts.append(link([(210, 63), (280, 57)]))
-    parts.append(link([(210, 180), (245, 180), (245, 158), (280, 158)]))
-    parts.append(link([(210, 225), (245, 225), (245, 268), (280, 268)]))
-    parts.append(link([(210, 245), (232, 245), (232, 357), (280, 357)]))
-    parts.append(link([(210, 380), (280, 380)]))
-    parts.append(link([(590, 57), (690, 57)]))
-    parts.append(link([(590, 158), (625, 158), (625, 100), (690, 100)]))
-    parts.append(link([(590, 250), (640, 250), (640, 192), (690, 192)]))
-    parts.append(link([(590, 292), (690, 292)]))
-    parts.append(link([(590, 367), (690, 374)]))
-    parts.append(link([(835, 344), (835, 326)]))
-    parts.append(link([(980, 76), (1005, 76), (1005, 165), (1035, 165)]))
-    parts.append(link([(980, 192), (1035, 195)]))
-    parts.append(link([(980, 289), (1005, 289), (1005, 245), (1035, 245)]))
-    return (f'<svg class="diagram" viewBox="0 0 {W} {H}" role="img" aria-label="위치 추정과 장애물 지도의 구조. 엔코더 오도메트리와 '
-            f'slam_toolbox 보정을 곱해 제어 위치를 만들고, LiDAR 장애물 격자로 주행 허가와 경로 계획을 하며, 목적지 등록 스캔과 ICP 로 하역 위치를 보정한다">'
-            f'<g font-family="var(--uos-font)">{"".join(parts)}</g></svg>')
-
-
 add('위치 · 장애물 구조', '위치 추정 · 장애물 지도 구조', 85, f"""
 <h2 class="headline">오도메트리에 SLAM 보정 반영 · LiDAR 격자로 장애물 판단 · 끊기거나 막히면 정지</h2>
-<div class="grow m7-fill">{structure_diagram()}</div>
+<div class="grow m7-fill">{figure('41_structure.png', '위치 추정과 장애물 지도의 구조. 위치, 장애물, 경로, 하역 네 줄이 입력 → 처리 → 판단을 거쳐 경로 추종으로 들어간다')}</div>
 <div class="takeaway">원칙: 주행 허가는 지금 보이는 것만 사용 · 오래된 장애물 기억은 경로 계획에만 사용</div>
 """,
     """여기까지가 카메라로 팔레트를 찾고 포크를 넣는 부분입니다. 다음은 LiDAR 한 대로 위치를 잡고 장애물을 피하는 부분입니다. 바퀴와 조향 엔코더로 계산한 이동량, 즉 오도메트리로 위치를 계속 계산합니다. LiDAR 스캔은 매번 SLAM 쪽으로 보내고, 지도와 맞춘 보정은 차가 약 0.45미터 움직이거나 30도 가까이 돌 때마다 새로 받습니다. 포크를 넣고 드는 동안에는 위치가 갑자기 바뀌지 않도록 새 보정을 반영하지 않습니다. SLAM 쪽 응답이 0.25초 넘게 끊기면 계산 위치만으로 달리지 않고 멈춥니다. 같은 스캔으로 장애물 격자도 만듭니다. 오래된 스캔일수록 위치 오차만큼 장애물을 크게 잡고, 지금 곡률로 멈췄을 때 지나갈 칸이 모두 비어 있어야 그 속도로 달립니다. 경로 계획에는 장애물 기억과 SLAM 지도를 함께 써서, 지나오며 본 장애물도 기억합니다. 목적지에서는 미리 등록한 스캔과 지금 스캔을 ICP로 맞춰 하역 위치를 보정합니다. (전환)""",
@@ -374,7 +253,7 @@ add('위치 · 장애물 구조', '위치 추정 · 장애물 지도 구조', 85
      ('src/forklift_core/control/drive_permission.py', '비상정지 원호(현재 곡률로 멈추는 궤적)와 앞 경로의 칸이 FREE 여야 그 속도 허용'),
      ('src/forklift_core/perception/planning_memory.py', '경로 계획에만: 칸별 마지막 끝점 · 마지막 FREE 시각 기억 + SLAM 정적 층 (주행 허가는 실시간 관측만)'),
      ('src/forklift_core/localization/scan_match.py · scan_docking.py', 'point-to-line ICP(Gauss–Newton), 여러 초기값이 같은 답일 때만 사용, 벽 하나뿐이면 퇴화로 거부')],
-    '화면 생성: 코드 구조를 그린 흐름도 (build_deck.py structure_diagram)')
+    '화면 생성: 코드 구조를 그린 흐름도 (prepare_figures.py structure, matplotlib)')
 
 # ----------------------------------------------------------------- 7
 SLAM_COMPARE = [  # item, 2D LiDAR SLAM, camera (visual) SLAM -- datasheets, BKM, RTAB-Map paper (SOURCES.md)
@@ -436,13 +315,13 @@ add('후진을 고르는 이유', '경로 계획: 후진을 고르는 이유', 9
 <h2 class="headline">회전 반경이 커서 전진만으로 비킬 거리가 없을 때 후진 · 앞뒤 전환으로 방향 맞춤</h2>
 <div class="m7-stage grow" style="grid-template-columns:1fr 1fr">
 <div class="m7-info"><p class="ph">새 상자 앞: 후진으로 거리 확보 → 상자를 피해 전진</p>
-{mpanel(f'<div class="m7-svg">{figure_svg("52_reverse_obstacle.svg")}</div>', legend='주황: 후진 · 파랑: 전진 · 회색 점선: 원래 경로', light='white')}</div>
+{mpanel(figure('52_reverse_obstacle.png', '새 상자 앞에서 멈춘 지게차의 재계획 경로를 위에서 본 그림. 원래 경로는 가장 작게 꺾는 길이라 상자 위를 지나고, 새 경로는 1.25 m 후진한 뒤 오른쪽으로 꺾어 상자를 비켜 간다'), legend='주황: 후진 · 파랑: 전진 · 회색 점선: 원래 경로', light='white')}</div>
 <div class="m7-info"><p class="ph">목적지 앞 방향 맞춤: 한 바퀴 대신 앞뒤로</p>
-{mpanel(f'<div class="m7-svg">{figure_svg("53_goal_fix.svg")}</div>', legend='회색 점선: 전진만 쓴 경로 · 초록: 목적지 · 목표 방향', light='white')}</div>
+{mpanel(figure('53_goal_fix.png', '목적지 앞 방향 맞춤. 전진만 쓰면 지름 약 7 m 원을 21.7 m 돌고, 앞뒤 전환을 쓰면 같은 자리에서 앞으로 0.50 m, 뒤로 0.49 m 움직여 끝난다'), legend='회색 점선: 전진만 쓴 경로 · 파랑: 앞으로 · 주황: 뒤로 · 초록 점: 목표', light='white')}</div>
 </div>
 <div class="takeaway">경로 비용: 후진 거리 1.3배 · 앞뒤 전환마다 1 m 추가 → 전진만으로 못 가거나 훨씬 멀 때만 후진</div>
 """,
-    """답은 큰 회전 반경입니다. 경로 비용을 셀 때 후진한 거리는 1.3배로 치고, 전진과 후진을 바꿀 때마다 1미터를 더하므로, 전진만으로 갈 수 있으면 전진을 고릅니다. 왼쪽은 앞의 상자 장면입니다. 멈춘 자리에서 상자는 앞으로 2미터, 오른쪽으로 0.6미터에 있었고, 원래 경로는 상자 위를 지나고 있었습니다. 회전 반경이 커서 이 거리 안에서는 옆으로 충분히 비킬 수 없으므로, 1.25미터 후진해 거리를 번 뒤 상자 안쪽으로 꺾어 나갑니다. 오른쪽은 앞뒤로 움직일 때의 특성입니다. 목적지 바로 앞에서 방향이 1.3도만 틀어져도, 전진만 쓰면 계획에 쓰는 회전 반경 3.45미터로 지름 약 7미터 원을 한 바퀴, 21.7미터를 돌아야 맞출 수 있습니다. 그래서 목적지에 붙는 마지막 연결에 앞뒤 전환을 허용했습니다. 오른쪽 개념도처럼 한쪽으로 꺾으며 조금 전진한 뒤 반대로 꺾으며 후진하면, 거의 제자리에서 방향만 바뀝니다. 이 경우 0.5미터씩 앞뒤로 움직여 1미터로 끝났고, 다른 목적지 앞 계획에서도 한 바퀴 경로는 나오지 않았습니다. C, D처럼 먼저 물러나야 하는 상황에도 이 계획을 쓸 예정입니다. (전환)""",
+    """답은 큰 회전 반경입니다. 경로 비용을 셀 때 후진한 거리는 1.3배로 치고, 전진과 후진을 바꿀 때마다 1미터를 더하므로, 전진만으로 갈 수 있으면 전진을 고릅니다. 왼쪽은 앞의 상자 장면입니다. 멈춘 자리에서 상자는 앞으로 2미터, 오른쪽으로 0.6미터에 있었고, 회색 점선인 원래 경로는 가장 작게 꺾는 길인데도 상자 위를 지납니다. 그래서 1.25미터 후진해 거리를 번 뒤 꺾어서 상자를 비켜 갑니다. 오른쪽은 앞뒤로 움직일 때의 특성입니다. 목적지 바로 앞에서 방향이 1.3도만 틀어져도, 전진만 쓰면 계획에 쓰는 회전 반경 3.45미터로 지름 약 7미터 원을 한 바퀴, 21.7미터를 돌아야 맞출 수 있습니다. 그래서 목적지에 붙는 마지막 연결에 앞뒤 전환을 허용했습니다. 오른쪽 확대 그림처럼 같은 자리에서 앞으로 0.5미터, 뒤로 0.5미터 움직여 1미터로 끝났고, 다른 목적지 앞 계획에서도 한 바퀴 경로는 나오지 않았습니다. C, D처럼 먼저 물러나야 하는 상황에도 이 계획을 쓸 예정입니다. (전환)""",
     [('src/forklift_core/planning/hybrid_astar.py', 'PlannerConfig: reverse_penalty 1.3, gear_change_penalty_m 1.0; D7_PLANNER_OPTIONS = Reeds–Shepp 목표 연결 + 연결 상한 4 m'),
      ('config/isaac_transport_measured.yaml', 'planner_curvature_inv_m 0.29 (계획 회전 반경 3.45 m, 차체 한계 15° = 2.46 m 에 추종 여유)'),
      (f'{S5N1}/plan_history.json', '재계획 94.3 s: 뒤차축 기준 상자 앞 1.97 m · 오른쪽 0.61 m, 후진 1.25 m → 전진 22.95 m, 원래 경로의 상자 중심 최소 거리 0.01 m (prepare_figures.py)'),

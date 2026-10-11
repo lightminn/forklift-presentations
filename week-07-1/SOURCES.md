@@ -19,11 +19,11 @@
 | 만든 것 | 쪽 | 원본 |
 |---|---|---|
 | `61_insert_depth.mp4` | 8 | S4b `run/pocket_frames/` 506장(10 Hz, 30.38–80.88 s)을 ws1 `artifacts/20261011_meeting_video/depth_clip/render_depth.py` 로 색 지도(0.25–3.0 m, turbo) 입힌 `depth_raw.mp4` → `prepare_clips.py depth` 가 `run/near_tracking.json` 사건(근접 추적 시작 44.3 s · 1.0 m 보정 54.03 s · 0.6 m 보정 61.73 s · 포크 끝 보호 70.62 s · 삽입 끝 80.69 s)에 글자, 마지막 장면 3.2 s 정지, 2배속 |
-| `figures/52_reverse_obstacle.svg` | 12 | 6주차 l8 장면 5 운반 중 상자 `plan_history.json`: 재계획(94.3 s)의 정지 자세 기준 상자 앞 1.97 m · 오른쪽 0.61 m, 재계획 경로 후진 1.25 m → 전진 22.95 m, 원래 경로의 상자 중심 최소 거리 0.01 m (`prepare_figures.py`) |
-| `figures/53_goal_fix.svg` | 12 | `tests/unit/planning/test_d7_planner_options.py` 의 실측 차체 사례(목표 1 cm 앞 · 0.023 rad)를 `plan_hybrid_astar` 로 다시 계획: 전진만 21.68 m, `D7_PLANNER_OPTIONS`(Reeds–Shepp · 상한 4 m) 0.99 m = 전진 0.50 + 후진 0.49 m. 왼쪽 "전진만" 은 그 경로를 축척대로, 오른쪽 "전진 · 후진" 은 각도를 과장한 개념도(16° 기울어진 처음 자세와 목표 방향 자세를 같은 뒤차축에 겹치고, 한쪽으로 꺾으며 전진 → 반대로 꺾으며 후진 화살표) |
+| `assets/52_reverse_obstacle.png` | 12 | 6주차 l8 장면 5 운반 중 상자 `plan_history.json`: 재계획(94.3 s)의 정지 자세 기준 상자 앞 1.97 m · 오른쪽 0.61 m, 재계획 경로 후진 1.25 m → 전진 22.95 m. 원래 경로는 처음 4 m 동안 가장 작게 꺾는 원(뒤차축 반경 1 / 0.29 = 3.45 m)에서 1.7 cm 이내이고 그 원이 상자 중심을 3 mm 차이로 지남(차체가 쓸고 가는 폭 3.05–4.15 m), 후진 뒤에는 상자가 회전 중심에서 4.8 m 라 비켜 감. matplotlib 축척 그림 (`prepare_figures.py`) |
+| `assets/53_goal_fix.png` | 12 | `tests/unit/planning/test_d7_planner_options.py` 의 실측 차체 사례(목표 1 cm 앞 · 0.023 rad)를 forklift b66271f 의 `plan_hybrid_astar` 로 다시 계획(`git archive b66271f src`): 전진만 21.68 m, `D7_PLANNER_OPTIONS`(Reeds–Shepp · 상한 4 m) 0.99 m = 전진 0.50 + 후진 0.49 m. 왼쪽은 원 전체, 오른쪽은 같은 자리 확대(각각 축척 막대, 확대 칸의 두 움직임은 겹치지 않게 차체 위아래로 나눠 그림). matplotlib (`prepare_figures.py`) |
 | `20_pipeline_stages_crop.png` | 7 | 3주차 `week-03/assets/20_pipeline_stages.png` 에서 위 제목 띠와 아래 단계 설명을 잘라 냄(세로 98–410 px, `prepare_figures.py stages`). 단계명과 색 범례는 HTML 로 다시 쓰고, 그림 안의 작은 글씨는 정리했다(화살표 설명 삭제, 시점 표시 19 → 26 px) |
-| 위치 추정 · 장애물 지도 흐름도 | 9 | `build_deck.py` `structure_diagram()` — slam_pose · slam_link · obstacle_grid · drive_permission · planning_memory · scan_match · scan_docking 의 데이터 흐름 |
-| 블록도 | 4 | `build_deck.py` `block_diagram()` — 하드웨어 기록과 5주차 회로 초안의 부품 · 상태 |
+| `assets/41_structure.png` | 9 | `prepare_figures.py` structure (matplotlib) — slam_pose · slam_link · obstacle_grid · drive_permission · planning_memory · scan_match · scan_docking 의 데이터 흐름을 위치 · 장애물 · 경로 · 하역 네 줄로 |
+| `assets/40_system.png` | 4 | `prepare_figures.py` system (matplotlib) — 하드웨어 기록과 5주차 회로 초안의 부품 · 상태 |
 | `30_chassis_pallet.jpg` | 5 | 5주차 자산 그대로(2026-09-30 실물 사진, EXIF 제거) |
 | `45_slam_error.mp4` · `46_new_obstacle_single.mp4` | 10 · 11 | 6주차 자산 그대로 (week-06/prepare_clips.py) |
 

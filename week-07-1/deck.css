@@ -643,3 +643,6 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .m7-q tr.pri td.grp { background:transparent; }
 /* 2: a case reached only in part (B: curved approach, but it stops before the insertion) */
 .m7-tag.part { background:#5b8fd0; }
+/* 2026-10-12: the diagrams and path figures are matplotlib PNGs (prepare_figures.py) */
+.m7-fill > .m7-figimg { width:100%; height:100%; object-fit:contain; display:block; min-height:0; }
+.m7-media > .m7-figimg { flex:1; min-height:0; width:100%; object-fit:contain; display:block; padding:6px 8px; box-sizing:border-box; }
