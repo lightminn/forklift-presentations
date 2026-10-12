@@ -140,19 +140,19 @@ class Canvas:
 
 
 # ---------------------------------------------------------------- slide 4
-WIFI_LINE = 'Wi-Fi: 상태 · 지도만 전송'
-ESTOP_LINE = 'Wi-Fi와 별도 · 신호 끊기면 정지'
+WIFI_LINE = 'Wi-Fi: 상태 · 지도 전송'
+ESTOP_LINE = 'Wi-Fi와 독립 · 신호 상실 시 정지'
 
 
 def system():
     c = Canvas(1180, 520)
     for x, label in ((0, '센서'), (335, '상위 연산'), (690, '하위 제어'), (960, '구동')):
         c.text(x, 12, label, 20, colour=UOS, bold=True)
-    c.box(0, 36, 270, 146, 'RGB-D 카메라', ['RealSense D435i', '캐리지 하단 (시뮬)'], 'fixed')
-    c.box(0, 196, 270, 146, '2D LiDAR', ['RPLIDAR A2M12 (보유)', '높이 1.05 m (시뮬)'], 'fixed')
+    c.box(0, 36, 270, 146, 'RGB-D 카메라', ['RealSense D435i', '캐리지 하단 장착 (설계)'], 'fixed')
+    c.box(0, 196, 270, 146, '2D LiDAR', ['RPLIDAR A2M12 (보유)', '장착 높이 1.05 m (설계)'], 'fixed')
     c.box(335, 36, 265, 306, 'Jetson Orin Nano', ['ROS 2 Jazzy', '팔레트 · 포켓 인식', 'SLAM (slam_toolbox)',
                                                   '경로 계획 (Hybrid A*)', '경로 추종 · 삽입 추적'], 'buy')
-    c.box(690, 36, 200, 306, 'STM32 보드', ['속도 · 조향 · 승강', '엔코더 읽기', '비상 차단'], 'draft')
+    c.box(690, 36, 200, 306, 'STM32 보드', ['속도 · 조향 · 승강', '엔코더 계수', '비상 차단'], 'draft')
     c.box(960, 36, 220, 150, '구동 보드', ['DRV8244 × 3', 'MT6701 엔코더'], 'draft')
     c.box(960, 210, 220, 132, '모터 · 전원', ['주행 · 리프트 (기존)', '조향 · 12 V 배터리'])
     c.arrow([(270, 110), (335, 110)], 'USB 3', (302, 90))
@@ -182,13 +182,13 @@ def structure():
     c.text(1040, 12, '제어', 20, colour=UOS, bold=True)
     lanes = [  # lane, input, process, output (title, line, fill, edge)
         ('위치', ('엔코더 + LiDAR', '바퀴 · 조향각 · 스캔'), ('오도메트리 + SLAM', '0.45 m · 0.5 rad마다 보정'),
-         ('제어 위치', '응답 0.25 s 끊기면 정지', '#eef3fa', BLUE)),
-        ('장애물', ('LiDAR 스캔', '10 Hz · 높이 1.05 m'), ('장애물 격자', '오래된 스캔일수록 크게'),
-         ('주행 허가', '멈추는 궤적이 비어야 주행', '#fff4ea', ORANGE)),
-        ('경로', ('장애물 기억', '+ SLAM 지도'), ('Hybrid A*', '전진 · 후진 호 탐색'),
-         ('경로', '전진 · 후진 구간 포함', '#ffffff', '#44505c')),
-        ('하역', ('등록 스캔', '+ 지금 스캔'), ('ICP 정합', '점–선 거리'),
-         ('하역 위치 보정', '목적지 직선 다시 그림', '#ffffff', '#44505c')),
+         ('제어용 위치', '응답 0.25 s 초과 시 정지', '#eef3fa', BLUE)),
+        ('장애물', ('LiDAR 스캔', '10 Hz · 높이 1.05 m'), ('점유 격자', '스캔 경과 시간만큼 팽창'),
+         ('주행 허가', '정지 궤적 비점유 시에만 주행', '#fff4ea', ORANGE)),
+        ('경로', ('장애물 기억', '+ SLAM 지도'), ('Hybrid A*', '전·후진 호 탐색'),
+         ('경로', '전·후진 구간 포함', '#ffffff', '#44505c')),
+        ('하역', ('등록 스캔', '+ 현재 스캔'), ('ICP 정합', 'point-to-line'),
+         ('하역 위치 보정', '최종 직선 경로 재생성', '#ffffff', '#44505c')),
     ]
     top, step, h = 34, 104, 90
     for i, (lane, inp, proc, out) in enumerate(lanes):
@@ -293,8 +293,8 @@ def goal_fix(repo, planner_src=None):
     p.ax.add_patch(p.patches.Rectangle((-0.45, -0.75), 2.6, 1.5, facecolor='none', edgecolor=MUTED,
                                        linewidth=1.2, linestyle=(0, (2, 2))))
     mid_x, mid_y = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2
-    p.text(mid_x, mid_y + 0.5, '전진만', 23, colour='#6b7480')
-    p.text(mid_x, mid_y - 0.5, f'한 바퀴 {plans["forward"]["length"]:.1f} m', 23, colour='#6b7480')
+    p.text(mid_x, mid_y + 0.5, '전진 전용', 23, colour='#6b7480')
+    p.text(mid_x, mid_y - 0.5, f'선회 {plans["forward"]["length"]:.1f} m', 23, colour='#6b7480')
     p.scale_bar(min(xs) - 0.6, min(ys) - 0.55)
     # The enlarged spot: same truck, the two moves of the D7 plan to scale (side by side).
     inset = p.fig.add_axes([0.57, 0.08, 0.43, 0.84])
@@ -310,10 +310,10 @@ def goal_fix(repo, planner_src=None):
     p.ax.plot([gl[0]], [gl[1]], 'o', color=GREEN, markersize=8, zorder=5)
     p.line([(q[0], 0.62) for q in fwd], BLUE, 5, arrow=True)
     p.line([(q[0], -0.62) for q in rev], ORANGE, 5, arrow=True)
-    p.text(0.25, 1.0, f'① 앞 {length(fwd):.2f} m', 22, colour=BLUE)
-    p.text(0.25, -1.0, f'② 뒤 {length(rev):.2f} m', 22, colour=ORANGE)
-    p.text(0.9, 1.4, '같은 자리 확대', 19, colour=MUTED, bold=False)
-    p.text(0.9, -1.42, f'방향 {math.degrees(abs(goal.yaw_rad - start.yaw_rad)):.1f}° 맞춤', 19,
+    p.text(0.25, 1.0, f'① 전진 {length(fwd):.2f} m', 22, colour=BLUE)
+    p.text(0.25, -1.0, f'② 후진 {length(rev):.2f} m', 22, colour=ORANGE)
+    p.text(0.9, 1.4, '목적지 부근 확대', 19, colour=MUTED, bold=False)
+    p.text(0.9, -1.42, f'방향 오차 {math.degrees(abs(goal.yaw_rad - start.yaw_rad)):.1f}° 보정', 19,
            colour=MUTED, bold=False)
     p.scale_bar(1.6, -0.62, 0.5, dy=0.14)
     p.ax = main_ax
@@ -330,7 +330,7 @@ def goal_fix(repo, planner_src=None):
 # arrow gaps, panels pasted at y 100 of the canvas; the crop keeps canvas rows 98-410.
 PANEL_W, GAP_W, CROP_ROWS = 385, 88, (98, 410)   # 410: below it only floor, and the table needs the room
 TAG_FONT = '/usr/share/fonts/TTF/NanumGothic.ttf'
-VIEWS = ('카메라에서 본 모습', '위에서 본 모습', '앞면을 좌우로 나눈 결과', '카메라에서 본 모습')
+VIEWS = ('카메라 시점', '상부 시점', '앞면 수평 분할', '카메라 시점')
 
 
 def pocket_stages():
@@ -344,6 +344,14 @@ def pocket_stages():
         x = i * (PANEL_W + GAP_W)
         if i in (1, 2):   # flat panel background: clear both old tag rows (view + colour legend)
             d.rectangle([x + 6, 10, x + PANEL_W - 6, 80], fill=(26, 29, 36))
+        else:             # image background: fill the old (longer) tag box from the pixels right of it
+            import numpy as np
+            a = np.asarray(img).copy()
+            dark = np.flatnonzero(np.abs(a[26, x:x + PANEL_W].astype(int) - (16, 18, 23)).max(1) < 6)
+            x1 = x + int(dark.max())
+            a[8:48, x:x1 + 3] = a[8:48, x1 + 5:x1 + 6]
+            img = Image.fromarray(a)
+            d = ImageDraw.Draw(img)
         w = d.textlength(view, font=new)
         d.rectangle([x + 8, 10, x + 8 + w + 16, 10 + 26 + 11], fill=(16, 18, 23))
         d.text((x + 16, 14), view, font=new, fill=(232, 236, 244))
@@ -358,7 +366,7 @@ def pocket_stages():
 # ---------------------------------------------------------------- hardware (week 5 records)
 WEEK5 = ROOT.parent / 'week-05/assets'
 LA_ROWS = [  # capture, title, button per channel (CH0, CH1) -- week-05/build_deck.py LA_ROWS
-    ('drive', '주행', ('앞', '뒤')),
+    ('drive', '주행', ('전진', '후진')),
     ('lift', '승강', ('하강', '상승')),
     ('steer', '조향', ('왼쪽', '오른쪽')),
 ]

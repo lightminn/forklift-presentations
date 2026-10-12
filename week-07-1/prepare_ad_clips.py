@@ -11,7 +11,8 @@ its timeline and gear runs.
 
 The clip starts at the far capture (the post-detection observe plan), follows the observe leg to the
 alignment straight's start, the stop there (the near capture), the straight approach and insertion,
-and ends 1 s after the lift. The plan being driven is drawn with its remaining part only, forward runs
+and ends 1 s after the lift; a small stage label (prepare_reverse_clip.caption) sits in the top-left corner.
+The plan being driven is drawn with its remaining part only, forward runs
 blue and reverse runs orange; hidden where the truck or the box covers it (prepare_reverse_clip).
 """
 import json
@@ -29,7 +30,7 @@ HERE = Path(__file__).resolve().parent
 FPS = 30
 SPEED = 2.0
 CROP = (150, 130, 1040, 372)        # x, y, w, h: the approach area, the 2 x 2 cell's aspect
-STAGE = {'approach': '직진 진입', 'insert': '삽입', 'lift': '들기'}
+STAGE = {'approach': '정렬 직진', 'insert': '포크 삽입', 'lift': '리프트'}
 
 
 def gear_runs_with_sign(poses, yaw0):
@@ -105,12 +106,12 @@ def clip(case, run, out_name):
         if ph in STAGE:
             return STAGE[ph]
         if tt < t_detect + 1.5 and abs(v[i]) < 0.01:
-            return '인식 → 경로 계획'
+            return '인식 · 경로 계획'
         if v[i] > 0.01:
             return '전진'
         if v[i] < -0.01:
             return '후진'
-        return '정렬 시작점에서 다시 관측'
+        return '재관측'
 
     picks = []
     tt = t_detect
@@ -152,7 +153,7 @@ def clip(case, run, out_name):
                 rc.draw_path(layer, cam, hulls, rc.after(pts, done), rc.BLUE if g > 0 else rc.ORANGE, 9)
                 done = 0.0
         img = np.ascontiguousarray(rc.cv2.addWeighted(layer, 0.9, img, 0.1, 0)[cy0:cy0 + ch, cx0:cx0 + cw])
-        img = np.ascontiguousarray(rc.caption(img, caption_at(idx), size=34))
+        img = np.ascontiguousarray(rc.caption(img, caption_at(idx), size=28))
         if poster_at is None and v[idx] != 0 and abs(v[idx]) > 0.05:
             poster_at = idx
             Image.fromarray(img).save(HERE / 'assets' / out_name.replace('.mp4', '_poster.jpg'), quality=88)

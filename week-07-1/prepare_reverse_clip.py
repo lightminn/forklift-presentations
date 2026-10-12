@@ -20,7 +20,8 @@ the truck (with the pallet) or the box covers it:
 - at the replan, the band the loaded body sweeps on the tightest right turn from the stop
   (rear axle radius 1 / 0.29 m, inner side R - 0.40 m, outer front corner hypot(R + 0.40, 1.56) m),
 - the replan's reverse run (orange) and forward run (blue), each shortened as the truck drives it.
-Captions are the clip's events; the clip ends when the rear axle is 1 m past the box. Driving plays at 2x, the replan frame is held 2.5 s, the last
+Stage labels (a small tag in the top-left corner, caption(); colour meanings are the slide's legend, not
+text in the clip) mark the clip's events; the clip ends when the rear axle is 1 m past the box. Driving plays at 2x, the replan frame is held 2.5 s, the last
 frame 1.5 s -> assets/55_reverse_box.mp4 (cropped to 1080 x 720) and its poster (the held frame).
 """
 import json
@@ -34,7 +35,8 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 HERE = Path(__file__).resolve().parent
-FONT = '/usr/share/fonts/noto-cjk/NotoSansCJK-Bold.ttc'
+FONT = '/usr/share/fonts/noto-cjk/NotoSansCJK-Medium.ttc'
+ACCENT, TAG_FILL = (127, 179, 240), (15, 18, 21, 215)   # the deck's caption-bar blue, dark tag
 W, H, FPS = 1280, 720, 30
 CROP = (120, 0, 1080, 720)                       # x, y, w, h: the panel's aspect, action kept
 TRUCK = ((-0.51, 1.22), (-0.40, 0.40), (0.0, 1.05))   # base frame extent of truck + pallet (m)
@@ -123,14 +125,16 @@ def tint(img, cam, hulls, poly, rgb, alpha=0.42):
     return out
 
 
-def caption(img, text, size=40):
+def caption(img, text, size=32):
+    """Stage label: a small dark tag in the top-left corner with a blue accent bar on its left."""
     pil = Image.fromarray(img)
     d = ImageDraw.Draw(pil, 'RGBA')
     font = ImageFont.truetype(FONT, size)
     l, t, r, b = d.textbbox((0, 0), text, font=font)
-    x, y = (img.shape[1] - (r - l)) // 2, img.shape[0] - (b - t) - 40
-    d.rectangle([x - 18, y - 12, x + r - l + 18, y + b - t + 16], fill=(27, 31, 36, 225))
-    d.text((x - l, y - t), text, font=font, fill=(255, 255, 255, 255))
+    x, y, bar, px, py = round(0.6 * size), round(0.5 * size), max(4, size // 7), round(0.45 * size), round(0.28 * size)
+    d.rectangle([x, y, x + bar + 2 * px + (r - l), y + 2 * py + (b - t)], fill=TAG_FILL)
+    d.rectangle([x, y, x + bar - 1, y + 2 * py + (b - t)], fill=(*ACCENT, 255))
+    d.text((x + bar + px - l, y + py - t), text, font=font, fill=(255, 255, 255, 255))
     return np.asarray(pil)
 
 
@@ -238,12 +242,12 @@ def main(run):
         if tt < t_spawn:
             return None
         if tt < t_replan:
-            return '경로 위에 새 상자 → 정지'
+            return '신규 장애물 감지 · 정지'
         if tt < t_rev0 + 1.0:
-            return '가장 작게 꺾어 돌아도 차체가 상자에 걸림'
+            return '최소 회전 반경 스윕 영역 – 장애물 간섭'
         if tt < t_fwd0:
-            return f'① {rev_m:.2f} m 후진해 거리 확보'
-        return '② 꺾어서 상자 옆으로 전진'
+            return f'① 후진 {rev_m:.2f} m'
+        return '② 전진 · 장애물 회피'
 
     picks = []
     for a, b, speed in ((t_spawn - 3.0, t_replan, 2.0), (t_replan, None, 2.5), (t_replan, t_end, 2.0)):

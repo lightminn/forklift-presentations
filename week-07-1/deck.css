@@ -678,3 +678,18 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .m7-cases2 .legend { margin:0; font-size:16px; color:#44505c; text-align:center; }
 /* 4: the camera choice, one line under the system figure */
 .m7-note { flex-shrink:0; margin:6px 0 0; font-size:19px; line-height:1.35; color:#44505c; }
+/* 2026-10-12 formal pass: graphic legends -- a swatch in the clip's own colour beside each term,
+   in place of "colour: meaning" text (build_deck.py legend()) */
+.m7-media .legend, .m7-cases2 .legend { display:flex; flex-wrap:wrap; justify-content:center; align-items:center; column-gap:18px; row-gap:2px; }
+.legend .lg { display:inline-flex; align-items:center; gap:7px; white-space:nowrap; }
+.legend .sw { display:inline-block; flex-shrink:0; box-sizing:border-box; }
+.legend .sw.line { width:26px; height:5px; border-radius:3px; }
+.legend .sw.dash { width:28px; height:0; border-top:4px dashed; }
+.legend .sw.band { width:24px; height:13px; border:2px solid; }
+.legend .sw.cell { width:12px; height:12px; }
+.legend .sw.dot { width:12px; height:12px; border-radius:50%; }
+.legend .sw.ring { width:15px; height:15px; border-radius:50%; border:2.5px solid; }
+.legend .sw.box { width:16px; height:13px; border:2.5px solid; }
+.legend .sw.ramp { width:132px; height:12px; border-radius:2px; }
+.legend .sw.none { width:12px; height:12px; border:1px solid #6b7480; }
+.legend .sep { display:inline-block; width:1px; height:15px; background:currentColor; opacity:.35; }
