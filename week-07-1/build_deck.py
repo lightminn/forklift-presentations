@@ -535,7 +535,7 @@ MISSION_FLOW = [  # stage in the clip's order, how it is done in this run (2026-
     ('접근 · 삽입', 'Hybrid A* · 2 m 앞 재관측 → 직진 삽입'),
     ('적재 · 운반', '리프트 → 운반 · 점유 격자 정지 판단'),
     ('하역', 'ICP 스캔 정합 → 위치 보정'),
-    ('복귀', '출발점까지 재계획 · 추종'),
+    ('복귀', '후진 선회로 방향 전환 → 전진 복귀'),
 ]
 mission_flow = ''.join(f'<li><b>{a}</b><span>{b}</span></li>' for a, b in MISSION_FLOW)
 add('운반 임무 전체', '운반 임무 전체', 45, f"""
@@ -543,17 +543,19 @@ add('운반 임무 전체', '운반 임무 전체', 45, f"""
 {stage(mpanel(video(MISSION_VIDEO, '공장 홀을 상부 시점에서 본 지게차. 팔레트를 인식해 적재하고, 목적지에 하역한 뒤 출발점으로 복귀한다'),
               legend(('line', PLAN, '주행 경로'), ('ring', GOAL, '목적지'))),
         ipanel('임무 흐름 (삽입 중 추적 미적용 실행)', f'<ol class="m7-vflow">{mission_flow}</ol><p class="m7-vnote"><b>위치 추정</b>휠 오도메트리 + SLAM 보정 (전 구간)</p>'), 424)}
-<div class="takeaway">결과: 하역 오차 19 mm · 복귀 오차 27 mm · 무접촉</div>
+<div class="takeaway">결과: 하역 오차 19 mm · 복귀 오차 23 mm · 무접촉</div>
 """,
-    """먼저 현재 시뮬레이션에서 처음부터 끝까지 연속으로 수행되는 운반 임무를 보여 드리겠습니다. 실측 차체 모델로 팔레트를 인식하고, 포크를 삽입해 적재한 뒤, 목적지에 하역하고 출발점으로 복귀합니다. 영상은 12배속입니다. 이 실행의 하역 오차는 19밀리미터, 출발점 복귀 오차는 27밀리미터였으며, 포크와 팔레트의 접촉은 없었습니다. 오른쪽은 영상의 진행 순서에 따른 단계별 구현입니다. 위치 추정은 slam_toolbox 기반의 일반적인 구성이므로 부록으로 돌리고, 인식, 삽입, 경로 계획은 소프트웨어 부분에서 설명드리겠습니다. 삽입 중 포켓 추적은 별도 실행으로 보여 드립니다. 이 결과를 사람이 운전하는 지게차의 시험 기준과 비교해 보겠습니다. (전환)""",
-    [('ws1 artifacts/20261011_meeting_video/seed_5_d7', 'forklift b66271f 스냅숏, 실측 차체 · SLAM 위치 · LiDAR 1대 · --d7-planner --d7-docking · --video --robot-camera (근접 추적 끔). result.json: success, complete, 하역 19.4 mm, 복귀 2.7 cm · 0.040 rad, 금지 접촉 0, 진입 319.9 / 318.1 mm, 시뮬 219.6 s'),
+    """먼저 현재 시뮬레이션에서 처음부터 끝까지 연속으로 수행되는 운반 임무를 보여 드리겠습니다. 실측 차체 모델로 팔레트를 인식하고, 포크를 삽입해 적재한 뒤, 목적지에 하역하고 출발점으로 복귀합니다. 영상은 12배속입니다. 이 실행의 하역 오차는 19밀리미터, 출발점 복귀 오차는 23밀리미터였으며, 포크와 팔레트의 접촉은 없었습니다. 하역 뒤에는 후진으로 크게 선회해 방향을 바꾼 다음 전진으로 돌아오고, 출발점에서는 짧게 후진해 출발 자세에 맞춥니다. 오른쪽은 영상의 진행 순서에 따른 단계별 구현입니다. 위치 추정은 slam_toolbox 기반의 일반적인 구성이므로 부록으로 돌리고, 인식, 삽입, 경로 계획은 소프트웨어 부분에서 설명드리겠습니다. 삽입 중 포켓 추적은 별도 실행으로 보여 드립니다. 이 결과를 사람이 운전하는 지게차의 시험 기준과 비교해 보겠습니다. (전환)""",
+    [('ws1 artifacts/20261012_return_forward/seed_5_fwd7', 'forklift 33d46b9 (브랜치 feat/return-turnaround = 6bf45a8 + 복귀 전진 우선, docs/plans/2026-10-12-return-forward-turnaround.md) 의 스냅숏 p5_retturn_6bf45a8_v7(커밋 직전 판, 이 실행의 결정은 같음), 실측 차체 · SLAM 위치 · LiDAR 1대 · --d7-planner --d7-docking --return-turnaround · --video --robot-camera (근접 추적 끔). result.json: success, complete, 하역 19.4 mm, 복귀 2.3 cm · 0.020 rad, 금지 접촉 0, 진입 319.9 / 318.1 mm, 시뮬 244.3 s'),
+     ('같은 실행 paths.json · result.json live_plans (복귀)', '첫 실시간 복귀 계획 172.09 s: 직접 계획(전 구간 후진 22.8 m, 비교 비용 70.1)과 최대 곡률 후진 호 후보 10개(곡률 0.25 /m, 후진 가중 3) 중 reverse_arc:-1:90 선택(비용 56.6) — 설치 경로 전진 22.9 m · 후진 8.7 m(호 + 출발점 주차), cusp 정체 · 허가 밖 진입 없음'),
+     ('ws1 artifacts/20261011_meeting_video/seed_5_d7', '이전 녹화(forklift b66271f, 전환 없음): 같은 장면 · 같은 하역 19.4 mm · 진입 319.9 / 318.1 mm, 복귀는 전 구간 후진 22.8 m, 복귀 2.7 cm · 0.040 rad, 시뮬 219.6 s'),
      ('ws1 artifacts/20261011_meeting_video/seed_1_d7', '같은 조건 장면 1: success, 하역 27.0 mm, 복귀 5.1 cm, 금지 접촉 0, 시뮬 273.8 s'),
      ('config/isaac_transport_measured.yaml', '목적지 도킹: 미리 등록한 위치의 LiDAR 스캔 정합 (등록 위치는 시뮬레이터 값)'),
      ('src/forklift_core/perception/pocket_detector.py', 'Depth-only geometric baseline for a known, horizontal pallet shape'),
      ('src/forklift_core/localization/slam_pose.py · scan_match.py · scan_docking.py', 'map<-base = map<-odom(SLAM) × odom<-base(odometry); point-to-line ICP 목적지 도킹'),
      ('src/forklift_core/control/path_tracking.py', 'RearAxlePathTracker — 뒤차축 pure pursuit (곡률 = 2 · 횡오차 / 거리²), 전환점마다 정지'),
      ('sim/isaac/run_transport.py', '이 녹화 실행은 근접 추적 끔: 정렬 직진 시작(2.1 m)에서 한 번 더 관측(near capture) 후 그 위치로 삽입')],
-    '화면 생성: 위 장면 5 기록을 글자 없이 다시 합성한 영상(ws1 artifacts/20261012_meeting_clean/mission.mp4)의 조감 칸 12배속 (prepare_clips.py mission)')
+    '화면 생성: 위 장면 5 기록을 글자 없이 다시 합성한 영상(ws1 artifacts/20261012_meeting_clean/mission_fwd.mp4, Slurm 2494)의 조감 칸 12배속 (prepare_clips.py mission)')
 
 # ----------------------------------------------------------------- 11
 # 2026-10-12: each criterion as a gauge -- the exam's band and disqualification zone with the simulated
