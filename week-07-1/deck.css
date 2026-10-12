@@ -646,3 +646,17 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 /* 2026-10-12: the diagrams and path figures are matplotlib PNGs (prepare_figures.py) */
 .m7-fill > .m7-figimg { width:100%; height:100%; object-fit:contain; display:block; min-height:0; }
 .m7-media > .m7-figimg { flex:1; min-height:0; width:100%; object-fit:contain; display:block; padding:6px 8px; box-sizing:border-box; }
+/* 2026-10-12 restructure: the brief's items first, three hardware slides */
+.m7-brief { font-size:19px; table-layout:fixed; }
+.m7-brief th, .m7-brief td { padding:9px 12px; vertical-align:middle; }
+.m7-brief th:nth-child(1) { width:22%; } .m7-brief th:nth-child(2) { width:34%; } .m7-brief th:nth-child(3) { width:25%; } .m7-brief th:nth-child(4) { width:19%; }
+.m7-brief td { white-space:nowrap; }
+.m7-brief td:first-child { color:var(--uos-blue); }
+.m7-brief td.real { color:#5d6670; }
+.m7-ctrl, .m7-board { font-size:19px; }
+.m7-ctrl th, .m7-ctrl td, .m7-board th, .m7-board td { padding:8px 12px; vertical-align:middle; }
+.m7-ctrl td:first-child, .m7-board td:first-child { white-space:nowrap; }
+.m7-board td:nth-child(2) { white-space:nowrap; }
+.m7-photo { width:100%; flex:1; min-height:0; object-fit:cover; object-position:50% 50%; border-radius:4px; margin-bottom:10px; }
+.m7-board { table-layout:fixed; } .m7-board th:nth-child(1) { width:21%; } .m7-board th:nth-child(2) { width:41%; } .m7-board th:nth-child(3) { width:38%; }
+.m7-board td { white-space:nowrap; } .m7-ctrl td { white-space:nowrap; }

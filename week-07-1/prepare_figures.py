@@ -3,6 +3,7 @@
 
     python prepare_figures.py /path/to/forklift [PLANNER_SRC]
     python prepare_figures.py stages
+    python prepare_figures.py hardware
 
 Writes assets/ (published with the page; the deck font Noto Sans CJK is the system's noto-cjk):
 1. 40_system.png -- slide 4, the system: sensors -> Jetson -> STM32 -> drive board -> motors,
@@ -10,11 +11,7 @@ Writes assets/ (published with the page; the deck font Noto Sans CJK is the syst
 2. 41_structure.png -- slide 9, localization and the obstacle map as four lanes (position,
    drive permission, planning, delivery docking) into the path tracker (slam_pose, slam_link,
    obstacle_grid, drive_permission, planning_memory, scan_match / scan_docking).
-3. 52_reverse_obstacle.png -- slide 12 left, the week 6 new-obstacle scene (measured chassis,
-   seed 5, box during transport; videos-from-ws1/20261007_l8_measured_seed5_n1/plan_history.json)
-   in the truck's frame at the stop (94.3 s replan): the live plan, the replan (reverse, then
-   forward) and the tightest right turn from the stop at the planner's radius 1 / 0.29 m, whose
-   rear-axle arc runs through the box (the body sweeps 3.05-4.15 m from the turn centre).
+3. (52_reverse_obstacle.png was replaced on 2026-10-12 by the rendered clip of prepare_reverse_clip.py.)
 4. 53_goal_fix.png -- slide 12 right, the D7 test case (tests/unit/planning/test_d7_planner_options.py:
    l8_measured seed 1 + N1 stall replan, goal 1 cm ahead and 0.023 rad off) planned with the
    forward-only goal connection and with D7_PLANNER_OPTIONS (Reeds-Shepp, 4 m cap), both to scale.
@@ -25,6 +22,11 @@ Writes assets/ (published with the page; the deck font Noto Sans CJK is the syst
    Gazebo scene s003) without its title band and step captions (rows 98-410; the step names are
    HTML). The small labels are redrawn for projection: the arrow captions are removed, the
    viewpoint tags are drawn larger, and the two colour legends move to the HTML legend.
+6. `hardware` -- from the week 5 records in ../week-05/assets: 44_waveforms.png, the existing
+   controller's two lines per command redrawn from data_la_edges.json (DSLogic Pro, 1 MHz; the
+   numbers are the time a line stayed high, runs under 10 ms are contact bounce); 43_la_setup.jpg,
+   the measurement photo cropped to the relay board and its probes (no people); 45_sch_drv_channel.png, one DRV8244
+   channel of the circuit draft (40_sch_drv8244.png) enlarged 2x.
 
 Sizes are in slide canvas pixels (1280 x 720 deck) and saved at 2.5x.
 """
@@ -43,7 +45,6 @@ TAG = {'fixed': ('확정', BLUE), 'buy': ('구매 예정', '#8c959e'), 'draft': 
 FONT_REGULAR = '/usr/share/fonts/noto-cjk/NotoSansCJK-Regular.ttc'
 FONT_BOLD = '/usr/share/fonts/noto-cjk/NotoSansCJK-Bold.ttc'
 LOADED = (1.56, 0.17, 0.40)        # planning footprint: ahead of / behind the rear axle, half width
-PLAN_RADIUS = 1 / 0.29             # planner curvature limit (config/isaac_transport_measured.yaml)
 
 
 def split_by_gear(points, heading):
@@ -149,7 +150,7 @@ def system():
                                                   '경로 계획 (Hybrid A*)', '경로 추종 · 삽입 추적'], 'buy')
     c.box(690, 36, 200, 306, 'STM32 보드', ['속도 · 조향 · 승강', '엔코더 읽기', '비상 차단'], 'draft')
     c.box(960, 36, 220, 150, '구동 보드', ['DRV8244 × 3', 'MT6701 엔코더'], 'draft')
-    c.box(960, 210, 220, 132, '모터 3개', ['12 V 배터리'], 'reuse')
+    c.box(960, 210, 220, 132, '모터 · 전원', ['주행 · 리프트 (기존)', '조향 · 12 V 배터리'])
     c.arrow([(270, 110), (335, 110)], 'USB 3', (302, 90))
     c.arrow([(270, 270), (335, 270)], 'USB', (302, 250))
     c.arrow([(600, 190), (690, 190)], '명령\n상태', (645, 156), both=True)
@@ -254,57 +255,6 @@ class Plot:
         return name
 
 
-def reverse_obstacle(repo):
-    run = repo / 'videos-from-ws1/20261007_l8_measured_seed5_n1'
-    history = json.loads((run / 'plan_history.json').read_text())
-    replan = next(e for e in history['plans'] if e['why'] == 'replan')
-    live = next(e for e in history['plans'] if e['why'] == 'live' and e['phase'] == 'transport')
-    x0, y0, yaw0 = history['replans'][0]['rear_pose']
-    spawn = history['new_obstacles'][0]['detail']          # name, x, y, yaw, size
-    c, s = math.cos(yaw0), math.sin(yaw0)
-
-    def local(p):
-        return (c * (p[0] - x0) + s * (p[1] - y0), -s * (p[0] - x0) + c * (p[1] - y0))
-
-    old = [local(p) for p in live['poses']]
-    start = min(range(len(old)), key=lambda i: math.hypot(*old[i]))
-    old = old[start:]
-    new = [local(p) for p in replan['poses']]
-    runs = split_by_gear(new, 0.0)
-    box = local(spawn[1:3])
-    # Frame: truck heading to the right (+x), its left up (+y).
-    xlim, ylim = (-2.6, 6.0), (-3.9, 1.5)
-    p = Plot(580, 390, xlim, ylim)
-
-    def inside(q):
-        return xlim[0] <= q[0] <= xlim[1] and ylim[0] <= q[1] <= ylim[1]
-
-    # The live plan from the stop is the tightest right turn: within 1.7 cm of the rear-axle arc
-    # about (0, -1 / 0.29) over its first 4 m, and that arc runs through the box.
-    p.line([q for q in old if inside(q)], GREY, 3.5, dashed=True)
-    reverse = [pts for gear, pts in runs if gear < 0][0]
-    forward = [pts for gear, pts in runs if gear > 0][0]
-    p.line(reverse, ORANGE, 5, arrow=True)
-    p.line([q for q in forward if inside(q)][:-2], BLUE, 5, arrow=True)
-    p.body(0.0, 0.0, 0.0)
-    p.square(box[0], box[1], spawn[4][0], spawn[3] - yaw0, RED, '#f6d5d0')
-    reverse_len, forward_len = length(reverse), length(forward)
-    R = PLAN_RADIUS
-    p.text(0.75, 0.9, '멈춘 위치', 23)
-    p.text(box[0] + 0.5, box[1] + 0.05, '새 상자', 23, colour=RED, ha='left')
-    p.text(-1.3, 0.75, f'① 후진 {reverse_len:.2f} m', 23, colour=ORANGE)
-    p.text(-0.4, -2.3, '② 전진', 23, colour=BLUE, ha='right')
-    p.text(3.5, -1.05, '원래 경로', 22, colour='#6b7480', ha='left')
-    p.text(3.5, -1.6, '가장 작게 꺾어도', 20, colour='#6b7480', bold=False, ha='left')
-    p.text(3.5, -2.08, '상자 위를 지남', 20, colour='#6b7480', bold=False, ha='left')
-    p.scale_bar(-2.3, -3.25)
-    meta = dict(reverse_m=round(reverse_len, 2), forward_m=round(forward_len, 2),
-                box_ahead_m=round(box[0], 2), box_right_m=round(-box[1], 2),
-                stop_turn_box_offset_m=round(math.hypot(box[0], box[1] + R) - R, 3),
-                new_min_to_box_m=round(min(math.hypot(q[0] - box[0], q[1] - box[1]) for q in new), 2))
-    return p.save('52_reverse_obstacle.png'), meta
-
-
 def goal_fix(repo, planner_src=None):
     sys.path.insert(0, str(planner_src or repo / 'src'))
     import numpy as np
@@ -401,18 +351,69 @@ def pocket_stages():
     print(out.name, img.size)
 
 
+# ---------------------------------------------------------------- hardware (week 5 records)
+WEEK5 = ROOT.parent / 'week-05/assets'
+LA_ROWS = [  # capture, title, button per channel (CH0, CH1) -- week-05/build_deck.py LA_ROWS
+    ('drive', '주행', ('앞', '뒤')),
+    ('lift', '승강', ('하강', '상승')),
+    ('steer', '조향', ('왼쪽', '오른쪽')),
+]
+GLITCH_S = 0.01                    # shorter than this = contact / ground bounce, not a command
+
+
+def waveforms():
+    """The existing controller's two lines per command (DSLogic Pro, 1 MHz), from the level changes
+    in week-05/assets/data_la_edges.json: one line high while a button is held, no switching."""
+    la = json.loads((WEEK5 / 'data_la_edges.json').read_text())
+    c = Canvas(600, 470)
+    colours = (BLUE, ORANGE)
+    left, right, row_h, lane = 96, 592, 152, 46
+    for r, (key, title, names) in enumerate(LA_ROWS):
+        cap = la[key]
+        t0, t1 = cap['start_s'], cap['end_s']
+        sx = lambda t: left + (t - t0) / (t1 - t0) * (right - left)   # noqa: E731
+        y0 = 8 + r * row_h
+        c.text(0, y0 + 14, title, 22, colour=INK, bold=True)
+        edges = cap['edges'] + [[t1, 0, 0]]
+        for ch in (0, 1):
+            base = y0 + 40 + ch * lane + 28
+            c.text(left - 12, base - 12, names[ch], 20, colour=colours[ch], bold=True, ha='right')
+            xs, ys, level = [sx(t0)], [base], 0
+            for t, a, b in cap['edges']:
+                v = (a, b)[ch]
+                xs += [sx(t), sx(t)]
+                ys += [base - level * 24, base - v * 24]
+                level = v
+            xs.append(sx(t1))
+            ys.append(base - level * 24)
+            c.ax.plot(xs, ys, color=colours[ch], linewidth=2.2, solid_joinstyle='miter')
+            for (t, a, b), (t2, _, _) in zip(edges, edges[1:]):
+                if (a, b)[ch] and not (a, b)[1 - ch] and t2 - t >= GLITCH_S:
+                    c.text((sx(t) + sx(t2)) / 2, base - 36, f'{t2 - t:.1f} s', 18, colour=colours[ch], ha='center')
+    return c.save('44_waveforms.png')
+
+
+def hardware_photos():
+    """The week 5 measurement photo without the people at the bottom, and one driver channel of
+    the circuit draft enlarged (the three channels are the same circuit)."""
+    from PIL import Image
+    Image.open(WEEK5 / '37_la_setup.jpg').crop((100, 600, 1050, 990)).save(ASSETS / '43_la_setup.jpg', quality=88)
+    sch = Image.open(WEEK5 / '40_sch_drv8244.png').convert('RGB').crop((95, 100, 722, 408))
+    sch.resize((sch.width * 2, sch.height * 2), Image.LANCZOS).save(ASSETS / '45_sch_drv_channel.png')
+    return ['43_la_setup.jpg', '45_sch_drv_channel.png']
+
+
 def main(repo, planner_src=None):
     repo = Path(repo).resolve()
     meta = {'40_system.png': system(), '41_structure.png': structure()}
-    for name, make in (('52_reverse_obstacle.png', lambda: reverse_obstacle(repo)),
-                       ('53_goal_fix.png', lambda: goal_fix(repo, planner_src))):
-        _, info = make()
-        meta[name] = info
+    _, meta['53_goal_fix.png'] = goal_fix(repo, planner_src)
     print(json.dumps(meta, ensure_ascii=False, indent=1))
 
 
 if __name__ == '__main__':
     if sys.argv[1] == 'stages':
         pocket_stages()
+    elif sys.argv[1] == 'hardware':
+        print(waveforms(), hardware_photos())
     else:
         main(sys.argv[1], Path(sys.argv[2]).resolve() if len(sys.argv) > 2 else None)
