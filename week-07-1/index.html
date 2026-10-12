@@ -35,7 +35,7 @@ B 는 멈추지 않고 삽입 — 멈춘 뒤 정렬하는 구현은 B 완료로 
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="01  과제 제안서 항목별 접근과 현황"><div class="slide-body">
 <h2 class="headline">과제 제안서 항목별 접근: 시뮬레이션에서 전 과정 연결 · 실물은 구동 보드 설계 단계</h2>
 <div class="m7-info grow"><p class="ph">과제 제안서 → 저희 접근 → 현황</p><div class="tb"><table class="comparison m7-brief"><tr><th>과제 제안서</th><th>저희 접근</th><th>시뮬레이션</th><th>실물</th></tr><tr><td>팔레트 인식 · RGB-D</td><td>D435i · 규격 치수로 포켓 인식</td><td><span class="m7-tag ok">확인</span>깊이 영상 포켓 위치 · 방향</td><td class="real">카메라 시험 전</td></tr><tr><td>위치 · 장애물 · 2D LiDAR</td><td>RPLIDAR A2M12 · 위치 보정 + 장애물 격자</td><td><span class="m7-tag ok">확인</span>새 장애물 정지 · 재계획</td><td class="real">구매 · 시험 전</td></tr><tr><td>플랫폼 · 소형 지게차 개조</td><td>소형 전동 지게차 + 구동 보드 자체 제작</td><td><span class="m7-tag ok">확인</span>실측 차체 모델</td><td class="real">보드 설계 중</td></tr><tr><td>목적 ① 장애물 회피 경로</td><td>Hybrid A* (전진 · 후진)</td><td><span class="m7-tag ok">확인</span>충돌 없이 완주</td><td class="real">실차 주행 후</td></tr><tr><td>목적 ② 삽입 중 포켓 추적</td><td>캐리지 하단 카메라 · 직전 보정 · 간격 감시</td><td><span class="m7-tag ok">확인</span>접촉 없이 삽입</td><td class="real">장착 · 보정 전</td></tr><tr><td>프로세스 ①–⑤</td><td>인식 → 위치 → 경로 → 삽입 → 하역</td><td><span class="m7-tag ok">확인</span>한 임무로 완주</td><td class="real">구동 보드 제작 후</td></tr><tr><td>예시 A–D</td><td>A 직진 · B 곡선 · C 후진 · D 재정렬</td><td><span class="m7-tag ok">확인</span>A · C · D <span class="m7-tag part">일부</span>B</td><td class="real">실차 A부터</td></tr></table></div></div>
-<div class="takeaway">남은 것: B 무정지 삽입 · A–D 반복 평가 · 실물 센서 시험 · 실차 주행</div>
+<div class="takeaway">남은 것: B를 멈추지 않고 곡선에서 바로 삽입 · A–D 반복 평가 · 실물 센서 시험 · 실차 주행</div>
 </div></x-import>
 </section>
 
@@ -259,7 +259,7 @@ D7 CPU 판정: 운반 목표 고리 1,686 → 0 (목표당 2,376 계획), 목표
 
 <section data-label="접근 상황 A · B" data-screen-label="13" data-duration="45" data-speaker-notes="권장 45초
 
-과제 문서의 네 가지 접근 상황을 그림과 같은 배치로 시뮬레이션에서 돌렸습니다. 왼쪽이 과제 문서의 그림이고, 오른쪽 영상은 팔레트가 오른쪽에 오도록 위에서 비스듬히 본 것입니다. 파란 선은 전진, 주황 선은 후진할 경로입니다. A는 팔레트 정면에서 인식해 그대로 직진해 넣습니다. B는 팔레트와 나란히 옆으로 비켜 선 경우로, S자로 꺾어 들어가 곡선 끝에서 한 번 다시 본 뒤 넣습니다. 다만 팔레트는 약 3.6미터 안에서 인식되고 마지막 0.8미터는 직진해야 해서, 멈추지 않고 비킬 수 있는 폭은 약 0.4미터입니다. 그보다 많이 비켜 있으면 앞뒤 전환이 필요합니다. (전환)
+과제 문서의 네 가지 접근 상황을 그림과 같은 배치로 시뮬레이션에서 돌렸습니다. 왼쪽이 과제 문서의 그림이고, 오른쪽 영상은 팔레트가 오른쪽에 오도록 위에서 비스듬히 본 것입니다. 파란 선은 전진, 주황 선은 후진할 경로입니다. A는 팔레트 정면에서 인식해 그대로 직진해 넣습니다. B는 팔레트와 나란히 옆으로 비켜 선 경우로, S자로 꺾어 들어가 곡선 끝에서 한 번 다시 본 뒤 넣습니다. 다만 팔레트는 약 3.6미터 안에서 인식되고 마지막 0.8미터는 직진해야 해서, 앞뒤 전환 없이 곡선 하나로 비킬 수 있는 폭은 약 0.4미터입니다. 그보다 많이 비켜 있으면 앞뒤 전환이 필요합니다. (전환)
 
 [Sources]
 화면 생성: 위 실행의 고정 시점 영상, 인식부터 들기까지 2배속, 진행 중인 계획을 바닥에 겹침 (prepare_ad_clips.py) · 왼쪽은 과제 제안서 그림
@@ -270,8 +270,8 @@ A 출발 (−0.5, 1.17, 0.006) → 인식 (−0.2, 1.17) 카메라–앞면 2.35
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="12  과제 접근 상황 A · B"><div class="slide-body">
 <h2 class="headline">과제 그림과 같은 자리에서 인식 → A는 바로 직진 · B는 S자 곡선으로 진입</h2>
-<div class="m7-cases2 grow"><div class="row"><p class="cap"><b>A 정면 정렬</b>1.15 m 직진 → 정렬 직진 → 삽입</p><div class="body"><img class="brief" src="assets/57_brief_a.png" alt="과제 제안서의 A 정면 정렬 그림"><video class="media" src="assets/56_case_a.mp4" poster="assets/56_case_a_poster.jpg" autoplay loop muted playsinline aria-label="A 정면 정렬 상황의 시뮬레이션. 1.15 m 직진 → 정렬 직진 → 삽입"></video></div></div><div class="row"><p class="cap"><b>B 옆으로 비켜 있음</b>0.35 m 옆에서 2.3 m S자 곡선 → 삽입</p><div class="body"><img class="brief" src="assets/57_brief_b.png" alt="과제 제안서의 B 옆으로 비켜 있음 그림"><video class="media" src="assets/56_case_b.mp4" poster="assets/56_case_b_poster.jpg" autoplay loop muted playsinline aria-label="B 옆으로 비켜 있음 상황의 시뮬레이션. 0.35 m 옆에서 2.3 m S자 곡선 → 삽입"></video></div></div><p class="legend">왼쪽: 과제 제안서 그림 (팔레트가 위) · 오른쪽: 시뮬레이션 (팔레트가 오른쪽) · 파랑: 전진 · 주황: 후진할 경로</p></div>
-<div class="takeaway">B의 한계: 인식 약 3.6 m 이내 · 마지막 직진 0.8 m → 멈추지 않고 비킬 수 있는 폭 약 0.4 m</div>
+<div class="m7-cases2 grow"><div class="row"><p class="cap"><b>A 정면 정렬</b>1.15 m 직진 → 정렬 직진 → 삽입</p><div class="body"><img class="brief" src="assets/57_brief_a.png" alt="과제 제안서의 A 정면 정렬 그림"><video class="media" src="assets/56_case_a.mp4" poster="assets/56_case_a_poster.jpg" autoplay loop muted playsinline aria-label="A 정면 정렬 상황의 시뮬레이션. 1.15 m 직진 → 정렬 직진 → 삽입"></video></div></div><div class="row"><p class="cap"><b>B 옆으로 비켜 있음</b>0.35 m 옆에서 2.3 m S자 곡선 → 한 번 멈춰 다시 관측 → 삽입</p><div class="body"><img class="brief" src="assets/57_brief_b.png" alt="과제 제안서의 B 옆으로 비켜 있음 그림"><video class="media" src="assets/56_case_b.mp4" poster="assets/56_case_b_poster.jpg" autoplay loop muted playsinline aria-label="B 옆으로 비켜 있음 상황의 시뮬레이션. 0.35 m 옆에서 2.3 m S자 곡선 → 한 번 멈춰 다시 관측 → 삽입"></video></div></div><p class="legend">왼쪽: 과제 제안서 그림 (팔레트가 위) · 오른쪽: 시뮬레이션 (팔레트가 오른쪽) · 파랑: 전진 · 주황: 후진할 경로</p></div>
+<div class="takeaway">B의 한계: 인식 약 3.6 m 이내 · 마지막 직진 0.8 m → 앞뒤 전환 없이 비킬 수 있는 폭 약 0.4 m</div>
 </div></x-import>
 </section>
 
@@ -365,7 +365,7 @@ T11 진입구 235 / 350 mm 두 해석, 어느 것도 채택하지 않음 (docs/d
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="17  리보틱스 확인 요청"><div class="slide-body">
 <h2 class="headline">확인 요청: 작업 범위 · 평가 기준 · 입력 조건 우선</h2>
-<div class="m7-info grow"><p class="ph">미팅에서 확인할 것</p><div class="tb"><table class="comparison m7-q"><tr><th>구분</th><th>질문</th></tr><tr class=pri><td class=grp rowspan=2>궁금한 것</td><td class="item">작업 범위: 제시한 운반 임무와 실제 작업 흐름의 일치 여부</td></tr><tr class=pri><td class="item">평가 기준: 요구 삽입 깊이 · 삽입 전 정지 허용 · 틸트 없는 운반 허용</td></tr><tr class=pri><td class=grp rowspan=5>결정 요청</td><td class="item">입력 조건: 팔레트 · 목적지 위치 제공 / 로봇 직접 탐색</td></tr><tr><td class="item">운용 환경: 실내 · 실외 · 통로 폭 · 바닥 · 낮은 장애물 · 사람 혼재</td></tr><tr><td class="item">팔레트: T11 포크 진입구 폭 235 / 350 mm · 하중</td></tr><tr><td class="item">시연 코스: 저희 차 크기로 줄인 실기시험 코스 사용 여부</td></tr><tr><td class="item">무선: 원격 정지 수준 · 여러 대 동시 운용 여부</td></tr><tr><td class=grp rowspan=1>제공 요청</td><td class="item">작업장 도면 · 운용 영상 · 사용 팔레트 도면</td></tr></table></div></div>
+<div class="m7-info grow"><p class="ph">미팅에서 확인할 것</p><div class="tb"><table class="comparison m7-q"><tr><th>구분</th><th>질문</th></tr><tr class=pri><td class=grp rowspan=2>궁금한 것</td><td class="item">작업 범위: 제시한 운반 임무와 실제 작업 흐름의 일치 여부</td></tr><tr class=pri><td class="item">평가 기준: 요구 삽입 깊이 · 삽입 직전 정지(다시 관측) 허용 · 틸트 없는 운반 허용</td></tr><tr class=pri><td class=grp rowspan=5>결정 요청</td><td class="item">입력 조건: 팔레트 · 목적지 위치 제공 / 로봇 직접 탐색</td></tr><tr><td class="item">운용 환경: 실내 · 실외 · 통로 폭 · 바닥 · 낮은 장애물 · 사람 혼재</td></tr><tr><td class="item">팔레트: T11 포크 진입구 폭 235 / 350 mm · 하중</td></tr><tr><td class="item">시연 코스: 저희 차 크기로 줄인 실기시험 코스 사용 여부</td></tr><tr><td class="item">무선: 원격 정지 수준 · 여러 대 동시 운용 여부</td></tr><tr><td class=grp rowspan=1>제공 요청</td><td class="item">작업장 도면 · 운용 영상 · 사용 팔레트 도면</td></tr></table></div></div>
 <div class="takeaway">합의 목표: 다음 실차 시험에 적용할 운용 조건과 판정 기준</div>
 </div></x-import>
 </section>
