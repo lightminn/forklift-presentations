@@ -39,6 +39,9 @@
 | 쪽 | 수치 | 출처와 정의 |
 |---|---|---|
 | 4 | Gemini 335Le 대신 D435i | 사용자 답변(2026-10-12): 전에 써 본 적이 있어 익숙함 · ROS 2 자료 · 예제가 많음. 335Le 사양은 https://www.orbbec.com/gemini-335le/ (Active & Passive Stereo, 기가비트 이더넷 M12, PoE 802.3af 또는 DC 9–24 V, IP67, 220 g) — 저장소에는 이유 기록이 없었음 |
+| 4 | A2 계열 중 A2M12 | 사용자 답변(2026-10-12): 이미 보유. docs/hardware.md 는 아직 "유력안" |
+| 5 | 들 수 있는 무게 10 kg | 사용자 답변(2026-10-12): 카탈로그 값. 시뮬레이션 팔레트 질량 10 kg(result.json settings_synthetic.pallet_mass_kg) |
+| 7 | 정격 3.8 A · 멈춤 10 A · 과전류 21 A 이상 · 측정 저항 1.5 kΩ | 사용자 답변(2026-10-12): 모터 12 V · 45 W, 권선 약 1.2 Ω → 45 / 12 = 3.75 A, 12 / 1.2 = 10 A. DRV8244-Q1 데이터시트 SLVSG24C 7.5.9: 과전류 보호 21–40 A(OCP_SEL 00, 기본 · HW 유일; SPI 로 15–31 · 10.5–24 A 도 고를 수 있음), 7.5.8: 전류 제한 ITRIP = VITRIP / RIPROPI × 4750, VITRIP 최대 2.97 V. 회로 초안 3.6 kΩ → 3.3 V 에서 4.35 A, 전류 제한 최대 3.92 A; 1.5 kΩ → 3.3 V 에서 10.45 A, 2.97 V 에서 9.4 A (계산, 팀 확정 전 "예정"). 연속 전류 표 7-1 DC 4.0 A(85 °C · 4층 2 oz) |
 | 5 | 회전 반경 약 2.5 m (계산, 사진 추정의 약 1.9배) | 0.66 / tan 15° = 2.46 m, 사진 추정 0.64 / tan 0.45 = 1.32 m (뒤차축, 자전거 모델), 비 1.86. 회전 원은 실측 전(`sim/models/dls08_measured/README.md`) |
 | 5 | EPAL 6 삽입 목표 33 cm (계산) | min(EPAL 6 깊이 600 × 0.6 = 360, 캐리지 한계 346 − 예비 16 = 330) mm — forklift CLAUDE.md. 규칙의 결과이고 캐리지 한계는 추정 위에 선 값 |
 | 8 | LiDAR · 깊이 카메라 · 잡음 · 마찰 | LiDAR A2M12 카탈로그(1,600빔 · 10 Hz · 0.2–12 m), 잡음 σ 0.02 m (`config/obstacle_layer_single.yaml`); 깊이 640 × 480, fx 465.74 → 수평 69.0° (D435i RGB 시야를 흉내 낸 합성 설정, 깊이 화각 87° 아님), 1 mm 양자화 · 잡음 없음 (S4b `pocket_camera`); 정지 · 운동 마찰 계수 0.8 / 0.7 (`config/isaac_transport.yaml`) |

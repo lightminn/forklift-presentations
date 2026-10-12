@@ -149,7 +149,7 @@ def system():
     for x, label in ((0, '센서'), (335, '상위 연산'), (690, '하위 제어'), (960, '구동')):
         c.text(x, 12, label, 20, colour=UOS, bold=True)
     c.box(0, 36, 270, 146, 'RGB-D 카메라', ['RealSense D435i', '캐리지 하단 (시뮬)'], 'fixed')
-    c.box(0, 196, 270, 146, '2D LiDAR', ['RPLIDAR A2', '높이 1.05 m (시뮬)'], 'fixed')
+    c.box(0, 196, 270, 146, '2D LiDAR', ['RPLIDAR A2M12 (보유)', '높이 1.05 m (시뮬)'], 'fixed')
     c.box(335, 36, 265, 306, 'Jetson Orin Nano', ['ROS 2 Jazzy', '팔레트 · 포켓 인식', 'SLAM (slam_toolbox)',
                                                   '경로 계획 (Hybrid A*)', '경로 추종 · 삽입 추적'], 'buy')
     c.box(690, 36, 200, 306, 'STM32 보드', ['속도 · 조향 · 승강', '엔코더 읽기', '비상 차단'], 'draft')
