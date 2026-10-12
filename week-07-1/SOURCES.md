@@ -30,7 +30,7 @@
 | `assets/41_structure.png` | 부록 1 (19쪽) | `prepare_figures.py` structure (matplotlib) — slam_pose · slam_link · obstacle_grid · drive_permission · planning_memory · scan_match · scan_docking 의 데이터 흐름을 위치 · 장애물 · 경로 · 하역 네 줄로 |
 | `assets/40_system.png` | 4 | `prepare_figures.py` system (matplotlib) — 하드웨어 기록과 5주차 회로 초안의 부품 · 상태. 모터 칸은 5주차 역분석 보고의 재사용 목록대로 "주행 · 리프트 (기존) · 조향 · 12 V 배터리" |
 | `assets/44_waveforms.png` | 6 | `prepare_figures.py hardware` — 5주차 `week-05/assets/data_la_edges.json`(DSLogic Pro 1 MHz 2채널, 주행 · 승강 · 조향)을 다시 그림. 숫자는 한 선이 켜져 있던 시간(10 ms 미만은 접점 튐), 짧은 세로선은 누르는 순간 두 선이 2.95–3.43 ms 같이 켜진 것 |
-| `assets/43_la_setup.jpg` | 6 | 5주차 `37_la_setup.jpg`(2026-09-29–30 측정 사진, EXIF 제거)에서 릴레이 기판과 탐침 부분만 자름(사람이 찍힌 아래쪽 제외) |
+| `assets/43_la_setup.jpg` | 6 | 5주차 `37_la_setup.jpg`(2026-09-29–30 측정 사진, 1050 × 1400, EXIF 제거)에서 릴레이 기판 전체(케이스 위 고리 ~ 기판 아래 끝)와 탐침이 들어가도록 전체 폭 · 세로 672–1098 px 를 자름(1050 × 426, 사람이 찍힌 아래쪽 제외). 슬라이드에서는 이 비율 그대로(잘라 내지 않음) 보임 |
 | `assets/45_sch_drv_channel.png` | 7 | 5주차 팀 회로 초안 `40_sch_drv8244.png` 의 L 채널(DRV8244 한 개)을 잘라 2배 확대 |
 | `30_chassis_pallet.jpg` | 5 | 5주차 자산 그대로(2026-09-30 실물 사진, EXIF 제거) |
 | `71_mission.mp4` · `46_new_obstacle_single.mp4` · `45_slam_error.mp4` | 3 · 11 · 부록 2 | 위 '글자 없는 재합성'에서 자름 (`prepare_clips.py mission · obstacle · slam`): 조감 칸 12배속 / 6주차 7쪽과 같은 73–118 s 구간의 조감 + 지도 칸 2배속 / 지도 칸 + 오차 두 줄 12배속. 영상 위 글자 없이, 색 의미는 슬라이드 범례(합성기의 RGB 값: 계획 경로 255, 214, 0 · 직전 경로 150, 150, 160 · LiDAR 칸 255, 130, 30 · 새 장애물 윤곽 255, 40, 40 · 실제 70, 150, 255 · SLAM 235, 45, 45 · 오도메트리 255, 160, 30 · 목적지 0, 200, 60). 6주차 영상(글자 있음)은 week-06 에 그대로 |

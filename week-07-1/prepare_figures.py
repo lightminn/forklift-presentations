@@ -26,7 +26,7 @@ Writes assets/ (published with the page; the deck font Noto Sans CJK is the syst
 6. `hardware` -- from the week 5 records in ../week-05/assets: 44_waveforms.png, the existing
    controller's two lines per command redrawn from data_la_edges.json (DSLogic Pro, 1 MHz; the
    numbers are the time a line stayed high, runs under 10 ms are contact bounce); 43_la_setup.jpg,
-   the measurement photo cropped to the relay board and its probes (no people); 45_sch_drv_channel.png, one DRV8244
+   the measurement photo cropped to the whole relay board and its probes, full width (no people); 45_sch_drv_channel.png, one DRV8244
    channel of the circuit draft (40_sch_drv8244.png) enlarged 2x.
 
 7. `brief` -- 57_brief_{a,b,c,d}.png, the brief's own drawings of cases A-D (slides 8-11) without title
@@ -409,7 +409,8 @@ def hardware_photos():
     """The week 5 measurement photo without the people at the bottom, and one driver channel of
     the circuit draft enlarged (the three channels are the same circuit)."""
     from PIL import Image
-    Image.open(WEEK5 / '37_la_setup.jpg').crop((100, 600, 1050, 990)).save(ASSETS / '43_la_setup.jpg', quality=88)
+    # the whole relay board (housing tab to the board's bottom edge), full width: 1050 x 426, 2.47 : 1
+    Image.open(WEEK5 / '37_la_setup.jpg').crop((0, 672, 1050, 1098)).save(ASSETS / '43_la_setup.jpg', quality=88)
     sch = Image.open(WEEK5 / '40_sch_drv8244.png').convert('RGB').crop((95, 100, 722, 408))
     sch.resize((sch.width * 2, sch.height * 2), Image.LANCZOS).save(ASSETS / '45_sch_drv_channel.png')
     return ['43_la_setup.jpg', '45_sch_drv_channel.png']

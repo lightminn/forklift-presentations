@@ -693,3 +693,8 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .legend .sw.ramp { width:132px; height:12px; border-radius:2px; }
 .legend .sw.none { width:12px; height:12px; border:1px solid #6b7480; }
 .legend .sep { display:inline-block; width:1px; height:15px; background:currentColor; opacity:.35; }
+/* 6: the whole relay board in view -- the photo keeps its own aspect (1050 x 426) instead of a cover crop,
+   the table takes the height left under it */
+.m7-info > .m7-photo { flex:none; width:100%; height:auto; aspect-ratio:1050 / 426; object-fit:contain; }
+.comparison.t6.m7-ctrl { font-size:19px; line-height:1.3; }
+.comparison.t6.m7-ctrl th, .comparison.t6.m7-ctrl td { padding:8px 12px; }
