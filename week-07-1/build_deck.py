@@ -516,7 +516,7 @@ EXAM = [  # item, exam (disqualification unless noted), ours (simulation), verdi
     ('운반 중 포크 높이', '20–30 cm 유지 (50 cm 초과 시 실격)', '포크 높이 약 19–22 cm (하면–상면)', 'like'),
     ('틸트', '마스트 각도 조절', '틸트 기구 없음', 'diff'),
 ]
-VERDICT = {'ok': ('충족', 'ok'), 'like': ('경계', 'like'), 'diff': ('미적용', 'diff')}
+VERDICT = {'ok': ('기준 충족', 'ok'), 'like': ('하한 근접', 'like'), 'diff': ('기구 없음', 'diff')}
 exam_rows = ''.join(f'<tr><td>{a}</td><td>{b}</td><td>{c}</td><td><span class="m7-v {VERDICT[v][1]}">{VERDICT[v][0]}</span></td></tr>'
                     for a, b, c, v in EXAM)
 add('자격시험 기준 비교', '지게차운전기능사 실기 기준과 비교', 55, f"""
