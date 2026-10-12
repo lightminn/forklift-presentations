@@ -3,7 +3,7 @@
 <link rel="icon" href="data:,">
 <script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>리보틱스 중간 미팅 · 자율 지게차 중간 점검</title>
-<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=2a7d99265204"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=4d2a809eaf6a"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 <section class="title-section" data-label="리보틱스 중간 미팅" data-screen-label="01" data-duration="20" data-speaker-notes="권장 20초
 
@@ -18,9 +18,9 @@
 중간 점검" subtitle="팔레트 핸들링 경로 생성 및 제어"></x-import><img class="partner-mark" src="assets/riibotics-logo.png" alt="Riibotics">
 </section>
 
-<section data-label="과제 이해와 진행 현황" data-screen-label="02" data-duration="75" data-speaker-notes="권장 75초
+<section data-label="과제 이해와 진행 현황" data-screen-label="02" data-duration="65" data-speaker-notes="권장 65초
 
-먼저 과제 제안서의 항목마다 어떻게 접근하고 있고 어디까지 왔는지입니다. 센서는 제안서대로 RGB-D 카메라 한 대와 2D LiDAR 한 대입니다. 카메라는 같은 RGB-D 방식인 D435i로 정했고, 팔레트 규격 치수로 포켓을 찾습니다. LiDAR는 A2 계열의 A2M12를 쓸 예정이고, 위치 보정과 장애물 판단에 같이 씁니다. 플랫폼은 소형 전동 지게차 차체를 들여와 재 보고 기존 제어기를 분석했으며, 속도를 조절하기 위해 구동 보드를 새로 설계하고 있습니다. 두 가지 목적인 장애물을 피하는 경로와 삽입 중 포켓 추적, 그리고 인식부터 하역까지 다섯 단계는 시뮬레이션에서 한 임무로 이어서 돌아갑니다. 예시 A는 확인했고, B는 곡선으로 다가가지만 삽입 전에 한 번 멈춰 다시 봅니다. 멈추지 않고 넣는 B와 C, D는 다음 단계입니다. 실물은 구동 보드를 만든 뒤 센서를 붙여 A부터 실차로 옮깁니다. 먼저 시뮬레이션 임무 전체를 보여 드린 뒤, 하드웨어, 인식과 포켓 추적, 경로 계획 순서로 말씀드리겠습니다. (전환)
+먼저 과제 제안서의 항목마다 어떻게 접근하고 있고 어디까지 왔는지입니다. 센서는 제안서대로 RGB-D 카메라 한 대와 2D LiDAR 한 대입니다. 카메라는 같은 RGB-D 방식인 D435i로 정했고, 팔레트 규격 치수로 포켓을 찾습니다. LiDAR는 A2 계열의 A2M12를 쓸 예정이고, 위치 보정과 장애물 판단에 같이 씁니다. 플랫폼은 소형 전동 지게차 차체를 들여와 재 보고 기존 제어기를 분석했으며, 속도를 조절하기 위해 구동 보드를 새로 설계하고 있습니다. 두 가지 목적인 장애물을 피하는 경로와 삽입 중 포켓 추적, 그리고 인식부터 하역까지 다섯 단계는 시뮬레이션에서 한 임무로 이어서 돌아갑니다. 예시 네 가지는 뒤에서 영상으로 보여 드리는데, A, C, D는 인식부터 삽입까지 되고, B는 곡선으로 다가가지만 삽입 전에 한 번 멈춰 다시 봅니다. 실물은 구동 보드를 만든 뒤 센서를 붙여 A부터 실차로 옮깁니다. 먼저 시뮬레이션 임무 전체를 보여 드린 뒤, 하드웨어, 인식과 포켓 추적, 경로 계획 순서로 말씀드리겠습니다. (전환)
 
 [Sources]
 출처: 과제 제안서 · 하드웨어 기록 · 실행 기록
@@ -28,14 +28,14 @@
 D435i 확정 · RPLIDAR A2 계획(A2M12 유력, 미구매) · Jetson 미구매: docs/hardware.md
 인식(카메라 깊이) → 위치 → LiDAR 1대 장애물 지도 + Hybrid A* → 근접 추적 삽입 → 운반 · 하역 · 복귀, 한 임무 완주 (2026-10-11), 금지 접촉 0: ws1 artifacts/20261011_s4b/smoke/seed_1_v0.055
 현재 설정 9회 모두 완주 (새 상자 장면 포함): ws1 artifacts/20261008_d7_isaac/v2/d7
-A–D 를 모든 계획기 · 제어기의 시험 사례로 사용; C · D 는 아직 별도 확인 전: forklift CLAUDE.md
+A–D 를 seed 5 에서 인식 자리만 바꿔 한 번씩 실행, 네 경우 모두 success complete · 금지 접촉 0 (A–D 장): ws1 artifacts/20261012_meeting_ad
 B 는 멈추지 않고 삽입 — 멈춘 뒤 정렬하는 구현은 B 완료로 표시하지 않음(:161); 기능 통과 A–D 각 20회 중 19회(:226). 지금 실행은 정렬 직진 시작(2.1 m)에서 멈춰 다시 관측, EPAL 6 · 장면당 1회: docs/plans/2026-09-11-development-roadmap.md
 차체 실측 · 제어기 역분석(릴레이 on/off, 속도 조절 없음) → DRV8244 구동 보드 회로 초안: week-05/SCRIPT.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="01  과제 제안서 항목별 접근과 현황"><div class="slide-body">
 <h2 class="headline">과제 제안서 항목별 접근: 시뮬레이션에서 전 과정 연결 · 실물은 구동 보드 설계 단계</h2>
-<div class="m7-info grow"><p class="ph">과제 제안서 → 저희 접근 → 현황</p><div class="tb"><table class="comparison m7-brief"><tr><th>과제 제안서</th><th>저희 접근</th><th>시뮬레이션</th><th>실물</th></tr><tr><td>팔레트 인식 · RGB-D</td><td>D435i · 규격 치수로 포켓 인식</td><td><span class="m7-tag ok">확인</span>깊이 영상 포켓 위치 · 방향</td><td class="real">카메라 시험 전</td></tr><tr><td>위치 · 장애물 · 2D LiDAR</td><td>RPLIDAR A2M12 · 위치 보정 + 장애물 격자</td><td><span class="m7-tag ok">확인</span>새 장애물 정지 · 재계획</td><td class="real">구매 · 시험 전</td></tr><tr><td>플랫폼 · 소형 지게차 개조</td><td>소형 전동 지게차 + 구동 보드 자체 제작</td><td><span class="m7-tag ok">확인</span>실측 차체 모델</td><td class="real">보드 설계 중</td></tr><tr><td>목적 ① 장애물 회피 경로</td><td>Hybrid A* (전진 · 후진)</td><td><span class="m7-tag ok">확인</span>충돌 없이 완주</td><td class="real">실차 주행 후</td></tr><tr><td>목적 ② 삽입 중 포켓 추적</td><td>캐리지 하단 카메라 · 직전 보정 · 간격 감시</td><td><span class="m7-tag ok">확인</span>접촉 없이 삽입</td><td class="real">장착 · 보정 전</td></tr><tr><td>프로세스 ①–⑤</td><td>인식 → 위치 → 경로 → 삽입 → 하역</td><td><span class="m7-tag ok">확인</span>한 임무로 완주</td><td class="real">구동 보드 제작 후</td></tr><tr><td>예시 A–D</td><td>A 직진 · B 곡선 · C 후진 · D 재정렬</td><td><span class="m7-tag ok">확인</span>A <span class="m7-tag part">일부</span>B <span class="m7-tag next">다음 단계</span>C · D</td><td class="real">실차 A부터</td></tr></table></div></div>
-<div class="takeaway">남은 것: B 무정지 삽입 · C · D · 반복 평가 · 실물 센서 시험 · 실차 주행</div>
+<div class="m7-info grow"><p class="ph">과제 제안서 → 저희 접근 → 현황</p><div class="tb"><table class="comparison m7-brief"><tr><th>과제 제안서</th><th>저희 접근</th><th>시뮬레이션</th><th>실물</th></tr><tr><td>팔레트 인식 · RGB-D</td><td>D435i · 규격 치수로 포켓 인식</td><td><span class="m7-tag ok">확인</span>깊이 영상 포켓 위치 · 방향</td><td class="real">카메라 시험 전</td></tr><tr><td>위치 · 장애물 · 2D LiDAR</td><td>RPLIDAR A2M12 · 위치 보정 + 장애물 격자</td><td><span class="m7-tag ok">확인</span>새 장애물 정지 · 재계획</td><td class="real">구매 · 시험 전</td></tr><tr><td>플랫폼 · 소형 지게차 개조</td><td>소형 전동 지게차 + 구동 보드 자체 제작</td><td><span class="m7-tag ok">확인</span>실측 차체 모델</td><td class="real">보드 설계 중</td></tr><tr><td>목적 ① 장애물 회피 경로</td><td>Hybrid A* (전진 · 후진)</td><td><span class="m7-tag ok">확인</span>충돌 없이 완주</td><td class="real">실차 주행 후</td></tr><tr><td>목적 ② 삽입 중 포켓 추적</td><td>캐리지 하단 카메라 · 직전 보정 · 간격 감시</td><td><span class="m7-tag ok">확인</span>접촉 없이 삽입</td><td class="real">장착 · 보정 전</td></tr><tr><td>프로세스 ①–⑤</td><td>인식 → 위치 → 경로 → 삽입 → 하역</td><td><span class="m7-tag ok">확인</span>한 임무로 완주</td><td class="real">구동 보드 제작 후</td></tr><tr><td>예시 A–D</td><td>A 직진 · B 곡선 · C 후진 · D 재정렬</td><td><span class="m7-tag ok">확인</span>A · C · D <span class="m7-tag part">일부</span>B</td><td class="real">실차 A부터</td></tr></table></div></div>
+<div class="takeaway">남은 것: B 무정지 삽입 · A–D 반복 평가 · 실물 센서 시험 · 실차 주행</div>
 </div></x-import>
 </section>
 
@@ -137,7 +137,7 @@ MT6701 Rev.1.5 — 14 bit 절대각(SSI · I2C), ABZ 증분 ≤ 1024 PPR, 자석
 </div></x-import>
 </section>
 
-<section data-label="시뮬레이션 환경" data-screen-label="08" data-duration="60" data-speaker-notes="권장 60초
+<section data-label="시뮬레이션 환경" data-screen-label="08" data-duration="50" data-speaker-notes="권장 50초
 
 실차 주행 전까지는 Isaac Sim에서 개발합니다. 공장 홀 장면에 실측 차체 값을 넣고 물리는 120헤르츠로 돌립니다. 지게차는 바퀴 토크로 실제로 굴러가고, 팔레트도 고정하지 않고 포크로 들어 올립니다. LiDAR는 A2M12 카탈로그 값으로, 깊이 영상은 D435i 컬러 카메라 화각에 맞춰 합성합니다. SLAM은 ROS 2의 slam_toolbox로 돌리고, 시뮬레이터는 스캔마다 SLAM 결과를 받은 뒤 다음으로 넘어갑니다. 주황색은 가정값입니다. 낮은 바닥 장애물은 없다고 가정했고, 바퀴 마찰과 구동 토크는 일반적인 범위의 값을 넣었습니다. LiDAR 잡음도 가정값이고, 깊이 영상에는 아직 잡음이 없습니다. 이 값들은 실측이 나오면 먼저 바꿉니다. (전환)
 
@@ -231,7 +231,7 @@ Dolgov et al., Practical Search Techniques in Path Planning for Autonomous Drivi
 </div></x-import>
 </section>
 
-<section data-label="후진을 고르는 이유" data-screen-label="12" data-duration="90" data-speaker-notes="권장 90초
+<section data-label="후진을 고르는 이유" data-screen-label="12" data-duration="85" data-speaker-notes="권장 85초
 
 답은 큰 회전 반경입니다. 경로 비용을 셀 때 후진한 거리는 1.3배로 치고, 전진과 후진을 바꿀 때마다 1미터를 더하므로, 전진만으로 갈 수 있으면 전진을 고릅니다. 왼쪽은 앞의 상자 장면을 다시 돌려 위에서 비스듬히 본 영상입니다. 멈춘 자리에서 상자는 앞으로 2미터, 오른쪽으로 0.6미터에 있었고, 노란 원래 경로는 가장 작게 꺾는 길인데도 상자 위를 지납니다. 빨간 띠는 그 자리에서 가장 작게 꺾어 돌 때 차체가 지나가는 자리로, 상자가 그 안에 있습니다. 그래서 1.75미터 후진해 거리를 번 뒤 꺾어서 상자를 비켜 갑니다. 오른쪽은 앞뒤로 움직일 때의 특성입니다. 목적지 바로 앞에서 방향이 1.3도만 틀어져도, 전진만 쓰면 계획에 쓰는 회전 반경 3.45미터로 지름 약 7미터 원을 한 바퀴, 21.7미터를 돌아야 맞출 수 있습니다. 그래서 목적지에 붙는 마지막 연결에 앞뒤 전환을 허용했습니다. 오른쪽 확대 그림처럼 같은 자리에서 앞으로 0.5미터, 뒤로 0.5미터 움직여 1미터로 끝났고, 다른 목적지 앞 계획에서도 한 바퀴 경로는 나오지 않았습니다. C, D처럼 먼저 물러나야 하는 상황에도 이 계획을 쓸 예정입니다. (전환)
 
@@ -257,7 +257,27 @@ D7 CPU 판정: 운반 목표 고리 1,686 → 0 (목표당 2,376 계획), 목표
 </div></x-import>
 </section>
 
-<section data-label="자격시험 기준 비교" data-screen-label="13" data-duration="55" data-speaker-notes="권장 55초
+<section data-label="접근 상황 A–D" data-screen-label="13" data-duration="70" data-speaker-notes="권장 70초
+
+과제 문서의 네 가지 접근 상황을 같은 장면에서 인식하는 자리만 바꿔 돌렸습니다. 파란 선은 전진, 주황 선은 후진할 경로입니다. A는 팔레트 정면에서 인식해 그대로 직진해 넣습니다. B는 옆으로 비켜 비스듬히 선 경우로, 한 번 꺾어 정렬 직선에 들어간 뒤 다시 보고 넣습니다. 다만 팔레트는 약 3.6미터 안에서 인식되고 마지막 2.1미터는 직진해야 해서, 곡선으로 비킬 구간이 약 1미터뿐입니다. 그래서 옆으로 많이 비켜 있으면 앞뒤 전환이 필요합니다. C는 너무 가까운 경우로, 조금 전진해 방향을 잡은 뒤 1.8미터 후진해 거리를 벌리고 넣습니다. D는 같은 자리에서 정렬 위치 바로 뒤에 상자가 있는 경우로, 상자와 0.3미터 간격을 두고 후진해 정렬한 뒤 넣습니다. 네 경우 모두 포크가 팔레트에 닿지 않고 운반과 하역까지 마쳤습니다. (전환)
+
+[Sources]
+화면 생성: 위 네 실행의 고정 시점 영상, 인식부터 들기까지 2배속, 진행 중인 계획을 바닥에 겹침 (prepare_ad_clips.py)
+meeting_ad.sbatch: 녹화 실행과 같은 현재 설정(d7 팔: --d7-planner --d7-docking, 실측 차체, LiDAR 1대, SLAM, 복귀 포함) · seed 5 · 관측 후보 하나(상황별 인식 자리) · 고정 시점(--extra-views quarter, 눈 0.6, −5.0, 7.0 · 대상 0.6, 1.1, 0 · 초점 2.2). 스냅숏 p5_s4b_b66271f_worldbox = b66271f + 월드 좌표 상자(new_obstacles.py frame: world, WORLDBOX_PATCH.txt): ws1 artifacts/20261012_meeting_ad
+A 인식 (−1.4, 1.16, 0.006) → 1.05 m 전진, 하역 16.9 mm; B4 (−1.45, 0.98, 0.30) 카메라–앞면 3.64 m → 1.07 m 전진(기어 전환 없음); C (0.4, 0.8, 0) → 0.91 m 전진 · 1.79 m 후진; D2 같은 자리 + 상자 (−1.05, 1.13) 0.4 × 0.4 × 1.3 m → 0.99 m 전진 · 1.87 m 후진, 차체–상자 최소 0.31 m. 모두 success complete, 금지 접촉 0, 진입 0.32–0.33 m, 하역 16.9 · 28.7 · 28.7 · 24.2 mm: ws1 artifacts/20261012_meeting_ad/case_A · case_B4 · case_C · case_D2
+카메라–앞면 4.57 · 4.09 · 4.29 m 에서 모두 no_opening_pattern (인식 실패); 성공은 3.55 (A) · 3.64 m (B4) — 깊이 잡음 없는 합성 영상에서의 값. case_B3 는 도착 자세 차이로 짧은 앞뒤 전환이 끼어 쓰지 않음, case_D 는 상자가 0.45 m 떨어져 경로가 C 와 같음: ws1 artifacts/20261012_meeting_ad/case_B_failed_4.57m · case_B_failed_4.09m · case_B2_failed_4.29m
+인식 자리를 고를 때 b66271f 계획기로 CPU 미리보기 — 실제 실행의 경로는 도착 자세 · LiDAR 격자 차이로 다를 수 있음(C 는 미리보기의 후진 먼저 대신 전진 먼저): ad_preview.py (같은 디렉터리)
+정렬 직진 시작의 카메라는 앞면에서 0.11 + 1.29 + 2.1 − 0.959 = 2.54 m; 인식 약 3.6 m 이내면 곡선 구간 약 1 m; 반경 3.45 m 원호 1 m 의 옆 이동 약 0.15 m: 계산
+예시 A–D (8–11쪽): docs/references/quest.txt (과제 문서)
+[/Sources]" style="background:#fff">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="12  과제 접근 상황 A–D"><div class="slide-body">
+<h2 class="headline">과제 접근 상황 A–D: 같은 장면에서 인식 자리만 바꿔 네 경우 모두 접촉 없이 삽입 · 하역</h2>
+<div class="m7-quad grow"><div class="cell"><p class="cap"><b>A 정면 정렬</b>1.05 m 직진 → 삽입</p><video class="media" src="assets/56_case_a.mp4" poster="assets/56_case_a_poster.jpg" autoplay loop muted playsinline aria-label="A 정면 정렬 상황. 인식한 자리에서 1.05 m 직진 → 삽입"></video></div><div class="cell"><p class="cap"><b>B 옆으로 비켜 있음</b>1.07 m 곡선 → 다시 관측 → 삽입</p><video class="media" src="assets/56_case_b.mp4" poster="assets/56_case_b_poster.jpg" autoplay loop muted playsinline aria-label="B 옆으로 비켜 있음 상황. 인식한 자리에서 1.07 m 곡선 → 다시 관측 → 삽입"></video></div><div class="cell"><p class="cap"><b>C 너무 가까움</b>0.9 m 전진 → 1.8 m 후진 → 삽입</p><video class="media" src="assets/56_case_c.mp4" poster="assets/56_case_c_poster.jpg" autoplay loop muted playsinline aria-label="C 너무 가까움 상황. 인식한 자리에서 0.9 m 전진 → 1.8 m 후진 → 삽입"></video></div><div class="cell"><p class="cap"><b>D 가깝고 뒤에 장애물</b>상자와 0.3 m 두고 후진 → 삽입</p><video class="media" src="assets/56_case_d.mp4" poster="assets/56_case_d_poster.jpg" autoplay loop muted playsinline aria-label="D 가깝고 뒤에 장애물 상황. 인식한 자리에서 상자와 0.3 m 두고 후진 → 삽입"></video></div><p class="legend">파랑: 전진할 경로 · 주황: 후진할 경로 · 가는 선은 시뮬레이터가 그린 계획 표시</p></div>
+<div class="takeaway">B의 한계: 인식 약 3.6 m · 정렬 직진 2.1 m 사이 곡선 구간이 약 1 m → 옆으로 많이 비켜 있으면 앞뒤 전환 필요</div>
+</div></x-import>
+</section>
+
+<section data-label="자격시험 기준 비교" data-screen-label="14" data-duration="55" data-speaker-notes="권장 55초
 
 사람이 운전하는 지게차의 기준과 비교하려고 지게차운전기능사 실기시험과 대조했습니다. 시험은 팔레트를 싣고 코스를 돈 뒤 내려놓는 과제라 작업 흐름이 저희 임무와 비슷합니다. 하역 위치가 20센티미터 넘게 어긋나거나, 포크를 20센티미터 넘게 덜 넣거나, 화물을 떨어뜨리거나 팔레트를 밀면 실격인데, 시뮬레이션 결과는 모두 이 기준 안입니다. 운반 중 포크 높이는 약 20센티미터로 권장 범위의 아래 끝입니다. 마스트를 기울이는 틸트 기구는 없어서, 틸트 없이 운반해도 되는지는 마지막에 여쭤보겠습니다. 시험 기준은 실제 지게차 크기라, 코스 치수가 차폭의 배수인 점을 이용해 저희 차 크기로 줄인 코스를 시뮬레이션 평가에 쓰는 것을 제안드립니다. (전환)
 
@@ -271,14 +291,14 @@ insertion_measured: D7 v2 20.4–26.1 mm, 녹화 장면 5 · 1: 25.6 · 35.5 mm,
 10쪽 표준 운용 절차 대조 — 틸트 기구 없음: week-05/SCRIPT.md
 §2 실제 지게차 자격증 시험 기준과 우리 지게차 비교 표 (3주차 피드백: 국가공인 시험의 표준 운용 방법): docs/references/week6_feedback.md
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="12  지게차운전기능사 실기 기준과 비교"><div class="slide-body">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="13  지게차운전기능사 실기 기준과 비교"><div class="slide-body">
 <h2 class="headline">지게차운전기능사 실기 기준 대비: 하역 · 삽입 · 낙하는 기준 안 · 틸트 기구는 없음</h2>
 <div class="m7-info grow"><p class="ph">실기시험 기준 대비 (시험 기준은 실제 지게차 크기)</p><div class="tb"><table class="comparison m7-exam"><tr><th>항목</th><th>실기시험 (2025 공개문제)</th><th>저희 지게차 (시뮬레이션)</th><th>비교</th></tr><tr><td>하역 위치</td><td>가로 · 세로 20 cm 넘게 어긋나면 실격</td><td>하역 오차 약 3 cm 이하 (기준의 약 1/7)</td><td><span class="m7-v ok">기준 안</span></td></tr><tr><td>포크 삽입</td><td>덜 넣은 정도 20 cm 넘으면 실격</td><td>덜 넣은 정도 약 2–4 cm</td><td><span class="m7-v ok">기준 안</span></td></tr><tr><td>낙하 · 밀림</td><td>화물 낙하 · 팔레트를 밀면 실격</td><td>낙하 · 밀림 없음</td><td><span class="m7-v ok">기준 안</span></td></tr><tr><td>운반 중 포크 높이</td><td>20–30 cm 유지 (50 cm 넘으면 실격)</td><td>포크 약 19–22 cm (밑면–윗면)</td><td><span class="m7-v like">비슷</span></td></tr><tr><td>틸트</td><td>마스트 각도 조절</td><td>틸트 기구 없음</td><td><span class="m7-v diff">다름</span></td></tr></table></div></div>
 <div class="takeaway">제안: 코스 치수는 차폭 (바깥 타이어 간 거리)의 배수 → 저희 차 크기로 줄인 코스를 시뮬레이션 평가에 사용</div>
 </div></x-import>
 </section>
 
-<section data-label="결론" data-screen-label="14" data-duration="40" data-speaker-notes="권장 40초
+<section data-label="결론" data-screen-label="15" data-duration="40" data-speaker-notes="권장 40초
 
 정리하면, 실측 차체와 시뮬레이션에서 확인한 것에 맞춰 방향을 정했습니다. 회전 반경이 커서 전진·후진 경로를 넣었고, 삽입 끝까지 보도록 카메라를 캐리지 하단으로 옮겼습니다. 속도를 조절할 수 없는 기존 제어기 대신 구동 보드를 만들고, 깊이 영상은 Wi-Fi로 보내지 않고 차에서 기록하며 비상정지는 따로 둡니다. LiDAR보다 낮은 바닥 장애물이 없다는 가정은 현장 조건으로 확인받고자 합니다. 다음 목표는 이 임무를 실차로 옮기는 것입니다. (전환)
 
@@ -291,16 +311,16 @@ insertion_measured: D7 v2 20.4–26.1 mm, 녹화 장면 5 · 1: 25.6 · 35.5 mm,
 과제 센서 구성(RGB-D 1 · 2D LiDAR 1) 유지, 낮은 장애물은 운용 가정: forklift CLAUDE.md
 §2 결론 장표 — 무엇이 어떻게 달라지니까 무엇으로 가야 하는지: docs/references/week6_feedback.md
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="13  결론"><div class="slide-body">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="14  결론"><div class="slide-body">
 <h2 class="headline">실측 차체 · 과제 센서의 제약에 맞춰 경로 · 카메라 · 구동부 · 통신 방향 결정</h2>
 <div class="m7-info grow"><p class="ph">확인한 것과 그에 따른 방향</p><div class="tb"><table class="comparison plan6 m7-concl"><tr><th class="c1">확인한 것</th><th class="c2">그래서</th><th class="c3"></th><th class="c4">정한 방향</th></tr><tr><td>실측 조향각 15°</td><td class="cur">회전 반경 약 2.5 m (사진 추정의 약 1.9배)</td><td class="arrow">→</td><td class="nxt">앞뒤로 움직여 방향 맞추는 경로</td></tr><tr><td>높은 카메라 장착</td><td class="cur">삽입 마지막 약 0.25 m 화면 밖</td><td class="arrow">→</td><td class="nxt">캐리지 하단 장착 · 직전 보정 · 삽입 중 감시</td></tr><tr><td>기존 제어기</td><td class="cur">릴레이로 켜기 · 끄기만 가능</td><td class="arrow">→</td><td class="nxt">자체 구동 보드 (속도 · 조향각 제어)</td></tr><tr><td>무압축 깊이 영상</td><td class="cur">약 200 Mbit/s → Wi-Fi 실시간 전송 어려움</td><td class="arrow">→</td><td class="nxt">차에서 기록 · 상태만 전송 · 비상정지 별도</td></tr><tr><td>LiDAR 높이 1.05 m</td><td class="cur">그보다 낮은 바닥 장애물은 못 봄</td><td class="arrow">→</td><td class="nxt">운용 가정으로 명시 · 현장 조건 확인</td></tr></table></div></div>
 <div class="takeaway">다음 목표: 시뮬레이션 임무를 실차로 (구동 보드 · 센서 연결 → 실차 인식 · 위치 추정 → 전체 임무)</div>
 </div></x-import>
 </section>
 
-<section data-label="남은 과제와 일정" data-screen-label="15" data-duration="35" data-speaker-notes="권장 35초
+<section data-label="남은 과제와 일정" data-screen-label="16" data-duration="35" data-speaker-notes="권장 35초
 
-남은 일정입니다. 중간고사 전에는 모터 전류를 재서 구동 보드 PCB를 설계하고, 시뮬레이션에서 C, D 상황을 확인합니다. 중간고사 뒤에는 구동 보드를 만들고 Jetson에 센서를 연결합니다. 11월 중순부터 실차로 위치 추정과 팔레트 인식을, 12월 초까지 실차 전체 임무를 확인하고, 마지막 주에 최종 시연을 준비합니다. 일정은 실물 진행에 따라 조정될 수 있습니다. (전환)
+남은 일정입니다. 중간고사 전에는 모터 전류를 재서 구동 보드 PCB를 설계하고, 시뮬레이션에서 A–D를 여러 장면으로 반복 평가합니다. 중간고사 뒤에는 구동 보드를 만들고 Jetson에 센서를 연결합니다. 11월 중순부터 실차로 위치 추정과 팔레트 인식을, 12월 초까지 실차 전체 임무를 확인하고, 마지막 주에 최종 시연을 준비합니다. 일정은 실물 진행에 따라 조정될 수 있습니다. (전환)
 
 [Sources]
 출처: 개발 로드맵 달력 · 6주차 다음 작업 (실물 일정은 팀 계획)
@@ -308,14 +328,14 @@ insertion_measured: D7 v2 20.4–26.1 mm, 녹화 장면 5 · 1: 25.6 · 35.5 mm,
 8쪽 다음 작업: 모터 전류 실측 → 전류 제한 · 방열 → PCB, 가정값 실측 교체, 센서 브래킷: week-06/build_deck.py
 시험 팔레트 만드는 방법(3D 프린터 · 스티로폼 · 목재 재단) — 11/13–26 배치는 팀 확인 전 제안: docs/references/week3_feedback.md
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="14  남은 과제와 일정"><div class="slide-body">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="15  남은 과제와 일정"><div class="slide-body">
 <h2 class="headline">남은 일정: 중간고사 전 구동 보드 설계 → 11월 실차 주행 → 12월 중순 최종 시연</h2>
-<div class="m7-info grow"><p class="ph">기간별 계획</p><div class="tb"><table class="comparison m7-sched"><tr><th>기간</th><th>소프트웨어</th><th>하드웨어</th></tr><tr><td>10/16–22</td><td>여러 장면 반복 · C · D 상황 확인</td><td>모터 전류 실측 · 구동 보드 PCB 설계</td></tr><tr class="exam"><td>10/23–29</td><td colspan="2">중간고사</td></tr><tr><td>10/30–11/12</td><td>실물 센서 연결 (Jetson · 카메라 · LiDAR)</td><td>구동 보드 제작 · 속도 · 조향 제어</td></tr><tr><td>11/13–26</td><td>실차 위치 추정 · 실물 팔레트 인식</td><td>센서 브래킷 장착 · 좌표 보정 · 시험 팔레트 제작</td></tr><tr><td>11/27–12/10</td><td>실차 A 전체 임무 확인 → B · C · D 확대</td><td>반복 시험 · 가정값을 실측값으로 교체</td></tr><tr><td>12/11–17</td><td colspan="2">최종 시연 준비</td></tr></table></div></div>
+<div class="m7-info grow"><p class="ph">기간별 계획</p><div class="tb"><table class="comparison m7-sched"><tr><th>기간</th><th>소프트웨어</th><th>하드웨어</th></tr><tr><td>10/16–22</td><td>여러 장면 · A–D 반복 평가</td><td>모터 전류 실측 · 구동 보드 PCB 설계</td></tr><tr class="exam"><td>10/23–29</td><td colspan="2">중간고사</td></tr><tr><td>10/30–11/12</td><td>실물 센서 연결 (Jetson · 카메라 · LiDAR)</td><td>구동 보드 제작 · 속도 · 조향 제어</td></tr><tr><td>11/13–26</td><td>실차 위치 추정 · 실물 팔레트 인식</td><td>센서 브래킷 장착 · 좌표 보정 · 시험 팔레트 제작</td></tr><tr><td>11/27–12/10</td><td>실차 A 전체 임무 확인 → B · C · D 확대</td><td>반복 시험 · 가정값을 실측값으로 교체</td></tr><tr><td>12/11–17</td><td colspan="2">최종 시연 준비</td></tr></table></div></div>
 <div class="takeaway">일정 조건: 구동 보드 제작 시점에 따라 실차 단계 조정 · 최종 시연일은 15주차로 가정</div>
 </div></x-import>
 </section>
 
-<section data-label="확인 요청" data-screen-label="16" data-duration="65" data-speaker-notes="권장 65초
+<section data-label="확인 요청" data-screen-label="17" data-duration="65" data-speaker-notes="권장 65초
 
 마지막으로 리보틱스 측에 여쭤볼 것입니다. 파랗게 표시한 세 가지를 먼저 여쭙고 싶습니다. 첫째, 오늘 보여 드린 운반 임무가 실제 작업 흐름과 맞는지입니다. 둘째, 시연 판정 기준입니다. 포크를 어디까지 넣어야 하는지, 지금처럼 삽입 직전에 멈춰 다시 봐도 되는지, 틸트 없이 운반해도 되는지입니다. 셋째, 팔레트 위치와 목적지를 시스템에서 받는지, 로봇이 직접 찾아야 하는지입니다. 나머지 운용 환경과 T11 진입구 폭, 줄인 시험 코스, 원격 정지와 여러 대 운용도 표에 적은 대로 정해 주시면 설계에 반영하겠습니다. 작업장 도면과 운용 영상, 팔레트 도면도 주시면 시뮬레이션 장면을 그에 맞게 만들겠습니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.
 
@@ -326,14 +346,14 @@ insertion_measured: D7 v2 20.4–26.1 mm, 녹화 장면 5 · 1: 25.6 · 35.5 mm,
 T11 진입구 235 / 350 mm 두 해석, 어느 것도 채택하지 않음 (docs/design/2026-09-17-t11-test-article-drawing.md): forklift CLAUDE.md
 §1 팀 메모: 리보틱스 미팅 때 물어볼 것이 있음: docs/references/week6_feedback.md
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="15  리보틱스 확인 요청"><div class="slide-body">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="16  리보틱스 확인 요청"><div class="slide-body">
 <h2 class="headline">확인 요청: 작업 범위 · 평가 기준 · 입력 조건 우선</h2>
 <div class="m7-info grow"><p class="ph">미팅에서 확인할 것</p><div class="tb"><table class="comparison m7-q"><tr><th>구분</th><th>질문</th></tr><tr class=pri><td class=grp rowspan=2>궁금한 것</td><td class="item">작업 범위: 제시한 운반 임무와 실제 작업 흐름의 일치 여부</td></tr><tr class=pri><td class="item">평가 기준: 요구 삽입 깊이 · 삽입 전 정지 허용 · 틸트 없는 운반 허용</td></tr><tr class=pri><td class=grp rowspan=5>결정 요청</td><td class="item">입력 조건: 팔레트 · 목적지 위치 제공 / 로봇 직접 탐색</td></tr><tr><td class="item">운용 환경: 실내 · 실외 · 통로 폭 · 바닥 · 낮은 장애물 · 사람 혼재</td></tr><tr><td class="item">팔레트: T11 포크 진입구 폭 235 / 350 mm · 하중</td></tr><tr><td class="item">시연 코스: 저희 차 크기로 줄인 실기시험 코스 사용 여부</td></tr><tr><td class="item">무선: 원격 정지 수준 · 여러 대 동시 운용 여부</td></tr><tr><td class=grp rowspan=1>제공 요청</td><td class="item">작업장 도면 · 운용 영상 · 사용 팔레트 도면</td></tr></table></div></div>
 <div class="takeaway">합의 목표: 다음 실차 시험에 적용할 운용 조건과 판정 기준</div>
 </div></x-import>
 </section>
 
-<section data-label="위치 · 장애물 구조" data-screen-label="17" data-duration="0" data-speaker-notes="권장 0초
+<section data-label="위치 · 장애물 구조" data-screen-label="18" data-duration="0" data-speaker-notes="권장 0초
 
 (부록, 질문이 나오면) LiDAR 한 대로 위치를 잡고 장애물을 판단하는 구조입니다. 바퀴와 조향 엔코더로 계산한 이동량, 즉 오도메트리로 위치를 계속 계산합니다. LiDAR 스캔은 매번 SLAM 쪽으로 보내고, 지도와 맞춘 보정은 차가 약 0.45미터 움직이거나 30도 가까이 돌 때마다 새로 받습니다. 포크를 넣고 드는 동안에는 위치가 갑자기 바뀌지 않도록 새 보정을 반영하지 않습니다. SLAM 쪽 응답이 0.25초 넘게 끊기면 계산 위치만으로 달리지 않고 멈춥니다. 같은 스캔으로 장애물 격자도 만듭니다. 오래된 스캔일수록 위치 오차만큼 장애물을 크게 잡고, 지금 곡률로 멈췄을 때 지나갈 칸이 모두 비어 있어야 그 속도로 달립니다. 경로 계획에는 장애물 기억과 SLAM 지도를 함께 써서, 지나오며 본 장애물도 기억합니다. 목적지에서는 미리 등록한 스캔과 지금 스캔을 ICP로 맞춰 하역 위치를 보정합니다. (전환)
 
@@ -355,7 +375,7 @@ point-to-line ICP(Gauss–Newton), 여러 초기값이 같은 답일 때만 사�
 </div></x-import>
 </section>
 
-<section data-label="위치 추정" data-screen-label="18" data-duration="0" data-speaker-notes="권장 0초
+<section data-label="위치 추정" data-screen-label="19" data-duration="0" data-speaker-notes="권장 0초
 
 (부록, 질문이 나오면) 이 구조로 위치를 추정한 결과와 LiDAR를 고른 이유입니다. 왼쪽 영상은 이전 차체 모델로 돌린 운반 실행입니다. 빨간 SLAM 경로는 파란 실제 경로를 따라가지만, 바퀴 회전만 계산한 주황색 오도메트리 경로는 갈수록 벗어납니다. 끝날 때 바퀴 회전만 계산한 위치는 3.4미터 어긋났고 SLAM은 약 4센티미터, 임무 전체 평균으로는 약 9센티미터였습니다. 3.4미터의 대부분은 짐을 싣고 돌 때 계산보다 덜 돌아 방향이 24도 틀어진 탓입니다. 오른쪽 표처럼 카메라는 앞쪽만 보고 멀수록 오차가 커지지만, LiDAR는 12미터까지 360도를 재고 그 지도를 경로 계획에 그대로 씁니다. 과제 문서도 2D LiDAR를 SLAM용으로 지정했으므로, 위치 추정은 LiDAR로 하고 카메라는 팔레트 인식에 집중하도록 나눴습니다. (전환)
 
