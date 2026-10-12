@@ -4,6 +4,7 @@
     python prepare_figures.py /path/to/forklift [PLANNER_SRC]
     python prepare_figures.py stages
     python prepare_figures.py hardware
+    python prepare_figures.py brief BRIEF.pdf
 
 Writes assets/ (published with the page; the deck font Noto Sans CJK is the system's noto-cjk):
 1. 40_system.png -- slide 4, the system: sensors -> Jetson -> STM32 -> drive board -> motors,
@@ -27,6 +28,9 @@ Writes assets/ (published with the page; the deck font Noto Sans CJK is the syst
    numbers are the time a line stayed high, runs under 10 ms are contact bounce); 43_la_setup.jpg,
    the measurement photo cropped to the relay board and its probes (no people); 45_sch_drv_channel.png, one DRV8244
    channel of the circuit draft (40_sch_drv8244.png) enlarged 2x.
+
+7. `brief` -- 57_brief_{a,b,c,d}.png, the brief's own drawings of cases A-D (slides 8-11) without title
+   and caption, shown beside the A-D simulation clips.
 
 Sizes are in slide canvas pixels (1280 x 720 deck) and saved at 2.5x.
 """
@@ -403,6 +407,35 @@ def hardware_photos():
     return ['43_la_setup.jpg', '45_sch_drv_channel.png']
 
 
+def brief_cases(pdf):
+    """The brief's approach drawings (slides 8-11: cases A-D) without the title and the caption, for the
+    A-D slide beside the simulation clips. pdf = the brief exported as PDF (forklift docs/references/quest.txt
+    has the link; /export/pdf). Rendered at 150 dpi; rows 0-17 % (the title) and from the caption band on are cut."""
+    import subprocess
+    import tempfile
+    import numpy as np
+    from PIL import Image
+    out = []
+    with tempfile.TemporaryDirectory() as tmp:
+        subprocess.run(['pdftoppm', '-r', '150', '-png', '-f', '8', '-l', '11', str(pdf), f'{tmp}/p'], check=True)
+        for k, case in zip(range(8, 12), 'abcd'):
+            im = Image.open(f'{tmp}/p-{k:02d}.png').convert('RGB')
+            a = np.asarray(im).astype(int)
+            ink = a.sum(2) < 720
+            ink[: int(0.17 * ink.shape[0])] = False
+            rows = np.flatnonzero(ink.any(1))
+            # the drawing ends where the last gap of 15+ empty rows before the caption begins
+            gaps = np.flatnonzero(np.diff(rows) > 15)
+            last = rows[gaps[-1]] if len(gaps) else rows[-1]
+            top = rows[0]
+            cols = np.flatnonzero(ink[top:last + 1].any(0))
+            box = (max(cols[0] - 10, 0), max(top - 10, 0), cols[-1] + 10, last + 10)
+            name = f'57_brief_{case}.png'
+            im.crop(box).save(ASSETS / name)
+            out.append((name, box))
+    return out
+
+
 def main(repo, planner_src=None):
     repo = Path(repo).resolve()
     meta = {'40_system.png': system(), '41_structure.png': structure()}
@@ -415,5 +448,7 @@ if __name__ == '__main__':
         pocket_stages()
     elif sys.argv[1] == 'hardware':
         print(waveforms(), hardware_photos())
+    elif sys.argv[1] == 'brief':
+        print(brief_cases(Path(sys.argv[2])))
     else:
         main(sys.argv[1], Path(sys.argv[2]).resolve() if len(sys.argv) > 2 else None)

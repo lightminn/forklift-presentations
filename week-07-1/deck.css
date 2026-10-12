@@ -667,3 +667,12 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .m7-quad .cell .cap b { color:#7fb3f0; margin-right:8px; }
 .m7-quad .cell video { flex:1; min-height:0; width:100%; height:100%; object-fit:contain; display:block; }
 .m7-quad .legend { grid-column:1 / -1; margin:0; font-size:16px; color:#44505c; text-align:center; }
+/* 2026-10-12 v3: A-D as two slides, each row the brief's own drawing beside the simulation clip */
+.m7-cases2 { display:grid; grid-template-rows:1fr 1fr auto; gap:10px; min-height:0; }
+.m7-cases2 .row { display:flex; flex-direction:column; min-height:0; background:#15181c; border-radius:4px; overflow:hidden; }
+.m7-cases2 .row .cap { flex-shrink:0; margin:0; padding:5px 12px; font-size:20px; line-height:1.3; font-weight:700; color:#ffffff; background:#0f1215; white-space:nowrap; }
+.m7-cases2 .row .cap b { color:#7fb3f0; margin-right:10px; }
+.m7-cases2 .row .body { flex:1; min-height:0; display:flex; }
+.m7-cases2 .row .body .brief { height:100%; width:auto; flex-shrink:0; display:block; background:#ffffff; padding:6px 10px; box-sizing:border-box; }
+.m7-cases2 .row .body video { flex:1; min-width:0; height:100%; object-fit:contain; display:block; }
+.m7-cases2 .legend { margin:0; font-size:16px; color:#44505c; text-align:center; }

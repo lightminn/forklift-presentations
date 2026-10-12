@@ -106,7 +106,7 @@ add('과제 이해와 진행 현황', '과제 제안서 항목별 접근과 현�
      (HW, 'D435i 확정 · RPLIDAR A2 계획(A2M12 유력, 미구매) · Jetson 미구매'),
      (S4B, '인식(카메라 깊이) → 위치 → LiDAR 1대 장애물 지도 + Hybrid A* → 근접 추적 삽입 → 운반 · 하역 · 복귀, 한 임무 완주 (2026-10-11), 금지 접촉 0'),
      ('ws1 artifacts/20261008_d7_isaac/v2/d7', '현재 설정 9회 모두 완주 (새 상자 장면 포함)'),
-     ('ws1 artifacts/20261012_meeting_ad', 'A–D 를 seed 5 에서 인식 자리만 바꿔 한 번씩 실행, 네 경우 모두 success complete · 금지 접촉 0 (A–D 장)'),
+     ('ws1 artifacts/20261012_meeting_ad', 'A–D 를 seed 5 에서 과제 그림과 같은 배치로 한 번씩 실행(정렬 직진 0.8 m, D 는 뒤 · 옆 벽), 네 경우 모두 success complete · 금지 접촉 0 (A·B · C·D 장)'),
      ('docs/plans/2026-09-11-development-roadmap.md', 'B 는 멈추지 않고 삽입 — 멈춘 뒤 정렬하는 구현은 B 완료로 표시하지 않음(:161); 기능 통과 A–D 각 20회 중 19회(:226). 지금 실행은 정렬 직진 시작(2.1 m)에서 멈춰 다시 관측, EPAL 6 · 장면당 1회'),
      ('week-05/SCRIPT.md', '차체 실측 · 제어기 역분석(릴레이 on/off, 속도 조절 없음) → DRV8244 구동 보드 회로 초안')],
     '출처: 과제 제안서 · 하드웨어 기록 · 실행 기록')
@@ -240,7 +240,7 @@ INSERT_ROWS = [  # step, method, reason (the values are in the narration and sou
     ('⑤ 삽입 끝', '캐리지 앞 여유를 남겨 정지', '팔레트를 밀지 않음'),
 ]
 insert_rows = ''.join(f'<tr><td>{a}</td><td>{b}</td><td class="muted">{c}</td></tr>' for a, b, c in INSERT_ROWS)
-add('삽입 중 포켓 추적', '삽입 중 포켓 추적', 90, f"""
+add('삽입 중 포켓 추적', '삽입 중 포켓 추적', 80, f"""
 <h2 class="headline">캐리지 하단 카메라로 삽입 끝까지 포켓 추적 · 삽입 직전 두 번 경로 보정</h2>
 {stage(mpanel(video('61_insert_depth.mp4', '캐리지 하단 카메라의 깊이 영상. 팔레트에 다가가며 두 번 멈춰 다시 보고, 포크가 들어가는 동안 팔레트 윗판이 화면에 남는다')),
         ipanel('구현 단계', f'<table class="comparison m7-ins"><tr><th>단계</th><th>방법</th><th>이유</th></tr>{insert_rows}</table>'), 520)}
@@ -264,7 +264,7 @@ WHY_POCKET = [
     ('합성 장면 평가', 'EPAL 6 합성 장면 (2–4 m): 검출 대상 모두 찾음 · 위치 오차 95 %가 8.2 mm 이하'),
 ]
 why_rows = ''.join(f'<tr><td>{a}</td><td>{b}</td></tr>' for a, b in WHY_POCKET)
-add('포켓 인식', '포켓 인식 처리 과정', 70, f"""
+add('포켓 인식', '포켓 인식 처리 과정', 60, f"""
 <h2 class="headline">포켓 인식: 학습 모델 대신 팔레트 규격 치수로 앞면 → 빈 공간 → 포켓 위치 · 방향</h2>
 <div class="m7-rows grow" style="grid-template-rows:auto 1fr">
 <figure class="m7-media m7-pipe2"><img src="assets/20_pipeline_stages_crop.png" alt="깊이 영상, 팔레트 앞면, 받침목과 빈 공간, 판정된 포켓 위치의 네 단계">
@@ -377,31 +377,51 @@ add('후진을 고르는 이유', '경로 계획: 후진을 고르는 이유', 8
      (FB6, '§3 Hybrid A* 가 왜 뒤로 가는지 · 앞뒤로 돌 때의 특성')],
     '화면 생성: 왼쪽은 위 실행의 고정 시점 영상에 경로와 휩쓸림 띠를 겹친 것, 2배속 · 재계획 순간 2.5 s 정지 (prepare_reverse_clip.py) · 오른쪽은 플래너 재실행 그림 (prepare_figures.py)')
 
-# ----------------------------------------------------------------- approach cases A-D
+# ----------------------------------------------------------------- approach cases A-D (v3)
 AD = 'ws1 artifacts/20261012_meeting_ad'
-AD_CELLS = [  # clip, case, what the truck did after the far capture (records, prepare_ad_clips.py)
-    ('56_case_a.mp4', 'A 정면 정렬', '1.05 m 직진 → 삽입'),
-    ('56_case_b.mp4', 'B 옆으로 비켜 있음', '1.07 m 곡선 → 다시 관측 → 삽입'),
-    ('56_case_c.mp4', 'C 너무 가까움', '0.9 m 전진 → 1.8 m 후진 → 삽입'),
-    ('56_case_d.mp4', 'D 가깝고 뒤에 장애물', '상자와 0.3 m 두고 후진 → 삽입'),
+AD_LEGEND = '왼쪽: 과제 제안서 그림 (팔레트가 위) · 오른쪽: 시뮬레이션 (팔레트가 오른쪽) · 파랑: 전진 · 주황: 후진할 경로'
+
+
+def ad_rows(cells):
+    return ''.join(
+        f'<div class="row"><p class="cap"><b>{case}</b>{what}</p><div class="body">'
+        f'<img class="brief" src="assets/{brief}" alt="과제 제안서의 {case} 그림">'
+        f'{video(clip, f"{case} 상황의 시뮬레이션. {what}", cls="media")}</div></div>'
+        for brief, clip, case, what in cells)
+
+
+AD_SOURCES = [
+    (AD, 'meeting_ad3.sbatch (v3, 2026-10-12): 녹화 실행과 같은 현재 설정(d7 팔, 실측 차체, LiDAR 1대, SLAM)에 정렬 직진 0.8 m(임무 영상은 2.1 m) · 복귀 없음(하역까지) · seed 5 · 출발점을 인식 자리 0.3 m 뒤에 둠(--start-rear) · 관측 후보 하나 · 고정 시점(--extra-views quarter, 눈 0.6, −5.0, 7.0 · 대상 0.6, 1.1, 0 · 초점 2.2). 스냅숏 p5_s4b_b66271f_worldbox = b66271f + 월드 좌표 상자(new_obstacles.py frame: world) + --start-rear (run_transport.py, WORLDBOX_PATCH.txt)'),
+    (QUEST, '예시 A–D 그림 (8–11쪽) — 제목과 설명을 잘라 왼쪽에 실음 (prepare_figures.py brief)'),
 ]
-ad_cells = ''.join(
-    f'<div class="cell"><p class="cap"><b>{case}</b>{what}</p>'
-    f'{video(clip, f"{case} 상황. 인식한 자리에서 {what}", cls="media")}</div>'
-    for clip, case, what in AD_CELLS)
-add('접근 상황 A–D', '과제 접근 상황 A–D', 70, f"""
-<h2 class="headline">과제 접근 상황 A–D: 같은 장면에서 인식 자리만 바꿔 네 경우 모두 접촉 없이 삽입 · 하역</h2>
-<div class="m7-quad grow">{ad_cells}<p class="legend">파랑: 전진할 경로 · 주황: 후진할 경로 · 가는 선은 시뮬레이터가 그린 계획 표시</p></div>
-<div class="takeaway">B의 한계: 인식 약 3.6 m · 정렬 직진 2.1 m 사이 곡선 구간이 약 1 m → 옆으로 많이 비켜 있으면 앞뒤 전환 필요</div>
+add('접근 상황 A · B', '과제 접근 상황 A · B', 45, f"""
+<h2 class="headline">과제 그림과 같은 자리에서 인식 → A는 바로 직진 · B는 S자 곡선으로 진입</h2>
+<div class="m7-cases2 grow">{ad_rows([
+    ('57_brief_a.png', '56_case_a.mp4', 'A 정면 정렬', '1.15 m 직진 → 정렬 직진 → 삽입'),
+    ('57_brief_b.png', '56_case_b.mp4', 'B 옆으로 비켜 있음', '0.35 m 옆에서 2.3 m S자 곡선 → 삽입'),
+])}<p class="legend">{AD_LEGEND}</p></div>
+<div class="takeaway">B의 한계: 인식 약 3.6 m 이내 · 마지막 직진 0.8 m → 멈추지 않고 비킬 수 있는 폭 약 0.4 m</div>
 """,
-    """과제 문서의 네 가지 접근 상황을 같은 장면에서 인식하는 자리만 바꿔 돌렸습니다. 파란 선은 전진, 주황 선은 후진할 경로입니다. A는 팔레트 정면에서 인식해 그대로 직진해 넣습니다. B는 옆으로 비켜 비스듬히 선 경우로, 한 번 꺾어 정렬 직선에 들어간 뒤 다시 보고 넣습니다. 다만 팔레트는 약 3.6미터 안에서 인식되고 마지막 2.1미터는 직진해야 해서, 곡선으로 비킬 구간이 약 1미터뿐입니다. 그래서 옆으로 많이 비켜 있으면 앞뒤 전환이 필요합니다. C는 너무 가까운 경우로, 조금 전진해 방향을 잡은 뒤 1.8미터 후진해 거리를 벌리고 넣습니다. D는 같은 자리에서 정렬 위치 바로 뒤에 상자가 있는 경우로, 상자와 0.3미터 간격을 두고 후진해 정렬한 뒤 넣습니다. 네 경우 모두 포크가 팔레트에 닿지 않고 운반과 하역까지 마쳤습니다. (전환)""",
-    [(AD, 'meeting_ad.sbatch: 녹화 실행과 같은 현재 설정(d7 팔: --d7-planner --d7-docking, 실측 차체, LiDAR 1대, SLAM, 복귀 포함) · seed 5 · 관측 후보 하나(상황별 인식 자리) · 고정 시점(--extra-views quarter, 눈 0.6, −5.0, 7.0 · 대상 0.6, 1.1, 0 · 초점 2.2). 스냅숏 p5_s4b_b66271f_worldbox = b66271f + 월드 좌표 상자(new_obstacles.py frame: world, WORLDBOX_PATCH.txt)'),
-     (f'{AD}/case_A · case_B4 · case_C · case_D2', 'A 인식 (−1.4, 1.16, 0.006) → 1.05 m 전진, 하역 16.9 mm; B4 (−1.45, 0.98, 0.30) 카메라–앞면 3.64 m → 1.07 m 전진(기어 전환 없음); C (0.4, 0.8, 0) → 0.91 m 전진 · 1.79 m 후진; D2 같은 자리 + 상자 (−1.05, 1.13) 0.4 × 0.4 × 1.3 m → 0.99 m 전진 · 1.87 m 후진, 차체–상자 최소 0.31 m. 모두 success complete, 금지 접촉 0, 진입 0.32–0.33 m, 하역 16.9 · 28.7 · 28.7 · 24.2 mm'),
-     (f'{AD}/case_B_failed_4.57m · case_B_failed_4.09m · case_B2_failed_4.29m', '카메라–앞면 4.57 · 4.09 · 4.29 m 에서 모두 no_opening_pattern (인식 실패); 성공은 3.55 (A) · 3.64 m (B4) — 깊이 잡음 없는 합성 영상에서의 값. case_B3 는 도착 자세 차이로 짧은 앞뒤 전환이 끼어 쓰지 않음, case_D 는 상자가 0.45 m 떨어져 경로가 C 와 같음'),
-     ('ad_preview.py (같은 디렉터리)', '인식 자리를 고를 때 b66271f 계획기로 CPU 미리보기 — 실제 실행의 경로는 도착 자세 · LiDAR 격자 차이로 다를 수 있음(C 는 미리보기의 후진 먼저 대신 전진 먼저)'),
-     ('계산', '정렬 직진 시작의 카메라는 앞면에서 0.11 + 1.29 + 2.1 − 0.959 = 2.54 m; 인식 약 3.6 m 이내면 곡선 구간 약 1 m; 반경 3.45 m 원호 1 m 의 옆 이동 약 0.15 m'),
-     (QUEST, '예시 A–D (8–11쪽)')],
-    '화면 생성: 위 네 실행의 고정 시점 영상, 인식부터 들기까지 2배속, 진행 중인 계획을 바닥에 겹침 (prepare_ad_clips.py)')
+    """과제 문서의 네 가지 접근 상황을 그림과 같은 배치로 시뮬레이션에서 돌렸습니다. 왼쪽이 과제 문서의 그림이고, 오른쪽 영상은 팔레트가 오른쪽에 오도록 위에서 비스듬히 본 것입니다. 파란 선은 전진, 주황 선은 후진할 경로입니다. A는 팔레트 정면에서 인식해 그대로 직진해 넣습니다. B는 팔레트와 나란히 옆으로 비켜 선 경우로, S자로 꺾어 들어가 곡선 끝에서 한 번 다시 본 뒤 넣습니다. 다만 팔레트는 약 3.6미터 안에서 인식되고 마지막 0.8미터는 직진해야 해서, 멈추지 않고 비킬 수 있는 폭은 약 0.4미터입니다. 그보다 많이 비켜 있으면 앞뒤 전환이 필요합니다. (전환)""",
+    AD_SOURCES + [
+        (f'{AD}/v3_A · v3_B', 'A 출발 (−0.5, 1.17, 0.006) → 인식 (−0.2, 1.17) 카메라–앞면 2.35 m → 1.15 m 전진 · 정렬 직진 0.8 m · 삽입, 하역 19.3 mm; B 출발 (−1.65, 0.82, 0) → 인식 (−1.35, 0.82) 3.51 m · 축에서 0.35 m → 2.33 m 전진(기어 전환 없음), 하역 25.1 mm. 둘 다 success complete, 금지 접촉 0'),
+        ('계산 · 기록', '인식 성공 3.55 · 3.64 m, 실패 4.09 · 4.29 · 4.57 m (case_B* 기록, 깊이 잡음 없는 합성 영상). 정렬 직진 시작의 뒤차축은 앞면에서 0.11 + 1.29 + 0.8 = 2.20 m, 카메라 3.6 m 일 때 뒤차축은 3.6 + 0.959 = 4.56 m → 곡선 구간 2.36 m, 반경 3.45 m S자의 옆 이동 2R(1 − cos(asin(2.36 / 2R))) ≈ 0.42 m')],
+    '화면 생성: 위 실행의 고정 시점 영상, 인식부터 들기까지 2배속, 진행 중인 계획을 바닥에 겹침 (prepare_ad_clips.py) · 왼쪽은 과제 제안서 그림')
+
+add('접근 상황 C · D', '과제 접근 상황 C · D', 55, f"""
+<h2 class="headline">너무 가까우면 먼저 후진 · 뒤가 막히면 좁은 공간에서 앞뒤로 움직여 정렬 → 삽입</h2>
+<div class="m7-cases2 grow">{ad_rows([
+    ('57_brief_c.png', '56_case_c.mp4', 'C 너무 가까움', '1.3 m 후진 → 1.5 m 전진하며 정렬 → 삽입'),
+    ('57_brief_d.png', '56_case_d.mp4', 'D 가깝고 뒤 · 옆에 장애물', '앞뒤로 네 번 움직여 정렬 → 삽입'),
+])}<p class="legend">{AD_LEGEND}</p></div>
+<div class="takeaway">결과: A–D 모두 접촉 없이 삽입 · 하역 · D는 정렬 직진을 0.8 m로 줄여야 들어감 (2.1 m면 직진 시작 자리가 뒤 벽과 겹침)</div>
+""",
+    """C는 팔레트 바로 앞에서 오른쪽으로 비켜 있어 그대로는 들어갈 수 없는 경우로, 먼저 1.3미터 후진해 거리를 벌린 뒤 방향을 맞춰 넣습니다. D는 같은 자리에서 바로 뒤에 벽, 왼쪽에 장애물이 있는 경우입니다. 뒤로 크게 물러날 수 없어서, 좁은 공간에서 앞뒤로 네 번 움직이며 방향을 맞춘 뒤 넣었습니다. 이 배치에서는 마지막 정렬 직진을 지금 임무처럼 2.1미터로 두면 직진을 시작할 자리가 뒤 벽과 겹쳐서, 네 상황 모두 0.8미터로 줄여 돌렸습니다. 네 경우 모두 포크가 팔레트에 닿지 않고 하역까지 마쳤습니다. (전환)""",
+    AD_SOURCES + [
+        (f'{AD}/v3_C · v3_D', 'C 출발 (0.38, 0.87, 0) → 인식 (0.68, 0.87) 포크 끝–앞면 1.1 m · 축에서 0.3 m 오른쪽 → 1.25 m 후진 · 1.52 m 전진, 하역 24.3 mm; D 같은 자리 + 뒤 벽(앞면이 인식 자리 차체 뒤 0.5 m, 0.4 × 2.27 × 1.3 m) · 왼쪽 막이(1.63 × 0.66 × 1.3 m, 팔레트 왼쪽 0.25 m 바깥) — d_walls2.yaml → 1.75 m 전진 · 1.91 m 후진 · 0.47 m 전진 · 0.14 m 후진, 하역 13.6 mm. 둘 다 success complete, 금지 접촉 0'),
+        ('사전 영역 (sim/isaac/run_transport.py, observation_viewpoints.BAY_PICKUP_ZONE)', '인식 전에는 팔레트가 있을 수 있는 영역(x 2.1–4.1, y −0.7–2.0 m)이 장애물이라 포크 끝을 앞면에서 약 1.1 m 보다 가까이 둘 수 없음 — 출발을 더 붙인 v2 실행은 invalid_start'),
+        ('ad2_preview.py (CPU 미리보기)', 'D 배치에서 정렬 직진 2.1 m 는 approach:invalid_goal, 0.8 m 는 여러 번 앞뒤 전환으로 계획')],
+    '화면 생성: 위 실행의 고정 시점 영상, 인식부터 들기까지 2배속, 진행 중인 계획을 바닥에 겹침 (prepare_ad_clips.py) · 왼쪽은 과제 제안서 그림')
 
 # ----------------------------------------------------------------- 10
 MISSION_VIDEO = '71_mission.mp4'
@@ -466,7 +486,7 @@ CONCLUSION = [  # what we found, so, direction
 ]
 concl_rows = ''.join(f'<tr><td>{a}</td><td class="cur">{b}</td><td class="arrow">→</td><td class="nxt">{c}</td></tr>'
                      for a, b, c in CONCLUSION)
-add('결론', '결론', 40, f"""
+add('결론', '결론', 30, f"""
 <h2 class="headline">실측 차체 · 과제 센서의 제약에 맞춰 경로 · 카메라 · 구동부 · 통신 방향 결정</h2>
 {ipanel('확인한 것과 그에 따른 방향', f'<table class="comparison plan6 m7-concl"><tr><th class="c1">확인한 것</th><th class="c2">그래서</th><th class="c3"></th><th class="c4">정한 방향</th></tr>{concl_rows}</table>', 'grow')}
 <div class="takeaway">다음 목표: 시뮬레이션 임무를 실차로 (구동 보드 · 센서 연결 → 실차 인식 · 위치 추정 → 전체 임무)</div>
@@ -531,7 +551,7 @@ add('확인 요청', '리보틱스 확인 요청', 65, f"""
     '출처: 4–6주차 피드백 · 5주차 미팅 질문 이어 받음')
 
 TITLE = '리보틱스 중간 미팅 · 자율 지게차 중간 점검'
-N_SLIDES = 19
+N_SLIDES = 20
 
 
 # 2026-10-12 (user): the company works on SLAM itself, so the talk follows the brief's items and
@@ -539,7 +559,7 @@ N_SLIDES = 19
 # feedback asked for the LiDAR / vision comparison).
 ORDER = ['리보틱스 중간 미팅', '과제 이해와 진행 현황', '운반 임무 전체', '시스템 구성', '실물 차체',
          '기존 제어기 분석', '구동 보드 설계', '시뮬레이션 환경', '포켓 인식', '삽입 중 포켓 추적', '새 장애물 대응',
-         '후진을 고르는 이유', '접근 상황 A–D', '자격시험 기준 비교', '결론', '남은 과제와 일정', '확인 요청',
+         '후진을 고르는 이유', '접근 상황 A · B', '접근 상황 C · D', '자격시험 기준 비교', '결론', '남은 과제와 일정', '확인 요청',
          '위치 · 장애물 구조', '위치 추정']
 APPENDIX = ('위치 · 장애물 구조', '위치 추정')
 

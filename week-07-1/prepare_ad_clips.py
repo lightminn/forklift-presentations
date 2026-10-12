@@ -4,7 +4,7 @@ with the plan being driven drawn on the floor (conda base: numpy, opencv, PIL; f
 
     python prepare_ad_clips.py RUN_ROOT
 
-RUN_ROOT is ws1 artifacts/20261012_meeting_ad (meeting_ad.sbatch): case_{A,B4,C,D2}/run, each one recorded
+RUN_ROOT is ws1 artifacts/20261012_meeting_ad (meeting_ad3.sbatch): v3_{A,B,C,D}/run, each one recorded
 mission on seed 5 with one observation candidate (the case's detection pose) and D's box. Every case
 writes assets/56_case_{a,b,c,d}.mp4 and _poster.jpg (cropped to the approach area, CROP), and prints
 its timeline and gear runs.
@@ -168,12 +168,12 @@ def clip(case, run, out_name):
     return summary
 
 
-# run folder -> case (the deck's clips, 2026-10-12): B4 is the B pose inside the ~3.5 m the detector
-# found the pallet at (B 4.57 m, B2 4.29 m, B 4.09 m found nothing; B3's arrived pose added cusps),
-# D2 the box 0.30 m behind the alignment start (D's box sat 0.45 m away and changed nothing).
-DECK_RUNS = (('A', 'a'), ('B4', 'b'), ('C', 'c'), ('D2', 'd'))
+# run folder -> case (the deck's clips, 2026-10-12 v3, after the brief's drawings on slides 8-11): the truck starts
+# 0.3 m behind its detection pose (meeting_ad3.sbatch, --start-rear), the alignment straight is 0.8 m, D has a wall
+# behind and a block on the left (d_walls2.yaml). The first sets (case_*, v2_*) are kept in RUN_ROOT.
+DECK_RUNS = (('v3_A', 'a'), ('v3_B', 'b'), ('v3_C', 'c'), ('v3_D', 'd'))
 
 if __name__ == '__main__':
     root = Path(sys.argv[1])
     for run_name, label in DECK_RUNS:
-        clip(run_name, root / f'case_{run_name}' / 'run', f'56_case_{label}.mp4')
+        clip(run_name, root / run_name / 'run', f'56_case_{label}.mp4')
