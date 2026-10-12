@@ -676,3 +676,5 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .m7-cases2 .row .body .brief { height:100%; width:auto; flex-shrink:0; display:block; background:#ffffff; padding:6px 10px; box-sizing:border-box; }
 .m7-cases2 .row .body video { flex:1; min-width:0; height:100%; object-fit:contain; display:block; }
 .m7-cases2 .legend { margin:0; font-size:16px; color:#44505c; text-align:center; }
+/* 4: the camera choice, one line under the system figure */
+.m7-note { flex-shrink:0; margin:6px 0 0; font-size:19px; line-height:1.35; color:#44505c; }
