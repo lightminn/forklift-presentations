@@ -8,8 +8,12 @@ system, what runs in simulation and what is still hardware work, the conclusions
 schedule and the questions for the company. The plan is PLAN.md. Clips are cut by
 prepare_clips.py and prepare_reverse_clip.py, the figures drawn by prepare_figures.py (matplotlib
 PNGs in assets/). Week 6 clips are reused where the result has not changed. Since 2026-10-12 the
-talk follows the brief's items and puts the hardware first; the localization slides are an appendix.
+talk follows the brief's items in five sections -- summary, hardware, software, conclusion with the
+schedule, questions (SECTIONS) -- with hardware and software kept apart; the localization slides are an
+appendix. Text-only slides became pictures the same day: status lanes (2), gauges (4), a distance diagram
+(11) and a Gantt chart (17).
 """
+from datetime import date, timedelta
 from html import escape
 from pathlib import Path
 import json
@@ -115,7 +119,8 @@ def tag(kind):
 
 
 TAGS = {'ok': '확인', 'next': '다음 단계', 'real': '실물', 'fixed': '확정', 'chosen': '선정',
-        'draft': '설계 중', 'buy': '구매 예정', 'reuse': '기존 재사용', 'plan': '설계 반영 예정', 'part': '일부'}
+        'draft': '설계 중', 'buy': '구매 예정', 'reuse': '기존 재사용', 'plan': '설계 반영 예정', 'part': '일부',
+        'done': '완료', 'wait': '예정', 'design': '설계 중'}
 
 
 # ----------------------------------------------------------------- 1
@@ -126,24 +131,44 @@ add('리보틱스 중간 미팅', '자율 지게차\n중간 점검', 20, '',
     '중간 미팅')
 
 # ----------------------------------------------------------------- 2
-BRIEF = [  # brief item, our approach, simulation (tag, text), real hardware
-    ('팔레트 인식 · RGB-D', 'D435i · 규격 치수 기반 포켓 검출', ('ok', '포켓 위치 · 방향 추정'), '카메라 시험 전'),
-    ('위치 · 장애물 · 2D LiDAR', 'RPLIDAR A2M12 · SLAM 보정 + 점유 격자', ('ok', '신규 장애물 정지 · 재계획'), '보유 · 시험 전'),
-    ('플랫폼 · 소형 지게차 개조', '소형 전동 지게차 + 구동 보드 자체 설계', ('ok', '실측 차체 모델 반영'), '보드 설계 중'),
-    ('목적 ① 장애물 회피 경로', 'Hybrid A* (전 · 후진)', ('ok', '무충돌 임무 완주'), '실차 주행 후'),
-    ('목적 ② 삽입 중 포켓 추적', '캐리지 하단 카메라 · 직전 보정 · 간격 감시', ('ok', '무접촉 삽입'), '장착 · 보정 전'),
-    ('프로세스 ①–⑤', '인식 → 위치 → 경로 → 삽입 → 하역', ('ok', '단일 임무로 연속 수행'), '구동 보드 제작 후'),
+# 2026-10-12 (user): "전체적으로 텍스트 많다는 평" -- the brief's items as two status lanes with a picture
+# per stage instead of a four-column table; software (simulation) above, hardware (the real truck) below.
+SW_LANE = [  # stage (the brief's process order), approach, thumbnail, simulation result (tag, text)
+    ('팔레트 인식', 'D435i · 규격 치수 기반', 'pocket', [('ok', '포켓 위치 · 방향')]),
+    ('위치 · 장애물', 'SLAM · 점유 격자', 'map', [('ok', '신규 장애물 재계획')]),
+    ('장애물 회피 경로', 'Hybrid A* (전 · 후진)', 'path', [('ok', 'A · C · D'), ('part', 'B')]),
+    ('삽입 중 포켓 추적', '캐리지 하단 카메라', 'insert', [('ok', '무접촉 삽입')]),
+    ('운반 · 하역', '인식 → 하역 단일 임무', 'mission', [('ok', '임무 완주')]),
 ]
-brief_rows = ''.join(f'<tr><td>{a}</td><td>{b}</td><td>{tag(k)}{s}</td><td class="real">{r}</td></tr>'
-                     for a, b, (k, s), r in BRIEF)
-brief_rows += (f'<tr><td>예시 A–D</td><td>A 직진 · B 곡선 · C 후진 · D 재정렬</td>'
-               f'<td>{tag("ok")}A · C · D {tag("part")}B</td><td class="real">실차는 A부터</td></tr>')
+HW_LANE = [  # stage, what, thumbnail (None: not started), state (tag, text)
+    ('차체 실측', '최대 조향각 15°', 'chassis', [('done', '')]),
+    ('기존 제어기 분석', '릴레이 On/Off 구동', 'ctrl', [('done', '')]),
+    ('구동 보드', 'DRV8244 · MT6701', 'board', [('design', '')]),
+    ('센서 장착', 'D435i · A2M12 보유', None, [('wait', '')]),
+    ('실차 주행', '구동 보드 제작 후 A부터', None, [('wait', '')]),
+]
+
+
+def lane(cards):
+    out = []
+    for name, what, thumb, states in cards:
+        pic = (f'<img class="th" src="assets/80_t_{thumb}.jpg" alt="">' if thumb
+               else '<div class="th none"></div>')
+        state = ''.join(f'{tag(k)}{t}' for k, t in states)
+        cls = 'wait' if states[0][0] == 'wait' else ''
+        out.append(f'<article class="{cls}">{pic}<h3>{name}</h3><p>{what}</p><p class="st">{state}</p></article>')
+    return ''.join(out)
+
+
 add('과제 이해와 진행 현황', '과제 요구사항별 접근과 진행 현황', 65, f"""
 <h2 class="headline">시뮬레이션: 인식부터 하역까지 전 과정 통합 · 실차: 구동 보드 설계 단계</h2>
-{ipanel('과제 제안서 요구사항별 접근 방법과 검증 현황', f'<table class="comparison m7-brief"><tr><th>과제 제안서</th><th>접근 방법</th><th>시뮬레이션</th><th>실차</th></tr>{brief_rows}</table>', 'grow')}
-<div class="takeaway">향후 과제: B 곡선 접근 후 정지 없는 삽입 · A–D 반복 평가 · 실물 센서 시험 · 실차 주행</div>
+<div class="m7-lanes grow">
+<p class="ln sw">소프트웨어<small>시뮬레이션</small></p><div class="lr sw">{lane(SW_LANE)}</div>
+<p class="ln hw">하드웨어<small>실차</small></p><div class="lr hw">{lane(HW_LANE)}</div>
+</div>
+<div class="takeaway">향후 과제: B 곡선에서 정지 없이 바로 삽입 · A–D 반복 평가 · 실물 센서 시험 · 실차 주행</div>
 """,
-    """먼저 과제 제안서의 요구사항별 접근 방법과 진행 현황입니다. 센서는 제안서 구성대로 RGB-D 카메라 1대와 2D LiDAR 1대입니다. 카메라는 같은 스테레오 방식의 D435i를 선정했고, 팔레트 규격 치수를 기준으로 포켓을 검출합니다. LiDAR는 A2 계열 중 보유 중인 A2M12를 사용하며, SLAM 위치 보정과 장애물 판단에 함께 활용합니다. 플랫폼은 소형 전동 지게차 차체를 확보해 실측하고 기존 제어기를 분석했으며, 속도 제어를 위해 구동 보드를 새로 설계하고 있습니다. 과제의 두 목적인 장애물 회피 경로와 삽입 중 포켓 추적, 그리고 인식부터 하역까지의 다섯 단계는 시뮬레이션에서 하나의 임무로 연속 수행됩니다. 예시 A–D는 뒤에서 영상으로 보여 드리겠습니다. A, C, D는 인식부터 삽입까지 수행되며, B는 곡선으로 접근하지만 삽입 직전에 한 번 정지해 재관측합니다. 실차 적용은 구동 보드 제작 후 센서를 장착해 A부터 진행합니다. 이어서 시뮬레이션 임무 전체를 먼저 보여 드리고, 하드웨어, 인식과 포켓 추적, 경로 계획 순으로 말씀드리겠습니다. (전환)""",
+    """먼저 과제 제안서의 요구사항별 접근 방법과 진행 현황을 요약하겠습니다. 위 줄은 소프트웨어로, 과제의 처리 순서대로 시뮬레이션에서 확인한 결과입니다. 센서는 제안서 구성대로 RGB-D 카메라 1대와 2D LiDAR 1대입니다. 카메라는 같은 스테레오 방식의 D435i를 선정했고, 팔레트 규격 치수를 기준으로 포켓을 검출합니다. LiDAR는 A2 계열 중 보유 중인 A2M12를 사용하며, SLAM 위치 보정과 장애물 판단에 함께 활용합니다. 과제의 두 목적인 장애물 회피 경로와 삽입 중 포켓 추적, 그리고 인식부터 하역까지의 다섯 단계는 시뮬레이션에서 하나의 임무로 연속 수행됩니다. 예시 A–D 가운데 A, C, D는 인식부터 삽입까지 수행되며, B는 곡선으로 접근하지만 삽입 직전에 한 번 정지해 재관측합니다. 아래 줄은 하드웨어입니다. 소형 전동 지게차 차체를 실측하고 기존 제어기를 분석했으며, 속도 제어를 위해 구동 보드를 새로 설계하고 있습니다. 카메라와 LiDAR는 확보했고 아직 시험 전이며, 실차 적용은 구동 보드 제작 후 A부터 진행합니다. 이어서 시뮬레이션 임무 전체와 실기시험 기준 비교로 현재 결과를 요약한 뒤, 하드웨어와 소프트웨어를 차례로 말씀드리고, 결론과 일정, 확인 요청 사항 순으로 마무리하겠습니다. (전환)""",
     [(QUEST, '센서(RGB-D Gemini 335Le · 2D RPLIDAR, SLAM · 장애물 목적) · 추천 플랫폼(소형 지게차 장난감 개조 또는 모바일 로봇 + 포크) · 목적(장애물 고려 경로, 삽입 중 pocket tracking) · 프로세스 5단계 · 예시 A–D'),
      (HW, 'D435i 확정 · RPLIDAR A2 계열 · Jetson 미구매'),
      ('사용자 답변 (2026-10-12)', 'RPLIDAR A2M12 는 이미 보유 (docs/hardware.md 는 아직 "유력안")'),
@@ -152,7 +177,7 @@ add('과제 이해와 진행 현황', '과제 요구사항별 접근과 진행 �
      ('ws1 artifacts/20261012_meeting_ad', 'A–D 를 seed 5 에서 과제 그림과 같은 배치로 한 번씩 실행(정렬 직진 0.8 m, D 는 뒤 · 옆 벽), 네 경우 모두 success complete · 금지 접촉 0 (A·B · C·D 장)'),
      ('docs/plans/2026-09-11-development-roadmap.md', 'B 는 멈추지 않고 삽입 — 멈춘 뒤 정렬하는 구현은 B 완료로 표시하지 않음(:161); 기능 통과 A–D 각 20회 중 19회(:226). 지금 실행은 정렬 직진 시작(2.1 m)에서 멈춰 다시 관측, EPAL 6 · 장면당 1회'),
      ('week-05/SCRIPT.md', '차체 실측 · 제어기 역분석(릴레이 on/off, 속도 조절 없음) → DRV8244 구동 보드 회로 초안')],
-    '출처: 과제 제안서 · 하드웨어 기록 · 실행 기록')
+    '출처: 과제 제안서 · 하드웨어 기록 · 실행 기록 · 단계 그림은 뒤 장의 그림과 영상 첫 장면을 자른 것 (prepare_figures.py thumbs)')
 
 # ----------------------------------------------------------------- 3
 add('시스템 구성', '시스템 구성', 65, f"""
@@ -161,7 +186,7 @@ add('시스템 구성', '시스템 구성', 65, f"""
 <p class="m7-note">센서 선정: 카메라 D435i (Gemini 335Le와 같은 스테레오 방식 · 팀 개발 경험 · ROS 2 자료와 예제) · LiDAR A2M12 (A2 계열 · 보유 장비)</p>
 <div class="takeaway">확인 필요: 원격 정지 요구 수준 · 다중 차량 운용 여부</div>
 """,
-    """전체 시스템 구성입니다. 왼쪽 센서는 과제 규격대로 RGB-D 카메라 1대와 2D LiDAR 1대입니다. 카메라는 과제의 Gemini 335Le 대신 같은 스테레오 방식인 D435i를 선정했습니다. 팀의 개발 경험이 있고, ROS 2 자료와 예제가 풍부하기 때문입니다. LiDAR는 과제의 A2 계열 중 보유 중인 A2M12를 사용합니다. 가운데 Jetson은 인식, 위치 추정, 경로 계획을 담당합니다. 오른쪽 STM32 보드는 Jetson의 명령을 받아 주행, 조향, 승강 모터를 제어하고, 엔코더로 바퀴 회전과 조향각을 측정합니다. 아래 점선 영역은 이번에 추가한 무선 구성입니다. 감시 PC와는 Wi-Fi로 상태와 지도만 주고받습니다. 무압축 깊이 영상은 초당 약 200메가비트로 Wi-Fi 실시간 전송이 어려워 차량에서 기록합니다. 비상정지는 Wi-Fi와 독립된 경로로 두어, 신호가 끊기면 즉시 정지하도록 합니다. 원격 정지의 요구 수준과 다중 차량 운용 여부는 마지막에 여쭙겠습니다. (전환)""",
+    """이제 하드웨어입니다. 먼저 전체 시스템 구성입니다. 왼쪽 센서는 과제 규격대로 RGB-D 카메라 1대와 2D LiDAR 1대입니다. 카메라는 과제의 Gemini 335Le 대신 같은 스테레오 방식인 D435i를 선정했습니다. 팀의 개발 경험이 있고, ROS 2 자료와 예제가 풍부하기 때문입니다. LiDAR는 과제의 A2 계열 중 보유 중인 A2M12를 사용합니다. 가운데 Jetson은 인식, 위치 추정, 경로 계획을 담당합니다. 오른쪽 STM32 보드는 Jetson의 명령을 받아 주행, 조향, 승강 모터를 제어하고, 엔코더로 바퀴 회전과 조향각을 측정합니다. 아래 점선 영역은 이번에 추가한 무선 구성입니다. 감시 PC와는 Wi-Fi로 상태와 지도만 주고받습니다. 무압축 깊이 영상은 초당 약 200메가비트로 Wi-Fi 실시간 전송이 어려워 차량에서 기록합니다. 비상정지는 Wi-Fi와 독립된 경로로 두어, 신호가 끊기면 즉시 정지하도록 합니다. 원격 정지의 요구 수준과 다중 차량 운용 여부는 마지막에 여쭙겠습니다. (전환)""",
     [(HW, 'D435i 확정 · RPLIDAR A2 계열 · Jetson Orin Nano Super 8GB 권장(미구매) · 개발 기준 ROS 2 Jazzy'),
      ('사용자 답변 (2026-10-12, LiDAR)', 'A2 계열 중 A2M12 를 고른 이유: 이미 보유'),
      ('사용자 답변 (2026-10-12)', 'Gemini 335Le 대신 D435i 를 산 이유: 전에 써 본 적이 있어 개발에 익숙함, ROS 2 자료 · 예제가 많음'),
@@ -244,7 +269,7 @@ add('구동 보드 설계', '구동 보드 설계', 75, f"""
      ('DRV8244-Q1 데이터시트 SLVSG24C 7.5.9 · 7.5.8', '과전류 보호 IOCP 21–40 A (OCP_SEL 00, 기본 · HW 유일), 10.5–24 A 설정도 있음(SPI); 전류 제한 VITRIP 1.18–2.97 V (끌 수 있음), ITRIP = VITRIP / RIPROPI × AIPROPI; AIPROPI 오차 ±5 % (1.2–8.3 A)'),
      ('https://uploadcdn.oneyac.com/attachments/files/brand_pdf/magntek/F3/CA/MT6701QT-STD.pdf', 'MT6701 Rev.1.5 — 14 bit 절대각(SSI · I2C), ABZ 증분 ≤ 1024 PPR, 자석 간격 0.5–2.0 mm · 축 어긋남 ≤ 0.3 mm'),
      (W5, '5–8쪽: DRV8244 · DRV8873 · DRV8876 비교, MT6701 · AS5600 · AS5047P 비교, 회로 초안(DRV8244 × 3 L · M · R, SPI MISO · MOSI · CLK 공유, 채널별 CS · IN1 · IN2 · DRVOFF · nSLEEP · nFAULT · IPROPI), 엔코더판 2종, MCU 핀 배정(Nucleo-64 morpho 2 × 38핀) — 조건: 모터 전류 실측 후 확정'),
-     ('week-07-1 14쪽 일정', '10/16–22 모터 전류 실측 · PCB 설계, 10/30–11/12 구동 보드 제작')],
+     ('week-07-1 17쪽 일정', '10/16–22 모터 전류 실측 · PCB 설계, 10/30–11/12 구동 보드 제작')],
     '화면 생성: 5주차 팀 회로 초안(40_sch_drv8244.png)의 L 채널을 잘라 2배 확대 (prepare_figures.py hardware)')
 
 # ----------------------------------------------------------------- 5
@@ -268,7 +293,7 @@ add('시뮬레이션 환경', '시뮬레이션 환경', 50, f"""
         ipanel('시뮬레이션 설정과 근거', f'<table class="comparison params6 m7-params"><tr><th>항목</th><th>값</th><th>근거</th></tr>{param_rows}</table>'), 360)}
 <div class="takeaway">실측 우선 교체 대상: 바퀴 마찰 · 구동 토크 · LiDAR 잡음 (깊이 잡음은 추가 예정)</div>
 """,
-    """실차 주행 전까지는 Isaac Sim에서 개발합니다. 공장 홀 장면에 실측 차체 값을 적용하고, 물리 연산은 120헤르츠로 수행합니다. 지게차는 바퀴 토크로 구동되며, 팔레트도 고정하지 않고 포크로 들어 올립니다. LiDAR는 A2M12 카탈로그 사양으로, 깊이 영상은 D435i 컬러 카메라 화각에 맞춰 합성합니다. SLAM은 ROS 2의 slam_toolbox로 수행하며, 시뮬레이터는 스캔마다 SLAM 응답을 받은 뒤 다음 단계로 진행합니다. 주황색 태그는 가정값입니다. 저상 바닥 장애물은 없다고 가정했고, 바퀴 마찰과 구동 토크는 일반적인 범위의 값을 적용했습니다. LiDAR 잡음도 가정값이며, 깊이 영상에는 아직 잡음을 넣지 않았습니다. 이 값들은 실측 결과가 나오는 대로 우선 교체합니다. (전환)""",
+    """다음은 소프트웨어입니다. 실차 주행 전까지는 Isaac Sim에서 개발합니다. 공장 홀 장면에 실측 차체 값을 적용하고, 물리 연산은 120헤르츠로 수행합니다. 지게차는 바퀴 토크로 구동되며, 팔레트도 고정하지 않고 포크로 들어 올립니다. LiDAR는 A2M12 카탈로그 사양으로, 깊이 영상은 D435i 컬러 카메라 화각에 맞춰 합성합니다. SLAM은 ROS 2의 slam_toolbox로 수행하며, 시뮬레이터는 스캔마다 SLAM 응답을 받은 뒤 다음 단계로 진행합니다. 주황색 태그는 가정값입니다. 저상 바닥 장애물은 없다고 가정했고, 바퀴 마찰과 구동 토크는 일반적인 범위의 값을 적용했습니다. LiDAR 잡음도 가정값이며, 깊이 영상에는 아직 잡음을 넣지 않았습니다. 이 값들은 실측 결과가 나오는 대로 우선 교체합니다. (전환)""",
     [(MEASURED, '실측 반영 모델 dls08_measured (실측하지 않은 항목은 추정값, 필드별 출처)'),
      ('config/isaac_transport.yaml', '정지 · 운동 마찰 계수 0.8 / 0.7 (지게차 · 팔레트 충돌 형상, sim/isaac/scene.py configure_drives), 바퀴 토크 3 N·m — 시뮬레이터 전용 가정값'),
      ('result.json pocket_camera · perception', '깊이 640 × 480, fx 465.74 → 수평 화각 69.0° (D435i RGB 시야를 흉내 낸 합성 설정, docs/design/2026-09-11-pocket-observation-and-scene-set.md 사용자 결정 1; D435i 깊이 화각 87° × 58° 아님), depth_quantize_mm 1, 잡음 없음'),
@@ -283,24 +308,46 @@ add('시뮬레이션 환경', '시뮬레이션 환경', 50, f"""
     '출처: 저장소 설정 · 모델 기록 (6주차 1쪽 이어 받음)')
 
 # ----------------------------------------------------------------- 6
-INSERT_ROWS = [  # step, method, reason (the values are in the narration and sources)
-    ('① 지연 보정', '촬영 시점의 차량 위치로 정합', '주행 중 위치 어긋남 방지'),
-    ('② 연속 추적', '윗판 가장자리 기반 위치 추적', '포켓 입구 시야 이탈 대응'),
-    ('③ 경로 보정', '1.0 · 0.6 m 지점 정지 → 경로 재생성', '원거리 관측 오차 감소'),
-    ('④ 간격 감시', '정지 거리 · 관측 오차 반영 간격 판정', '접촉 전 정지'),
-    ('⑤ 삽입 완료', '캐리지 전방 여유 확보 후 정지', '팔레트 밀림 방지'),
+# 2026-10-12: the five steps on the fork tip's distance to the pallet face instead of a table (S4B
+# near_tracking.json: armed 44.3 s about 1.5 m out, corrections at 1.0 / 0.6 m, front -> roof tracking at
+# 63.19 s about 0.55 m, protection from 0.149 m, insertion end about 0.32 m in).
+D_FAR, D_IN = 1.6, -0.4                       # axis: fork tip to pallet face, m (negative = inserted)
+
+
+def at(d):
+    return f'{(D_FAR - d) / (D_FAR - D_IN) * 100:.1f}%'
+
+
+def span(d0, d1, text, cls=''):
+    return f'<span class="bar {cls}" style="left:{at(d0)};width:calc({at(d1)} - {at(d0)})">{text}</span>'
+
+
+def mark(d, text, cls=''):
+    return f'<span class="mk {cls}" style="left:{at(d)}"><i></i><em>{text}</em></span>'
+
+
+INSERT_STEPS = [  # row label, track content
+    ('① 지연 보정', span(1.5, -0.32, '촬영 시점의 차량 위치로 정합')),
+    ('② 연속 추적', span(1.5, 0.55, '포켓 입구') + span(0.55, -0.32, '윗판 가장자리', 'alt')),
+    ('③ 경로 보정', mark(1.0, '정지 · 재관측') + mark(0.6, '정지 · 재관측')),
+    ('④ 간격 감시', span(0.15, -0.32, '간격 판정', 'warn')),
+    ('⑤ 삽입 완료', mark(-0.32, '캐리지 여유 1.6 cm', 'end')),
 ]
-insert_rows = ''.join(f'<tr><td>{a}</td><td>{b}</td><td class="muted">{c}</td></tr>' for a, b, c in INSERT_ROWS)
+AXIS = [(1.5, '1.5 m'), (1.0, '1.0 m'), (0.6, '0.6 m'), (0.15, '0.15'), (0.0, '앞면'), (-0.32, '−0.32 m')]
+FACE = f'<span class="face" style="left:{at(0)}"></span>'
+insert_rows = ''.join(f'<p class="rl">{a}</p><div class="tr">{FACE}{b}</div>' for a, b in INSERT_STEPS)
+insert_axis = ''.join(f'<span style="left:{at(d)}">{t}</span>' for d, t in AXIS)
+insert_diagram = f'<div class="m7-dist">{insert_rows}<p class="rl"></p><div class="ax">{insert_axis}</div></div>'
 add('삽입 중 포켓 추적', '삽입 중 포켓 추적', 80, f"""
 <h2 class="headline">캐리지 하단 카메라로 삽입 완료까지 포켓 추적 · 삽입 직전 2회 경로 보정</h2>
 {stage(mpanel(video('61_insert_depth.mp4', '캐리지 하단 카메라의 깊이 영상. 팔레트에 접근하며 두 번 정지해 재관측하고, 포크 삽입 중에도 팔레트 윗판이 시야에 남는다'),
               legend(('ramp', DEPTH_RAMP, ('깊이 0.25 m', '3 m 이상')), ('none', '#000000', '측정값 없음'))),
-        ipanel('구현 단계', f'<table class="comparison m7-ins"><tr><th>단계</th><th>방법</th><th>목적</th></tr>{insert_rows}</table>'), 484)}
+        ipanel('구현 단계: 포크 끝–팔레트 앞면 거리 기준', insert_diagram), 484)}
 <div class="takeaway">결과: 포크–팔레트 접촉 없이 약 32 cm 삽입 (깊이 잡음 미적용 합성 영상)</div>
 """,
-    """과제에서 강조한 삽입 중 포켓 추적입니다. 처음에는 카메라를 차체 전방 상단에 장착했는데, 포크 삽입이 시작되면 마지막 약 25센티미터를 관측하지 못했습니다. 그래서 Crown 특허 사례와 같이 카메라를 캐리지 하단으로 옮겼고, 영상과 같이 삽입 중에도 팔레트 윗판이 시야에 남습니다. 영상의 색은 거리로, 빨간색일수록 가깝습니다. 구현은 표의 다섯 단계입니다. 먼저 시뮬레이터에서 측정한 영상 지연 약 0.09초를 반영해, 각 영상을 촬영 시점의 차량 위치에 정합합니다. 실물에서는 이 지연을 다시 측정합니다. 포켓 입구가 시야를 벗어나면 윗판 가장자리로 팔레트 위치를 계속 추적합니다. 포크 끝이 앞면까지 1미터와 0.6미터 남은 지점에서는 정지해 재관측하고, 남은 직진 경로를 다시 생성합니다. 포크 끝이 앞면 15센티미터 이내에 들어오면 포크와 포켓 벽 사이의 간격을 계속 감시하고, 관측 오차와 정지 거리를 더한 값보다 좁아지면 정지합니다. 삽입은 캐리지 전방에 1.6센티미터 여유를 남기는 위치에서 완료합니다. 이 실행에서 포크는 팔레트와 접촉 없이 약 32센티미터 삽입되었습니다. 다만 깊이 잡음이 없는 합성 영상이므로, 잡음을 적용한 검증이 남아 있습니다. (전환)""",
+    """과제에서 강조한 삽입 중 포켓 추적입니다. 처음에는 카메라를 차체 전방 상단에 장착했는데, 포크 삽입이 시작되면 마지막 약 25센티미터를 관측하지 못했습니다. 그래서 Crown 특허 사례와 같이 카메라를 캐리지 하단으로 옮겼고, 영상과 같이 삽입 중에도 팔레트 윗판이 시야에 남습니다. 영상의 색은 거리로, 빨간색일수록 가깝습니다. 구현은 오른쪽 그림과 같이 포크 끝과 팔레트 앞면 사이의 거리에 따라 다섯 단계로 나뉩니다. 먼저 시뮬레이터에서 측정한 영상 지연 약 0.09초를 반영해, 각 영상을 촬영 시점의 차량 위치에 정합합니다. 실물에서는 이 지연을 다시 측정합니다. 포크 끝이 앞면 약 0.55미터에 들어와 포켓 입구가 시야를 벗어나면, 윗판 가장자리로 팔레트 위치를 계속 추적합니다. 포크 끝이 앞면까지 1미터와 0.6미터 남은 지점에서는 정지해 재관측하고, 남은 직진 경로를 다시 생성합니다. 포크 끝이 앞면 15센티미터 이내에 들어오면 포크와 포켓 벽 사이의 간격을 계속 감시하고, 관측 오차와 정지 거리를 더한 값보다 좁아지면 정지합니다. 삽입은 캐리지 전방에 1.6센티미터 여유를 남기는 위치에서 완료합니다. 이 실행에서 포크는 팔레트와 접촉 없이 약 32센티미터 삽입되었습니다. 다만 깊이 잡음이 없는 합성 영상이므로, 잡음을 적용한 검증이 남아 있습니다. (전환)""",
     [(S4B, 'forklift b66271f, 실측 차체 · SLAM 위치 · LiDAR 1대 · 근접 추적(보정점 1.0 / 0.6 m), 포켓 깊이 확인(D5) 끔. result.json: success, 삽입 끝 진입 323.5 / 322.2 mm, 금지 접촉 0, 하역 6.74 mm'),
-     (f'{S4B}/run/near_tracking.json', '근접 추적 시작 44.3 s, 1.0 m 보정 54.03 s(정지 0.37 s), 0.6 m 보정 61.73 s, 포크 끝 보호 시작 70.62 s(앞면 0.149 m), 삽입 끝 80.69 s'),
+     (f'{S4B}/run/near_tracking.json', '근접 추적 시작 44.3 s, 1.0 m 보정 54.03 s(정지 0.37 s), 0.6 m 보정 61.73 s, 추적 대상 앞면 → 윗판 전환 63.19 s(frames mode front → roof), 포크 끝 보호 시작 70.62 s(앞면 0.149 m), 삽입 끝 80.69 s. 그림의 약 1.5 m · 0.55 m 는 보정점(1.0 / 0.6 m)에서 뒤차축이 움직인 거리로 계산 (44.3 s 1.52 m, 63.19 s 0.55 m), 삽입 끝 −0.32 m 는 진입 323.5 / 322.2 mm'),
      (NEARPLAN, '기존 장착(높이 0.50 m · 수평)은 삽입 마지막 약 0.25 m 무관측'),
      (CROWN, 'Crown 특허 US9990535B2 — 포크 캐리지 하단 장착 (4주차 장착 사례 ②)'),
      ('config/near_field_bounds_measured.json · forklift 2313dc9', '카메라 지연 L = 91.668 ms (11 틱, 120 Hz) — 측정 대역 84.43–98.94 ms, Isaac 렌더 경로의 값 (실물 D435i 는 다시 측정)'),
@@ -482,23 +529,22 @@ add('접근 상황 C · D', '과제 접근 시나리오 C · D', 55, f"""
 
 # ----------------------------------------------------------------- 10
 MISSION_VIDEO = '71_mission.mp4'
-MISSION_ROWS = [  # stage, how it is done in this run
+MISSION_FLOW = [  # stage in the clip's order, how it is done in this run (2026-10-12: a flow beside the clip, not a table)
     ('팔레트 인식', '깊이 영상 · 규격 치수 기반 형상 규칙'),
-    ('위치 추정', '휠 오도메트리 + SLAM 보정'),
-    ('장애물', 'LiDAR 1대 점유 격자 · 정지 궤적 검사'),
-    ('경로', 'Hybrid A* (전 · 후진) + 뒤차축 기준 추종'),
-    ('삽입', '2 m 전방에서 재측정 → 직진 삽입'),
+    ('접근 · 삽입', 'Hybrid A* 경로 · 2 m 전방 재측정 → 직진 삽입'),
+    ('적재 · 운반', '리프트 → 운반 경로 · LiDAR 점유 격자 정지 판단'),
     ('하역', '등록 스캔 ICP 정합 → 위치 보정'),
+    ('복귀', '출발점까지 경로 재계획 · 추종'),
 ]
-mission_rows = ''.join(f'<tr><td>{a}</td><td>{b}</td></tr>' for a, b in MISSION_ROWS)
+mission_flow = ''.join(f'<li><b>{a}</b><span>{b}</span></li>' for a, b in MISSION_FLOW)
 add('운반 임무 전체', '운반 임무 전체', 45, f"""
 <h2 class="headline">실측 차체 모델로 인식 → 삽입 → 적재 → 운반 → 하역 → 복귀 전 과정 자율 수행</h2>
 {stage(mpanel(video(MISSION_VIDEO, '공장 홀을 상부 시점에서 본 지게차. 팔레트를 인식해 적재하고, 목적지에 하역한 뒤 출발점으로 복귀한다'),
               legend(('line', PLAN, '주행 경로'), ('ring', GOAL, '목적지'))),
-        ipanel('단계별 구현 (본 영상: 삽입 중 추적 미적용)', f'<table class="comparison t6 m7-mission"><tr><th>단계</th><th>구현</th></tr>{mission_rows}</table>'), 424)}
+        ipanel('임무 흐름과 구현 (본 영상: 삽입 중 추적 미적용)', f'<ol class="m7-vflow">{mission_flow}</ol><p class="m7-vnote"><b>위치 추정</b>휠 오도메트리 + SLAM 보정 (전 구간)</p>'), 424)}
 <div class="takeaway">결과: 하역 오차 19 mm · 출발점 복귀 오차 27 mm · 포크–팔레트 접촉 없음</div>
 """,
-    """먼저 현재 시뮬레이션에서 처음부터 끝까지 연속으로 수행되는 운반 임무를 보여 드리겠습니다. 실측 차체 모델로 팔레트를 인식하고, 포크를 삽입해 적재한 뒤, 목적지에 하역하고 출발점으로 복귀합니다. 영상은 12배속입니다. 이 실행의 하역 오차는 19밀리미터, 출발점 복귀 오차는 27밀리미터였으며, 포크와 팔레트의 접촉은 없었습니다. 오른쪽 표는 단계별 구현입니다. 위치 추정은 slam_toolbox 기반의 일반적인 구성이므로 부록으로 돌리고, 인식, 삽입, 경로 계획은 뒤에서 설명드리겠습니다. 삽입 중 포켓 추적은 별도 실행으로 보여 드립니다. 다음은 이 임무를 수행하는 하드웨어 구성입니다. (전환)""",
+    """먼저 현재 시뮬레이션에서 처음부터 끝까지 연속으로 수행되는 운반 임무를 보여 드리겠습니다. 실측 차체 모델로 팔레트를 인식하고, 포크를 삽입해 적재한 뒤, 목적지에 하역하고 출발점으로 복귀합니다. 영상은 12배속입니다. 이 실행의 하역 오차는 19밀리미터, 출발점 복귀 오차는 27밀리미터였으며, 포크와 팔레트의 접촉은 없었습니다. 오른쪽은 영상의 진행 순서에 따른 단계별 구현입니다. 위치 추정은 slam_toolbox 기반의 일반적인 구성이므로 부록으로 돌리고, 인식, 삽입, 경로 계획은 소프트웨어 부분에서 설명드리겠습니다. 삽입 중 포켓 추적은 별도 실행으로 보여 드립니다. 이 결과를 사람이 운전하는 지게차의 시험 기준과 비교해 보겠습니다. (전환)""",
     [('ws1 artifacts/20261011_meeting_video/seed_5_d7', 'forklift b66271f 스냅숏, 실측 차체 · SLAM 위치 · LiDAR 1대 · --d7-planner --d7-docking · --video --robot-camera (근접 추적 끔). result.json: success, complete, 하역 19.4 mm, 복귀 2.7 cm · 0.040 rad, 금지 접촉 0, 진입 319.9 / 318.1 mm, 시뮬 219.6 s'),
      ('ws1 artifacts/20261011_meeting_video/seed_1_d7', '같은 조건 장면 1: success, 하역 27.0 mm, 복귀 5.1 cm, 금지 접촉 0, 시뮬 273.8 s'),
      ('config/isaac_transport_measured.yaml', '목적지 도킹: 미리 등록한 위치의 LiDAR 스캔 정합 (등록 위치는 시뮬레이터 값)'),
@@ -509,22 +555,40 @@ add('운반 임무 전체', '운반 임무 전체', 45, f"""
     '화면 생성: 위 장면 5 기록을 글자 없이 다시 합성한 영상(ws1 artifacts/20261012_meeting_clean/mission.mp4)의 조감 칸 12배속 (prepare_clips.py mission)')
 
 # ----------------------------------------------------------------- 11
-EXAM = [  # item, exam (disqualification unless noted), ours (simulation), verdict
-    ('하역 위치', '가로 · 세로 20 cm 초과 시 실격', '하역 오차 약 3 cm 이하 (기준의 약 1/7)', 'ok'),
-    ('포크 삽입', '미삽입 거리 20 cm 초과 시 실격', '미삽입 거리 약 2–4 cm', 'ok'),
-    ('낙하 · 밀림', '화물 낙하 · 팔레트 밀림 시 실격', '낙하 · 밀림 없음', 'ok'),
-    ('운반 중 포크 높이', '20–30 cm 유지 (50 cm 초과 시 실격)', '포크 높이 약 19–22 cm (하면–상면)', 'like'),
-    ('틸트', '마스트 각도 조절', '틸트 기구 없음', 'diff'),
+# 2026-10-12: each criterion as a gauge -- the exam's band and disqualification zone with the simulated
+# values on the same scale (values: the sources below) -- instead of a four-column table.
+def gauge(top, zones, ours, ticks, label):
+    """zones: (lo, hi, cls) in cm; ours: (lo, hi) cm; ticks: values in cm on a 0..top scale."""
+    pc = lambda v: f'{min(v, top) / top * 100:.2f}%'
+    z = ''.join(f'<span class="z {c}" style="left:{pc(a)};width:calc({pc(b)} - {pc(a)})"></span>' for a, b, c in zones)
+    lo, hi = ours
+    o = f'<span class="o" style="left:{pc(lo)};width:calc({pc(hi)} - {pc(lo)})"><em>{label}</em></span>'
+    t = ''.join(f'<span style="left:{pc(v)}">{v:g}{" cm" if v == ticks[-1] else ""}</span>' for v in ticks)
+    return f'<div class="g"><div class="trk">{z}{o}</div><div class="tk">{t}</div></div>'
+
+
+def fact(rule, ours):
+    return f'<div class="g txt"><span class="cond">{rule}</span><span class="arr">→</span><span class="ours">{ours}</span></div>'
+
+
+EXAM = [  # item, exam rule (short), visual, verdict
+    ('하역 위치', '20 cm 초과 시 실격', gauge(25, [(0, 20, 'ok'), (20, 25, 'ng')], (0, 3), [0, 10, 20], '약 3 cm 이하'), 'ok'),
+    ('포크 미삽입 거리', '20 cm 초과 시 실격', gauge(25, [(0, 20, 'ok'), (20, 25, 'ng')], (2, 4), [0, 10, 20], '약 2–4 cm'), 'ok'),
+    ('운반 중 포크 높이', '20–30 cm 유지 · 50 cm 초과 시 실격', gauge(55, [(20, 30, 'ok'), (50, 55, 'ng')], (19, 22), [0, 20, 30, 50], '약 19–22 cm'), 'like'),
+    ('낙하 · 밀림', '화물 낙하 · 팔레트 밀림 시 실격', fact('실격 조건', '낙하 · 밀림 없음'), 'ok'),
+    ('틸트', '마스트 각도 조절', fact('실기 조작', '틸트 기구 없음'), 'diff'),
 ]
 VERDICT = {'ok': ('기준 충족', 'ok'), 'like': ('하한 근접', 'like'), 'diff': ('기구 없음', 'diff')}
-exam_rows = ''.join(f'<tr><td>{a}</td><td>{b}</td><td>{c}</td><td><span class="m7-v {VERDICT[v][1]}">{VERDICT[v][0]}</span></td></tr>'
-                    for a, b, c, v in EXAM)
+exam_rows = ''.join(f'<p class="it">{a}<small>{b}</small></p>{g}<p class="vd"><span class="m7-v {VERDICT[v][1]}">{VERDICT[v][0]}</span></p>'
+                    for a, b, g, v in EXAM)
+EXAM_LEGEND = legend(('cell', '#bfe3cc', '기준 범위'), ('cell', '#f2b8b2', '실격 구간'), ('cell', '#004094', '개발 차량 (시뮬레이션)'))
+
 add('자격시험 기준 비교', '지게차운전기능사 실기 기준과 비교', 55, f"""
 <h2 class="headline">지게차운전기능사 실기 기준 대비: 하역 · 삽입 · 낙하 항목 충족 · 틸트 기구 미보유</h2>
-{ipanel('실기시험 기준 비교 (시험 기준은 실제 지게차 규모)', f'<table class="comparison m7-exam"><tr><th>항목</th><th>실기시험 (2025 공개문제)</th><th>개발 차량 (시뮬레이션)</th><th>판정</th></tr>{exam_rows}</table>', 'grow')}
+<div class="m7-gauges grow"><p class="hd">항목 · 실기시험 (2025 공개문제)</p><p class="hd">실기시험 기준 (실제 지게차 규모)과 개발 차량</p><p class="hd">판정</p>{exam_rows}<p class="legend">{EXAM_LEGEND}</p></div>
 <div class="takeaway">제안: 코스 치수가 차폭 (최외측 타이어 간 거리)의 배수로 정의됨 → 개발 차량 규모로 축소한 코스를 시뮬레이션 평가에 적용</div>
 """,
-    """사람이 운전하는 지게차의 기준과 비교하기 위해 지게차운전기능사 실기시험 기준과 대조했습니다. 시험은 팔레트를 적재해 코스를 주행한 뒤 하역하는 과제로, 작업 흐름이 본 임무와 유사합니다. 하역 위치가 20센티미터 넘게 어긋나거나, 포크 미삽입 거리가 20센티미터를 넘거나, 화물을 낙하시키거나 팔레트를 밀면 실격인데, 시뮬레이션 결과는 모두 기준 이내입니다. 운반 중 포크 높이는 약 20센티미터로 권장 범위의 하한에 해당합니다. 마스트를 기울이는 틸트 기구는 없으므로, 틸트 없는 운반이 허용되는지는 마지막에 여쭙겠습니다. 시험 기준은 실제 지게차 규모이므로, 코스 치수가 차폭의 배수로 정의된다는 점을 이용해 개발 차량 규모로 축소한 코스를 시뮬레이션 평가에 적용할 것을 제안드립니다. (전환)""",
+    """비교 기준은 지게차운전기능사 실기시험입니다. 시험은 팔레트를 적재해 코스를 주행한 뒤 하역하는 과제로, 작업 흐름이 본 임무와 유사합니다. 그림의 초록 구간이 기준 범위, 빨간 구간이 실격 구간이고, 파란 막대가 시뮬레이션 결과입니다. 하역 위치가 20센티미터 넘게 어긋나거나, 포크 미삽입 거리가 20센티미터를 넘거나, 화물을 낙하시키거나 팔레트를 밀면 실격인데, 시뮬레이션 결과는 모두 기준 이내입니다. 운반 중 포크 높이는 약 19에서 22센티미터로, 20에서 30센티미터 유지 기준의 하한에 해당합니다. 마스트를 기울이는 틸트 기구는 없으므로, 틸트 없는 운반이 허용되는지는 마지막에 여쭙겠습니다. 시험 기준은 실제 지게차 규모이므로, 코스 치수가 차폭의 배수로 정의된다는 점을 이용해 개발 차량 규모로 축소한 코스를 시뮬레이션 평가에 적용할 것을 제안드립니다. (전환)""",
     [(QNET, '「[공개문제] 지게차운전기능사」 코스운전 및 작업 (한국산업인력공단, 2025-12-22 등록) — 유의사항 7 주행 중 포크 20–30 cm 유지, 실격 (8) 화물 · 파렛트 낙하 (9) 파손 (10) 포크로 드럼통 터치 (14) 포크 50 cm 초과 (15) 하역 20 cm 초과 (16)(17) 밀림 (18) 덜 삽입 20 cm 초과; 팔레트에 닿는 것 자체는 실격 아님. 코스 치수는 D(좌우 최외측 타이어 바깥 간 거리)의 배수. 도면은 저작물이라 화면에 싣지 않음'),
      ('같은 문서', '시험 시간 4분 — 코스 · 차체 규모가 달라 비교에서 제외 (속도 · 작업 시간은 자율 동작 완성 뒤 단계)'),
      (S4B, '하역 6.74 mm, 진입 323.5 / 322.2 mm (캐리지 한계 0.346 m) · 캐리지 앞면–팔레트 간격 22.1 mm, 금지 접촉 0, 팔레트 밀림 없음; 운반 중 승강 관절 0.165 m (명령 lift_target_m 0.2 에 못 미침) → 포크 중심 0.205 m · 밑면 0.193 m · 윗면 0.218 m (fork_center_height 0.04, 두께 0.025)'),
@@ -535,52 +599,123 @@ add('자격시험 기준 비교', '지게차운전기능사 실기 기준과 비
     '출처: Q-Net 공개문제 원문 (2025) · 실행 기록')
 
 # ----------------------------------------------------------------- 12
-CONCLUSION = [  # what we found, so, direction
-    ('실측 조향각 15°', '최소 회전 반경 약 2.5 m (사진 추정의 약 1.9배)', '전 · 후진 전환 경로'),
-    ('상단 카메라 장착', '삽입 마지막 약 0.25 m 관측 불가', '캐리지 하단 장착 · 직전 보정 · 삽입 중 감시'),
-    ('기존 제어기', '릴레이 On/Off 제어만 가능', '자체 구동 보드 (속도 · 조향각 제어)'),
-    ('무압축 깊이 영상', '약 200 Mbit/s → Wi-Fi 실시간 전송 곤란', '차량 내 기록 · 상태만 전송 · 독립 비상정지'),
-    ('LiDAR 높이 1.05 m', '그보다 낮은 바닥 장애물 감지 불가', '운용 가정으로 명시 · 현장 조건 확인'),
+CONCLUSION = [  # group, what we found, so, direction -- hardware and software apart (user, 2026-10-12)
+    ('하드웨어', [('기존 제어기', '릴레이 On/Off 제어만 가능', '자체 구동 보드 (속도 · 조향각 제어)'),
+                ('상단 카메라 장착', '삽입 마지막 약 0.25 m 관측 불가', '캐리지 하단 장착'),
+                ('무압축 깊이 영상', 'Wi-Fi 실시간 전송 곤란 (약 200 Mbit/s)', '차량 내 기록 · 상태만 전송 · 독립 비상정지'),
+                ('LiDAR 높이 1.05 m', '그보다 낮은 바닥 장애물 감지 불가', '운용 가정으로 명시 · 현장 조건 확인')]),
+    ('소프트웨어', [('실측 조향각 15°', '최소 회전 반경 약 2.5 m', '전 · 후진 전환 경로 계획'),
+                 ('근접 시 포켓 입구 시야 이탈', '포켓 직접 검출 불가', '윗판 기반 추적 · 직전 보정 · 간격 감시')]),
 ]
-concl_rows = ''.join(f'<tr><td>{a}</td><td class="cur">{b}</td><td class="arrow">→</td><td class="nxt">{c}</td></tr>'
-                     for a, b, c in CONCLUSION)
-add('결론', '결론', 30, f"""
-<h2 class="headline">실측 차체 · 과제 센서의 제약을 근거로 경로 · 카메라 · 구동부 · 통신 설계 방향 확정</h2>
-{ipanel('확인 사항과 설계 방향', f'<table class="comparison plan6 m7-concl"><tr><th class="c1">확인 사항</th><th class="c2">영향</th><th class="c3"></th><th class="c4">설계 방향</th></tr>{concl_rows}</table>', 'grow')}
+GROUP_CLS = {'하드웨어': 'hw', '소프트웨어': 'sw'}
+
+
+def concl_row(group, n, i, row):
+    a, b, c = row
+    grp = f'<td class="grp {GROUP_CLS[group]}" rowspan="{n}">{group}</td>' if i == 0 else ''
+    return f'<tr>{grp}<td class="key">{a}</td><td class="cur">{b}</td><td class="arrow">→</td><td class="nxt">{c}</td></tr>'
+
+
+concl_rows = ''.join(concl_row(group, len(rows), i, row) for group, rows in CONCLUSION for i, row in enumerate(rows))
+add('결론', '확인 사항과 설계 방향', 30, f"""
+<h2 class="headline">실측 차체 · 과제 센서의 제약을 근거로 하드웨어 · 소프트웨어 설계 방향 확정</h2>
+<div class="m7-info grow"><div class="tb"><table class="comparison plan6 m7-concl"><tr><th class="c0">구분</th><th class="c1">확인 사항</th><th class="c2">영향</th><th class="c3"></th><th class="c4">설계 방향</th></tr>{concl_rows}</table></div></div>
 <div class="takeaway">다음 목표: 시뮬레이션 임무의 실차 이식 (구동 보드 · 센서 연동 → 실차 인식 · 위치 추정 → 전체 임무)</div>
 """,
-    """정리하면, 실측 차체와 시뮬레이션에서 확인한 사항을 근거로 설계 방향을 정했습니다. 회전 반경이 크므로 전 · 후진 전환 경로를 도입했고, 삽입 완료까지 관측하도록 카메라를 캐리지 하단으로 옮겼습니다. 속도 제어가 불가능한 기존 제어기 대신 구동 보드를 제작하고, 깊이 영상은 Wi-Fi로 전송하지 않고 차량에서 기록하며 비상정지는 독립된 경로로 둡니다. LiDAR 높이보다 낮은 바닥 장애물이 없다는 가정은 현장 조건으로 확인받고자 합니다. 다음 목표는 이 임무를 실차로 이식하는 것입니다. (전환)""",
+    """정리하면, 실측 차체와 시뮬레이션에서 확인한 사항을 근거로 하드웨어와 소프트웨어의 설계 방향을 정했습니다. 하드웨어는 속도 제어가 불가능한 기존 제어기 대신 구동 보드를 제작하고, 삽입 완료까지 관측하도록 카메라를 캐리지 하단으로 옮깁니다. 깊이 영상은 Wi-Fi로 전송하지 않고 차량에서 기록하며, 비상정지는 독립된 경로로 둡니다. LiDAR 높이보다 낮은 바닥 장애물이 없다는 가정은 현장 조건으로 확인받고자 합니다. 소프트웨어는 회전 반경이 크므로 전 · 후진 전환 경로를 도입했고, 근접 구간에서 포켓 입구가 시야를 벗어나므로 윗판 기반 추적과 직전 보정, 간격 감시로 삽입을 완료합니다. 다음 목표는 이 임무를 실차로 이식하는 것입니다. (전환)""",
     [(MEASURED, '실측 조향 15°, 회전 반경 2.46 m (사진 추정 1.32 m)'),
      (NEARPLAN, '기존 장착 마지막 약 0.25 m 무관측'),
      ('week-05/SCRIPT.md', '기존 제어기 릴레이 on/off, 속도 조절 기능 없음'),
-     ('3쪽 시스템 구성 출처', '무압축 깊이 848 × 480 · 30 fps 약 195 Mbit/s (계산), 무선 E-stop 은 Wi-Fi 와 별도'),
+     ('5쪽 시스템 구성 출처', '무압축 깊이 848 × 480 · 30 fps 약 195 Mbit/s (계산), 무선 E-stop 은 Wi-Fi 와 별도'),
      ('forklift CLAUDE.md', '과제 센서 구성(RGB-D 1 · 2D LiDAR 1) 유지, 낮은 장애물은 운용 가정'),
-     (FB6, '§2 결론 장표 — 무엇이 어떻게 달라지니까 무엇으로 가야 하는지')],
+     ('src/forklift_core/perception/roof_tracking.py', '포켓 입구가 시야를 벗어난 뒤 윗판 가장자리로 추적 (11쪽)'),
+     (FB6, '§2 결론 장표 — 무엇이 어떻게 달라지니까 무엇으로 가야 하는지'),
+     ('사용자 지시 (2026-10-12)', '하드웨어 · 소프트웨어를 나눠 보임')],
     '출처: 앞 장들의 결과 정리')
 
 # ----------------------------------------------------------------- 13
-SCHEDULE = [  # period, software, hardware
-    ('10/16–22', '다중 장면 A–D 반복 평가', '모터 전류 실측 · 구동 보드 PCB 설계'),
-    ('10/23–29', '중간고사', ''),
-    ('10/30–11/12', '실물 센서 연동 (Jetson · 카메라 · LiDAR)', '구동 보드 제작 · 속도 · 조향 제어'),
-    ('11/13–26', '실차 위치 추정 · 실물 팔레트 인식', '센서 브래킷 장착 · 캘리브레이션 · 시험 팔레트 제작'),
-    ('11/27–12/10', '실차 A 전체 임무 검증 → B · C · D 확대', '반복 시험 · 가정값을 실측값으로 교체'),
-    ('12/11–17', '최종 시연 준비', ''),
+# 2026-10-12 (user): the schedule as a Gantt chart, from the start of development to the end. The bars
+# up to 10/12 are what was done (dates from the repositories' history, sources below); from 10/16 the
+# plan of the development roadmap's calendar. Weeks start on Friday (roadmap section 4).
+G0, G1 = date(2026, 9, 4), date(2026, 12, 21)          # semester week 1 Friday .. the last exam day
+GSPAN = (G1 - G0).days + 1
+SW_C, HW_C, CO_C, TODAY_C = BLUE, ORANGE, '#6b7480', '#d0342c'
+GANTT = [  # group, colour, rows: (label, [(start, end, state)])  state: done / plan
+    ('소프트웨어', SW_C, [
+        ('개발 계획 · 시뮬레이션 환경', [('09-08', '10-01', 'done')]),
+        ('팔레트 인식 · 삽입 중 포켓 추적', [('09-11', '10-12', 'done')]),
+        ('위치 추정 · 장애물 지도 · 경로 계획', [('09-17', '10-12', 'done')]),
+        ('접근 시나리오 A–D 반복 평가', [('10-01', '10-12', 'done'), ('10-16', '10-22', 'plan')]),
+        ('실물 센서 연동 (Jetson · 카메라 · LiDAR)', [('10-30', '11-12', 'plan')]),
+        ('실차 위치 추정 · 실물 팔레트 인식', [('11-13', '11-26', 'plan')]),
+        ('실차 전체 임무 A → B · C · D', [('11-27', '12-10', 'plan')])]),
+    ('하드웨어', HW_C, [
+        ('부품 선정 (센서 · 컴퓨터)', [('09-10', '09-17', 'done')]),
+        ('차체 입고 · 실측 · 기존 제어기 분석', [('09-23', '09-30', 'done')]),
+        ('구동 보드 설계 · 모터 전류 실측', [('09-28', '10-12', 'done'), ('10-16', '10-22', 'plan')]),
+        ('구동 보드 제작 · 속도 · 조향 제어', [('10-30', '11-12', 'plan')]),
+        ('센서 장착 · 캘리브레이션 · 시험 팔레트', [('11-13', '11-26', 'plan')]),
+        ('실차 반복 시험 · 가정값 실측 교체', [('11-27', '12-10', 'plan')])]),
+    ('공통', CO_C, [('최종 시연 준비 (15주차 가정)', [('12-11', '12-17', 'plan')])]),
 ]
-sched_rows = ''.join(
-    (f'<tr class="exam"><td>{p}</td><td colspan="2">{s}</td></tr>' if not h and s == '중간고사' else
-     f'<tr><td>{p}</td><td colspan="2">{s}</td></tr>' if not h else
-     f'<tr><td>{p}</td><td>{s}</td><td>{h}</td></tr>') for p, s, h in SCHEDULE)
-add('남은 과제와 일정', '향후 과제와 일정', 30, f"""
-<h2 class="headline">향후 일정: 중간고사 전 구동 보드 설계 → 11월 실차 주행 → 12월 중순 최종 시연</h2>
-{ipanel('기간별 계획', f'<table class="comparison m7-sched"><tr><th>기간</th><th>소프트웨어</th><th>하드웨어</th></tr>{sched_rows}</table>', 'grow')}
+G_EXAMS = [('10-23', '10-29', '중간고사'), ('12-18', '12-21', '기말')]
+G_TODAY = ('10-14', '10/14 중간 미팅')
+
+
+def gday(md):
+    m, d = map(int, md.split('-'))
+    return date(2026, m, d)
+
+
+def gx(md, end=False):
+    return f'{((gday(md) - G0).days + (1 if end else 0)) / GSPAN * 100:.2f}%'
+
+
+def gantt():
+    cells, r = [], 2
+    n = sum(len(rows) for _, _, rows in GANTT)
+    weeks = [G0 + timedelta(days=7 * k) for k in range(16)]
+    ticks = ''.join(f'<span style="left:{gx(w.strftime("%m-%d"))}">{w.month}/{w.day}</span>' for w in weeks[:-1])
+    lines = ''.join(f'<i style="left:{gx(w.strftime("%m-%d"))}"></i>' for w in weeks[1:])
+    exams = ''.join(f'<b style="left:{gx(a)};width:calc({gx(b, True)} - {gx(a)})"><em>{t}</em></b>' for a, b, t in G_EXAMS)
+    today = f'<u style="left:{gx(G_TODAY[0], True)}"></u>'
+    cells.append(f'<div class="ax" style="grid-row:1;grid-column:3">{ticks}'
+                 f'<span class="now" style="left:{gx(G_TODAY[0], True)}">{G_TODAY[1]}</span></div>')
+    cells.append(f'<div class="ov" style="grid-row:2 / span {n};grid-column:3">{lines}{exams}{today}</div>')
+    for group, colour, rows in GANTT:
+        cells.append(f'<p class="grp" style="grid-row:{r} / span {len(rows)};color:{colour}">{group}</p>')
+        for i, (label, segs) in enumerate(rows):
+            first = ' first' if i == 0 else ''
+            bars = ''.join(
+                f'<span class="{st}" style="left:{gx(a)};width:calc({gx(b, True)} - {gx(a)});'
+                f'{"background:" + colour if st == "done" else "background:" + colour + "73;border-color:" + colour}"></span>'
+                for a, b, st in segs)
+            cells.append(f'<p class="lb{first}" style="grid-row:{r}">{label}</p>'
+                         f'<div class="tl{first}" style="grid-row:{r}">{bars}</div>')
+            r += 1
+    return f'<div class="m7-gantt grow">{"".join(cells)}</div>'
+
+
+GANTT_LEGEND = legend(('cell', SW_C, '소프트웨어'), ('cell', HW_C, '하드웨어'), '|',
+                      ('cell', '#5a5f66', '수행'), ('band', '#5a5f66', '예정'), '|',
+                      ('dash', TODAY_C, '중간 미팅 (10/14)'), ('cell', '#e3e6ea', '시험 기간'))
+add('개발 일정', '개발 일정', 35, f"""
+<h2 class="headline">개발 일정: 시뮬레이션 개발 · 구동 보드 설계 → 11월 실차 주행 → 12월 중순 최종 시연</h2>
+{gantt()}
+<p class="m7-glegend legend">{GANTT_LEGEND}</p>
 <div class="takeaway">전제: 구동 보드 제작 시점에 따라 실차 단계 조정 · 최종 시연일은 15주차로 가정</div>
 """,
-    """향후 일정입니다. 중간고사 전에는 모터 전류를 실측해 구동 보드 PCB를 설계하고, 시뮬레이션에서 A–D를 여러 장면으로 반복 평가합니다. 중간고사 이후에는 구동 보드를 제작하고 Jetson에 센서를 연동합니다. 11월 중순부터 실차 위치 추정과 팔레트 인식을, 12월 초까지 실차 전체 임무를 검증하고, 마지막 주에 최종 시연을 준비합니다. 일정은 실물 진행 상황에 따라 조정될 수 있습니다. (전환)""",
-    [('docs/plans/2026-09-11-development-roadmap.md', '§4 달력 대응: 8주차 10/23–29 중간고사, 9–10주차 10/30–11/12, 11–12주차 11/13–11/26, 13–14주차 11/27–12/10, 15주차 12/11–17 예비 · 최종 시연일 미정(15주차 가정)'),
+    """개발 일정입니다. 빨간 점선이 오늘 미팅 시점으로, 왼쪽이 지금까지 수행한 내용이고 오른쪽이 앞으로의 계획입니다. 9월 초 개발 계획을 세운 뒤, 소프트웨어는 시뮬레이션 환경과 팔레트 인식을 시작으로 경로 계획, 위치 추정과 장애물 지도, 삽입 중 포켓 추적을 개발했습니다. 하드웨어는 부품을 선정하고, 9월 하순 차체가 입고된 뒤 실측과 기존 제어기 분석을 마쳤으며, 현재 구동 보드를 설계하고 있습니다. 중간고사 전에는 모터 전류를 실측해 구동 보드 PCB를 설계하고, 시뮬레이션에서 A–D를 여러 장면으로 반복 평가합니다. 중간고사 이후에는 구동 보드를 제작하고 Jetson에 센서를 연동합니다. 11월 중순부터 실차 위치 추정과 팔레트 인식을, 12월 초까지 실차 전체 임무를 검증하고, 마지막 주에 최종 시연을 준비합니다. 일정은 실물 진행 상황에 따라 조정될 수 있습니다. (전환)""",
+    [('docs/plans/2026-09-11-development-roadmap.md', '§4 달력 대응: 학기 주차는 금요일 시작(1주차 09/04), 8주차 10/23–29 중간고사, 9–10주차 10/30–11/12, 11–12주차 11/13–11/26, 13–14주차 11/27–12/10, 15주차 12/11–17 예비 · 최종 시연일 미정(15주차 가정), 16주차 12/18–21 기말고사'),
+     ('forklift-presentations git 이력', '2주차 개발 계획 자료 2026-09-08–09'),
+     ('forklift git 이력 (수행 막대)', '09/10 저장소 · 하드웨어 결정(ADR 0001), 09/11 Gazebo 정적 장면, 09/13–16 포켓 검출 · 평가, 09/17 Isaac Sim 전환(ADR 0004) · Hybrid A* 운반, 09/19 검출기 Isaac 연동, 09/26 공장 홀 · LiDAR SLAM, 10/01 실측 차체 모델 · A–D 재검증, 10/04 캐리지 하단 장착, 10/05–08 점유 격자 · 주행 허가 · 단일 LiDAR · D7, 10/08–12 근접 추적(D8) · 운반 복구, 10/12 A–D 렌더 (meeting_ad)'),
+     ('docs/hardware.md · docs/decisions/0001', 'D435i 확정 · RPLIDAR A2 계열 · Jetson 권장안 (2026-09-10, A2M12 기대 09/15)'),
+     ('docs/validation/2026-09-23-chassis-intake.md', '차체 입고 · 초기 구조 조사 2026-09-23'),
+     ('week-05/SOURCES.md', '실측 사진 2026-09-29–30, 팀 실측 09/30, 제어기 역분석 보고 09/30, 모터 드라이버 · 엔코더 선정 · 회로 초안(5주차 자료 09/28–30); 모터 수치 · IPROPI 검토 10/12 (8쪽)'),
      ('week-06/build_deck.py', '8쪽 다음 작업: 모터 전류 실측 → 전류 제한 · 방열 → PCB, 가정값 실측 교체, 센서 브래킷'),
-     ('docs/references/week3_feedback.md', '시험 팔레트 만드는 방법(3D 프린터 · 스티로폼 · 목재 재단) — 11/13–26 배치는 팀 확인 전 제안')],
-    '출처: 개발 로드맵 달력 · 6주차 다음 작업 (실물 일정은 팀 계획)')
+     ('docs/references/week3_feedback.md', '시험 팔레트 만드는 방법(3D 프린터 · 스티로폼 · 목재 재단) — 11/13–26 배치는 팀 확인 전 제안'),
+     ('사용자 지시 (2026-10-12)', '일정은 간트 차트로, 개발 시작부터 끝까지')],
+    '출처: 개발 로드맵 달력 · 저장소 이력 · 6주차 다음 작업 (실물 일정은 팀 계획)')
 
 # ----------------------------------------------------------------- 14
 QUESTIONS = [  # group (week 4 feedback: asked / decided / provided), items; (True, ...) = ask first
@@ -614,12 +749,17 @@ N_SLIDES = 20
 
 # 2026-10-12 (user): the company works on SLAM itself, so the talk follows the brief's items and
 # puts the hardware first; the localization slides stay as an appendix for questions (the week 6
-# feedback asked for the LiDAR / vision comparison).
-ORDER = ['리보틱스 중간 미팅', '과제 이해와 진행 현황', '운반 임무 전체', '시스템 구성', '실물 차체',
-         '기존 제어기 분석', '구동 보드 설계', '시뮬레이션 환경', '포켓 인식', '삽입 중 포켓 추적', '새 장애물 대응',
-         '후진을 고르는 이유', '접근 상황 A · B', '접근 상황 C · D', '자격시험 기준 비교', '결론', '남은 과제와 일정', '확인 요청',
-         '위치 · 장애물 구조', '위치 추정']
+# feedback asked for the LiDAR / vision comparison). Same day, later: "요약 -> hw -> sw -> 결론(향후일정)
+# -> 질의응답", hardware and software apart, the licence comparison moved to the front.
+SECTIONS = [('요약', ['과제 이해와 진행 현황', '운반 임무 전체', '자격시험 기준 비교']),
+            ('하드웨어', ['시스템 구성', '실물 차체', '기존 제어기 분석', '구동 보드 설계']),
+            ('소프트웨어', ['시뮬레이션 환경', '포켓 인식', '삽입 중 포켓 추적', '새 장애물 대응', '후진을 고르는 이유',
+                       '접근 상황 A · B', '접근 상황 C · D']),
+            ('결론', ['결론', '개발 일정']),
+            ('질의응답', ['확인 요청'])]
+SECTION = {label: name for name, labels in SECTIONS for label in labels}
 APPENDIX = ('위치 · 장애물 구조', '위치 추정')
+ORDER = ['리보틱스 중간 미팅'] + [label for _, labels in SECTIONS for label in labels] + list(APPENDIX)
 
 
 def build():
@@ -629,7 +769,7 @@ def build():
     slides.sort(key=lambda s: ORDER.index(s['label']))
     main = [s for s in slides if s['label'] not in APPENDIX]
     for i, s in enumerate(main[1:], 1):
-        s['title'] = f'{i:02d}  {s["title"]}'
+        s['title'] = f'{i:02d}  {SECTION[s["label"]]} · {s["title"]}'
     for i, s in enumerate((s for s in slides if s['label'] in APPENDIX), 1):
         s['title'] = f'부록 {i}  {s["title"]}'
         s['seconds'] = 0                    # shown only for questions, outside the timed talk

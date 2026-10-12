@@ -31,6 +31,8 @@ Writes assets/ (published with the page; the deck font Noto Sans CJK is the syst
 
 7. `brief` -- 57_brief_{a,b,c,d}.png, the brief's own drawings of cases A-D (slides 8-11) without title
    and caption, shown beside the A-D simulation clips.
+8. `thumbs` -- 80_t_*.jpg, 480 x 320 crops of the figures and clip posters above for the status lanes
+   of slide 2 (THUMBS; run after the figures and clips exist).
 
 Sizes are in slide canvas pixels (1280 x 720 deck) and saved at 2.5x.
 """
@@ -445,6 +447,29 @@ def brief_cases(pdf):
     return out
 
 
+THUMBS = {  # name: (source in assets/, crop box) -- 3 : 2 crops of figures and clip posters already on the slides
+    'pocket': ('20_pipeline_stages_crop.png', (1419, 55, 1804, 312)),       # stage 4, under the viewpoint tag
+    'map': ('46_new_obstacle_single_poster.jpg', (840, 0, 1250, 273)),      # SLAM map panel with the LiDAR cells
+    'path': ('55_reverse_box_poster.jpg', (140, 90, 1080, 717)),            # under the stage tag
+    'insert': ('61_insert_depth_poster.jpg', (0, 60, 548, 425)),            # under the stage tag
+    'mission': ('71_mission_poster.jpg', (0, 180, 620, 593)),
+    'chassis': ('30_chassis_pallet.jpg', (260, 360, 1050, 887)),            # the truck, without the lab's wall sign
+    'ctrl': ('43_la_setup.jpg', (0, 0, 639, 426)),                          # the relay board
+    'board': ('45_sch_drv_channel.png', (100, 0, 1024, 616)),
+}
+
+
+def thumbs():
+    """Slide 2's status lanes: one small picture per stage, cut from what the later slides show."""
+    from PIL import Image
+    out = []
+    for name, (src, box) in THUMBS.items():
+        im = Image.open(ASSETS / src).convert('RGB').crop(box).resize((480, 320), Image.LANCZOS)
+        im.save(ASSETS / f'80_t_{name}.jpg', quality=88)
+        out.append(f'80_t_{name}.jpg')
+    return out
+
+
 def main(repo, planner_src=None):
     repo = Path(repo).resolve()
     meta = {'40_system.png': system(), '41_structure.png': structure()}
@@ -459,5 +484,7 @@ if __name__ == '__main__':
         print(waveforms(), hardware_photos())
     elif sys.argv[1] == 'brief':
         print(brief_cases(Path(sys.argv[2])))
+    elif sys.argv[1] == 'thumbs':
+        print(thumbs())
     else:
         main(sys.argv[1], Path(sys.argv[2]).resolve() if len(sys.argv) > 2 else None)

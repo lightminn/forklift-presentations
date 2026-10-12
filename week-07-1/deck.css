@@ -698,3 +698,97 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .m7-info > .m7-photo { flex:none; width:100%; height:auto; aspect-ratio:1050 / 426; object-fit:contain; }
 .comparison.t6.m7-ctrl { font-size:19px; line-height:1.3; }
 .comparison.t6.m7-ctrl th, .comparison.t6.m7-ctrl td { padding:8px 12px; }
+/* ---- 2026-10-12 restructure: 요약 -> 하드웨어 -> 소프트웨어 -> 결론 -> 질의응답, fewer words (user) ----
+   software is blue and hardware orange wherever the two are shown apart (slides 2, 16, 17) */
+/* 2: the brief's stages as two status lanes, a picture per stage (prepare_figures.py thumbs) */
+.m7-lanes { display:grid; grid-template-columns:122px minmax(0,1fr); grid-template-rows:minmax(0,1fr) minmax(0,1fr); gap:14px 16px; min-height:0; }
+.m7-lanes .ln { display:flex; flex-direction:column; justify-content:center; margin:0; font-size:21px; font-weight:700; line-height:1.3; border-left:5px solid; padding-left:12px; }
+.m7-lanes .ln small { font-size:16px; font-weight:600; color:#5d6670; }
+.m7-lanes .ln.sw { color:var(--uos-blue); border-color:var(--uos-blue); }
+.m7-lanes .ln.hw { color:#a85b08; border-color:#c26a1a; }
+.m7-lanes .lr { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:24px; min-height:0; }
+.m7-lanes article { position:relative; display:flex; flex-direction:column; min-height:0; min-width:0; background:#f4f6f9; border-top:4px solid; border-radius:0 0 4px 4px; }
+.m7-lanes .lr.sw article { border-top-color:var(--uos-blue); }
+.m7-lanes .lr.hw article { border-top-color:#c26a1a; }
+.m7-lanes .lr.hw article.wait { border-top-color:#c9ccd1; }
+.m7-lanes article:not(:last-child)::after { content:'→'; position:absolute; right:-21px; top:38%; font-size:20px; color:#8c959e; }
+.m7-lanes .th { flex:1; min-height:0; width:100%; object-fit:cover; display:block; }
+.m7-lanes .th.none { background:repeating-linear-gradient(135deg,#e9ecf0 0 9px,#f4f6f9 9px 18px); }
+.m7-lanes h3 { flex-shrink:0; margin:7px 10px 1px; font-size:20px; line-height:1.25; white-space:nowrap; }
+.m7-lanes p { flex-shrink:0; margin:0 10px; font-size:16.5px; line-height:1.35; color:#1b1f24; }
+.m7-lanes p.st { margin:5px 10px 8px; font-size:16px; font-weight:600; white-space:nowrap; }
+.m7-lanes article.wait h3, .m7-lanes article.wait p { color:#5d6670; }
+.m7-tag.done { background:#c26a1a; } .m7-tag.wait { background:#9aa3ad; }
+.m7-tag.design { background:#e0a100; }
+.m7-lanes p.st .m7-tag:not(:first-child) { margin-left:8px; }
+/* 4: the exam criteria as gauges on the exam's own scale */
+.m7-gauges { display:grid; grid-template-columns:300px minmax(0,1fr) 112px; grid-template-rows:auto repeat(5,minmax(0,1fr)) auto; column-gap:26px; min-height:0; }
+.m7-gauges .hd { margin:0; padding:4px 0 8px; font-size:19px; font-weight:700; color:var(--uos-blue); border-bottom:2px solid var(--uos-blue); }
+.m7-gauges .it, .m7-gauges .vd, .m7-gauges .g { margin:0; border-bottom:1px solid var(--uos-rule); min-height:0; }
+.m7-gauges .it { display:flex; flex-direction:column; justify-content:center; font-size:21px; font-weight:700; line-height:1.3; }
+.m7-gauges .it small { margin-top:3px; font-size:16.5px; font-weight:400; color:#44505c; }
+.m7-gauges .vd { display:flex; align-items:center; }
+.m7-gauges .g { display:flex; flex-direction:column; justify-content:center; padding:0 26px 0 4px; }
+.m7-gauges .trk { position:relative; height:18px; margin-top:24px; background:#eef0f3; border-radius:2px; }
+.m7-gauges .z { position:absolute; top:0; bottom:0; }
+.m7-gauges .z.ok { background:#bfe3cc; } .m7-gauges .z.ng { background:#f2b8b2; }
+.m7-gauges .o { position:absolute; top:-4px; bottom:-4px; min-width:6px; background:#004094; border-radius:2px; }
+.m7-gauges .o em { position:absolute; bottom:calc(100% + 4px); left:0; font-style:normal; font-size:17px; font-weight:700; color:#004094; white-space:nowrap; }
+.m7-gauges .tk { position:relative; height:24px; }
+.m7-gauges .tk span { position:absolute; top:5px; transform:translateX(-50%); font-size:15px; color:#44505c; white-space:nowrap; font-variant-numeric:tabular-nums; }
+.m7-gauges .tk span:first-child { transform:none; }
+.m7-gauges .g.txt { flex-direction:row; align-items:center; justify-content:flex-start; gap:14px; font-size:18px; }
+.m7-gauges .g.txt .cond { color:#44505c; } .m7-gauges .g.txt .arr { color:#8c959e; }
+.m7-gauges .g.txt .ours { padding:4px 12px; font-weight:700; color:#ffffff; background:#004094; border-radius:3px; }
+.m7-gauges > .legend { grid-column:1 / -1; justify-content:center; margin:0; padding-top:8px; font-size:16px; color:#44505c; }
+.m7-gauges .legend .lg, .m7-glegend .lg { display:inline-flex; align-items:center; gap:7px; }
+/* 11: the five insertion steps on the fork tip's distance to the pallet face */
+.m7-dist { flex:1; display:grid; grid-template-columns:116px minmax(0,1fr); grid-template-rows:repeat(5,minmax(0,1fr)) auto; min-height:0; padding:4px 34px 0 0; }
+.m7-dist .rl { display:flex; align-items:center; margin:0; font-size:18px; font-weight:700; color:var(--uos-blue); white-space:nowrap; border-bottom:1px solid var(--uos-rule); }
+.m7-dist .tr { position:relative; border-bottom:1px solid var(--uos-rule); }
+.m7-dist .rl:nth-last-child(2) { border-bottom:0; }
+.m7-dist .face { position:absolute; top:0; bottom:0; width:0; border-left:2px dashed #8c959e; }
+.m7-dist .bar { position:absolute; top:50%; height:30px; transform:translateY(-50%); display:flex; align-items:center; padding:0 10px; box-sizing:border-box;
+  font-size:16px; color:#ffffff; background:var(--uos-blue); border-radius:3px; white-space:nowrap; overflow:hidden; }
+.m7-dist .bar.alt { background:#5b8fd0; }
+.m7-dist .bar.warn { background:#c26a1a; }
+.m7-dist .mk { position:absolute; top:38%; width:0; height:0; }
+.m7-dist .mk i { position:absolute; left:-9px; top:-9px; width:18px; height:18px; border-radius:50%; background:#c26a1a; box-shadow:0 0 0 3px #ffffff, 0 0 0 5px #c26a1a; }
+.m7-dist .mk.end i { border-radius:2px; background:#2e9a6b; box-shadow:0 0 0 3px #ffffff, 0 0 0 5px #2e9a6b; }
+.m7-dist .mk em { position:absolute; left:0; top:16px; transform:translateX(-50%); font-style:normal; font-size:15.5px; color:#1b1f24; white-space:nowrap; }
+.m7-dist .mk.end em { transform:translateX(-82%); }
+.m7-dist .ax { position:relative; height:30px; }
+.m7-dist .ax span { position:absolute; top:5px; transform:translateX(-50%); font-size:15px; color:#44505c; white-space:nowrap; font-variant-numeric:tabular-nums; }
+/* 16: findings grouped by hardware and software */
+.m7-concl th.c0 { width:10%; } .m7-concl th.c1 { width:22%; } .m7-concl th.c2 { width:31%; } .m7-concl th.c3 { width:4%; } .m7-concl th.c4 { width:33%; }
+.m7-concl td:first-child { color:inherit; }
+.m7-concl td.grp { font-weight:700; white-space:nowrap; border-right:1px solid var(--uos-rule); }
+.m7-concl td.grp.sw { color:var(--uos-blue); } .m7-concl td.grp.hw { color:#a85b08; }
+.m7-concl td.key { font-weight:700; color:#1b1f24; white-space:nowrap; }
+.m7-concl tr:has(td.grp.sw) td { border-top:2px solid var(--uos-rule); }
+/* 17: the schedule as a Gantt chart, development start to end */
+.m7-gantt { display:grid; grid-template-columns:118px 318px minmax(0,1fr); grid-template-rows:46px; grid-auto-rows:minmax(0,1fr); min-height:0; }
+.m7-gantt .ax { position:relative; border-bottom:2px solid var(--uos-blue); }
+.m7-gantt .ax span { position:absolute; bottom:4px; padding-left:4px; font-size:14px; color:#44505c; white-space:nowrap; font-variant-numeric:tabular-nums; }
+.m7-gantt .ax span.now { bottom:auto; top:0; padding:0; transform:translateX(-50%); font-size:15px; font-weight:700; color:#d0342c; }
+.m7-gantt .ov { position:relative; z-index:0; }
+.m7-gantt .ov i { position:absolute; top:0; bottom:0; border-left:1px solid #e6e8eb; }
+.m7-gantt .ov b { position:absolute; top:0; bottom:0; background:#e3e6ea; }
+.m7-gantt .ov b em { position:absolute; top:6px; left:50%; transform:translateX(-50%); font-style:normal; font-weight:600; font-size:13.5px; color:#5d6670; white-space:nowrap; }
+.m7-gantt .ov u { position:absolute; top:-26px; bottom:0; width:0; border-left:2.5px dashed #d0342c; }
+.m7-gantt .grp { grid-column:1; display:flex; align-items:center; margin:0; font-size:20px; font-weight:700; border-top:2px solid var(--uos-rule); }
+.m7-gantt .lb { grid-column:2; display:flex; align-items:center; margin:0; padding-right:10px; font-size:17px; white-space:nowrap; border-top:1px solid #eceef1; }
+.m7-gantt .tl { grid-column:3; position:relative; z-index:1; border-top:1px solid #eceef1; }
+.m7-gantt .lb.first, .m7-gantt .tl.first { border-top:2px solid var(--uos-rule); }
+.m7-gantt .tl span { position:absolute; top:20%; bottom:20%; box-sizing:border-box; border:2px solid transparent; border-radius:3px; }
+.m7-glegend { justify-content:center; align-items:center; margin:0; column-gap:18px; font-size:16px; color:#44505c; }
+/* 3: the mission's stages as a vertical flow in the clip's order */
+.m7-vflow { flex:1; list-style:none; margin:0; padding:6px 0 0 4px; display:flex; flex-direction:column; justify-content:space-around; counter-reset:st; position:relative; }
+.m7-vflow::before { content:''; position:absolute; left:21px; top:30px; bottom:30px; border-left:3px solid #c9d6ea; }
+.m7-vflow li { position:relative; display:grid; grid-template-columns:52px 150px minmax(0,1fr); align-items:center; counter-increment:st; }
+.m7-vflow li::before { content:counter(st); grid-column:1; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  background:var(--uos-blue); color:#ffffff; font-size:19px; font-weight:700; position:relative; }
+.m7-vflow b { font-size:22px; color:#1b1f24; white-space:nowrap; }
+.m7-vflow span { font-size:19px; color:#44505c; line-height:1.35; }
+.m7-vnote { flex-shrink:0; margin:10px 0 0; padding:9px 14px; background:#f4f6f9; border-left:4px solid var(--uos-blue); font-size:18px; color:#44505c; }
+.m7-vnote b { color:#1b1f24; margin-right:12px; }
