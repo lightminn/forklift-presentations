@@ -252,12 +252,11 @@ add('엔코더 보드 PCB', '08  엔코더 보드 PCB', 70, """
 <div class="pcb7 grow">
 <div class="pcbimgs">
 <p class="rl">2.54 mm</p>
-<figure class="shot"><img class="media" src="assets/75_enc_top.jpg" alt="2.54 mm 판 앞면. 왼쪽에 8핀 칩 U2와 고정 구멍 두 개, 가운데 C1 · C3 · R4, 오른쪽에 2열 4핀 단자"></figure>
-<figure class="shot"><img class="media" src="assets/75_enc_bottom.jpg" alt="2.54 mm 판 뒷면. 2열 4핀 박스 헤더가 보드보다 크게 나와 있음"></figure>
+<figure class="shot"><img class="media" src="assets/75_enc_top.jpg" alt="2.54 mm 판 앞면. 왼쪽에 8핀 칩 U2와 고정 구멍 두 개, 가운데 C1 · C3 · R4, 오른쪽에 2열 4핀 단자"><figcaption>앞면</figcaption></figure>
+<figure class="shot"><img class="media" src="assets/75_enc_bottom.jpg" alt="2.54 mm 판 뒷면. 2열 4핀 박스 헤더가 보드보다 크게 나와 있음"><figcaption>뒷면 (박스 헤더)</figcaption></figure>
 <p class="rl">1.27 mm</p>
-<figure class="shot"><img class="media" src="assets/75_enc127_top.jpg" alt="1.27 mm 판 앞면. 같은 부품 배치에 2열 4핀 단자가 촘촘해짐"></figure>
-<figure class="shot"><img class="media" src="assets/75_enc127_bottom.jpg" alt="1.27 mm 판 뒷면. 박스 헤더가 작아져 보드 폭 안에 가까워짐"></figure>
-<p></p><p class="cl">앞면</p><p class="cl">뒷면 (박스 헤더)</p>
+<figure class="shot"><img class="media" src="assets/75_enc127_top.jpg" alt="1.27 mm 판 앞면. 같은 부품 배치에 2열 4핀 단자가 촘촘해짐"><figcaption>앞면</figcaption></figure>
+<figure class="shot"><img class="media" src="assets/75_enc127_layout.jpg" alt="1.27 mm 판 PCB 배치도. 2열 4핀 커넥터 CN1 에 3V3, CS, CLK, MOSI, MISO, GND 가 배정되어 있고 실크에 KTH_Enc V1.0.1"><figcaption>배치도 (CN1 핀 배정)</figcaption></figure>
 </div>
 <table class="comparison t7 pcbq7">
 <tr><th>핀 간격</th><th>2.54 mm</th><th>1.27 mm</th></tr>
@@ -268,12 +267,12 @@ add('엔코더 보드 PCB', '08  엔코더 보드 PCB', 70, """
 </div>
 <div class="takeaway">엔코더 커넥터 핀 간격은 2.54 mm (납땜이 쉬움)와 1.27 mm (보드가 작아짐) 중 어느 쪽이 나을까요?</div>
 """,
-    """하드웨어는 엔코더 보드 PCB입니다. 5주차에 말씀드린 자석식 각도 센서 MT6701을 SOP-8 패키지로 올렸고, 2열 4핀 박스 헤더로 MCU 보드와 연결합니다. 위가 2.54밀리미터 커넥터 판, 아래가 1.27밀리미터 커넥터로 바꾼 판이고, 왼쪽이 앞면, 오른쪽이 뒷면입니다. 2.54밀리미터 판은 뒷면 커넥터가 보드보다 크게 튀어나와 있습니다. 그래서 두 판을 모두 그려 봤고, 어느 쪽으로 갈지 여쭤보고 싶습니다. 1.27밀리미터로 바꾸면 커넥터가 가로세로 절반 정도로 줄어 보드를 작게 만들 수 있지만, 납땜이 까다롭고 맞는 케이블의 선택지가 적습니다. 2.54밀리미터는 크지만 손납땜이 쉽고 박스 헤더용 납작 케이블을 쉽게 구할 수 있습니다. 실차에 달 때 어느 쪽이 나은지 의견 부탁드립니다. (전환)""",
-    [('팀 PCB 3D 렌더 (2026-10-14, 팀원 공유)', '엔코더 보드 앞면 · 뒷면 — U2(MT6701, SOP-8, 사용자 확인 2026-10-14) · C1 · C3 · R4 · 2×4 박스 헤더 · 고정 구멍 2개; 같은 날 커넥터를 1.27 mm 로 줄인 판의 앞면 · 뒷면(뒷면 실크 「KTH_Enc V1.0.0」)'),
+    """하드웨어는 엔코더 보드 PCB입니다. 5주차에 말씀드린 자석식 각도 센서 MT6701을 SOP-8 패키지로 올렸고, 2열 4핀 박스 헤더로 MCU 보드와 연결합니다. 위가 2.54밀리미터 커넥터 판, 아래가 1.27밀리미터 커넥터로 바꾼 판입니다. 아래 오른쪽은 1.27밀리미터 판의 배치도로, 커넥터 여덟 핀에 전원과 SPI 신호를 배정했습니다. 2.54밀리미터 판은 뒷면 커넥터가 보드보다 크게 튀어나와 있습니다. 그래서 두 판을 모두 그려 봤고, 어느 쪽으로 갈지 여쭤보고 싶습니다. 1.27밀리미터로 바꾸면 커넥터가 가로세로 절반 정도로 줄어 보드를 작게 만들 수 있지만, 납땜이 까다롭고 맞는 케이블의 선택지가 적습니다. 2.54밀리미터는 크지만 손납땜이 쉽고 박스 헤더용 납작 케이블을 쉽게 구할 수 있습니다. 실차에 달 때 어느 쪽이 나은지 의견 부탁드립니다. (전환)""",
+    [('팀 PCB 3D 렌더 (2026-10-14, 팀원 공유)', '엔코더 보드 앞면 · 뒷면 — U2(MT6701, SOP-8, 사용자 확인 2026-10-14) · C1 · C3 · R4 · 2×4 박스 헤더 · 고정 구멍 2개; 같은 날 커넥터를 1.27 mm 로 줄인 판(V1.0.1)의 3D 앞면과 PCB 배치도 — CN1 핀 1 3V3 · 2 CS · 4 CLK · 6 MOSI · 7 GND · 8 MISO'),
      ('week-05/build_deck.py 8쪽', '5주차 회로 초안: MT6701 증분판(ABZ) · 절대각판(SSI), 같은 2.54 mm 2×4 헤더'),
      ('팀 메시지 (2026-10-14)', '「교수님에게 2.54 VS 1.27 물어보죠」'),
      ('비교 표', '1.27 mm 는 2.54 mm 의 절반 간격 — 같은 핀 수면 커넥터 가로 · 세로가 약 절반 (기하 계산, 하우징 두께 제외)')],
-    '그림: 팀 PCB 3D 렌더 네 장 — 2.54 mm 판 · 1.27 mm 판 앞뒷면 (배경만 잘라 냄)')
+    '그림: 팀 PCB 자료 네 장 — 2.54 mm 판 앞 · 뒷면 3D, 1.27 mm 판(V1.0.1) 앞면 3D와 배치도 (배경만 잘라 냄)')
 
 # ----------------------------------------------------------------- 10
 NEXT_ROWS = [

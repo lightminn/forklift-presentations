@@ -576,8 +576,9 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .comparison.t7.pcbq7 td, .comparison.t7.pcbq7 th { padding:12px 10px; }
 .pcb7 .shot .media { border:0; outline:0; box-shadow:none; }
 .comparison.t7.pcbq7 td { white-space:nowrap; }
-.pcbimgs { display:grid; grid-template-columns:auto 1fr 1fr; grid-template-rows:minmax(0,1fr) minmax(0,1fr) auto; gap:8px 10px; height:100%; min-height:0; align-items:center; }
+.pcbimgs { display:grid; grid-template-columns:auto 1fr 1fr; grid-template-rows:minmax(0,1fr) minmax(0,1fr); gap:8px 10px; height:100%; min-height:0; align-items:center; }
 .pcbimgs .shot { padding:4px; }
 .pcbimgs .rl { font-size:20px; font-weight:700; color:#44505c; writing-mode:horizontal-tb; white-space:nowrap; }
 .pcbimgs .rl.now { color:var(--uos-blue); }
 .pcbimgs .cl { font-size:17px; color:#44505c; text-align:center; margin:0; }
+.pcbimgs .shot figcaption { color:#e8ecf1; font-size:16px; margin-top:2px; }
