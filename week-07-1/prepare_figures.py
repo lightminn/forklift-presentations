@@ -142,8 +142,8 @@ class Canvas:
 
 
 # ---------------------------------------------------------------- slide 4
-WIFI_LINE = 'Wi-Fi: 상태 · 지도 전송'
-ESTOP_LINE = 'Wi-Fi와 독립 · 신호 상실 시 정지'
+WIFI_LINE = '상태와 지도만 Wi-Fi로 전송'
+ESTOP_LINE = 'Wi-Fi와 별도 경로, 신호가 끊기면 정지'
 
 
 def system():

@@ -34,12 +34,12 @@ B 는 멈추지 않고 삽입 — 멈춘 뒤 정렬하는 구현은 B 완료로 
 차체 실측 · 제어기 역분석(릴레이 on/off, 속도 조절 없음) → DRV8244 구동 보드 회로 초안: week-05/SCRIPT.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="01  요약 · 과제 요구사항별 접근과 진행 현황"><div class="slide-body">
-<h2 class="headline">시뮬레이션: 전 과정 통합 · 실차: 구동 보드 설계 중</h2>
+<h2 class="headline">시뮬레이션은 전 과정 통합, 실차는 구동 보드 설계 중</h2>
 <div class="m7-lanes grow">
 <p class="ln sw">소프트웨어<small>시뮬레이션</small></p><div class="lr sw"><article class=""><img class="th" src="assets/80_t_pocket.jpg" alt=""><h3>팔레트 인식</h3><p>D435i · 규격 치수 기반</p><p class="st"><span class="m7-tag ok">확인</span>포켓 위치 · 방향</p></article><article class=""><img class="th" src="assets/80_t_map.jpg" alt=""><h3>위치 · 장애물</h3><p>SLAM · 점유 격자</p><p class="st"><span class="m7-tag ok">확인</span>신규 장애물 재계획</p></article><article class=""><img class="th" src="assets/80_t_path.jpg" alt=""><h3>장애물 회피 경로</h3><p>Hybrid A* (전 · 후진)</p><p class="st"><span class="m7-tag ok">확인</span>A · C · D<span class="m7-tag part">일부</span>B</p></article><article class=""><img class="th" src="assets/80_t_insert.jpg" alt=""><h3>삽입 중 포켓 추적</h3><p>캐리지 하단 카메라</p><p class="st"><span class="m7-tag ok">확인</span>무접촉 삽입</p></article><article class=""><img class="th" src="assets/80_t_mission.jpg" alt=""><h3>운반 · 하역</h3><p>인식 → 하역 단일 임무</p><p class="st"><span class="m7-tag ok">확인</span>임무 완주</p></article></div>
 <p class="ln hw">하드웨어<small>실차</small></p><div class="lr hw"><article class=""><img class="th" src="assets/80_t_chassis.jpg" alt=""><h3>차체 실측</h3><p>최대 조향각 15°</p><p class="st"><span class="m7-tag done">완료</span></p></article><article class=""><img class="th" src="assets/80_t_ctrl.jpg" alt=""><h3>기존 제어기 분석</h3><p>릴레이 On/Off 구동</p><p class="st"><span class="m7-tag done">완료</span></p></article><article class=""><img class="th" src="assets/80_t_board.jpg" alt=""><h3>구동 보드</h3><p>DRV8244 · MT6701</p><p class="st"><span class="m7-tag design">설계 중</span></p></article><article class="wait"><div class="th none"></div><h3>센서 장착</h3><p>D435i · A2M12 보유</p><p class="st"><span class="m7-tag wait">예정</span></p></article><article class="wait"><div class="th none"></div><h3>실차 주행</h3><p>구동 보드 제작 후 A부터</p><p class="st"><span class="m7-tag wait">예정</span></p></article></div>
 </div>
-<div class="takeaway">향후 과제: B 무정지 삽입 · A–D 반복 평가 · 센서 시험 · 실차 주행</div>
+<div class="takeaway">남은 과제는 B에서 정지 없이 삽입, A–D 반복 평가, 센서 시험, 실차 주행입니다</div>
 </div></x-import>
 </section>
 
@@ -61,8 +61,8 @@ RearAxlePathTracker — 뒤차축 pure pursuit (곡률 = 2 · 횡오차 / 거리
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="02  요약 · 운반 임무 전체"><div class="slide-body">
 <h2 class="headline">인식부터 복귀까지 한 임무로 자율 수행 (실측 차체 모델)</h2>
-<div class="m7-stage grow" style="grid-template-columns:424px 1fr"><figure class="m7-media"><video class="media" src="assets/71_mission.mp4" poster="assets/71_mission_poster.jpg" autoplay loop muted playsinline aria-label="공장 홀을 상부 시점에서 본 지게차. 팔레트를 인식해 적재하고, 목적지에 하역한 뒤 출발점으로 복귀한다"></video><figcaption class="legend"><span class="lg"><span class="sw line" style="background:#ffd600"></span>주행 경로</span><span class="lg"><span class="sw ring" style="border-color:#00c83c"></span>목적지</span></figcaption></figure><div class="m7-info "><p class="ph">임무 흐름 (삽입 중 추적 미적용 실행)</p><div class="tb"><ol class="m7-vflow"><li><b>팔레트 인식</b><span>규격 치수 기반 형상 규칙</span></li><li><b>접근 · 삽입</b><span>Hybrid A* · 2 m 앞 재관측 → 직진 삽입</span></li><li><b>적재 · 운반</b><span>리프트 → 운반 · 점유 격자 정지 판단</span></li><li><b>하역</b><span>ICP 스캔 정합 → 위치 보정</span></li><li><b>복귀</b><span>후진 선회로 방향 전환 → 전진 복귀</span></li></ol><p class="m7-vnote"><b>위치 추정</b>휠 오도메트리 + SLAM 보정 (전 구간)</p></div></div></div>
-<div class="takeaway">결과: 하역 오차 19 mm · 복귀 오차 23 mm · 무접촉</div>
+<div class="m7-stage grow" style="grid-template-columns:424px 1fr"><figure class="m7-media"><video class="media" src="assets/71_mission.mp4" poster="assets/71_mission_poster.jpg" autoplay loop muted playsinline aria-label="공장 홀을 상부 시점에서 본 지게차. 팔레트를 인식해 적재하고, 목적지에 하역한 뒤 출발점으로 복귀한다"></video><figcaption class="legend"><span class="lg"><span class="sw line" style="background:#ffd600"></span>주행 경로</span><span class="lg"><span class="sw ring" style="border-color:#00c83c"></span>목적지</span></figcaption></figure><div class="m7-info "><p class="ph">임무 흐름 (삽입 중 추적 미적용 실행)</p><div class="tb"><ol class="m7-vflow"><li><b>팔레트 인식</b><span>규격 치수 기반 형상 규칙</span></li><li><b>접근 · 삽입</b><span>Hybrid A* · 2 m 앞 재관측 → 직진 삽입</span></li><li><b>적재 · 운반</b><span>리프트 → 운반 · 점유 격자 정지 판단</span></li><li><b>하역</b><span>ICP 스캔 정합 → 위치 보정</span></li><li><b>복귀</b><span>후진 선회로 방향 전환 → 전진 복귀</span></li></ol><p class="m7-vnote"><b>위치 추정</b>전 구간에서 휠 오도메트리를 SLAM으로 보정</p></div></div></div>
+<div class="takeaway">하역 오차 19 mm, 복귀 오차 23 mm로 팔레트에 닿지 않고 임무를 마쳤습니다</div>
 </div></x-import>
 </section>
 
@@ -81,9 +81,9 @@ insertion_measured: D7 v2 20.4–26.1 mm, 녹화 장면 5 · 1: 25.6 · 35.5 mm,
 §2 실제 지게차 자격증 시험 기준과 우리 지게차 비교 표 (3주차 피드백: 국가공인 시험의 표준 운용 방법): docs/references/week6_feedback.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="03  요약 · 지게차운전기능사 실기 기준과 비교"><div class="slide-body">
-<h2 class="headline">하역 · 삽입 · 낙하 기준 충족 · 틸트 기구 없음</h2>
+<h2 class="headline">하역, 삽입, 낙하 기준은 충족하고 틸트 기구는 없음</h2>
 <div class="m7-gauges grow"><p class="hd">항목 (2025 공개문제)</p><p class="hd">기준 (실제 지게차 규모) · 개발 차량</p><p class="hd">판정</p><p class="it">하역 위치<small>20 cm 초과 시 실격</small></p><div class="g"><div class="trk"><span class="z ok" style="left:0.00%;width:calc(80.00% - 0.00%)"></span><span class="z ng" style="left:80.00%;width:calc(100.00% - 80.00%)"></span><span class="o" style="left:0.00%;width:calc(12.00% - 0.00%)"><em>약 3 cm 이하</em></span></div><div class="tk"><span style="left:0.00%">0</span><span style="left:40.00%">10</span><span style="left:80.00%">20 cm</span></div></div><p class="vd"><span class="m7-v ok">기준 충족</span></p><p class="it">포크 미삽입 거리<small>20 cm 초과 시 실격</small></p><div class="g"><div class="trk"><span class="z ok" style="left:0.00%;width:calc(80.00% - 0.00%)"></span><span class="z ng" style="left:80.00%;width:calc(100.00% - 80.00%)"></span><span class="o" style="left:8.00%;width:calc(16.00% - 8.00%)"><em>약 2–4 cm</em></span></div><div class="tk"><span style="left:0.00%">0</span><span style="left:40.00%">10</span><span style="left:80.00%">20 cm</span></div></div><p class="vd"><span class="m7-v ok">기준 충족</span></p><p class="it">운반 중 포크 높이<small>20–30 cm 유지 · 50 cm 초과 실격</small></p><div class="g"><div class="trk"><span class="z ok" style="left:36.36%;width:calc(54.55% - 36.36%)"></span><span class="z ng" style="left:90.91%;width:calc(100.00% - 90.91%)"></span><span class="o" style="left:34.55%;width:calc(40.00% - 34.55%)"><em>약 19–22 cm</em></span></div><div class="tk"><span style="left:0.00%">0</span><span style="left:36.36%">20</span><span style="left:54.55%">30</span><span style="left:90.91%">50 cm</span></div></div><p class="vd"><span class="m7-v like">하한 근접</span></p><p class="it">낙하 · 밀림<small>낙하 · 밀림 시 실격</small></p><div class="g txt"><span class="cond">실격 조건</span><span class="arr">→</span><span class="ours">낙하 · 밀림 없음</span></div><p class="vd"><span class="m7-v ok">기준 충족</span></p><p class="it">틸트<small>마스트 각도 조절</small></p><div class="g txt"><span class="cond">실기 조작</span><span class="arr">→</span><span class="ours">틸트 기구 없음</span></div><p class="vd"><span class="m7-v diff">기구 없음</span></p><p class="legend"><span class="lg"><span class="sw cell" style="background:#bfe3cc"></span>기준 범위</span><span class="lg"><span class="sw cell" style="background:#f2b8b2"></span>실격 구간</span><span class="lg"><span class="sw cell" style="background:#004094"></span>개발 차량 (시뮬레이션)</span></p></div>
-<div class="takeaway">제안: 코스 치수는 차폭의 배수 → 개발 차량 규모로 축소해 시뮬레이션 평가에 적용</div>
+<div class="takeaway">코스 치수가 차폭의 배수이므로, 개발 차량 규모로 줄여 시뮬레이션 평가에 쓰기를 제안합니다</div>
 </div></x-import>
 </section>
 
@@ -106,9 +106,9 @@ slam_toolbox online_sync, mapping, 해상도 0.05 m, Ceres, 루프 닫기; Isaac
 --min-obstacle-height-m 1.15 — 1.05 m 평면에 닿지 않는 소품 제거 (운용 가정): forklift bc4cc64
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="04  소프트웨어 · 시뮬레이션 환경"><div class="slide-body">
-<h2 class="headline">Isaac Sim 공장 홀 · 실측 차체 · 과제 센서 구성</h2>
+<h2 class="headline">Isaac Sim 공장 홀에 실측 차체와 과제 센서 구성 적용</h2>
 <div class="m7-stage grow" style="grid-template-columns:360px 1fr"><figure class="m7-media light"><img class="media" src="assets/70_hall.jpg" alt="Isaac Sim 공장 홀을 위에서 본 장면. 지게차와 팔레트, 적재물이 보인다"></figure><div class="m7-info "><p class="ph">설정과 근거</p><div class="tb"><table class="comparison params6 m7-params"><tr><th>항목</th><th>값</th><th>근거</th></tr><tr><td>차체</td><td>실측 축거 · 바퀴 · 조향각</td><td><span class="kind" style="background:#6a4fb3">실측</span> 5주차 실측 (외형 · 질량은 카탈로그)</td></tr><tr><td>물리</td><td>Isaac Sim 5.1 · 120 Hz</td><td><span class="kind" style="background:#2e9a6b">구현</span> 바퀴 토크 구동 · 팔레트 물리 적재</td></tr><tr><td>LiDAR</td><td>A2M12 1,600점 · 10 Hz</td><td><span class="kind" style="background:#2f74c0">규격·사양</span> 카탈로그 값 · 잡음 σ 2 cm 가정</td></tr><tr><td>깊이 카메라</td><td>640 × 480 · 화각 69°</td><td><span class="kind" style="background:#c26a1a">가정</span> D435i 컬러 화각 기준 · 잡음 미적용</td></tr><tr><td>SLAM 연동</td><td>ROS 2 slam_toolbox</td><td><span class="kind" style="background:#2e9a6b">구현</span> 스캔 송신 → SLAM 응답 후 진행</td></tr><tr><td>바닥 장애물</td><td>LiDAR 높이 (1.05 m) 이상</td><td><span class="kind" style="background:#c26a1a">가정</span> 운용 가정 · 저상 소품 제외</td></tr><tr><td>마찰 · 토크</td><td>마찰 계수 0.8 / 0.7 · 3 N·m</td><td><span class="kind" style="background:#c26a1a">가정</span> 일반 범위 값 · 실측 후 교체</td></tr></table></div></div></div>
-<div class="takeaway">실측 후 교체: 바퀴 마찰 · 구동 토크 · LiDAR 잡음 (깊이 잡음 추가 예정)</div>
+<div class="takeaway">바퀴 마찰, 구동 토크, LiDAR 잡음은 실측 후 교체하고 깊이 잡음은 추가할 예정입니다</div>
 </div></x-import>
 </section>
 
@@ -130,9 +130,9 @@ EPAL 6 Gazebo 장면 100개 = positive 60 · occluded 20 · negative 20, 자세 
 <figure class="m7-media m7-pipe2"><img src="assets/20_pipeline_stages_crop.png" alt="깊이 영상, 팔레트 앞면, 받침목과 빈 공간, 판정된 포켓 위치의 네 단계">
 <div class="steps"><b>① 깊이 영상</b><i></i><b>② 앞면 추출</b><i></i><b>③ 받침목 · 개구부 분리</b><i></i><b>④ 포켓 위치 · 방향</b></div>
 <figcaption class="legend"><span class="lg"><span class="sw cell" style="background:#3c9660"></span>작업 범위</span><span class="lg"><span class="sw cell" style="background:#f1c232"></span>앞면 후보</span><span class="lg"><span class="sw cell" style="background:#966c40"></span>측정점 존재 구간</span><span class="lg"><span class="sw box" style="border-color:#ff40ff"></span>개구부 · 검출 포켓</span></figcaption></figure>
-<div class="m7-info "><p class="ph">선정 근거</p><div class="tb"><table class="comparison t6 m7-why"><tr><th>근거</th><th>내용</th></tr><tr><td>규격 치수 기반</td><td>학습 데이터 불필요 · 치수만 바꿔 EPAL 6 · T11 대응</td></tr><tr><td>합성 장면 평가</td><td>EPAL 6 (2–4 m): 전수 검출 · 위치 오차 95 % 8.2 mm 이하</td></tr></table></div></div>
+<div class="m7-info "><p class="ph">선정 근거</p><div class="tb"><table class="comparison t6 m7-why"><tr><th>근거</th><th>내용</th></tr><tr><td>규격 치수 기반</td><td>학습 데이터 불필요 · 치수만 바꿔 EPAL 6 · T11 대응</td></tr><tr><td>합성 장면 평가</td><td>EPAL 6 (2–4 m) 전수 검출, 위치 오차는 95 %가 8.2 mm 이하</td></tr></table></div></div>
 </div>
-<div class="takeaway">한계: 근접 시 포켓 입구 시야 이탈 → 삽입 중 추적으로 인계</div>
+<div class="takeaway">가까워지면 포켓 입구가 시야를 벗어나므로 삽입 중 추적이 이어받습니다</div>
 </div></x-import>
 </section>
 
@@ -153,9 +153,9 @@ Crown 특허 US9990535B2 — 포크 캐리지 하단 장착 (4주차 장착 사�
 추적 프레임에는 깊이 잡음을 넣지 않음 — 잡음 없는 합성 깊이에서의 추적 흐름 실증: memory: D8 범위 (2026-10-10 사용자 결정)
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="06  소프트웨어 · 삽입 중 포켓 추적"><div class="slide-body">
-<h2 class="headline">캐리지 하단 카메라 → 삽입 완료까지 포켓 추적</h2>
+<h2 class="headline">캐리지 하단 카메라로 삽입이 끝날 때까지 포켓 추적</h2>
 <div class="m7-stage grow" style="grid-template-columns:484px 1fr"><figure class="m7-media"><video class="media" src="assets/61_insert_depth.mp4" poster="assets/61_insert_depth_poster.jpg" autoplay loop muted playsinline aria-label="캐리지 하단 카메라의 깊이 영상. 팔레트에 접근하며 두 번 정지해 재관측하고, 포크 삽입 중에도 팔레트 윗판이 시야에 남는다"></video><figcaption class="legend"><span class="lg">깊이 0.25 m<span class="sw ramp" style="background:linear-gradient(90deg,#900d00,#b82008,#f45c17,#ffa323,#dfdc32,#96fa50,#4ef983,#27d7c3,#2f9ef5,#4958dd,#23171b)"></span>3 m 이상</span><span class="lg"><span class="sw none" style="background:#000000"></span>측정값 없음</span></figcaption></figure><div class="m7-info "><p class="ph">구현 단계 (포크 끝–팔레트 앞면 거리)</p><div class="tb"><div class="m7-dist"><p class="rl">① 지연 보정</p><div class="tr"><span class="face" style="left:80.0%"></span><span class="bar " style="left:5.0%;width:calc(96.0% - 5.0%)">촬영 시점 위치로 정합</span></div><p class="rl">② 연속 추적</p><div class="tr"><span class="face" style="left:80.0%"></span><span class="bar " style="left:5.0%;width:calc(52.5% - 5.0%)">포켓 입구</span><span class="bar alt" style="left:52.5%;width:calc(96.0% - 52.5%)">윗판 가장자리</span></div><p class="rl">③ 경로 보정</p><div class="tr"><span class="face" style="left:80.0%"></span><span class="mk " style="left:30.0%"><i></i><em>정지 · 재관측</em></span><span class="mk " style="left:50.0%"><i></i><em>정지 · 재관측</em></span></div><p class="rl">④ 간격 감시</p><div class="tr"><span class="face" style="left:80.0%"></span><span class="bar warn" style="left:72.5%;width:calc(96.0% - 72.5%)">간격 판정</span></div><p class="rl">⑤ 삽입 완료</p><div class="tr"><span class="face" style="left:80.0%"></span><span class="mk end" style="left:96.0%"><i></i><em>캐리지 여유 1.6 cm</em></span></div><p class="rl"></p><div class="ax"><span style="left:5.0%">1.5 m</span><span style="left:30.0%">1.0 m</span><span style="left:50.0%">0.6 m</span><span style="left:72.5%">0.15</span><span style="left:80.0%">앞면</span><span style="left:96.0%">−0.32 m</span></div></div></div></div></div>
-<div class="takeaway">결과: 무접촉 약 32 cm 삽입 (깊이 잡음 미적용)</div>
+<div class="takeaway">팔레트에 닿지 않고 약 32 cm 삽입했습니다 (깊이 잡음 미적용)</div>
 </div></x-import>
 </section>
 
@@ -175,9 +175,9 @@ Dolgov et al., Practical Search Techniques in Path Planning for Autonomous Drivi
 비상정지 원호(현재 곡률로 멈추는 궤적)의 칸이 모두 FREE 여야 그 속도 허용 · 앞 경로도 같은 검사: src/forklift_core/control/drive_permission.py
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="07  소프트웨어 · 경로 계획 구현과 새 장애물"><div class="slide-body">
-<h2 class="headline">Hybrid A*: 신규 장애물 앞 정지 → 재계획 → 재개</h2>
-<div class="m7-stage grow" style="grid-template-columns:720px 1fr"><figure class="m7-media"><video class="media" src="assets/46_new_obstacle_single.mp4" poster="assets/46_new_obstacle_single_poster.jpg" autoplay loop muted playsinline aria-label="팔레트 운반 중 경로 위에 장애물이 나타나 정지하고, 재계획한 경로로 회피하는 장면. 왼쪽은 상부 시점, 오른쪽은 SLAM 지도와 LiDAR 점유 셀"></video><figcaption class="legend"><span class="lg">우: SLAM 지도</span><span class="sep"></span><span class="lg"><span class="sw line" style="background:#ffd600"></span>현재 경로</span><span class="lg"><span class="sw line" style="background:#9696a0"></span>직전 경로</span><span class="lg"><span class="sw cell" style="background:#ff821e"></span>LiDAR 점유 셀</span><span class="lg"><span class="sw box" style="border-color:#ff2828"></span>신규 장애물</span></figcaption></figure><div class="m7-info "><p class="ph">구현 (현재 설정)</p><div class="tb"><table class="comparison t6 m7-plan"><tr><th>항목</th><th>구현</th></tr><tr><td>차량 모델</td><td>자전거 모델 · 계획 회전 반경 3.45 m</td></tr><tr><td>탐색</td><td>0.2 m · 10° 격자 · 호 길이 0.25 m</td></tr><tr><td>충돌 검사</td><td>차체 + 적재물 사각형 · 여유 0.1 m</td></tr><tr><td>목표 연결</td><td>Reeds–Shepp (전 · 후진)</td></tr><tr><td>추종</td><td>뒤차축 기준 pure pursuit</td></tr><tr><td>장애물</td><td>LiDAR 점유 격자 · 정지 궤적 검사</td></tr><tr><td>재계획</td><td>정지 위치에서 경로 재생성 (후진 포함)</td></tr></table></div></div></div>
-<div class="takeaway">결과: 운반 · 복귀 중 출현한 장애물 (높이 1.3 m) 회피 · 임무 완주</div>
+<h2 class="headline">Hybrid A*로 신규 장애물 앞에서 정지하고 재계획한 뒤 재개</h2>
+<div class="m7-stage grow" style="grid-template-columns:720px 1fr"><figure class="m7-media"><video class="media" src="assets/46_new_obstacle_single.mp4" poster="assets/46_new_obstacle_single_poster.jpg" autoplay loop muted playsinline aria-label="팔레트 운반 중 경로 위에 장애물이 나타나 정지하고, 재계획한 경로로 회피하는 장면. 왼쪽은 상부 시점, 오른쪽은 SLAM 지도와 LiDAR 점유 셀"></video><figcaption class="legend"><span class="lg">오른쪽은 SLAM 지도</span><span class="sep"></span><span class="lg"><span class="sw line" style="background:#ffd600"></span>현재 경로</span><span class="lg"><span class="sw line" style="background:#9696a0"></span>직전 경로</span><span class="lg"><span class="sw cell" style="background:#ff821e"></span>LiDAR 점유 셀</span><span class="lg"><span class="sw box" style="border-color:#ff2828"></span>신규 장애물</span></figcaption></figure><div class="m7-info "><p class="ph">구현 (현재 설정)</p><div class="tb"><table class="comparison t6 m7-plan"><tr><th>항목</th><th>구현</th></tr><tr><td>차량 모델</td><td>자전거 모델 · 계획 회전 반경 3.45 m</td></tr><tr><td>탐색</td><td>0.2 m · 10° 격자 · 호 길이 0.25 m</td></tr><tr><td>충돌 검사</td><td>차체 + 적재물 사각형 · 여유 0.1 m</td></tr><tr><td>목표 연결</td><td>Reeds–Shepp (전 · 후진)</td></tr><tr><td>추종</td><td>뒤차축 기준 pure pursuit</td></tr><tr><td>장애물</td><td>LiDAR 점유 격자 · 정지 궤적 검사</td></tr><tr><td>재계획</td><td>정지 위치에서 경로 재생성 (후진 포함)</td></tr></table></div></div></div>
+<div class="takeaway">운반 중과 복귀 중에 나타난 1.3 m 높이 장애물을 피해 임무를 마쳤습니다</div>
 </div></x-import>
 </section>
 
@@ -195,15 +195,15 @@ l8_measured 장면 1 + N1 정지 재계획: 목표 1 cm 앞 · 0.023 rad — 전
 D7 CPU 판정: 운반 목표 고리 1,686 → 0 (목표당 2,376 계획), 목표까지 길이 중앙값 21.69 → 1.03 m: forklift 1e3cdeb
 §3 Hybrid A* 가 왜 뒤로 가는지 · 앞뒤로 돌 때의 특성: docs/references/week6_feedback.md
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="08  소프트웨어 · 경로 계획: 후진 선택 조건"><div class="slide-body">
-<h2 class="headline">큰 회전 반경 보완: 후진 회피 · 전 · 후진 전환 자세 보정</h2>
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="08  소프트웨어 · 경로 계획의 후진 선택 조건"><div class="slide-body">
+<h2 class="headline">큰 회전 반경을 후진 회피와 전 · 후진 전환 자세 보정으로 보완</h2>
 <div class="m7-stage grow" style="grid-template-columns:1fr 1fr">
-<div class="m7-info"><p class="ph">장애물 회피: 후진으로 선회 거리 확보</p>
+<div class="m7-info"><p class="ph">후진으로 선회 거리를 확보해 장애물 회피</p>
 <figure class="m7-media"><video class="media" src="assets/55_reverse_box.mp4" poster="assets/55_reverse_box_poster.jpg" autoplay loop muted playsinline aria-label="신규 장애물 앞에서 정지한 지게차를 비스듬한 상부 시점에서 본 영상. 기존 경로는 장애물 위를 지나고, 최소 회전 반경 스윕 영역에 장애물이 있어 1.75 m 후진한 뒤 선회해 회피한다"></video><figcaption class="legend"><span class="lg"><span class="sw line" style="background:#ffc428"></span>기존 경로</span><span class="lg"><span class="sw band" style="background:#e12d2373;border-color:#e12d23"></span>최소 회전 반경 스윕 영역</span><span class="lg"><span class="sw line" style="background:#f07d1e"></span>후진</span><span class="lg"><span class="sw line" style="background:#3c91f0"></span>전진</span></figcaption></figure></div>
-<div class="m7-info"><p class="ph">자세 보정: 원 선회 대신 전 · 후진 전환</p>
+<div class="m7-info"><p class="ph">원을 도는 대신 전 · 후진 전환으로 자세 보정</p>
 <figure class="m7-media white"><img class="m7-figimg" src="assets/53_goal_fix.png" alt="목적지 자세 보정. 전진 전용이면 지름 약 7 m 원을 21.7 m 선회하고, 전 · 후진 전환을 쓰면 제자리에서 전진 0.50 m, 후진 0.49 m로 끝난다"><figcaption class="legend"><span class="lg"><span class="sw dash" style="border-color:#9aa3ad"></span>전진 전용 경로</span><span class="lg"><span class="sw line" style="background:#2f74c0"></span>전진</span><span class="lg"><span class="sw line" style="background:#c26a1a"></span>후진</span><span class="lg"><span class="sw dot" style="background:#2e9a6b"></span>목표 위치</span></figcaption></figure></div>
 </div>
-<div class="takeaway">경로 비용: 후진 거리 × 1.3 · 전환당 +1 m → 전진이 불가하거나 훨씬 길 때만 후진</div>
+<div class="takeaway">후진 거리는 1.3배, 전환은 1회당 1 m로 계산해 전진이 어렵거나 훨씬 멀 때만 후진합니다</div>
 </div></x-import>
 </section>
 
@@ -219,9 +219,9 @@ A 출발 (−0.5, 1.17, 0.006) → 인식 (−0.2, 1.17) 카메라–앞면 2.35
 인식 성공 3.55 · 3.64 m, 실패 4.09 · 4.29 · 4.57 m (case_B* 기록, 깊이 잡음 없는 합성 영상). 정렬 직진 시작의 뒤차축은 앞면에서 0.11 + 1.29 + 0.8 = 2.20 m, 카메라 3.6 m 일 때 뒤차축은 3.6 + 0.959 = 4.56 m → 곡선 구간 2.36 m, 반경 3.45 m S자의 옆 이동 2R(1 − cos(asin(2.36 / 2R))) ≈ 0.42 m: 계산 · 기록
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="09  소프트웨어 · 과제 접근 시나리오 A · B"><div class="slide-body">
-<h2 class="headline">A: 직진 진입 · B: S자 곡선 진입 (제안서와 같은 배치)</h2>
-<div class="m7-cases2 grow"><div class="row"><p class="cap"><b>A 정면 정렬</b>1.15 m 전진 → 삽입</p><div class="body"><img class="brief" src="assets/57_brief_a.png" alt="과제 제안서의 A 정면 정렬 그림"><video class="media" src="assets/56_case_a.mp4" poster="assets/56_case_a_poster.jpg" autoplay loop muted playsinline aria-label="A 정면 정렬 상황의 시뮬레이션. 1.15 m 전진 → 삽입"></video></div></div><div class="row"><p class="cap"><b>B 측방 오프셋</b>측방 0.35 m · S자 곡선 2.3 m → 재관측 → 삽입</p><div class="body"><img class="brief" src="assets/57_brief_b.png" alt="과제 제안서의 B 측방 오프셋 그림"><video class="media" src="assets/56_case_b.mp4" poster="assets/56_case_b_poster.jpg" autoplay loop muted playsinline aria-label="B 측방 오프셋 상황의 시뮬레이션. 측방 0.35 m · S자 곡선 2.3 m → 재관측 → 삽입"></video></div></div><p class="legend"><span class="lg">좌: 과제 제안서 그림</span><span class="lg">우: 시뮬레이션 (팔레트 우측)</span><span class="sep"></span><span class="lg"><span class="sw line" style="background:#3c91f0"></span>전진 경로</span><span class="lg"><span class="sw line" style="background:#f07d1e"></span>후진 경로</span></p></div>
-<div class="takeaway">B 적용 범위: 전 · 후진 전환 없이 측방 오프셋 약 0.4 m까지 (인식 3.6 m · 직진 0.8 m)</div>
+<h2 class="headline">A는 직진으로, B는 S자 곡선으로 진입 (제안서와 같은 배치)</h2>
+<div class="m7-cases2 grow"><div class="row"><p class="cap"><b>A 정면 정렬</b>1.15 m 전진 → 삽입</p><div class="body"><img class="brief" src="assets/57_brief_a.png" alt="과제 제안서의 A 정면 정렬 그림"><video class="media" src="assets/56_case_a.mp4" poster="assets/56_case_a_poster.jpg" autoplay loop muted playsinline aria-label="A 정면 정렬 상황의 시뮬레이션. 1.15 m 전진 → 삽입"></video></div></div><div class="row"><p class="cap"><b>B 측방 오프셋</b>측방 0.35 m · S자 곡선 2.3 m → 재관측 → 삽입</p><div class="body"><img class="brief" src="assets/57_brief_b.png" alt="과제 제안서의 B 측방 오프셋 그림"><video class="media" src="assets/56_case_b.mp4" poster="assets/56_case_b_poster.jpg" autoplay loop muted playsinline aria-label="B 측방 오프셋 상황의 시뮬레이션. 측방 0.35 m · S자 곡선 2.3 m → 재관측 → 삽입"></video></div></div><p class="legend"><span class="lg">왼쪽은 과제 제안서 그림</span><span class="lg">오른쪽은 시뮬레이션 (팔레트가 오른쪽)</span><span class="sep"></span><span class="lg"><span class="sw line" style="background:#3c91f0"></span>전진 경로</span><span class="lg"><span class="sw line" style="background:#f07d1e"></span>후진 경로</span></p></div>
+<div class="takeaway">B는 측방 오프셋 약 0.4 m까지 전 · 후진 전환 없이 진입합니다 (인식 3.6 m, 직진 0.8 m)</div>
 </div></x-import>
 </section>
 
@@ -238,9 +238,9 @@ C 출발 (0.38, 0.87, 0) → 인식 (0.68, 0.87) 포크 끝–앞면 1.1 m · �
 D 배치에서 정렬 직진 2.1 m 는 approach:invalid_goal, 0.8 m 는 여러 번 앞뒤 전환으로 계획: ad2_preview.py (CPU 미리보기)
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="10  소프트웨어 · 과제 접근 시나리오 C · D"><div class="slide-body">
-<h2 class="headline">C: 후진 후 재접근 · D: 전 · 후진 반복 정렬</h2>
-<div class="m7-cases2 grow"><div class="row"><p class="cap"><b>C 근접</b>1.3 m 후진 → 1.5 m 전진 정렬 → 삽입</p><div class="body"><img class="brief" src="assets/57_brief_c.png" alt="과제 제안서의 C 근접 그림"><video class="media" src="assets/56_case_c.mp4" poster="assets/56_case_c_poster.jpg" autoplay loop muted playsinline aria-label="C 근접 상황의 시뮬레이션. 1.3 m 후진 → 1.5 m 전진 정렬 → 삽입"></video></div></div><div class="row"><p class="cap"><b>D 근접 · 후방 · 측방 장애물</b>전 · 후진 4회 정렬 → 삽입</p><div class="body"><img class="brief" src="assets/57_brief_d.png" alt="과제 제안서의 D 근접 · 후방 · 측방 장애물 그림"><video class="media" src="assets/56_case_d.mp4" poster="assets/56_case_d_poster.jpg" autoplay loop muted playsinline aria-label="D 근접 · 후방 · 측방 장애물 상황의 시뮬레이션. 전 · 후진 4회 정렬 → 삽입"></video></div></div><p class="legend"><span class="lg">좌: 과제 제안서 그림</span><span class="lg">우: 시뮬레이션 (팔레트 우측)</span><span class="sep"></span><span class="lg"><span class="sw line" style="background:#3c91f0"></span>전진 경로</span><span class="lg"><span class="sw line" style="background:#f07d1e"></span>후진 경로</span></p></div>
-<div class="takeaway">결과: A–D 무접촉 삽입 · 하역 완료 (정렬 직진 0.8 m · 2.1 m면 D 시작점이 후방 벽과 간섭)</div>
+<h2 class="headline">C는 후진 후 재접근, D는 전 · 후진을 반복해 정렬</h2>
+<div class="m7-cases2 grow"><div class="row"><p class="cap"><b>C 근접</b>1.3 m 후진 → 1.5 m 전진 정렬 → 삽입</p><div class="body"><img class="brief" src="assets/57_brief_c.png" alt="과제 제안서의 C 근접 그림"><video class="media" src="assets/56_case_c.mp4" poster="assets/56_case_c_poster.jpg" autoplay loop muted playsinline aria-label="C 근접 상황의 시뮬레이션. 1.3 m 후진 → 1.5 m 전진 정렬 → 삽입"></video></div></div><div class="row"><p class="cap"><b>D 근접 · 후방 · 측방 장애물</b>전 · 후진 4회 정렬 → 삽입</p><div class="body"><img class="brief" src="assets/57_brief_d.png" alt="과제 제안서의 D 근접 · 후방 · 측방 장애물 그림"><video class="media" src="assets/56_case_d.mp4" poster="assets/56_case_d_poster.jpg" autoplay loop muted playsinline aria-label="D 근접 · 후방 · 측방 장애물 상황의 시뮬레이션. 전 · 후진 4회 정렬 → 삽입"></video></div></div><p class="legend"><span class="lg">왼쪽은 과제 제안서 그림</span><span class="lg">오른쪽은 시뮬레이션 (팔레트가 오른쪽)</span><span class="sep"></span><span class="lg"><span class="sw line" style="background:#3c91f0"></span>전진 경로</span><span class="lg"><span class="sw line" style="background:#f07d1e"></span>후진 경로</span></p></div>
+<div class="takeaway">A–D 모두 팔레트에 닿지 않고 하역까지 마쳤습니다 (정렬 직진 0.8 m, 2.1 m면 D 시작점이 뒤 벽과 겹침)</div>
 </div></x-import>
 </section>
 
@@ -264,10 +264,10 @@ rmw_zenoh (멀티캐스트 탐색 없이 라우터 사용) — Wi-Fi 구성 후�
 무선 제어는 통신 상실 포함 올바른 신호가 없으면 자동 정지: EU 기계지침 2006/42/EC 부속서 I 1.2.1 (2차 자료)
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="11  하드웨어 · 실차 시스템 구성"><div class="slide-body">
-<h2 class="headline">소프트웨어는 Jetson에 탑재 · 모터 제어는 STM32 구동 보드</h2>
+<h2 class="headline">소프트웨어는 Jetson에서, 모터 제어는 STM32 구동 보드에서 실행</h2>
 <div class="grow m7-fill"><img class="m7-figimg" src="assets/40_system.png" alt="시스템 구성. 카메라와 LiDAR가 USB로 Jetson에, Jetson이 명령 · 상태로 STM32 보드에, STM32가 구동 · 엔코더 보드와 모터에 이어진다. 아래 무선 칸에 감시 PC(Wi-Fi)와 출력을 끊는 무선 비상정지"></div>
-<p class="m7-note">센서: D435i (335Le와 같은 스테레오 방식 · 사용 경험 · ROS 2 자료) · A2M12 (A2 계열 · 보유)</p>
-<div class="takeaway">확인 필요: 원격 정지 요구 수준 · 다중 차량 운용 여부</div>
+<p class="m7-note">카메라는 335Le와 같은 스테레오 방식이고 사용 경험과 ROS 2 자료가 많은 D435i, LiDAR는 보유 중인 A2 계열 A2M12</p>
+<div class="takeaway">원격 정지 요구 수준과 다중 차량 운용은 마지막에 여쭙겠습니다</div>
 </div></x-import>
 </section>
 
@@ -283,9 +283,9 @@ rmw_zenoh (멀티캐스트 탐색 없이 라우터 사용) — Wi-Fi 구성 후�
 삽입 깊이 규칙 min(깊이 × 0.6, 캐리지 한계 − 16 mm): dls08_measured 346 − 16 = 330 mm (EPAL 6 깊이 600 × 0.6 = 360 mm 보다 작음): forklift CLAUDE.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="12  하드웨어 · 실물 차체 실측"><div class="slide-body">
-<h2 class="headline">최대 조향각 15° → 최소 회전 반경 약 2.5 m · 포크 길이 36 cm</h2>
+<h2 class="headline">최대 조향각이 15°라 최소 회전 반경은 약 2.5 m, 포크 길이는 36 cm</h2>
 <div class="m7-stage grow" style="grid-template-columns:346px 1fr"><figure class="m7-media light"><img class="media" src="assets/30_chassis_pallet.jpg" alt="입고한 지게차 차체와 앞에 놓인 동봉 플라스틱 팔레트"></figure><div class="m7-info "><p class="ph">실측 결과</p><div class="tb"><table class="comparison t6 m7-chassis"><tr><th>항목</th><th>실측</th><th>비교 · 영향</th></tr><tr><td>최대 조향각</td><td><b>15°</b></td><td>사진 추정 대비 회전 반경 1.9배</td></tr><tr><td>축거 · 윤거 · 바퀴 반경</td><td><b>0.66 · 0.53 · 0.125 m</b></td><td>사진 추정 대비 1–2 cm 차이</td></tr><tr><td>포크 길이 · 폭 · 두께</td><td><b>36 · 5.5 · 2.5 cm</b></td><td>EPAL 6 삽입 목표 33 cm (계산)</td></tr><tr><td>포크 간격</td><td><b>5.5–38 cm 조절</b></td><td>팔레트 받침목 간격에 맞춤</td></tr><tr><td>외형 · 질량</td><td><b>1.46 × 0.63 × 1.01 m · 24 kg</b></td><td>카탈로그 값과 일치</td></tr><tr><td>최대 적재 하중</td><td><b>10 kg (카탈로그)</b></td><td>시뮬레이션 팔레트 질량과 같음</td></tr></table></div></div></div>
-<div class="takeaway">반영: 시뮬레이션 차체 모델 갱신 · 회전 반경은 주행 시험으로 검증</div>
+<div class="takeaway">실측값은 시뮬레이션 차체 모델에 반영했고, 회전 반경은 주행 시험으로 검증합니다</div>
 </div></x-import>
 </section>
 
@@ -300,9 +300,9 @@ DSLogic Pro 1 MHz 2채널, 주행 19 · 승강 28 · 조향 31개 레벨 변화;
 로직 애널라이저로 버튼별 신호 측정 (리버스 엔지니어링): docs/references/week4_feedback.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="13  하드웨어 · 기존 제어기 분석"><div class="slide-body">
-<h2 class="headline">기존 제어기: 릴레이 On/Off만 가능 → 구동 보드 자체 제작</h2>
-<div class="m7-stage grow" style="grid-template-columns:600px 1fr"><figure class="m7-media white"><img class="m7-figimg" src="assets/44_waveforms.png" alt="로직 애널라이저로 기록한 기존 제어기의 두 선. 주행 · 승강 · 조향 버튼마다 한 선만 켜지고, 누르는 동안 그대로 유지된다"><figcaption class="legend">로직 애널라이저 (1 MHz) · 수치: 버튼 입력 유지 시간</figcaption></figure><div class="m7-info"><img class="m7-photo" src="assets/43_la_setup.jpg" alt="기존 제어기 메인보드에 로직 애널라이저 탐침을 연결한 측정 구성"><table class="comparison t6 m7-ctrl"><tr><th>대상</th><th>관측</th><th>판단</th></tr><tr><td>신호</td><td>입력 동안 High 유지</td><td><b>PWM 아님</b></td></tr><tr><td>모터 구동</td><td>릴레이 On/Off · 방향 전환</td><td><b>속도 제어 불가</b></td></tr><tr><td>무선 수신</td><td>메인보드 통합형</td><td><b>미사용</b></td></tr><tr><td>재사용</td><td>전원 스위치 · 주행 · 리프트 모터</td><td><b>그대로 사용</b></td></tr></table></div></div>
-<div class="takeaway">요구: 경로 추종의 속도 · 조향각 명령을 연속값으로 실행</div>
+<h2 class="headline">기존 제어기는 릴레이 On/Off만 가능해 구동 보드를 자체 제작</h2>
+<div class="m7-stage grow" style="grid-template-columns:600px 1fr"><figure class="m7-media white"><img class="m7-figimg" src="assets/44_waveforms.png" alt="로직 애널라이저로 기록한 기존 제어기의 두 선. 주행 · 승강 · 조향 버튼마다 한 선만 켜지고, 누르는 동안 그대로 유지된다"><figcaption class="legend">로직 애널라이저(1 MHz)로 기록, 숫자는 버튼을 누르고 있던 시간</figcaption></figure><div class="m7-info"><img class="m7-photo" src="assets/43_la_setup.jpg" alt="기존 제어기 메인보드에 로직 애널라이저 탐침을 연결한 측정 구성"><table class="comparison t6 m7-ctrl"><tr><th>대상</th><th>관측</th><th>판단</th></tr><tr><td>신호</td><td>입력 동안 High 유지</td><td><b>PWM 아님</b></td></tr><tr><td>모터 구동</td><td>릴레이 On/Off · 방향 전환</td><td><b>속도 제어 불가</b></td></tr><tr><td>무선 수신</td><td>메인보드 통합형</td><td><b>미사용</b></td></tr><tr><td>재사용</td><td>전원 스위치 · 주행 · 리프트 모터</td><td><b>그대로 사용</b></td></tr></table></div></div>
+<div class="takeaway">경로 추종이 내는 속도와 조향각 명령을 연속값으로 실행해야 합니다</div>
 </div></x-import>
 </section>
 
@@ -321,9 +321,9 @@ MT6701 Rev.1.5 — 14 bit 절대각(SSI · I2C), ABZ 증분 ≤ 1024 PPR, 자석
 10/16–22 모터 전류 실측 · PCB 설계, 10/30–11/12 구동 보드 제작: week-07-1 17쪽 일정
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="14  하드웨어 · 구동 보드 설계"><div class="slide-body">
-<h2 class="headline">구동 보드 초안: DRV8244 × 3 · MT6701 엔코더 · STM32</h2>
-<div class="m7-stage grow" style="grid-template-columns:470px 1fr"><figure class="m7-media white"><img class="media" src="assets/45_sch_drv_channel.png" alt="DRV8244 모터 드라이버 한 채널의 회로 초안. SPI 선 · 방향 입력 · DRVOFF · 전류 측정 저항"><figcaption class="legend">회로 초안: 드라이버 1채널 (동일 회로 3채널 · SPI 버스 공유)</figcaption></figure><div class="m7-info "><p class="ph">부품 선정 근거</p><div class="tb"><table class="comparison t6 m7-board"><tr><th>기능</th><th>선정</th><th>근거</th></tr><tr><td>모터 (기존)</td><td><b>12 V · 45 W · 1.2 Ω</b></td><td>정격 3.8 A · 구속 10 A</td></tr><tr><td>모터 드라이버</td><td><b>DRV8244-Q1 × 3</b></td><td>47 mΩ · 과전류 21 A 이상</td></tr><tr><td>전류 측정</td><td><b>IPROPI 3.6 → 1.5 kΩ (예정)</b></td><td>측정 범위 4.4 → 10 A</td></tr><tr><td>비상 차단</td><td><b>DRVOFF 핀</b></td><td>무선 비상정지 연동 예정</td></tr><tr><td>조향각</td><td><b>MT6701 절대각 (SSI)</b></td><td>전원 투입 즉시 각도 확인</td></tr><tr><td>바퀴 회전</td><td><b>MT6701 증분 (ABZ)</b></td><td>MCU 타이머 계수</td></tr><tr><td>제어기</td><td><b>STM32 (Nucleo-64)</b></td><td>핀 배정 초안 완료</td></tr></table></div></div></div>
-<div class="takeaway">다음 단계: 방열 검토 (정격 3.8 A ↔ 연속 허용 4 A) → PCB 제작 (10/30–11/12)</div>
+<h2 class="headline">DRV8244 3개와 MT6701 엔코더, STM32로 구동 보드 초안 설계</h2>
+<div class="m7-stage grow" style="grid-template-columns:470px 1fr"><figure class="m7-media white"><img class="media" src="assets/45_sch_drv_channel.png" alt="DRV8244 모터 드라이버 한 채널의 회로 초안. SPI 선 · 방향 입력 · DRVOFF · 전류 측정 저항"><figcaption class="legend">드라이버 1채널 회로 초안 (같은 회로 3채널이 SPI 버스를 공유)</figcaption></figure><div class="m7-info "><p class="ph">부품 선정 근거</p><div class="tb"><table class="comparison t6 m7-board"><tr><th>기능</th><th>선정</th><th>근거</th></tr><tr><td>모터 (기존)</td><td><b>12 V · 45 W · 1.2 Ω</b></td><td>정격 3.8 A · 구속 10 A</td></tr><tr><td>모터 드라이버</td><td><b>DRV8244-Q1 × 3</b></td><td>47 mΩ · 과전류 21 A 이상</td></tr><tr><td>전류 측정</td><td><b>IPROPI 3.6 → 1.5 kΩ (예정)</b></td><td>측정 범위 4.4 → 10 A</td></tr><tr><td>비상 차단</td><td><b>DRVOFF 핀</b></td><td>무선 비상정지 연동 예정</td></tr><tr><td>조향각</td><td><b>MT6701 절대각 (SSI)</b></td><td>전원 투입 즉시 각도 확인</td></tr><tr><td>바퀴 회전</td><td><b>MT6701 증분 (ABZ)</b></td><td>MCU 타이머 계수</td></tr><tr><td>제어기</td><td><b>STM32 (Nucleo-64)</b></td><td>핀 배정 초안 완료</td></tr></table></div></div></div>
+<div class="takeaway">정격 3.8 A가 연속 허용 4 A에 가까워 방열을 검토한 뒤 PCB를 제작합니다 (10/30–11/12)</div>
 </div></x-import>
 </section>
 
@@ -343,9 +343,9 @@ MT6701 Rev.1.5 — 14 bit 절대각(SSI · I2C), ABZ 증분 ≤ 1024 PPR, 자석
 하드웨어 · 소프트웨어를 나눠 보임 · 소프트웨어 → 하드웨어 순서: 사용자 지시 (2026-10-12)
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="15  결론 · 확인 사항과 설계 방향"><div class="slide-body">
-<h2 class="headline">실측 · 시뮬레이션 제약 → 설계 방향 확정</h2>
+<h2 class="headline">실측과 시뮬레이션에서 확인한 제약으로 설계 방향 확정</h2>
 <div class="m7-info grow"><div class="tb"><table class="comparison plan6 m7-concl"><tr><th class="c0">구분</th><th class="c1">확인 사항</th><th class="c2">영향</th><th class="c3"></th><th class="c4">설계 방향</th></tr><tr><td class="grp sw" rowspan="2">소프트웨어</td><td class="key">실측 조향각 15°</td><td class="cur">최소 회전 반경 약 2.5 m</td><td class="arrow">→</td><td class="nxt">전 · 후진 전환 경로 계획</td></tr><tr><td class="key">근접 시 포켓 입구 시야 이탈</td><td class="cur">포켓 직접 검출 불가</td><td class="arrow">→</td><td class="nxt">윗판 기반 추적 · 직전 보정 · 간격 감시</td></tr><tr><td class="grp hw" rowspan="4">하드웨어</td><td class="key">기존 제어기</td><td class="cur">릴레이 On/Off 제어만 가능</td><td class="arrow">→</td><td class="nxt">자체 구동 보드 (속도 · 조향각 제어)</td></tr><tr><td class="key">상단 카메라 장착</td><td class="cur">삽입 마지막 약 0.25 m 관측 불가</td><td class="arrow">→</td><td class="nxt">캐리지 하단 장착</td></tr><tr><td class="key">무압축 깊이 영상</td><td class="cur">Wi-Fi 실시간 전송 곤란 (약 200 Mbit/s)</td><td class="arrow">→</td><td class="nxt">차량 내 기록 · 상태만 전송 · 독립 비상정지</td></tr><tr><td class="key">LiDAR 높이 1.05 m</td><td class="cur">그보다 낮은 바닥 장애물 감지 불가</td><td class="arrow">→</td><td class="nxt">운용 가정으로 명시 · 현장 조건 확인</td></tr></table></div></div>
-<div class="takeaway">다음 목표: 시뮬레이션 임무의 실차 이식</div>
+<div class="takeaway">다음 목표는 시뮬레이션 임무를 실차로 옮기는 것입니다</div>
 </div></x-import>
 </section>
 
@@ -366,10 +366,10 @@ D435i 확정 · RPLIDAR A2 계열 · Jetson 권장안 (2026-09-10, A2M12 기대 
 일정은 간트 차트로, 개발 시작부터 끝까지: 사용자 지시 (2026-10-12)
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="16  결론 · 개발 일정"><div class="slide-body">
-<h2 class="headline">시뮬레이션 · 구동 보드 설계 → 11월 실차 주행 → 12월 중순 시연</h2>
+<h2 class="headline">시뮬레이션과 구동 보드 설계 후 11월 실차 주행, 12월 중순 시연</h2>
 <div class="m7-gantt grow"><div class="ax" style="grid-row:1;grid-column:3"><span style="left:0.00%">9/4</span><span style="left:6.42%">9/11</span><span style="left:12.84%">9/18</span><span style="left:19.27%">9/25</span><span style="left:25.69%">10/2</span><span style="left:32.11%">10/9</span><span style="left:38.53%">10/16</span><span style="left:44.95%">10/23</span><span style="left:51.38%">10/30</span><span style="left:57.80%">11/6</span><span style="left:64.22%">11/13</span><span style="left:70.64%">11/20</span><span style="left:77.06%">11/27</span><span style="left:83.49%">12/4</span><span style="left:89.91%">12/11</span><span class="now" style="left:37.61%">10/14 중간 미팅</span></div><div class="ov" style="grid-row:2 / span 14;grid-column:3"><i style="left:6.42%"></i><i style="left:12.84%"></i><i style="left:19.27%"></i><i style="left:25.69%"></i><i style="left:32.11%"></i><i style="left:38.53%"></i><i style="left:44.95%"></i><i style="left:51.38%"></i><i style="left:57.80%"></i><i style="left:64.22%"></i><i style="left:70.64%"></i><i style="left:77.06%"></i><i style="left:83.49%"></i><i style="left:89.91%"></i><i style="left:96.33%"></i><b style="left:44.95%;width:calc(51.38% - 44.95%)"><em>중간고사</em></b><b style="left:96.33%;width:calc(100.00% - 96.33%)"><em>기말</em></b><u style="left:37.61%"></u></div><p class="grp" style="grid-row:2 / span 7;color:#2f74c0">소프트웨어</p><p class="lb first" style="grid-row:2">개발 계획 · 시뮬레이션 환경</p><div class="tl first" style="grid-row:2"><span class="done" style="left:3.67%;width:calc(25.69% - 3.67%);background:#2f74c0"></span></div><p class="lb" style="grid-row:3">팔레트 인식 · 삽입 중 포켓 추적</p><div class="tl" style="grid-row:3"><span class="done" style="left:6.42%;width:calc(35.78% - 6.42%);background:#2f74c0"></span></div><p class="lb" style="grid-row:4">위치 추정 · 장애물 지도 · 경로 계획</p><div class="tl" style="grid-row:4"><span class="done" style="left:11.93%;width:calc(35.78% - 11.93%);background:#2f74c0"></span></div><p class="lb" style="grid-row:5">접근 시나리오 A–D 반복 평가</p><div class="tl" style="grid-row:5"><span class="done" style="left:24.77%;width:calc(35.78% - 24.77%);background:#2f74c0"></span><span class="plan" style="left:38.53%;width:calc(44.95% - 38.53%);background:#2f74c073;border-color:#2f74c0"></span></div><p class="lb" style="grid-row:6">실물 센서 · Jetson 연동</p><div class="tl" style="grid-row:6"><span class="plan" style="left:51.38%;width:calc(64.22% - 51.38%);background:#2f74c073;border-color:#2f74c0"></span></div><p class="lb" style="grid-row:7">실차 위치 추정 · 실물 팔레트 인식</p><div class="tl" style="grid-row:7"><span class="plan" style="left:64.22%;width:calc(77.06% - 64.22%);background:#2f74c073;border-color:#2f74c0"></span></div><p class="lb" style="grid-row:8">실차 전체 임무 A → B · C · D</p><div class="tl" style="grid-row:8"><span class="plan" style="left:77.06%;width:calc(89.91% - 77.06%);background:#2f74c073;border-color:#2f74c0"></span></div><p class="grp" style="grid-row:9 / span 6;color:#c26a1a">하드웨어</p><p class="lb first" style="grid-row:9">부품 선정 (센서 · 컴퓨터)</p><div class="tl first" style="grid-row:9"><span class="done" style="left:5.50%;width:calc(12.84% - 5.50%);background:#c26a1a"></span></div><p class="lb" style="grid-row:10">차체 입고 · 실측 · 기존 제어기 분석</p><div class="tl" style="grid-row:10"><span class="done" style="left:17.43%;width:calc(24.77% - 17.43%);background:#c26a1a"></span></div><p class="lb" style="grid-row:11">구동 보드 설계 · 모터 전류 실측</p><div class="tl" style="grid-row:11"><span class="done" style="left:22.02%;width:calc(35.78% - 22.02%);background:#c26a1a"></span><span class="plan" style="left:38.53%;width:calc(44.95% - 38.53%);background:#c26a1a73;border-color:#c26a1a"></span></div><p class="lb" style="grid-row:12">구동 보드 제작 · 속도 · 조향 제어</p><div class="tl" style="grid-row:12"><span class="plan" style="left:51.38%;width:calc(64.22% - 51.38%);background:#c26a1a73;border-color:#c26a1a"></span></div><p class="lb" style="grid-row:13">센서 장착 · 캘리브레이션 · 시험 팔레트</p><div class="tl" style="grid-row:13"><span class="plan" style="left:64.22%;width:calc(77.06% - 64.22%);background:#c26a1a73;border-color:#c26a1a"></span></div><p class="lb" style="grid-row:14">실차 반복 시험 · 가정값 실측 교체</p><div class="tl" style="grid-row:14"><span class="plan" style="left:77.06%;width:calc(89.91% - 77.06%);background:#c26a1a73;border-color:#c26a1a"></span></div><p class="grp" style="grid-row:15 / span 1;color:#6b7480">공통</p><p class="lb first" style="grid-row:15">최종 시연 준비 (15주차 가정)</p><div class="tl first" style="grid-row:15"><span class="plan" style="left:89.91%;width:calc(96.33% - 89.91%);background:#6b748073;border-color:#6b7480"></span></div></div>
 <p class="m7-glegend legend"><span class="lg"><span class="sw cell" style="background:#2f74c0"></span>소프트웨어</span><span class="lg"><span class="sw cell" style="background:#c26a1a"></span>하드웨어</span><span class="sep"></span><span class="lg"><span class="sw cell" style="background:#5a5f66"></span>수행</span><span class="lg"><span class="sw band" style="background:#5a5f6673;border-color:#5a5f66"></span>예정</span><span class="sep"></span><span class="lg"><span class="sw dash" style="border-color:#d0342c"></span>중간 미팅 (10/14)</span><span class="lg"><span class="sw cell" style="background:#e3e6ea"></span>시험 기간</span></p>
-<div class="takeaway">전제: 실차 단계는 구동 보드 제작 시점에 연동 · 시연일 15주차 가정</div>
+<div class="takeaway">실차 일정은 구동 보드 제작 시점에 따라 움직이며, 시연일은 15주차로 가정했습니다</div>
 </div></x-import>
 </section>
 
@@ -408,9 +408,9 @@ online_sync · mapping · 해상도 0.05 m · Ceres · do_loop_closing true: ros
 point-to-line ICP(Gauss–Newton), 여러 초기값이 같은 답일 때만 사용, 벽 하나뿐이면 퇴화로 거부: src/forklift_core/localization/scan_match.py · scan_docking.py
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="부록 1  위치 추정 · 장애물 지도 구조"><div class="slide-body">
-<h2 class="headline">오도메트리 + SLAM 보정 · 점유 격자 장애물 판단 → 이상 시 정지</h2>
+<h2 class="headline">오도메트리는 SLAM으로 보정, 장애물은 점유 격자로 판단, 이상 시 정지</h2>
 <div class="grow m7-fill"><img class="m7-figimg" src="assets/41_structure.png" alt="위치 추정과 장애물 지도의 구조. 위치, 장애물, 경로, 하역 네 줄이 입력 → 처리 → 판단을 거쳐 경로 추종으로 들어간다"></div>
-<div class="takeaway">원칙: 주행 허가는 실시간 관측 · 장애물 기억은 경로 계획에만</div>
+<div class="takeaway">주행 허가는 실시간 관측으로만 판단하고, 장애물 기억은 경로 계획에만 씁니다</div>
 </div></x-import>
 </section>
 
@@ -431,10 +431,10 @@ SLAM Toolbox (JOSS 2021) — CPU 전용, 2D 점유 격자를 Nav2 에 그대로 
 cuVSLAM 기술보고서 부록 B — Orin Nano Super 에서 RGB-D 모드는 424 × 240 에서만 안정 (GPU 가속 비전 SLAM): https://arxiv.org/abs/2506.04359
 §4 LiDAR SLAM 과 비전 SLAM 비교 장표 (LiDAR 를 쓰는 근거) · 팀 메모: SLAM 은 깊게 들어가지 않음: docs/references/week6_feedback.md
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="부록 2  위치 추정: LiDAR SLAM"><div class="slide-body">
-<h2 class="headline">임무 종료 시점 위치 오차: 오도메트리 3.4 m → LiDAR SLAM 약 4 cm</h2>
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="부록 2  LiDAR SLAM 위치 추정"><div class="slide-body">
+<h2 class="headline">임무 종료 시점 위치 오차는 오도메트리 3.4 m, LiDAR SLAM 약 4 cm</h2>
 <div class="m7-stage grow" style="grid-template-columns:380px 1fr"><figure class="m7-media"><video class="media" src="assets/45_slam_error.mp4" poster="assets/45_slam_error_poster.jpg" autoplay loop muted playsinline aria-label="SLAM 운반 실행에서 slam_toolbox가 생성한 지도와 추정 경로. 아래 수치는 SLAM 위치 오차와 오도메트리 위치 오차"></video><figcaption class="legend"><span class="lg"><span class="sw line" style="background:#4696ff"></span>실제 경로</span><span class="lg"><span class="sw line" style="background:#eb2d2d"></span>SLAM 추정</span><span class="lg"><span class="sw line" style="background:#ffa01e"></span>오도메트리</span></figcaption></figure><div class="m7-info "><p class="ph">LiDAR SLAM 선정 근거</p><div class="tb"><table class="comparison t6 m7-slam"><tr><th>항목</th><th>2D LiDAR (선정)</th><th>카메라 (비전)</th></tr><tr><td>측정 거리</td><td class="blue"><b>0.2–12 m</b></td><td>0.2 m–3 m 이상 (조명 조건에 따라)</td></tr><tr><td>시야</td><td class="blue"><b>360°</b></td><td>전방 87° × 58°</td></tr><tr><td>취약 환경</td><td class="blue"><b>긴 복도 · 넓은 개방 공간</b></td><td>무질감 벽면 · 저조도 · 반복 패턴</td></tr><tr><td>지도</td><td class="blue"><b>2D 점유 격자 → 경로 계획 직결</b></td><td>특징점 지도 → 격자 별도 생성</td></tr><tr><td>연산</td><td class="blue"><b>CPU 전용 (소형 보드 가능)</b></td><td>GPU 권장 · Orin Nano는 저해상도만 안정</td></tr></table></div></div></div>
-<div class="takeaway">오도메트리 오차 원인: 적재 선회 시 회전량 부족 → 방향 24° 어긋남 (마찰 가정값에 좌우)</div>
+<div class="takeaway">오도메트리 오차는 적재 상태로 선회할 때 덜 돌아 방향이 24° 어긋난 탓입니다 (마찰 가정값에 좌우)</div>
 </div></x-import>
 </section>
 </x-import></x-dc></body></html>
