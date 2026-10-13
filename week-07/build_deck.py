@@ -4,8 +4,8 @@ Run from any directory with Python 3. No third-party build dependencies.
 
 Week 7 (class, 2026-10-14) reports the multi-forklift traffic work on ws1
 (robot repository branch feat/fleet-five, plans and validation records
-2026-10-08 to 10-12). The drive board PCB slide was left out of the published
-deck until the team's material arrives (user, 2026-10-14: publish now). Every fleet result is simulation with the simulator's pose (no SLAM)
+2026-10-08 to 10-12). The encoder board PCB slide (team 3D renders, 2026-10-14) asks the professor
+about the connector pitch, 2.54 vs 1.27 mm (team message). Every fleet result is simulation with the simulator's pose (no SLAM)
 on generated factories. The clips are cut by prepare_clips.py on ws1.
 """
 from html import escape
@@ -86,24 +86,24 @@ def bars(rows, xmax, unit, aria):
 
 # ----------------------------------------------------------------- 1
 add('개발 진행 보고', '7주차\n자율 지게차 개발', 20, '',
-    """안녕하십니까. 7주차 자율 지게차 개발 진행 상황을 발표할 김광민이라고 합니다. 이번 주에는 지게차 여러 대가 한 공장에서 서로 부딪히거나 막히지 않고 다니게 하는 교통 관리를 말씀드리겠습니다. 결과는 모두 시뮬레이션입니다. (전환)""",
+    """안녕하십니까. 7주차 자율 지게차 개발 진행 상황을 발표할 김광민이라고 합니다. 이번 주에는 두 가지를 말씀드리겠습니다. 첫째는 지게차 여러 대가 한 공장에서 서로 부딪히거나 막히지 않고 다니게 하는 교통 관리이고, 둘째는 하드웨어 쪽 엔코더 보드 PCB입니다. 교통 관리 결과는 모두 시뮬레이션입니다. (전환)""",
     [(FIVE, '5대 동시 운반 계획'), (WINDOWS, '교차 시간 창 실행 기록')], '진행 보고')
 
 # ----------------------------------------------------------------- 2
 add('이번 주 요약', '01  이번 주 요약', 40, f"""
-<h2 class="headline">이번 주: 지게차 여러 대가 막히지 않고 다니는 교통 관리</h2>
+<h2 class="headline">이번 주: 여러 대가 막히지 않고 다니는 교통 관리 · 엔코더 보드 PCB</h2>
 <div class="split grow" style="grid-template-columns:1.05fr 1fr;gap:28px">
 <figure class="shot"><img class="media" src="assets/73_rack.jpg" alt="무작위로 만든 랙 창고를 위에서 본 모습. 지게차 8대가 각자 색 띠로 앞길을 예약하고 다님"></figure>
 <table class="comparison t7 sum7 grow">
 <tr><th>구분</th><th>이번 주 내용</th><th>상태</th></tr>
 <tr><td>다중 지게차</td><td>NVIDIA 창고 5대 → 무작위 공장 3종 · 최대 20대</td><td class="blue"><b>겹침 · 교착 0</b><br><span class="muted small">시뮬레이션</span></td></tr>
 <tr><td>교통 규칙</td><td>앞길 예약 → 막히면 우회 → 교차 지점 순서 정하기</td><td>긴 대기 1/3로</td></tr>
-<tr><td>시험</td><td>고장 · 통신 · 위치 오차 · 사람</td><td>30분 연속</td></tr>
+<tr><td>하드웨어</td><td>엔코더 보드 PCB (MT6701)</td><td>3D 설계</td></tr>
 </table>
 </div>
 <div class="takeaway">배경: 실제 현장은 지게차 여러 대가 같은 통로를 씀 (리보틱스 미팅 질문: 동시 투입 대수 · 중앙 관제)</div>
 """,
-    """먼저 이번 주 요약입니다. 지금까지는 지게차 한 대가 팔레트를 집어 옮기는 것을 만들었는데, 실제 현장에서는 여러 대가 같은 통로를 함께 씁니다. 그래서 리보틱스 미팅에서도 현장에 몇 대가 동시에 들어가는지, 중앙에서 관리하는 서버가 있는지를 여쭤보기로 했습니다. 이번 주에는 이것을 시뮬레이션으로 먼저 해 봤습니다. NVIDIA 창고에서 5대로 시작해서, 무작위로 만든 공장 세 종류에서 최대 20대까지 늘렸습니다. 교통 규칙은 앞길을 예약하는 방식에서 시작해, 막히면 돌아가는 규칙과 교차 지점의 통과 순서를 정하는 규칙을 차례로 더했습니다. (전환)""",
+    """먼저 이번 주 요약입니다. 지금까지는 지게차 한 대가 팔레트를 집어 옮기는 것을 만들었는데, 실제 현장에서는 여러 대가 같은 통로를 함께 씁니다. 그래서 리보틱스 미팅에서도 현장에 몇 대가 동시에 들어가는지, 중앙에서 관리하는 서버가 있는지를 여쭤보기로 했습니다. 이번 주에는 이것을 시뮬레이션으로 먼저 해 봤습니다. NVIDIA 창고에서 5대로 시작해서, 무작위로 만든 공장 세 종류에서 최대 20대까지 늘렸습니다. 교통 규칙은 앞길을 예약하는 방식에서 시작해, 막히면 돌아가는 규칙과 교차 지점의 통과 순서를 정하는 규칙을 차례로 더했습니다. 하드웨어는 엔코더 보드 PCB를 뒤에서 말씀드리겠습니다. (전환)""",
     [('week-07-1 18쪽', '리보틱스 미팅 질문 — 다중 차량: 현장 동시 투입 대수 · 중앙 관제 서버 유무'),
      (FIVE, 'NVIDIA 창고 5대'), (WORLDS_PLAN, '무작위 공장 3종 · 트럭 5 · 10 · 20대'),
      (WINDOWS, '7절 판정: 트럭 겹침 0 · 60 s 넘는 서로 기다림 · gridlock 0 (seed 600–604, 119 칸)')],
@@ -246,12 +246,35 @@ add('남은 한계', '07  남은 한계', 60, f"""
      ('docs/references/week6_feedback.md', '5절 무선 통신: 지게차–PC · 지게차–지게차 미고려')],
     '출처: 다중 지게차 계획 · 실행 기록')
 
+# ----------------------------------------------------------------- 9 PCB
+add('엔코더 보드 PCB', '08  엔코더 보드 PCB', 70, """
+<h2 class="headline">엔코더 보드 PCB: MT6701 (SOP-8) · 2×4 박스 헤더로 MCU 보드와 연결</h2>
+<div class="pcb7 grow">
+<figure class="shot"><img class="media" src="assets/75_enc_top.jpg" alt="엔코더 보드 3D 렌더 앞면. 왼쪽에 8핀 칩 U2와 고정 구멍 두 개, 가운데 C1 · C3 · R4, 오른쪽에 2열 4핀 단자"><figcaption>앞면</figcaption></figure>
+<figure class="shot"><img class="media" src="assets/75_enc_bottom.jpg" alt="엔코더 보드 3D 렌더 뒷면. 2열 4핀 박스 헤더가 보드 옆으로 크게 나와 있음"><figcaption>뒷면 · 박스 헤더</figcaption></figure>
+<table class="comparison t7 pcbq7">
+<tr><th>핀 간격</th><th>2.54 mm (현재)</th><th>1.27 mm</th></tr>
+<tr><td>커넥터 크기</td><td>보드보다 큼</td><td class="blue"><b>가로 · 세로 약 절반</b></td></tr>
+<tr><td>납땜</td><td class="blue"><b>손납땜 쉬움</b></td><td>정밀 납땜 필요</td></tr>
+<tr><td>케이블 구하기</td><td class="blue"><b>납작 케이블 흔함</b></td><td>선택지 적음</td></tr>
+</table>
+</div>
+<div class="takeaway">질문: 엔코더 커넥터 핀 간격 2.54 mm (배선 · 납땜 쉬움) vs 1.27 mm (보드 소형화)</div>
+""",
+    """하드웨어는 엔코더 보드 PCB입니다. 5주차에 말씀드린 자석식 각도 센서 MT6701을 SOP-8 패키지로 올렸고, 2열 4핀 박스 헤더로 MCU 보드와 연결합니다. 왼쪽이 앞면, 가운데가 뒷면입니다. 뒷면을 보시면 커넥터가 보드보다 크게 튀어나와 있습니다. 그래서 커넥터 핀 간격을 지금의 2.54밀리미터로 둘지, 1.27밀리미터로 줄일지 여쭤보고 싶습니다. 1.27밀리미터로 바꾸면 커넥터가 가로세로 절반 정도로 줄어 보드를 작게 만들 수 있지만, 납땜이 까다롭고 맞는 케이블의 선택지가 적습니다. 2.54밀리미터는 크지만 손납땜이 쉽고 박스 헤더용 납작 케이블을 쉽게 구할 수 있습니다. 실차에 달 때 어느 쪽이 나은지 의견 부탁드립니다. (전환)""",
+    [('팀 PCB 3D 렌더 (2026-10-14, 팀원 공유)', '엔코더 보드 앞면 · 뒷면 — U2(MT6701, SOP-8, 사용자 확인 2026-10-14) · C1 · C3 · R4 · 2×4 박스 헤더 · 고정 구멍 2개'),
+     ('week-05/build_deck.py 8쪽', '5주차 회로 초안: MT6701 증분판(ABZ) · 절대각판(SSI), 같은 2.54 mm 2×4 헤더'),
+     ('팀 메시지 (2026-10-14)', '「교수님에게 2.54 VS 1.27 물어보죠」'),
+     ('비교 표', '1.27 mm 는 2.54 mm 의 절반 간격 — 같은 핀 수면 커넥터 가로 · 세로가 약 절반 (기하 계산, 하우징 두께 제외)')],
+    '그림: 팀 PCB 3D 렌더 두 장 (배경만 잘라 냄)')
+
 # ----------------------------------------------------------------- 10
 NEXT_ROWS = [
     ('다중 지게차', '위치는 시뮬레이터 정답', '트럭마다 SLAM 위치로 동시 주행'),
     ('다중 지게차', '보호 영역이 진행 방향 앞쪽만', '차체 둘레 전체로 넓혀 사람 접촉 0'),
     ('다중 지게차', '중앙 서버 · 통신은 가정', '리보틱스 답변(투입 대수 · 관제) 보고 범위 확정'),
     ('1대 운반', '포크 간격을 실측 범위(0.37 m)로 바꿈', '삽입 중 위치 추적 다시 검증'),
+    ('하드웨어', '엔코더 보드 PCB 3D 설계', '커넥터 핀 간격 결정 후 제작'),
 ]
 
 
@@ -266,23 +289,23 @@ def _next_table():
     return ''.join(rows)
 
 
-add('다음 작업', '08  다음 작업', 50, f"""
-<h2 class="headline">다음 작업: 트럭마다 SLAM 위치로 동시 주행 · 사람 감지 범위 넓히기</h2>
+add('다음 작업', '09  다음 작업', 50, f"""
+<h2 class="headline">다음 작업: 트럭마다 SLAM 위치로 동시 주행 · 사람 감지 범위 · 엔코더 보드 제작</h2>
 <table class="comparison plan6 grow"><tr><th class="c1">구분</th><th class="c2">현재</th><th class="c3"></th><th class="c4">다음 단계</th></tr>{_next_table()}</table>
-<div class="takeaway">다음 목표: 시뮬레이터 정답 위치 없이 여러 대 운용</div>
+<div class="takeaway">다음 목표: 시뮬레이터 정답 위치 없이 여러 대 운용 · 엔코더 보드 제작</div>
 """,
-    """정리하겠습니다. 이번 주에는 지게차 여러 대가 같은 공장에서 겹치거나 막히지 않고 다니는 교통 관리를 시뮬레이션으로 만들었습니다. 다음 단계는 시뮬레이터의 정답 위치 대신 트럭마다 SLAM으로 추정한 위치로 여러 대를 함께 움직이는 것이고, 사람을 보는 보호 영역을 차체 둘레 전체로 넓혀 사람과 닿는 경우를 없애겠습니다. 중앙 서버와 통신을 어느 정도까지 만들지는 리보틱스 미팅에서 현장 투입 대수와 관제 서버 답변을 듣고 정하겠습니다. 한 대 운반 쪽은 포크 간격을 실측 범위 안의 0.37미터로 바꿨기 때문에, 포크를 넣는 동안의 위치 추적을 다시 검증하고 있습니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.""",
+    """정리하겠습니다. 이번 주에는 지게차 여러 대가 같은 공장에서 겹치거나 막히지 않고 다니는 교통 관리를 시뮬레이션으로 만들었습니다. 다음 단계는 시뮬레이터의 정답 위치 대신 트럭마다 SLAM으로 추정한 위치로 여러 대를 함께 움직이는 것이고, 사람을 보는 보호 영역을 차체 둘레 전체로 넓혀 사람과 닿는 경우를 없애겠습니다. 중앙 서버와 통신을 어느 정도까지 만들지는 리보틱스 미팅에서 현장 투입 대수와 관제 서버 답변을 듣고 정하겠습니다. 한 대 운반 쪽은 포크 간격을 실측 범위 안의 0.37미터로 바꿨기 때문에, 포크를 넣는 동안의 위치 추적을 다시 검증하고 있습니다. 하드웨어는 커넥터 핀 간격을 정한 뒤 엔코더 보드를 제작하겠습니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.""",
     [('forklift d47d4d0', 'dls08_measured fork_spacing_m 0.29 → 0.3725 (실측 범위 안의 수동 설정값)'),
      ('forklift 7f07659', 'D5 v11 계획 6판 — 삽입 중 추적 재검증'),
      ('week-07-1 18쪽', '리보틱스 미팅 질문 — 현장 동시 투입 대수 · 중앙 관제 서버')],
     '출처: 다중 지게차 실행 기록 · 로봇 저장소 이력')
 
 TITLE = '7주차 자율 지게차 개발'
-TOTAL = 490
+TOTAL = 560
 
 
 def build():
-    assert len(slides) == 9, len(slides)
+    assert len(slides) == 10, len(slides)
     assert sum(s['seconds'] for s in slides) == TOTAL, sum(s['seconds'] for s in slides)
     sections = []
     script = [f'# {TITLE} · 발표 원고', '',
