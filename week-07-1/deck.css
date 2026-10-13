@@ -792,3 +792,5 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .m7-vflow span { font-size:19px; color:#44505c; line-height:1.35; }
 .m7-vnote { flex-shrink:0; margin:10px 0 0; padding:9px 14px; background:#f4f6f9; border-left:4px solid var(--uos-blue); font-size:18px; color:#44505c; }
 .m7-vnote b { color:#1b1f24; margin-right:12px; }
+/* 18: two more questions (2026-10-13) — tighter rows so the last group stays above the band */
+.comparison.m7-q th, .comparison.m7-q td { padding-top:4px; padding-bottom:4px; line-height:1.3; }

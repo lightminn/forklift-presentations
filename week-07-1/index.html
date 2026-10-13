@@ -3,7 +3,7 @@
 <link rel="icon" href="data:,">
 <script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>리보틱스 중간 미팅 · 자율 지게차 중간 점검</title>
-<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=3e3a4c78f80e"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=895e7fddc1c4"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 <section class="title-section" data-label="리보틱스 중간 미팅" data-screen-label="01" data-duration="20" data-speaker-notes="권장 20초
 
@@ -373,9 +373,9 @@ D435i 확정 · RPLIDAR A2 계열 · Jetson 권장안 (2026-09-10, A2M12 기대 
 </div></x-import>
 </section>
 
-<section data-label="확인 요청" data-screen-label="18" data-duration="65" data-speaker-notes="권장 65초
+<section data-label="확인 요청" data-screen-label="18" data-duration="75" data-speaker-notes="권장 75초
 
-마지막으로 리보틱스 측에 확인을 요청드릴 사항입니다. 파랗게 표시한 세 가지를 우선 여쭙고자 합니다. 첫째, 오늘 보여 드린 운반 임무가 실제 작업 흐름과 부합하는지입니다. 둘째, 시연 판정 기준입니다. 요구되는 포크 삽입 깊이, 현재와 같이 삽입 직전에 정지해 재관측하는 방식의 허용 여부, 틸트 없는 운반의 허용 여부입니다. 셋째, 팔레트와 목적지 위치를 시스템에서 제공받는지, 로봇이 직접 탐색해야 하는지입니다. 그 밖의 운용 환경, T11 진입구 폭, 축소 시험 코스, 원격 정지와 다중 차량 운용도 표의 항목대로 정해 주시면 설계에 반영하겠습니다. 작업장 도면, 운용 영상, 팔레트 도면을 제공해 주시면 시뮬레이션 장면을 그에 맞게 구성하겠습니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.
+마지막으로 리보틱스 측에 확인을 요청드릴 사항입니다. 파랗게 표시한 세 가지를 우선 여쭙고자 합니다. 첫째, 오늘 보여 드린 운반 임무가 실제 작업 흐름과 부합하는지입니다. 둘째, 시연 판정 기준입니다. 요구되는 포크 삽입 깊이, 현재와 같이 삽입 직전에 정지해 재관측하는 방식의 허용 여부, 틸트 없는 운반의 허용 여부입니다. 셋째, 팔레트와 목적지 위치를 시스템에서 제공받는지, 로봇이 직접 탐색해야 하는지입니다. 이와 함께 포크 높이를 정밀하게 조절해야 하는지, 현장에 지게차가 동시에 몇 대 투입되고 이를 관리하는 중앙 관제 서버가 있는지도 여쭙고자 합니다. 그 밖의 운용 환경, T11 진입구 폭, 축소 시험 코스, 원격 정지 요구 수준도 표의 항목대로 정해 주시면 설계에 반영하겠습니다. 작업장 도면, 운용 영상, 팔레트 도면을 제공해 주시면 시뮬레이션 장면을 그에 맞게 구성하겠습니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.
 
 [Sources]
 출처: 4–6주차 피드백 · 5주차 미팅 질문 이어 받음
@@ -383,10 +383,11 @@ D435i 확정 · RPLIDAR A2 계열 · Jetson 권장안 (2026-09-10, A2M12 기대 
 11쪽 미팅 질문 (실제 운용 상황 · 초기 제공 정보 · 시뮬레이션 설정 적합성): week-05/build_deck.py
 T11 진입구 235 / 350 mm 두 해석, 어느 것도 채택하지 않음 (docs/design/2026-09-17-t11-test-article-drawing.md): forklift CLAUDE.md
 §1 팀 메모: 리보틱스 미팅 때 물어볼 것이 있음: docs/references/week6_feedback.md
+질문 추가: 포크 높이 정밀 조절 필요 여부 · 현장 동시 투입 대수와 중앙 관제 서버 유무: 사용자 지시 (2026-10-13)
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="17  질의응답 · 리보틱스 확인 요청"><div class="slide-body">
 <h2 class="headline">우선 확인: 작업 범위 · 평가 기준 · 입력 조건</h2>
-<div class="m7-info grow"><div class="tb"><table class="comparison m7-q"><tr><th>구분</th><th>항목</th></tr><tr class=pri><td class=grp rowspan=2>질의</td><td class="item">작업 범위: 운반 임무와 실제 작업 흐름의 부합 여부</td></tr><tr class=pri><td class="item">평가 기준: 요구 삽입 깊이 · 삽입 직전 정지 · 틸트 없는 운반 허용 여부</td></tr><tr class=pri><td class=grp rowspan=5>결정 요청</td><td class="item">입력 조건: 팔레트 · 목적지 위치 사전 제공 / 로봇 자율 탐색</td></tr><tr><td class="item">운용 환경: 실내 · 실외 · 통로 폭 · 바닥 조건 · 저상 장애물 · 작업자 혼재</td></tr><tr><td class="item">팔레트: T11 포크 진입구 폭 235 / 350 mm · 하중 (개발 차량 최대 10 kg)</td></tr><tr><td class="item">시연 코스: 축소 실기시험 코스 적용 여부</td></tr><tr><td class="item">무선: 원격 정지 요구 수준 · 다중 차량 운용 여부</td></tr><tr><td class=grp rowspan=1>자료 요청</td><td class="item">작업장 도면 · 운용 영상 · 사용 팔레트 도면</td></tr></table></div></div>
+<div class="m7-info grow"><div class="tb"><table class="comparison m7-q"><tr><th>구분</th><th>항목</th></tr><tr class=pri><td class=grp rowspan=4>질의</td><td class="item">작업 범위: 운반 임무와 실제 작업 흐름의 부합 여부</td></tr><tr class=pri><td class="item">평가 기준: 요구 삽입 깊이 · 삽입 직전 정지 · 틸트 없는 운반 허용 여부</td></tr><tr><td class="item">포크 높이: 정밀 조절 요구 여부 · 허용 오차</td></tr><tr><td class="item">다중 차량: 현장 동시 투입 대수 · 중앙 관제 서버 유무</td></tr><tr class=pri><td class=grp rowspan=5>결정 요청</td><td class="item">입력 조건: 팔레트 · 목적지 위치 사전 제공 / 로봇 자율 탐색</td></tr><tr><td class="item">운용 환경: 실내 · 실외 · 통로 폭 · 바닥 조건 · 저상 장애물 · 작업자 혼재</td></tr><tr><td class="item">팔레트: T11 포크 진입구 폭 235 / 350 mm · 하중 (개발 차량 최대 10 kg)</td></tr><tr><td class="item">시연 코스: 축소 실기시험 코스 적용 여부</td></tr><tr><td class="item">무선: 원격 정지 요구 수준</td></tr><tr><td class=grp rowspan=1>자료 요청</td><td class="item">작업장 도면 · 운용 영상 · 사용 팔레트 도면</td></tr></table></div></div>
 <div class="takeaway">목표: 실차 시험의 운용 조건 · 판정 기준 합의</div>
 </div></x-import>
 </section>
