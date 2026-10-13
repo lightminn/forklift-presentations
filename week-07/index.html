@@ -30,17 +30,17 @@ NVIDIA 창고 5대: docs/plans/2026-10-08-fleet-five-forklifts.md
 7절 판정: 트럭 겹침 0 · 60 s 넘는 서로 기다림 · gridlock 0 (seed 600–604, 119 칸): docs/validation/2026-10-11-fleet-time-windows.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="01  이번 주 요약"><div class="slide-body">
-<h2 class="headline">이번 주: 여러 대가 막히지 않고 다니는 교통 관리 · 엔코더 보드 PCB</h2>
+<h2 class="headline">지게차 여러 대가 막히지 않고 다니는 교통 관리와 엔코더 보드 PCB</h2>
 <div class="split grow" style="grid-template-columns:1.05fr 1fr;gap:28px">
 <figure class="shot"><img class="media" src="assets/73_rack.jpg" alt="무작위로 만든 랙 창고를 위에서 본 모습. 지게차 8대가 각자 색 띠로 앞길을 예약하고 다님"></figure>
 <table class="comparison t7 sum7 grow">
 <tr><th>구분</th><th>이번 주 내용</th><th>상태</th></tr>
-<tr><td>다중 지게차</td><td>NVIDIA 창고 5대 → 무작위 공장 3종 · 최대 20대</td><td class="blue"><b>겹침 · 교착 0</b><br><span class="muted small">시뮬레이션</span></td></tr>
-<tr><td>교통 규칙</td><td>앞길 예약 → 막히면 우회 → 교차 지점 순서 정하기</td><td>긴 대기 1/3로</td></tr>
+<tr><td>다중 지게차</td><td>NVIDIA 창고 5대에서 무작위 공장 3종, 최대 20대로</td><td class="blue"><b>겹침과 교착 없음</b><br><span class="muted small">(시뮬레이션)</span></td></tr>
+<tr><td>교통 규칙</td><td>앞길 예약 → 막히면 우회 → 교차 지점 순서 정하기</td><td>긴 대기 약 1/3로</td></tr>
 <tr><td>하드웨어</td><td>엔코더 보드 PCB (MT6701)</td><td>3D 설계</td></tr>
 </table>
 </div>
-<div class="takeaway">배경: 실제 현장은 지게차 여러 대가 같은 통로를 씀 (리보틱스 미팅 질문: 동시 투입 대수 · 중앙 관제)</div>
+<div class="takeaway">실제 현장은 여러 대가 같은 통로를 쓰므로 리보틱스 미팅에서도 동시 투입 대수와 중앙 관제를 묻습니다</div>
 </div></x-import>
 </section>
 
@@ -55,7 +55,7 @@ success · completed 5 · violation_count 0 · route_conflicts 0 · 시뮬레이
 tools/compose_fleet_video.py — 트럭 색 선: 최근 30 s 실제 궤적, 빨간 고리: 교통 대기: forklift feat/fleet-five c24548f
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="02  왜 교통 관리가 필요한가"><div class="slide-body">
-<h2 class="headline">회전 반경 3.45 m · 통로 폭 약 3.5 m → 통로에서 마주치면 비켜설 수 없음</h2>
+<h2 class="headline">회전 반경 3.45 m, 통로 폭 약 3.5 m라 통로에서 마주치면 비켜설 수 없음</h2>
 <div class="split grow" style="grid-template-columns:1.55fr 1fr;gap:26px">
 <div class="m7-media"><video class="media" src="assets/71_warehouse5.mp4" poster="assets/71_warehouse5_poster.jpg" autoplay loop muted playsinline aria-label="NVIDIA 창고를 위에서 본 지게차 5대. 각자 랙 통로 끝의 팔레트를 집어 후진으로 나와 출하장에 내리고 주차장으로 돌아옴"></video>
 <div class="legend"><span class="lg"><span class="sw line" style="background:#3c8ce6"></span>트럭별 최근 30 s 이동 경로</span><span class="lg"><span class="sw ring" style="border-color:#ff4646"></span>다른 트럭이 지나갈 때까지 대기</span></div></div>
@@ -65,10 +65,10 @@ tools/compose_fleet_video.py — 트럭 색 선: 최근 30 s 실제 궤적, 빨�
 <tr><td>지게차</td><td>5대 동시 운반 (실측 차체 모델)</td></tr>
 <tr><td>랙 통로 폭</td><td>2.85–3.74 m</td></tr>
 <tr><td>최소 회전 반경</td><td>3.45 m (조향각 15°)</td></tr>
-<tr><td>결과</td><td class="blue"><b>5대 모두 완주 · 서로 겹침 없음</b></td></tr>
+<tr><td>결과</td><td class="blue"><b>5대 모두 겹치지 않고 완주</b></td></tr>
 </table>
 </div>
-<div class="takeaway">필요한 것: 마주치기 전에 미리 순서를 정하는 중앙 교통 관리 (마주친 뒤 한 대가 비키는 방식은 불가)</div>
+<div class="takeaway">마주친 뒤 한 대가 비키는 방식은 쓸 수 없어, 마주치기 전에 중앙에서 순서를 정해야 합니다</div>
 </div></x-import>
 </section>
 
@@ -85,13 +85,13 @@ tools/compose_fleet_video.py — 트럭 색 선: 최근 30 s 실제 궤적, 빨�
 tools/compose_world_video.py — 색 띠: 점유 구간, 점: 남은 경로, 마름모: 교차 통표, 고리: 대기: forklift feat/fleet-five c24548f
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="03  교통 규칙"><div class="slide-body">
-<h2 class="headline">규칙: 앞길을 미리 예약 · 다른 트럭이 지나갈 자리에는 서지 않음</h2>
+<h2 class="headline">앞길을 미리 예약하고, 다른 트럭이 지나갈 자리에는 서지 않는 교통 규칙</h2>
 <div class="rule7 grow">
-<div class="m7-media"><video class="media" src="assets/72_close_a.mp4" poster="assets/72_close_a_poster.jpg" autoplay loop muted playsinline aria-label="랙 창고를 가까이 본 Isaac 렌더. 청록 트럭의 다음 구간이 노랑 트럭의 예약 구간과 겹쳐, 노랑 트럭이 지나갈 때까지 그 앞에서 기다림"></video><p class="rcap"><b>①</b> 다음 구간이 다른 트럭의 예약과 겹침 → 그 앞에서 대기</p></div>
-<div class="m7-media"><video class="media" src="assets/72_close_b.mp4" poster="assets/72_close_b_poster.jpg" autoplay loop muted playsinline aria-label="랙 창고를 가까이 본 Isaac 렌더. 연두 트럭이 들어가면 먼저 지나갈 파랑 트럭의 길 위에 서게 되므로, 진입 전에 기다림"></video><p class="rcap"><b>②</b> 들어가면 먼저 지나갈 트럭의 길 위에 서게 됨 → 진입 전 대기</p></div>
-<div class="legend"><span class="lg"><span class="sw band" style="background:#3c8ce673;border-color:#3c8ce6"></span>예약 구간 (그 트럭만 달릴 수 있음)</span><span class="lg"><span class="sw dots" style="color:#3c8ce6"></span>남은 경로</span><span class="lg"><span class="sw diamond" style="border-color:#3c8ce6"></span>교차 지점 (색 = 먼저 지나갈 트럭)</span><span class="lg"><span class="sw ring" style="border-color:#ffb928"></span>대기 (선: 기다리는 상대)</span></div>
+<div class="m7-media"><video class="media" src="assets/72_close_a.mp4" poster="assets/72_close_a_poster.jpg" autoplay loop muted playsinline aria-label="랙 창고를 가까이 본 Isaac 렌더. 청록 트럭의 다음 구간이 노랑 트럭의 예약 구간과 겹쳐, 노랑 트럭이 지나갈 때까지 그 앞에서 기다림"></video><p class="rcap"><b>①</b> 다음 구간이 다른 트럭의 예약과 겹치면 그 앞에서 대기</p></div>
+<div class="m7-media"><video class="media" src="assets/72_close_b.mp4" poster="assets/72_close_b_poster.jpg" autoplay loop muted playsinline aria-label="랙 창고를 가까이 본 Isaac 렌더. 연두 트럭이 들어가면 먼저 지나갈 파랑 트럭의 길 위에 서게 되므로, 진입 전에 기다림"></video><p class="rcap"><b>②</b> 들어가면 먼저 지나갈 트럭의 길 위에 서게 되므로 진입 전에 대기</p></div>
+<div class="legend"><span class="lg"><span class="sw band" style="background:#3c8ce673;border-color:#3c8ce6"></span>예약 구간 (그 트럭만 달릴 수 있음)</span><span class="lg"><span class="sw dots" style="color:#3c8ce6"></span>남은 경로</span><span class="lg"><span class="sw diamond" style="border-color:#3c8ce6"></span>교차 지점 (색은 먼저 지나갈 트럭)</span><span class="lg"><span class="sw ring" style="border-color:#ffb928"></span>대기 (선은 기다리는 상대로)</span></div>
 </div>
-<div class="takeaway">교착이 없는 이유: 기다리는 트럭은 앞서 갈 트럭의 길 밖에 서서 기다림 → 앞선 트럭부터 차례로 끝남</div>
+<div class="takeaway">기다리는 트럭은 늘 앞서 갈 트럭의 길 밖에 서 있으므로, 앞선 트럭부터 차례로 지나가 교착이 생기지 않습니다</div>
 </div></x-import>
 </section>
 
@@ -106,20 +106,20 @@ seed 600 크기: 랙 82.34 × 58.22, 공정 75.74 × 74.88, 복합동 91.65 × 5
 7절: seed 600–604, 120 칸 중 multi_604_C0_20 은 출발 배치 생성 실패로 제외 → 119 칸: docs/validation/2026-10-11-fleet-time-windows.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="04  시험 환경"><div class="slide-body">
-<h2 class="headline">무작위로 만든 공장 3종 × 6가지 상황, 30분 연속 운반</h2>
+<h2 class="headline">무작위로 만든 공장 3종에서 6가지 상황으로 30분씩 연속 운반</h2>
 <div class="env7 grow">
 <figure class="shot"><img class="media" src="assets/73_rack.jpg" alt="랙 창고"><figcaption>랙 창고 82 × 58 m</figcaption></figure>
 <figure class="shot"><img class="media" src="assets/73_shop.jpg" alt="기계가 흩어진 공정 공장"><figcaption>공정 공장 76 × 75 m</figcaption></figure>
 <figure class="shot"><img class="media" src="assets/73_multi.jpg" alt="두 홀을 문으로 이은 복합동"><figcaption>복합동 92 × 51 m</figcaption></figure>
 </div>
-<table class="comparison t7 cond7"><tr><th>기본</th><th>고장</th><th>통신</th><th>위치 오차</th><th>사람</th><th>전부</th></tr><tr><td>트럭 5 · 10 · 20대</td><td>트럭 고장 · 쏟아진 짐</td><td>지연 0.5 s · 20 % 손실</td><td>최대 0.17 m</td><td>10명 보행</td><td>위 네 가지 동시</td></tr></table>
-<div class="takeaway">평가: 공장 배치를 바꿔 가며 120회 (CPU 계산) · 대표 장면은 Isaac Sim 물리로 확인</div>
+<table class="comparison t7 cond7"><tr><th>기본</th><th>고장</th><th>통신</th><th>위치 오차</th><th>사람</th><th>전부</th></tr><tr><td>트럭 5 · 10 · 20대</td><td>트럭 고장과 쏟아진 짐</td><td>0.5 s 지연과 20 % 손실</td><td>최대 0.17 m</td><td>10명이 걸어 다님</td><td>위 네 가지 동시</td></tr></table>
+<div class="takeaway">공장 배치를 바꿔 가며 120회를 CPU로 계산하고, 대표 장면은 Isaac Sim 물리 시뮬레이션으로 확인했습니다</div>
 </div></x-import>
 </section>
 
 <section data-label="막힘 줄이기" data-screen-label="06" data-duration="80" data-speaker-notes="권장 80초
 
-그런데 이 시험에서 처음 규칙만으로는 막히는 경우가 나왔습니다. 고장이나 쏟아진 짐 때문에 트럭이 경로를 다시 짜면 순번이 바뀌는데, 이때 앞 장의 전제, 즉 기다리는 트럭이 앞 순번 트럭의 길 밖에 선다는 조건이 깨집니다. 그래서 공장 배치 다섯 개로 돌린 119번 중 15번은 서로를 기다리며 끝까지 풀리지 않았습니다. 이를 위해 두 단계를 더했습니다. 먼저 20초 넘게 막히면 다른 길로 돌아가고, 60초 넘게 기다리면 상대의 남은 경로를 벽으로 보고 비켜 가는 규칙입니다. 이것을 더하자 같은 119번에서 영영 막힌 실행이 0이 됐습니다. 다음으로 앞 장에서 본 교차 지점 규칙, 즉 교차 지점마다 어느 트럭이 먼저, 언제 지나갈지를 미리 정하고 그 시간 안에 오지 못하면 순서를 바꾸는 규칙을 더했습니다. 다른 공장 배치 다섯 개로 견주었을 때 60초 넘게 기다린 횟수가 1,542번에서 576번으로 약 3분의 1이 됐고, 영영 막힌 실행은 여전히 0이었습니다. 두 비교는 각각 같은 배치끼리 견준 값입니다. 모든 실행에서 트럭끼리 겹친 적은 없었고, 남은 긴 대기는 고장 난 트럭이나 사람 앞에 선 트럭 때문으로, 교통 규칙이 다루는 범위 밖입니다. (전환)
+그런데 이 시험에서 처음 규칙만으로는 막히는 경우가 나왔습니다. 고장이나 쏟아진 짐 때문에 트럭이 경로를 다시 짜면 순번이 바뀌는데, 이때 앞 장의 전제, 즉 기다리는 트럭이 앞 순번 트럭의 길 밖에 선다는 조건이 깨집니다. 그래서 공장 배치 다섯 개로 돌린 119번 중 15번은 서로를 기다리며 끝까지 풀리지 않았습니다. 그래서 규칙을 두 단계 더했습니다. 먼저 20초 넘게 막히면 다른 길로 돌아가고, 60초 넘게 기다리면 상대의 남은 경로를 벽으로 보고 비켜 가는 규칙입니다. 이것을 더하자 같은 119번에서 영영 막힌 실행이 0이 됐습니다. 다음으로 앞 장에서 본 교차 지점 규칙, 즉 교차 지점마다 어느 트럭이 먼저, 언제 지나갈지를 미리 정하고 그 시간 안에 오지 못하면 순서를 바꾸는 규칙을 더했습니다. 다른 공장 배치 다섯 개로 견주었을 때 60초 넘게 기다린 횟수가 1,542번에서 576번으로 약 3분의 1이 됐고, 영영 막힌 실행은 여전히 0이었습니다. 두 비교는 각각 같은 배치끼리 견준 값입니다. 모든 실행에서 트럭끼리 겹친 적은 없었고, 남은 긴 대기는 고장 난 트럭이나 사람 앞에 선 트럭 때문으로, 교통 규칙이 다루는 범위 밖입니다. (전환)
 
 [Sources]
 그래프: 각 비교는 같은 평가 배치 · 같은 119 칸끼리 (판 이름 v14 · v18 · v24 는 화면에서 생략)
@@ -129,13 +129,13 @@ TA: 20 s 막히면 우회 경로 · RA: 60 s 기다리면 선순위 남은 경�
 교차 시간 창: 발급 30 s · 여유 10 s, 만료하면 순서 다시 정함; 사람 접촉 판정은 세 판 모두 미달(166–193 표본, 대부분 rack_601_C5_10): docs/validation/2026-10-11-fleet-time-windows.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="05  막힘 줄이기"><div class="slide-body">
-<h2 class="headline">막히면 우회 · 교차 지점 순서 정하기 → 영영 막힌 실행 15 → 0, 오래 기다림 약 1/3</h2>
-<div class="phase-flow steps3"><b>① 앞길 예약 + 순번</b><span class="arrow">→</span><b>② 20 s 막히면 다른 길로 우회</b><span class="arrow">→</span><b>③ 교차 지점마다 지나갈 순서 · 시각 예약</b></div>
+<h2 class="headline">막히면 우회하고 교차 지점 순서를 정해 영영 막힌 실행 15회 → 0회, 긴 대기 약 1/3로</h2>
+<div class="phase-flow steps3"><b>① 앞길 예약과 순번</b><span class="arrow">→</span><b>② 20 s 막히면 다른 길로 우회</b><span class="arrow">→</span><b>③ 교차 지점마다 지나갈 순서와 시각 예약</b></div>
 <div class="split grow" style="gap:30px">
 <div class="chart7"><p class="panel-h">영영 막힌 실행 <span class="muted">(119회 중, 평가 배치 A)</span></p><svg class="diagram" viewBox="0 0 600 160" role="img" aria-label="영영 막힌 실행 수. 앞길 예약만 15회, 막히면 우회를 더하면 0회 (119회 중)"><g font-family="var(--uos-font)"><text x="178" y="44" text-anchor="end" font-size="22" fill="#1b1f24">앞길 예약만</text><rect x="190" y="14" width="225.0" height="44" rx="3" fill="#c26a1a"/><text x="427.0" y="46" font-size="28" font-weight="700" fill="#1b1f24">15회</text><text x="178" y="118" text-anchor="end" font-size="22" fill="#1b1f24">+ 막히면 우회</text><rect x="190" y="88" width="4.0" height="44" rx="3" fill="#2f74c0"/><text x="206.0" y="120" font-size="28" font-weight="700" fill="#1b1f24">0회</text></g></svg></div>
 <div class="chart7"><p class="panel-h">60 s 넘게 기다린 횟수 <span class="muted">(119회 합, 평가 배치 B)</span></p><svg class="diagram" viewBox="0 0 600 160" role="img" aria-label="60초 넘게 기다린 횟수. 막히면 우회까지 1,542번, 교차 순서를 더하면 576번 (119회 합)"><g font-family="var(--uos-font)"><text x="178" y="44" text-anchor="end" font-size="22" fill="#1b1f24">+ 막히면 우회</text><rect x="190" y="14" width="257.0" height="44" rx="3" fill="#9aa3ad"/><text x="459.0" y="46" font-size="28" font-weight="700" fill="#1b1f24">1,542번</text><text x="178" y="118" text-anchor="end" font-size="22" fill="#1b1f24">+ 교차 순서</text><rect x="190" y="88" width="96.0" height="44" rx="3" fill="#2f74c0"/><text x="298.0" y="120" font-size="28" font-weight="700" fill="#1b1f24">576번</text></g></svg></div>
 </div>
-<div class="takeaway">모든 실행에서 트럭끼리 겹침 0 · 남은 긴 대기: 고장 · 사람 앞에서 선 트럭 (교통 규칙 밖)</div>
+<div class="takeaway">모든 실행에서 트럭끼리 겹친 적은 없고, 남은 긴 대기는 고장 났거나 사람 앞에 선 트럭 때문입니다</div>
 </div></x-import>
 </section>
 
@@ -150,16 +150,16 @@ TA: 20 s 막히면 우회 경로 · RA: 60 s 기다리면 선순위 남은 경�
 ws1 job 2441 실행 · 2442 합성, 영상 400 s = 시뮬레이션 1,200 s: ws1 artifacts/20261009_fleet_worlds/videos/tw24_rack600.mp4
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="06  물리 시뮬레이션 확인"><div class="slide-body">
-<h2 class="headline">트럭 8대 · 사람 8명 · 고장 1대 → 20분 동안 겹침 · 교착 없이 운반</h2>
+<h2 class="headline">트럭 8대와 사람 8명, 고장 1대가 있는 공장에서 20분 동안 겹침과 교착 없이 운반</h2>
 <div class="split grow" style="grid-template-columns:1.25fr 1fr;gap:24px">
 <div class="m7-media"><video class="media" src="assets/74_rack600.mp4" poster="assets/74_rack600_poster.jpg" autoplay loop muted playsinline aria-label="무작위 랙 창고를 위에서 본 지게차 8대와 사람 8명. 트럭마다 색 띠로 앞길을 예약하고, 교차 지점의 마름모가 지나갈 순서를 표시함"></video>
 <div class="legend"><span class="lg"><span class="sw band" style="background:#3c8ce673;border-color:#3c8ce6"></span>예약 구간</span><span class="lg"><span class="sw diamond" style="border-color:#3c8ce6"></span>교차 지점</span><span class="lg"><span class="sw ring" style="border-color:#ff4646"></span>대기</span><span class="lg"><span class="sw ring" style="border-color:#ffb928"></span>20 s 넘게 대기</span><span class="lg"><span class="sw dot" style="background:#ff508c"></span>사람</span></div></div>
 <div class="stack" style="gap:12px">
 <table class="comparison t7 isaac7"><tr><th>공장</th><th>완료</th><th>트럭 겹침</th><th>교착</th><th>사람 접촉</th></tr><tr><td>랙 창고</td><td>16건</td><td class="blue"><b>0</b></td><td class="blue"><b>0</b></td><td>0</td></tr><tr><td>공정 공장</td><td>15건</td><td class="blue"><b>0</b></td><td class="blue"><b>0</b></td><td>1회</td></tr><tr><td>복합동 A</td><td>9건</td><td class="blue"><b>0</b></td><td class="blue"><b>0</b></td><td>0</td></tr><tr><td>복합동 B</td><td>14건</td><td class="blue"><b>0</b></td><td class="blue"><b>0</b></td><td>0</td></tr></table>
-<p class="small muted">Isaac Sim 물리 · 실측 차체 모델 · 20분 운용</p>
+<p class="small muted">실측 차체 모델로 Isaac Sim에서 20분 운용</p>
 </div>
 </div>
-<div class="takeaway">조건: 위치는 시뮬레이터 정답 · 공장은 무작위 생성 (실제 도면 아님)</div>
+<div class="takeaway">위치는 시뮬레이터 정답을 썼고, 공장은 생성기가 만든 배치입니다 (실제 도면 아님)</div>
 </div></x-import>
 </section>
 
@@ -176,9 +176,9 @@ W3 통신: 지연 0.5 s · 허가 손실 20 % (CPU 모형): docs/plans/2026-10-0
 5절 무선 통신: 지게차–PC · 지게차–지게차 미고려: docs/references/week6_feedback.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="07  남은 한계"><div class="slide-body">
-<h2 class="headline">남은 과제: 트럭마다 SLAM 위치로 동시 주행 · 사람 감지 범위 · 운반 중 팔레트</h2>
-<table class="comparison t7 lim7 grow"><tr><th>항목</th><th>현재</th><th>원인 · 다음</th></tr><tr><td>위치</td><td>시뮬레이터 정답</td><td>트럭마다 SLAM 위치로 5대 동시 주행: 1회 시험에서 대기 중 멈춤 (원인 분석 전)</td></tr><tr><td>사람</td><td>움직이는 트럭과 접촉 남음</td><td>보호 영역이 진행 방향 앞쪽만 → 옆 · 모서리로 오는 사람 못 봄 (추정)</td></tr><tr><td>운반 중 팔레트</td><td>포크 위에서 미끄러져 떨어지는 경우</td><td>원인 미확정 · 떨어진 팔레트를 장애물로 못 봄</td></tr><tr><td>경로 계산</td><td>복합동에서 계산이 길고 실패 많음</td><td>경로 탐색 한도 · 계산 시간 개선</td></tr><tr><td>통신 · 서버</td><td>지연 · 손실은 모의만</td><td>실제 무선망 · 중앙 서버 구성 (6주차 피드백)</td></tr></table>
-<div class="takeaway">전제: 중앙 서버가 모든 트럭의 위치와 경로를 안다고 가정 (실물 통신 미구현)</div>
+<h2 class="headline">SLAM 위치로 여러 대 동시 주행, 사람 감지 범위, 운반 중 팔레트가 남은 과제</h2>
+<table class="comparison t7 lim7 grow"><tr><th>항목</th><th>현재</th><th>원인과 다음 단계</th></tr><tr><td>위치</td><td>시뮬레이터 정답</td><td>5대가 각자 SLAM 위치로 달린 시험에서 대기 중 멈춤 (원인 분석 전)</td></tr><tr><td>사람</td><td>움직이는 트럭과 접촉 남음</td><td>보호 영역이 앞쪽뿐이라 옆이나 모서리로 오는 사람을 못 봄 (추정)</td></tr><tr><td>운반 중 팔레트</td><td>포크 위에서 미끄러져 떨어지는 경우</td><td>원인을 아직 모르고, 떨어진 팔레트를 장애물로 못 봄</td></tr><tr><td>경로 계산</td><td>복합동에서 계산이 길고 실패 많음</td><td>경로 탐색 한도와 계산 시간 개선</td></tr><tr><td>통신과 서버</td><td>지연과 손실은 모의로만 넣음</td><td>실제 무선망과 중앙 서버 구성 (6주차 피드백)</td></tr></table>
+<div class="takeaway">중앙 서버가 모든 트럭의 위치와 경로를 바로 안다고 가정했습니다 (실물 통신 미구현)</div>
 </div></x-import>
 </section>
 
@@ -194,7 +194,7 @@ W3 통신: 지연 0.5 s · 허가 손실 20 % (CPU 모형): docs/plans/2026-10-0
 1.27 mm 는 2.54 mm 의 절반 간격 — 같은 핀 수면 커넥터 가로 · 세로가 약 절반 (기하 계산, 하우징 두께 제외): 비교 표
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="08  엔코더 보드 PCB"><div class="slide-body">
-<h2 class="headline">엔코더 보드 PCB: MT6701 (SOP-8) · 2×4 박스 헤더로 MCU 보드와 연결</h2>
+<h2 class="headline">MT6701 (SOP-8) 엔코더 보드를 2×4 박스 헤더로 MCU 보드와 연결</h2>
 <div class="pcb7 grow">
 <div class="pcbimgs">
 <p class="rl">2.54 mm</p>
@@ -203,16 +203,16 @@ W3 통신: 지연 0.5 s · 허가 손실 20 % (CPU 모형): docs/plans/2026-10-0
 <p class="rl">1.27 mm</p>
 <figure class="shot"><img class="media" src="assets/75_enc127_top.jpg" alt="1.27 mm 판 앞면. 같은 부품 배치에 2열 4핀 단자가 촘촘해짐"></figure>
 <figure class="shot"><img class="media" src="assets/75_enc127_bottom.jpg" alt="1.27 mm 판 뒷면. 박스 헤더가 작아져 보드 폭 안에 가까워짐"></figure>
-<p></p><p class="cl">앞면</p><p class="cl">뒷면 · 박스 헤더</p>
+<p></p><p class="cl">앞면</p><p class="cl">뒷면 (박스 헤더)</p>
 </div>
 <table class="comparison t7 pcbq7">
 <tr><th>핀 간격</th><th>2.54 mm</th><th>1.27 mm</th></tr>
-<tr><td>커넥터 크기</td><td>보드보다 큼</td><td class="blue"><b>가로 · 세로 약 절반</b></td></tr>
+<tr><td>커넥터 크기</td><td>보드보다 큼</td><td class="blue"><b>가로와 세로 약 절반</b></td></tr>
 <tr><td>납땜</td><td class="blue"><b>손납땜 쉬움</b></td><td>정밀 납땜 필요</td></tr>
 <tr><td>케이블 구하기</td><td class="blue"><b>납작 케이블 흔함</b></td><td>선택지 적음</td></tr>
 </table>
 </div>
-<div class="takeaway">질문: 엔코더 커넥터 핀 간격 2.54 mm (배선 · 납땜 쉬움) vs 1.27 mm (보드 소형화)</div>
+<div class="takeaway">엔코더 커넥터 핀 간격은 2.54 mm (납땜이 쉬움)와 1.27 mm (보드가 작아짐) 중 어느 쪽이 나을까요?</div>
 </div></x-import>
 </section>
 
@@ -227,9 +227,9 @@ D5 v11 계획 6판 — 삽입 중 추적 재검증: forklift 7f07659
 리보틱스 미팅 질문 — 현장 동시 투입 대수 · 중앙 관제 서버: week-07-1 18쪽
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="09  다음 작업"><div class="slide-body">
-<h2 class="headline">다음 작업: 트럭마다 SLAM 위치로 동시 주행 · 사람 감지 범위 · 엔코더 보드 제작</h2>
-<table class="comparison plan6 grow"><tr><th class="c1">구분</th><th class="c2">현재</th><th class="c3"></th><th class="c4">다음 단계</th></tr><tr><td class="grp" rowspan="3">다중 지게차</td><td class="cur">위치는 시뮬레이터 정답</td><td class="arrow">→</td><td class="nxt">트럭마다 SLAM 위치로 동시 주행</td></tr><tr><td class="cur">보호 영역이 진행 방향 앞쪽만</td><td class="arrow">→</td><td class="nxt">차체 둘레 전체로 넓혀 사람 접촉 0</td></tr><tr><td class="cur">중앙 서버 · 통신은 가정</td><td class="arrow">→</td><td class="nxt">리보틱스 답변(투입 대수 · 관제) 보고 범위 확정</td></tr><tr><td class="grp" rowspan="1">1대 운반</td><td class="cur">포크 간격을 실측 범위(0.37 m)로 바꿈</td><td class="arrow">→</td><td class="nxt">삽입 중 위치 추적 다시 검증</td></tr><tr><td class="grp" rowspan="1">하드웨어</td><td class="cur">엔코더 보드 PCB 3D 설계</td><td class="arrow">→</td><td class="nxt">커넥터 핀 간격 결정 후 제작</td></tr></table>
-<div class="takeaway">다음 목표: 시뮬레이터 정답 위치 없이 여러 대 운용 · 엔코더 보드 제작</div>
+<h2 class="headline">SLAM 위치로 여러 대 동시 주행, 사람 감지 범위 넓히기, 엔코더 보드 제작</h2>
+<table class="comparison plan6 grow"><tr><th class="c1">구분</th><th class="c2">현재</th><th class="c3"></th><th class="c4">다음 단계</th></tr><tr><td class="grp" rowspan="3">다중 지게차</td><td class="cur">위치는 시뮬레이터 정답</td><td class="arrow">→</td><td class="nxt">트럭마다 SLAM 위치로 동시 주행</td></tr><tr><td class="cur">보호 영역이 진행 방향 앞쪽뿐</td><td class="arrow">→</td><td class="nxt">차체 둘레 전체로 넓혀 사람 접촉 없애기</td></tr><tr><td class="cur">중앙 서버와 통신은 가정</td><td class="arrow">→</td><td class="nxt">리보틱스 답변(투입 대수, 관제)을 보고 범위 확정</td></tr><tr><td class="grp" rowspan="1">1대 운반</td><td class="cur">포크 간격을 실측 범위(0.37 m)로 바꿈</td><td class="arrow">→</td><td class="nxt">삽입 중 위치 추적 다시 검증</td></tr><tr><td class="grp" rowspan="1">하드웨어</td><td class="cur">엔코더 보드 PCB 3D 설계</td><td class="arrow">→</td><td class="nxt">커넥터 핀 간격 결정 후 제작</td></tr></table>
+<div class="takeaway">다음 목표는 시뮬레이터 정답 위치 없이 여러 대를 운용하고 엔코더 보드를 만드는 것입니다</div>
 </div></x-import>
 </section>
 </x-import></x-dc></body></html>
