@@ -732,8 +732,8 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .m7-gauges .trk { position:relative; height:18px; margin-top:24px; background:#eef0f3; border-radius:2px; }
 .m7-gauges .z { position:absolute; top:0; bottom:0; }
 .m7-gauges .z.ok { background:#bfe3cc; } .m7-gauges .z.ng { background:#f2b8b2; }
-.m7-gauges .o { position:absolute; top:-4px; bottom:-4px; min-width:6px; background:#004094; border-radius:2px; }
-.m7-gauges .o em { position:absolute; bottom:calc(100% + 4px); left:0; font-style:normal; font-size:17px; font-weight:700; color:#004094; white-space:nowrap; }
+.m7-gauges .pt { position:absolute; top:50%; width:22px; height:22px; border-radius:50%; background:#004094; border:3px solid #ffffff; box-shadow:0 0 0 1px #004094; transform:translate(-50%, -50%); }
+.m7-gauges .pt em { position:absolute; bottom:calc(100% + 5px); left:50%; transform:translateX(-50%); font-style:normal; font-size:17px; font-weight:700; color:#004094; white-space:nowrap; }
 .m7-gauges .tk { position:relative; height:24px; }
 .m7-gauges .tk span { position:absolute; top:5px; transform:translateX(-50%); font-size:15px; color:#44505c; white-space:nowrap; font-variant-numeric:tabular-nums; }
 .m7-gauges .tk span:first-child { transform:none; }

@@ -561,11 +561,11 @@ add('운반 임무 전체', '운반 임무 전체', 45, f"""
 # 2026-10-12: each criterion as a gauge -- the exam's band and disqualification zone with the simulated
 # values on the same scale (values: the sources below) -- instead of a four-column table.
 def gauge(top, zones, ours, ticks, label):
-    """zones: (lo, hi, cls) in cm; ours: (lo, hi) cm; ticks: values in cm on a 0..top scale."""
+    """zones: (lo, hi, cls) in cm; ours: one value in cm, drawn as a dot (2026-10-13 user: a bar read as
+    another zone, not a point); ticks: values in cm on a 0..top scale."""
     pc = lambda v: f'{min(v, top) / top * 100:.2f}%'
     z = ''.join(f'<span class="z {c}" style="left:{pc(a)};width:calc({pc(b)} - {pc(a)})"></span>' for a, b, c in zones)
-    lo, hi = ours
-    o = f'<span class="o" style="left:{pc(lo)};width:calc({pc(hi)} - {pc(lo)})"><em>{label}</em></span>'
+    o = f'<span class="pt" style="left:{pc(ours)}"><em>{label}</em></span>'
     t = ''.join(f'<span style="left:{pc(v)}">{v:g}{" cm" if v == ticks[-1] else ""}</span>' for v in ticks)
     return f'<div class="g"><div class="trk">{z}{o}</div><div class="tk">{t}</div></div>'
 
@@ -575,23 +575,23 @@ def fact(rule, ours):
 
 
 EXAM = [  # item, exam rule (short), visual, verdict
-    ('하역 위치', '20 cm 초과 시 실격', gauge(25, [(0, 20, 'ok'), (20, 25, 'ng')], (0, 3), [0, 10, 20], '약 3 cm 이하'), 'ok'),
-    ('포크 미삽입 거리', '20 cm 초과 시 실격', gauge(25, [(0, 20, 'ok'), (20, 25, 'ng')], (2, 4), [0, 10, 20], '약 2–4 cm'), 'ok'),
-    ('운반 중 포크 높이', '20–30 cm 유지 · 50 cm 초과 실격', gauge(55, [(20, 30, 'ok'), (50, 55, 'ng')], (19, 22), [0, 20, 30, 50], '약 19–22 cm'), 'like'),
+    ('하역 위치', '20 cm 초과 시 실격', gauge(25, [(0, 20, 'ok'), (20, 25, 'ng')], 2.94, [0, 10, 20], '최대 2.9 cm'), 'ok'),
+    ('포크 미삽입 거리', '20 cm 초과 시 실격', gauge(25, [(0, 20, 'ok'), (20, 25, 'ng')], 3.74, [0, 10, 20], '최대 3.7 cm'), 'ok'),
+    ('운반 중 포크 높이', '20–30 cm 유지 · 50 cm 초과 실격', gauge(55, [(20, 30, 'ok'), (50, 55, 'ng')], 20.5, [0, 20, 30, 50], '20.5 cm'), 'like'),
     ('낙하 · 밀림', '낙하 · 밀림 시 실격', fact('실격 조건', '낙하 · 밀림 없음'), 'ok'),
     ('틸트', '마스트 각도 조절', fact('실기 조작', '틸트 기구 없음'), 'diff'),
 ]
 VERDICT = {'ok': ('기준 충족', 'ok'), 'like': ('하한 근접', 'like'), 'diff': ('기구 없음', 'diff')}
 exam_rows = ''.join(f'<p class="it">{a}<small>{b}</small></p>{g}<p class="vd"><span class="m7-v {VERDICT[v][1]}">{VERDICT[v][0]}</span></p>'
                     for a, b, g, v in EXAM)
-EXAM_LEGEND = legend(('cell', '#bfe3cc', '기준 범위'), ('cell', '#f2b8b2', '실격 구간'), ('cell', '#004094', '개발 차량 (시뮬레이션)'))
+EXAM_LEGEND = legend(('cell', '#bfe3cc', '기준 범위'), ('cell', '#f2b8b2', '실격 구간'), ('dot', '#004094', '개발 차량 (시뮬레이션)'))
 
 add('자격시험 기준 비교', '지게차운전기능사 실기 기준과 비교', 55, f"""
 <h2 class="headline">하역, 삽입, 낙하 기준은 충족하고 틸트 기구는 없음</h2>
 <div class="m7-gauges grow"><p class="hd">항목 (2025 공개문제)</p><p class="hd">기준 (실제 지게차 규모) · 개발 차량</p><p class="hd">판정</p>{exam_rows}<p class="legend">{EXAM_LEGEND}</p></div>
 <div class="takeaway">코스 치수가 차폭의 배수이므로, 개발 차량 규모로 줄여 시뮬레이션 평가에 쓰기를 제안합니다</div>
 """,
-    """비교 기준은 지게차운전기능사 실기시험입니다. 시험은 팔레트를 적재해 코스를 주행한 뒤 하역하는 과제로, 작업 흐름이 본 임무와 유사합니다. 그림의 초록 구간이 기준 범위, 빨간 구간이 실격 구간이고, 파란 막대가 시뮬레이션 결과입니다. 하역 위치가 20센티미터 넘게 어긋나거나, 포크 미삽입 거리가 20센티미터를 넘거나, 화물을 낙하시키거나 팔레트를 밀면 실격인데, 시뮬레이션 결과는 모두 기준 이내입니다. 운반 중 포크 높이는 약 19에서 22센티미터로, 20에서 30센티미터 유지 기준의 하한에 해당합니다. 마스트를 기울이는 틸트 기구는 없으므로, 틸트 없는 운반이 허용되는지는 마지막에 여쭙겠습니다. 시험 기준은 실제 지게차 규모이므로, 코스 치수가 차폭의 배수로 정의된다는 점을 이용해 개발 차량 규모로 축소한 코스를 시뮬레이션 평가에 적용할 것을 제안드립니다. (전환)""",
+    """비교 기준은 지게차운전기능사 실기시험입니다. 시험은 팔레트를 적재해 코스를 주행한 뒤 하역하는 과제로, 작업 흐름이 본 임무와 유사합니다. 그림의 초록 구간이 기준 범위, 빨간 구간이 실격 구간이고, 파란 점이 시뮬레이션 결과입니다. 하역 위치와 미삽입 거리는 완주한 실행 가운데 가장 큰 값을 찍었습니다. 하역 위치가 20센티미터 넘게 어긋나거나, 포크 미삽입 거리가 20센티미터를 넘거나, 화물을 낙하시키거나 팔레트를 밀면 실격인데, 시뮬레이션 결과는 모두 기준 이내입니다. 운반 중 포크 높이는 포크 중심 기준 20.5센티미터로, 20에서 30센티미터 유지 기준의 하한에 가깝습니다. 마스트를 기울이는 틸트 기구는 없으므로, 틸트 없는 운반이 허용되는지는 마지막에 여쭙겠습니다. 시험 기준은 실제 지게차 규모이므로, 코스 치수가 차폭의 배수로 정의된다는 점을 이용해 개발 차량 규모로 축소한 코스를 시뮬레이션 평가에 적용할 것을 제안드립니다. (전환)""",
     [(QNET, '「[공개문제] 지게차운전기능사」 코스운전 및 작업 (한국산업인력공단, 2025-12-22 등록) — 유의사항 7 주행 중 포크 20–30 cm 유지, 실격 (8) 화물 · 파렛트 낙하 (9) 파손 (10) 포크로 드럼통 터치 (14) 포크 50 cm 초과 (15) 하역 20 cm 초과 (16)(17) 밀림 (18) 덜 삽입 20 cm 초과; 팔레트에 닿는 것 자체는 실격 아님. 코스 치수는 D(좌우 최외측 타이어 바깥 간 거리)의 배수. 도면은 저작물이라 화면에 싣지 않음'),
      ('같은 문서', '시험 시간 4분 — 코스 · 차체 규모가 달라 비교에서 제외 (속도 · 작업 시간은 자율 동작 완성 뒤 단계)'),
      (S4B, '하역 6.74 mm, 진입 323.5 / 322.2 mm (캐리지 한계 0.346 m) · 캐리지 앞면–팔레트 간격 22.1 mm, 금지 접촉 0, 팔레트 밀림 없음; 운반 중 승강 관절 0.165 m (명령 lift_target_m 0.2 에 못 미침) → 포크 중심 0.205 m · 밑면 0.193 m · 윗면 0.218 m (fork_center_height 0.04, 두께 0.025)'),
