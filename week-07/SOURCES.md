@@ -17,8 +17,8 @@
 | `assets/71_warehouse5.mp4` | 3 | ws1 `artifacts/20261008_fleet/runs/f2d_truth_seed0_overlay.mp4`(job 1916, 5대 완주 · 위반 0) 지도 칸, 4배속 |
 | `assets/72_close_a.mp4`, `72_close_b.mp4` | 4 | 같은 실행(tw24_rack600)을 카메라만 두 대기 지점 위로 옮겨 다시 렌더(ws1 `~/w7deck/exp/runs/close_rack600`) 한 합성 영상에서 두 대기 장면을 자름 |
 | `assets/73_{rack,shop,multi}.jpg` | 2, 5 | ws1 `artifacts/20261009_fleet_worlds/videos/tw24_*600.mp4` 150 s(시뮬레이션 450 s) 프레임의 지도 칸 |
-| `assets/75_enc_top.jpg`, `75_enc_bottom.jpg` | 9 | 팀 엔코더 보드 PCB 3D 렌더 두 장(2026-10-14 팀원 공유, LCEDA) — 알파 배경을 검정으로, 여백만 잘라 900 px 로 줄임. 칩은 MT6701 SOP-8(사용자 확인) |
-| `assets/75_enc127_top.jpg`, `75_enc127_layout.jpg` | 9 | 커넥터를 1.27 mm 로 줄인 판(V1.0.1)의 3D 앞면과 PCB 배치도(같은 날 공유, V1.0.0 렌더를 대체) — 3D 는 같은 처리, 배치도는 크기만 줄임 |
+| `assets/75_enc_top.jpg`, `75_enc_bottom.jpg` | 9 | 팀 엔코더 보드 PCB 3D 렌더 두 장(2026-10-14 팀원 공유, LCEDA) — 알파 배경을 검정으로, 여백만 잘라 900 px 로 줄임. KTH7801 절대각 엔코더 보드(SOP-8, 1.27 mm 판의 이전 커넥터 판 — 사용자 확인 2026-10-14; 처음에 MT6701 로 적었던 것을 고침) |
+| `assets/75_enc127_top.jpg`, `75_enc127_layout.jpg` | 9 | 커넥터를 1.27 mm 로 줄인 판(V1.0.1, 실크 KTH_Enc — KTH7801 보드)의 3D 앞면과 PCB 배치도(같은 날 공유, V1.0.0 렌더를 대체) — 3D 는 같은 처리, 배치도는 크기만 줄임 |
 | `assets/74_rack600.mp4` | 7 | `tw24_rack600.mp4`(ws1 job 2441 · 2442) 지도 칸, 5배속 |
 
 범례 색은 합성 스크립트(`tools/compose_fleet_video.py`, `tools/compose_world_video.py`)의 색 그대로다.
