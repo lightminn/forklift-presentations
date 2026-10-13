@@ -533,7 +533,7 @@ add('접근 상황 C · D', '과제 접근 시나리오 C · D', 55, f"""
 MISSION_VIDEO = '71_mission.mp4'
 MISSION_FLOW = [  # stage in the clip's order, how it is done in this run (2026-10-12: a flow beside the clip, not a table)
     ('팔레트 인식', '규격 치수 기반 형상 규칙'),
-    ('접근 · 삽입', 'Hybrid A* · 2 m 앞 재관측 → 직진 삽입'),
+    ('접근 · 삽입', 'Hybrid A* 접근 → 직진 삽입'),   # re-observation step dropped (user, 2026-10-13)
     ('적재 · 운반', '리프트 → 운반 · 점유 격자 정지 판단'),
     ('하역', 'ICP 스캔 정합 → 위치 보정'),
     ('복귀', '후진 선회로 방향 전환 → 전진 복귀'),
