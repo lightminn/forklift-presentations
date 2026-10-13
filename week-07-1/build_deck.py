@@ -562,19 +562,18 @@ add('운반 임무 전체', '운반 임무 전체', 45, f"""
 # 2026-10-13 (user, option 3): the exam's tolerances are absolute values for a full-size truck, so a
 # pass against them says little for a vehicle with 36 cm forks; the slide now shows the exam's items
 # carried over as our own measurements, with the tolerances asked of Riibotics (gauges removed).
-EXAM = [  # item, exam rule (full-size truck), our measurement (simulation), tolerance (tag, text)
-    ('하역 위치', '20 cm 넘게 어긋나면 실격', '하역 오차 최대 2.9 cm', ('diff', '확인 요청')),
-    ('포크 삽입', '20 cm 넘게 덜 넣으면 실격', '덜 넣은 거리 최대 3.7 cm', ('diff', '확인 요청')),
-    ('운반 중 포크 높이', '20–30 cm 유지, 50 cm 넘으면 실격', '포크 중심 20.5 cm', ('diff', '확인 요청')),
-    ('낙하 · 밀림', '낙하하거나 밀면 실격', '낙하 · 밀림 없음', ('ok', '그대로 적용')),
-    ('틸트', '마스트를 기울여 운반', '틸트 기구 없음', ('diff', '확인 요청')),
+EXAM = [  # item, exam rule (full-size truck), our measurement (simulation); tolerance column removed (user, 2026-10-13)
+    ('하역 위치', '20 cm 넘게 어긋나면 실격', '하역 오차 최대 2.9 cm'),
+    ('포크 삽입', '20 cm 넘게 덜 넣으면 실격', '덜 넣은 거리 최대 3.7 cm'),
+    ('운반 중 포크 높이', '20–30 cm 유지, 50 cm 넘으면 실격', '포크 중심 20.5 cm'),
+    ('낙하 · 밀림', '낙하하거나 밀면 실격', '낙하 · 밀림 없음'),
+    ('틸트', '마스트를 기울여 운반', '틸트 기구 없음'),
 ]
-exam_rows = ''.join(f'<tr><td class="it">{a}</td><td>{b}</td><td class="ours">{c}</td>'
-                    f'<td class="vd"><span class="m7-v {t}">{v}</span></td></tr>' for a, b, c, (t, v) in EXAM)
+exam_rows = ''.join(f'<tr><td class="it">{a}</td><td>{b}</td><td class="ours">{c}</td></tr>' for a, b, c in EXAM)
 
 add('자격시험 기준 비교', '지게차운전기능사 실기 판정 항목', 55, f"""
 <h2 class="headline">실기시험 판정 항목을 개발 차량에서 측정, 허용치는 확인 필요</h2>
-<div class="m7-info grow"><div class="tb"><table class="comparison m7-exam"><tr><th>항목</th><th>실기시험 (실제 지게차)</th><th>개발 차량 (시뮬레이션)</th><th>허용치</th></tr>{exam_rows}</table></div></div>
+<div class="m7-info grow"><div class="tb"><table class="comparison m7-exam"><tr><th>항목</th><th>실기시험 (실제 지게차)</th><th>개발 차량 (시뮬레이션)</th></tr>{exam_rows}</table></div></div>
 <div class="takeaway">실제 지게차 규모의 허용치는 개발 차량에 맞지 않아, 정해 주시는 허용치로 평가하겠습니다</div>
 """,
     """비교 기준은 지게차운전기능사 실기시험입니다. 시험은 팔레트를 적재해 코스를 주행한 뒤 하역하는 과제로, 작업 흐름이 본 임무와 비슷합니다. 다만 시험의 허용치는 실제 지게차 규모의 절대값이라, 포크 길이가 36센티미터인 개발 차량에 그대로 대면 합격 여부가 큰 의미를 갖지 않습니다. 그래서 시험이 보는 항목을 개발 차량의 판정 항목으로 옮겨 시뮬레이션에서 측정했습니다. 완주한 실행 가운데 하역 오차는 최대 2.9센티미터, 덜 넣은 거리는 최대 3.7센티미터였고, 운반 중 포크 높이는 포크 중심 기준 20.5센티미터였습니다. 낙하나 밀림은 없었고, 이 항목은 규모와 상관없이 그대로 적용합니다. 마스트를 기울이는 틸트 기구는 없습니다. 나머지 항목의 허용치와 틸트 없는 운반의 허용 여부는 마지막에 여쭙겠습니다. 시험 코스는 치수가 차폭의 배수로 정해져 있어, 개발 차량 규모로 줄여 시뮬레이션 평가에 쓸 수 있습니다. (전환)""",
