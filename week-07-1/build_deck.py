@@ -279,8 +279,8 @@ SIM_STILL = '70_hall.jpg'   # the recorded run's hall at the start (prepare_clip
 SIM_PARAMS = [
     ('차체', '실측 축거 · 바퀴 · 조향각', 'measure', '5주차 실측 (외형 · 질량은 카탈로그)'),
     ('물리', 'Isaac Sim 5.1 · 120 Hz', 'impl', '바퀴 토크 구동 · 팔레트 물리 적재'),
-    ('LiDAR', 'A2M12 1,600점 · 10 Hz', 'spec', '카탈로그 값 · 잡음 σ 2 cm 가정'),
-    ('깊이 카메라', '640 × 480 · 화각 69°', 'assume', 'D435i 컬러 화각 기준 · 잡음 미적용'),
+    ('LiDAR', 'A2M12 1,600점 · 10 Hz', 'spec', '카탈로그 사양'),
+    ('깊이 카메라', '640 × 480 · 화각 69°', 'assume', 'D435i 컬러 화각 기준'),
     ('SLAM 연동', 'ROS 2 slam_toolbox', 'impl', '스캔 송신 → SLAM 응답 후 진행'),
     ('바닥 장애물', 'LiDAR 높이 (1.05 m) 이상', 'assume', '운용 가정 · 저상 소품 제외'),
     ('마찰 · 토크', '마찰 계수 0.8 / 0.7 · 3 N·m', 'assume', '일반 범위 값 · 실측 후 교체'),
@@ -293,9 +293,9 @@ add('시뮬레이션 환경', '시뮬레이션 환경', 50, f"""
 <h2 class="headline">Isaac Sim 공장 홀에 실측 차체와 과제 센서 구성 적용</h2>
 {stage(mpanel(f'<img class="media" src="assets/{SIM_STILL}" alt="Isaac Sim 공장 홀을 위에서 본 장면. 지게차와 팔레트, 적재물이 보인다">', light=True),
         ipanel('설정과 근거', f'<table class="comparison params6 m7-params"><tr><th>항목</th><th>값</th><th>근거</th></tr>{param_rows}</table>'), 360)}
-<div class="takeaway">바퀴 마찰, 구동 토크, LiDAR 잡음은 실측 후 교체하고 깊이 잡음은 추가할 예정입니다</div>
+<div class="takeaway">바퀴 마찰, 구동 토크, 센서 잡음은 실측값으로 교체할 예정입니다</div>
 """,
-    """다음은 소프트웨어입니다. 실차 주행 전까지는 Isaac Sim에서 개발합니다. 공장 홀 장면에 팀이 실측한 차체 값을 적용하고, 물리 연산은 120헤르츠로 수행합니다. 지게차는 바퀴 토크로 구동되며, 팔레트도 고정하지 않고 포크로 들어 올립니다. LiDAR는 A2M12 카탈로그 사양으로, 깊이 영상은 D435i 컬러 카메라 화각에 맞춰 합성합니다. SLAM은 ROS 2의 slam_toolbox로 수행하며, 시뮬레이터는 스캔마다 SLAM 응답을 받은 뒤 다음 단계로 진행합니다. 주황색 태그는 가정값입니다. 저상 바닥 장애물은 없다고 가정했고, 바퀴 마찰과 구동 토크는 일반적인 범위의 값을 적용했습니다. LiDAR 잡음도 가정값이며, 깊이 영상에는 아직 잡음을 넣지 않았습니다. 이 값들은 실측 결과가 나오는 대로 우선 교체합니다. (전환)""",
+    """다음은 소프트웨어입니다. 실차 주행 전까지는 Isaac Sim에서 개발합니다. 공장 홀 장면에 팀이 실측한 차체 값을 적용하고, 물리 연산은 120헤르츠로 수행합니다. 지게차는 바퀴 토크로 구동되며, 팔레트도 고정하지 않고 포크로 들어 올립니다. LiDAR는 A2M12 카탈로그 사양으로, 깊이 영상은 D435i 컬러 카메라 화각에 맞춰 합성합니다. SLAM은 ROS 2의 slam_toolbox로 수행하며, 시뮬레이터는 스캔마다 SLAM 응답을 받은 뒤 다음 단계로 진행합니다. 주황색 태그는 가정값입니다. 저상 바닥 장애물은 없다고 가정했고, 바퀴 마찰과 구동 토크는 일반적인 범위의 값을 적용했습니다. 센서 잡음도 실측 전 설정이며, 이 값들은 실측 결과가 나오는 대로 우선 교체합니다. (전환)""",
     [(MEASURED, '실측 반영 모델 dls08_measured (실측하지 않은 항목은 추정값, 필드별 출처)'),
      ('config/isaac_transport.yaml', '정지 · 운동 마찰 계수 0.8 / 0.7 (지게차 · 팔레트 충돌 형상, sim/isaac/scene.py configure_drives), 바퀴 토크 3 N·m — 시뮬레이터 전용 가정값'),
      ('result.json pocket_camera · perception', '깊이 640 × 480, fx 465.74 → 수평 화각 69.0° (D435i RGB 시야를 흉내 낸 합성 설정, docs/design/2026-09-11-pocket-observation-and-scene-set.md 사용자 결정 1; D435i 깊이 화각 87° × 58° 아님), depth_quantize_mm 1, 잡음 없음'),
