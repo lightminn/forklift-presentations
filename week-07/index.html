@@ -3,7 +3,7 @@
 <link rel="icon" href="data:,">
 <script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>7주차 자율 지게차 개발</title>
-<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=d5d97cf2ff62"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=ec0701f5c0d6"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 <section class="title-section" data-label="개발 진행 보고" data-screen-label="01" data-duration="20" data-speaker-notes="권장 20초
 
@@ -184,11 +184,11 @@ W3 통신: 지연 0.5 s · 허가 손실 20 % (CPU 모형): docs/plans/2026-10-0
 
 <section data-label="엔코더 보드 PCB" data-screen-label="09" data-duration="70" data-speaker-notes="권장 70초
 
-하드웨어는 엔코더 보드 PCB입니다. 5주차에 말씀드린 자석식 각도 센서 MT6701을 SOP-8 패키지로 올렸고, 2열 4핀 박스 헤더로 MCU 보드와 연결합니다. 왼쪽이 앞면, 가운데가 뒷면입니다. 뒷면을 보시면 커넥터가 보드보다 크게 튀어나와 있습니다. 그래서 커넥터 핀 간격을 지금의 2.54밀리미터로 둘지, 1.27밀리미터로 줄일지 여쭤보고 싶습니다. 1.27밀리미터로 바꾸면 커넥터가 가로세로 절반 정도로 줄어 보드를 작게 만들 수 있지만, 납땜이 까다롭고 맞는 케이블의 선택지가 적습니다. 2.54밀리미터는 크지만 손납땜이 쉽고 박스 헤더용 납작 케이블을 쉽게 구할 수 있습니다. 실차에 달 때 어느 쪽이 나은지 의견 부탁드립니다. (전환)
+하드웨어는 엔코더 보드 PCB입니다. 5주차에 말씀드린 자석식 각도 센서 MT6701을 SOP-8 패키지로 올렸고, 2열 4핀 박스 헤더로 MCU 보드와 연결합니다. 위가 2.54밀리미터 커넥터 판, 아래가 1.27밀리미터 커넥터로 바꾼 판이고, 왼쪽이 앞면, 오른쪽이 뒷면입니다. 2.54밀리미터 판은 뒷면 커넥터가 보드보다 크게 튀어나와 있습니다. 그래서 두 판을 모두 그려 봤고, 어느 쪽으로 갈지 여쭤보고 싶습니다. 1.27밀리미터로 바꾸면 커넥터가 가로세로 절반 정도로 줄어 보드를 작게 만들 수 있지만, 납땜이 까다롭고 맞는 케이블의 선택지가 적습니다. 2.54밀리미터는 크지만 손납땜이 쉽고 박스 헤더용 납작 케이블을 쉽게 구할 수 있습니다. 실차에 달 때 어느 쪽이 나은지 의견 부탁드립니다. (전환)
 
 [Sources]
-그림: 팀 PCB 3D 렌더 두 장 (배경만 잘라 냄)
-엔코더 보드 앞면 · 뒷면 — U2(MT6701, SOP-8, 사용자 확인 2026-10-14) · C1 · C3 · R4 · 2×4 박스 헤더 · 고정 구멍 2개: 팀 PCB 3D 렌더 (2026-10-14, 팀원 공유)
+그림: 팀 PCB 3D 렌더 네 장 — 2.54 mm 판 · 1.27 mm 판 앞뒷면 (배경만 잘라 냄)
+엔코더 보드 앞면 · 뒷면 — U2(MT6701, SOP-8, 사용자 확인 2026-10-14) · C1 · C3 · R4 · 2×4 박스 헤더 · 고정 구멍 2개; 같은 날 커넥터를 1.27 mm 로 줄인 판의 앞면 · 뒷면(뒷면 실크 「KTH_Enc V1.0.0」): 팀 PCB 3D 렌더 (2026-10-14, 팀원 공유)
 5주차 회로 초안: MT6701 증분판(ABZ) · 절대각판(SSI), 같은 2.54 mm 2×4 헤더: week-05/build_deck.py 8쪽
 「교수님에게 2.54 VS 1.27 물어보죠」: 팀 메시지 (2026-10-14)
 1.27 mm 는 2.54 mm 의 절반 간격 — 같은 핀 수면 커넥터 가로 · 세로가 약 절반 (기하 계산, 하우징 두께 제외): 비교 표
@@ -196,10 +196,17 @@ W3 통신: 지연 0.5 s · 허가 손실 20 % (CPU 모형): docs/plans/2026-10-0
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="08  엔코더 보드 PCB"><div class="slide-body">
 <h2 class="headline">엔코더 보드 PCB: MT6701 (SOP-8) · 2×4 박스 헤더로 MCU 보드와 연결</h2>
 <div class="pcb7 grow">
-<figure class="shot"><img class="media" src="assets/75_enc_top.jpg" alt="엔코더 보드 3D 렌더 앞면. 왼쪽에 8핀 칩 U2와 고정 구멍 두 개, 가운데 C1 · C3 · R4, 오른쪽에 2열 4핀 단자"><figcaption>앞면</figcaption></figure>
-<figure class="shot"><img class="media" src="assets/75_enc_bottom.jpg" alt="엔코더 보드 3D 렌더 뒷면. 2열 4핀 박스 헤더가 보드 옆으로 크게 나와 있음"><figcaption>뒷면 · 박스 헤더</figcaption></figure>
+<div class="pcbimgs">
+<p class="rl">2.54 mm</p>
+<figure class="shot"><img class="media" src="assets/75_enc_top.jpg" alt="2.54 mm 판 앞면. 왼쪽에 8핀 칩 U2와 고정 구멍 두 개, 가운데 C1 · C3 · R4, 오른쪽에 2열 4핀 단자"></figure>
+<figure class="shot"><img class="media" src="assets/75_enc_bottom.jpg" alt="2.54 mm 판 뒷면. 2열 4핀 박스 헤더가 보드보다 크게 나와 있음"></figure>
+<p class="rl">1.27 mm</p>
+<figure class="shot"><img class="media" src="assets/75_enc127_top.jpg" alt="1.27 mm 판 앞면. 같은 부품 배치에 2열 4핀 단자가 촘촘해짐"></figure>
+<figure class="shot"><img class="media" src="assets/75_enc127_bottom.jpg" alt="1.27 mm 판 뒷면. 박스 헤더가 작아져 보드 폭 안에 가까워짐"></figure>
+<p></p><p class="cl">앞면</p><p class="cl">뒷면 · 박스 헤더</p>
+</div>
 <table class="comparison t7 pcbq7">
-<tr><th>핀 간격</th><th>2.54 mm (현재)</th><th>1.27 mm</th></tr>
+<tr><th>핀 간격</th><th>2.54 mm</th><th>1.27 mm</th></tr>
 <tr><td>커넥터 크기</td><td>보드보다 큼</td><td class="blue"><b>가로 · 세로 약 절반</b></td></tr>
 <tr><td>납땜</td><td class="blue"><b>손납땜 쉬움</b></td><td>정밀 납땜 필요</td></tr>
 <tr><td>케이블 구하기</td><td class="blue"><b>납작 케이블 흔함</b></td><td>선택지 적음</td></tr>
