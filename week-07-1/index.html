@@ -185,7 +185,7 @@ Dolgov et al., Practical Search Techniques in Path Planning for Autonomous Drivi
 
 <section data-label="후진을 고르는 이유" data-screen-label="09" data-duration="85" data-speaker-notes="권장 85초
 
-원인은 큰 회전 반경입니다. 경로 비용을 계산할 때 후진 거리에는 1.3의 가중치를, 전 · 후진 전환에는 1회당 1미터를 더하므로, 전진만으로 갈 수 있으면 전진 경로를 선택합니다. 왼쪽은 앞의 장애물 장면을 다시 실행해 비스듬한 상부 시점에서 본 영상입니다. 정지 위치에서 상자는 전방 2미터, 우측 0.6미터에 있었고, 노란 기존 경로는 최소 회전 반경에 가까운 경로임에도 상자 위를 지납니다. 빨간 영역은 그 위치에서 최소 회전 반경으로 선회할 때 차체가 지나는 스윕 영역이며, 상자가 그 안에 있습니다. 따라서 1.75미터 후진해 선회 거리를 확보한 뒤 상자를 회피합니다. 오른쪽은 전 · 후진 전환의 효과입니다. 목적지 직전에 방향이 1.3도만 어긋나도, 전진만 사용하면 계획 회전 반경 3.45미터로 지름 약 7미터의 원을 한 바퀴, 21.7미터를 선회해야 합니다. 그래서 목적지에 접속하는 마지막 구간에 전 · 후진 전환을 허용했습니다. 확대 그림과 같이 제자리에서 전진 0.5미터, 후진 0.5미터, 총 1미터로 보정이 끝났고, 다른 목적지 접근 계획에서도 원 선회 경로는 나타나지 않았습니다. C, D와 같이 먼저 후진해야 하는 상황에도 같은 계획기를 사용합니다. (전환)
+원인은 큰 회전 반경입니다. 경로 비용을 계산할 때 후진 거리에는 1.3의 가중치를, 전 · 후진 전환에는 1회당 1미터를 더하므로, 전진만으로 갈 수 있으면 전진 경로를 선택합니다. 영상은 앞의 장애물 장면을 다시 실행해 비스듬한 상부 시점에서 본 것입니다. 정지 위치에서 상자는 전방 2미터, 우측 0.6미터에 있었고, 노란 기존 경로는 최소 회전 반경에 가까운 경로임에도 상자 위를 지납니다. 빨간 영역은 그 위치에서 최소 회전 반경으로 선회할 때 차체가 지나는 스윕 영역이며, 상자가 그 안에 있습니다. 따라서 1.75미터 후진해 선회 거리를 확보한 뒤 상자를 회피합니다. 전 · 후진 전환은 목적지에서도 쓰입니다. 표 마지막 줄과 같이, 목적지 직전에 방향이 1.3도만 어긋나도 전진만 사용하면 계획 회전 반경 3.45미터로 지름 약 7미터의 원을 한 바퀴, 21.7미터를 선회해야 합니다. 그래서 목적지에 접속하는 마지막 구간에 전 · 후진 전환을 허용했고, 전진 0.5미터와 후진 0.5미터, 총 1미터로 보정이 끝났습니다. 다른 목적지 접근 계획에서도 원 선회 경로는 나타나지 않았습니다. C, D와 같이 먼저 후진해야 하는 상황에도 같은 계획기를 사용합니다. (전환)
 
 [Sources]
 화면 생성: 왼쪽은 위 실행의 고정 시점 영상에 경로와 휩쓸림 띠를 겹친 것, 2배속 · 재계획 순간 2.5 s 정지 · 왼쪽 위 단계 라벨 (prepare_reverse_clip.py) · 오른쪽은 플래너 재실행 그림 (prepare_figures.py) · 색 범례는 슬라이드 범례
@@ -198,13 +198,8 @@ D7 CPU 판정: 운반 목표 고리 1,686 → 0 (목표당 2,376 계획), 목표
 §3 Hybrid A* 가 왜 뒤로 가는지 · 앞뒤로 돌 때의 특성: docs/references/week6_feedback.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="08  소프트웨어 · 경로 계획의 후진 선택 조건"><div class="slide-body">
-<h2 class="headline">큰 회전 반경을 후진 회피와 전 · 후진 전환 자세 보정으로 보완</h2>
-<div class="m7-stage grow" style="grid-template-columns:1fr 1fr">
-<div class="m7-info"><p class="ph">후진으로 선회 거리를 확보해 장애물 회피</p>
-<figure class="m7-media"><video class="media" src="assets/55_reverse_box.mp4" poster="assets/55_reverse_box_poster.jpg" autoplay loop muted playsinline aria-label="신규 장애물 앞에서 정지한 지게차를 비스듬한 상부 시점에서 본 영상. 기존 경로는 장애물 위를 지나고, 최소 회전 반경 스윕 영역에 장애물이 있어 1.75 m 후진한 뒤 선회해 회피한다"></video><figcaption class="legend"><span class="lg"><span class="sw line" style="background:#ffc428"></span>기존 경로</span><span class="lg"><span class="sw band" style="background:#e12d2373;border-color:#e12d23"></span>최소 회전 반경 스윕 영역</span><span class="lg"><span class="sw line" style="background:#f07d1e"></span>후진</span><span class="lg"><span class="sw line" style="background:#3c91f0"></span>전진</span></figcaption></figure></div>
-<div class="m7-info"><p class="ph">원을 도는 대신 전 · 후진 전환으로 자세 보정</p>
-<figure class="m7-media white"><img class="m7-figimg" src="assets/53_goal_fix.png" alt="목적지 자세 보정. 전진 전용이면 지름 약 7 m 원을 21.7 m 선회하고, 전 · 후진 전환을 쓰면 제자리에서 전진 0.50 m, 후진 0.49 m로 끝난다"><figcaption class="legend"><span class="lg"><span class="sw dash" style="border-color:#9aa3ad"></span>전진 전용 경로</span><span class="lg"><span class="sw line" style="background:#2f74c0"></span>전진</span><span class="lg"><span class="sw line" style="background:#c26a1a"></span>후진</span><span class="lg"><span class="sw dot" style="background:#2e9a6b"></span>목표 위치</span></figcaption></figure></div>
-</div>
+<h2 class="headline">큰 회전 반경 때문에 후진으로 선회 거리를 확보해 장애물 회피</h2>
+<div class="m7-stage grow" style="grid-template-columns:620px 1fr"><figure class="m7-media"><video class="media" src="assets/55_reverse_box.mp4" poster="assets/55_reverse_box_poster.jpg" autoplay loop muted playsinline aria-label="신규 장애물 앞에서 정지한 지게차를 비스듬한 상부 시점에서 본 영상. 기존 경로는 장애물 위를 지나고, 최소 회전 반경 스윕 영역에 장애물이 있어 1.75 m 후진한 뒤 선회해 회피한다"></video><figcaption class="legend"><span class="lg"><span class="sw line" style="background:#ffc428"></span>기존 경로</span><span class="lg"><span class="sw band" style="background:#e12d2373;border-color:#e12d23"></span>최소 회전 반경 스윕 영역</span><span class="lg"><span class="sw line" style="background:#f07d1e"></span>후진</span><span class="lg"><span class="sw line" style="background:#3c91f0"></span>전진</span></figcaption></figure><div class="m7-info "><p class="ph">후진을 고른 근거</p><div class="tb"><table class="comparison t6 m7-plan"><tr><th>항목</th><th>내용</th></tr><tr><td>상자 위치</td><td>정지 위치에서 앞 2.0 m, 오른쪽 0.6 m</td></tr><tr><td>기존 경로</td><td>최소 회전 반경에 가깝지만 상자 위를 지남</td></tr><tr><td>선회 영역</td><td>최소 회전 반경으로 돌아도 상자에 걸림</td></tr><tr><td>선택</td><td>1.75 m 후진한 뒤 선회해 회피</td></tr><tr><td>목적지 자세 보정</td><td>전진만 21.7 m 선회, 전 · 후진은 1.0 m</td></tr></table></div></div></div>
 <div class="takeaway">후진 거리는 1.3배, 전환은 1회당 1 m로 계산해 전진이 어렵거나 훨씬 멀 때만 후진합니다</div>
 </div></x-import>
 </section>
