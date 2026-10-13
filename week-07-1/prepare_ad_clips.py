@@ -29,7 +29,7 @@ import prepare_reverse_clip as rc
 HERE = Path(__file__).resolve().parent
 FPS = 30
 SPEED = 2.0
-CROP = (150, 130, 1040, 372)        # x, y, w, h: the approach area, the 2 x 2 cell's aspect
+CROP = (200, 10, 920, 512)          # x, y, w, h: the approach area at a side-by-side column aspect (2026-10-14; was 150, 130, 1040, 372 for stacked rows)
 STAGE = {'approach': '정렬 직진', 'insert': '포크 삽입', 'lift': '리프트'}
 
 

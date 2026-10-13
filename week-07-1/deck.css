@@ -802,3 +802,8 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .comparison.m7-exam td.it { font-weight:700; }
 .comparison.m7-exam td.ours { font-weight:700; color:var(--uos-blue); }
 .comparison.m7-exam .m7-v { font-size:17px; padding:4px 10px; }
+/* 10-11: A-D clips side by side, the brief's drawings removed (2026-10-14) */
+.m7-cases2 { grid-template-columns:1fr 1fr; grid-template-rows:minmax(0,1fr) auto; column-gap:16px; }
+.m7-cases2 > .legend { grid-column:1 / -1; }
+.m7-cases2 .row { align-self:center; }
+.m7-cases2 .row .body video { width:100%; height:auto; aspect-ratio:920 / 512; }
