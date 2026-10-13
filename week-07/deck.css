@@ -568,3 +568,4 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .comparison.t7.cond7 th, .comparison.t7.cond7 td { text-align:center; padding:6px 6px; font-weight:400; }
 .comparison.t7.cond7 th { font-weight:700; }
 .comparison.t7.cond7 td:first-child { font-weight:400; }
+.comparison.t7.sum7 td:last-child { white-space:nowrap; }

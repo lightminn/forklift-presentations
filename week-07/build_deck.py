@@ -4,9 +4,8 @@ Run from any directory with Python 3. No third-party build dependencies.
 
 Week 7 (class, 2026-10-14) reports the multi-forklift traffic work on ws1
 (robot repository branch feat/fleet-five, plans and validation records
-2026-10-08 to 10-12) and the drive board PCB. The PCB slide waits for the
-team's material (user, 2026-10-13: "나중에 줄"); until then the deck stays a
-draft. Every fleet result is simulation with the simulator's pose (no SLAM)
+2026-10-08 to 10-12). The drive board PCB slide was left out of the published
+deck until the team's material arrives (user, 2026-10-14: publish now). Every fleet result is simulation with the simulator's pose (no SLAM)
 on generated factories. The clips are cut by prepare_clips.py on ws1.
 """
 from html import escape
@@ -87,24 +86,24 @@ def bars(rows, xmax, unit, aria):
 
 # ----------------------------------------------------------------- 1
 add('개발 진행 보고', '7주차\n자율 지게차 개발', 20, '',
-    """안녕하십니까. 7주차 자율 지게차 개발 진행 상황을 발표할 김광민이라고 합니다. 이번 주에는 두 가지를 말씀드리겠습니다. 첫째는 지게차 여러 대가 한 공장에서 서로 부딪히거나 막히지 않고 다니게 하는 교통 관리이고, 둘째는 하드웨어 쪽 구동 보드 PCB입니다. 교통 관리 결과는 모두 시뮬레이션입니다. (전환)""",
+    """안녕하십니까. 7주차 자율 지게차 개발 진행 상황을 발표할 김광민이라고 합니다. 이번 주에는 지게차 여러 대가 한 공장에서 서로 부딪히거나 막히지 않고 다니게 하는 교통 관리를 말씀드리겠습니다. 결과는 모두 시뮬레이션입니다. (전환)""",
     [(FIVE, '5대 동시 운반 계획'), (WINDOWS, '교차 시간 창 실행 기록')], '진행 보고')
 
 # ----------------------------------------------------------------- 2
 add('이번 주 요약', '01  이번 주 요약', 40, f"""
-<h2 class="headline">이번 주: 여러 대가 막히지 않고 다니는 교통 관리 · 구동 보드 PCB</h2>
+<h2 class="headline">이번 주: 지게차 여러 대가 막히지 않고 다니는 교통 관리</h2>
 <div class="split grow" style="grid-template-columns:1.05fr 1fr;gap:28px">
 <figure class="shot"><img class="media" src="assets/73_rack.jpg" alt="무작위로 만든 랙 창고를 위에서 본 모습. 지게차 8대가 각자 색 띠로 앞길을 예약하고 다님"></figure>
-<table class="comparison t7 grow">
+<table class="comparison t7 sum7 grow">
 <tr><th>구분</th><th>이번 주 내용</th><th>상태</th></tr>
 <tr><td>다중 지게차</td><td>NVIDIA 창고 5대 → 무작위 공장 3종 · 최대 20대</td><td class="blue"><b>겹침 · 교착 0</b><br><span class="muted small">시뮬레이션</span></td></tr>
-<tr><td>교통 규칙</td><td>앞길 예약 → 막히면 우회 → 교차 지점 순서 정하기</td><td>긴 대기 약 1/3</td></tr>
-<tr><td>하드웨어</td><td>구동 보드 PCB</td><td>[자료 반영 예정]</td></tr>
+<tr><td>교통 규칙</td><td>앞길 예약 → 막히면 우회 → 교차 지점 순서 정하기</td><td>긴 대기 1/3로</td></tr>
+<tr><td>시험</td><td>고장 · 통신 · 위치 오차 · 사람</td><td>30분 연속</td></tr>
 </table>
 </div>
 <div class="takeaway">배경: 실제 현장은 지게차 여러 대가 같은 통로를 씀 (리보틱스 미팅 질문: 동시 투입 대수 · 중앙 관제)</div>
 """,
-    """먼저 이번 주 요약입니다. 지금까지는 지게차 한 대가 팔레트를 집어 옮기는 것을 만들었는데, 실제 현장에서는 여러 대가 같은 통로를 함께 씁니다. 그래서 리보틱스 미팅에서도 현장에 몇 대가 동시에 들어가는지, 중앙에서 관리하는 서버가 있는지를 여쭤보기로 했습니다. 이번 주에는 이것을 시뮬레이션으로 먼저 해 봤습니다. NVIDIA 창고에서 5대로 시작해서, 무작위로 만든 공장 세 종류에서 최대 20대까지 늘렸습니다. 교통 규칙은 앞길을 예약하는 방식에서 시작해, 막히면 돌아가는 규칙과 교차 지점의 통과 순서를 정하는 규칙을 차례로 더했습니다. 하드웨어는 구동 보드 PCB를 뒤에서 말씀드리겠습니다. (전환)""",
+    """먼저 이번 주 요약입니다. 지금까지는 지게차 한 대가 팔레트를 집어 옮기는 것을 만들었는데, 실제 현장에서는 여러 대가 같은 통로를 함께 씁니다. 그래서 리보틱스 미팅에서도 현장에 몇 대가 동시에 들어가는지, 중앙에서 관리하는 서버가 있는지를 여쭤보기로 했습니다. 이번 주에는 이것을 시뮬레이션으로 먼저 해 봤습니다. NVIDIA 창고에서 5대로 시작해서, 무작위로 만든 공장 세 종류에서 최대 20대까지 늘렸습니다. 교통 규칙은 앞길을 예약하는 방식에서 시작해, 막히면 돌아가는 규칙과 교차 지점의 통과 순서를 정하는 규칙을 차례로 더했습니다. (전환)""",
     [('week-07-1 18쪽', '리보틱스 미팅 질문 — 다중 차량: 현장 동시 투입 대수 · 중앙 관제 서버 유무'),
      (FIVE, 'NVIDIA 창고 5대'), (WORLDS_PLAN, '무작위 공장 3종 · 트럭 5 · 10 · 20대'),
      (WINDOWS, '7절 판정: 트럭 겹침 0 · 60 s 넘는 서로 기다림 · gridlock 0 (seed 600–604, 119 칸)')],
@@ -247,23 +246,12 @@ add('남은 한계', '07  남은 한계', 60, f"""
      ('docs/references/week6_feedback.md', '5절 무선 통신: 지게차–PC · 지게차–지게차 미고려')],
     '출처: 다중 지게차 계획 · 실행 기록')
 
-# ----------------------------------------------------------------- 9
-add('구동 보드 PCB', '08  구동 보드 PCB', 90, """
-<h2 class="headline">[구동 보드 PCB — 자료 받은 뒤 작성]</h2>
-<div class="pending7 grow"><p>PCB 레이아웃 · 3D · 부품 배치 자료 반영 예정</p><p class="small muted">5주차 회로 초안: DRV8244 모터 드라이버 · MT6701 엔코더 · MCU 핀 배정</p></div>
-<div class="takeaway">[자료 반영 예정]</div>
-""",
-    """[PCB 자료를 받은 뒤 작성한다.] (전환)""",
-    [('week-05/build_deck.py', '5주차 회로 초안 — DRV8244 3채널 드라이버 · MT6701 엔코더 두 가지 · MCU 핀')],
-    '출처: [자료 반영 예정]')
-
 # ----------------------------------------------------------------- 10
 NEXT_ROWS = [
     ('다중 지게차', '위치는 시뮬레이터 정답', '트럭마다 SLAM 위치로 동시 주행'),
     ('다중 지게차', '보호 영역이 진행 방향 앞쪽만', '차체 둘레 전체로 넓혀 사람 접촉 0'),
     ('다중 지게차', '중앙 서버 · 통신은 가정', '리보틱스 답변(투입 대수 · 관제) 보고 범위 확정'),
     ('1대 운반', '포크 간격을 실측 범위(0.37 m)로 바꿈', '삽입 중 위치 추적 다시 검증'),
-    ('하드웨어', '[PCB 현재 상태]', '[PCB 다음 단계]'),
 ]
 
 
@@ -278,23 +266,23 @@ def _next_table():
     return ''.join(rows)
 
 
-add('다음 작업', '09  다음 작업', 50, f"""
-<h2 class="headline">다음 작업: 트럭마다 SLAM 위치로 동시 주행 · 사람 감지 범위 · PCB</h2>
+add('다음 작업', '08  다음 작업', 50, f"""
+<h2 class="headline">다음 작업: 트럭마다 SLAM 위치로 동시 주행 · 사람 감지 범위 넓히기</h2>
 <table class="comparison plan6 grow"><tr><th class="c1">구분</th><th class="c2">현재</th><th class="c3"></th><th class="c4">다음 단계</th></tr>{_next_table()}</table>
-<div class="takeaway">다음 목표: 정답 위치 없이 여러 대 운용 · [하드웨어 목표]</div>
+<div class="takeaway">다음 목표: 시뮬레이터 정답 위치 없이 여러 대 운용</div>
 """,
-    """정리하겠습니다. 이번 주에는 지게차 여러 대가 같은 공장에서 겹치거나 막히지 않고 다니는 교통 관리를 시뮬레이션으로 만들었습니다. 다음 단계는 시뮬레이터의 정답 위치 대신 트럭마다 SLAM으로 추정한 위치로 여러 대를 함께 움직이는 것이고, 사람을 보는 보호 영역을 차체 둘레 전체로 넓혀 사람과 닿는 경우를 없애겠습니다. 중앙 서버와 통신을 어느 정도까지 만들지는 리보틱스 미팅에서 현장 투입 대수와 관제 서버 답변을 듣고 정하겠습니다. 한 대 운반 쪽은 포크 간격을 실측 범위 안의 0.37미터로 바꿨기 때문에, 포크를 넣는 동안의 위치 추적을 다시 검증하고 있습니다. [하드웨어 다음 단계.] 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.""",
+    """정리하겠습니다. 이번 주에는 지게차 여러 대가 같은 공장에서 겹치거나 막히지 않고 다니는 교통 관리를 시뮬레이션으로 만들었습니다. 다음 단계는 시뮬레이터의 정답 위치 대신 트럭마다 SLAM으로 추정한 위치로 여러 대를 함께 움직이는 것이고, 사람을 보는 보호 영역을 차체 둘레 전체로 넓혀 사람과 닿는 경우를 없애겠습니다. 중앙 서버와 통신을 어느 정도까지 만들지는 리보틱스 미팅에서 현장 투입 대수와 관제 서버 답변을 듣고 정하겠습니다. 한 대 운반 쪽은 포크 간격을 실측 범위 안의 0.37미터로 바꿨기 때문에, 포크를 넣는 동안의 위치 추적을 다시 검증하고 있습니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.""",
     [('forklift d47d4d0', 'dls08_measured fork_spacing_m 0.29 → 0.3725 (실측 범위 안의 수동 설정값)'),
      ('forklift 7f07659', 'D5 v11 계획 6판 — 삽입 중 추적 재검증'),
      ('week-07-1 18쪽', '리보틱스 미팅 질문 — 현장 동시 투입 대수 · 중앙 관제 서버')],
     '출처: 다중 지게차 실행 기록 · 로봇 저장소 이력')
 
 TITLE = '7주차 자율 지게차 개발'
-TOTAL = 580
+TOTAL = 490
 
 
 def build():
-    assert len(slides) == 10, len(slides)
+    assert len(slides) == 9, len(slides)
     assert sum(s['seconds'] for s in slides) == TOTAL, sum(s['seconds'] for s in slides)
     sections = []
     script = [f'# {TITLE} · 발표 원고', '',
