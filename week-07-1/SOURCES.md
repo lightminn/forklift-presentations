@@ -1,6 +1,6 @@
 # 리보틱스 중간 미팅 자료 출처
 
-쪽 번호는 2026-10-12 세 번째 재구성 순서(본 발표 18장 + 부록 2장: 요약 2–4 — 과제 항목별 현황 · 운반 임무 · 실기시험 기준, 소프트웨어 5–11 — 접근 상황 A–D 는 10 · 11, 하드웨어 12–15, 결론 16 · 일정 17, 질의응답 18, 위치 추정 두 장은 부록 19 · 20쪽) 기준이다. 사용자 지시: "요약->hw->sw->결론(향후일정)->질의응답 순으로", "hw, sw 분리", "시각화 가능한건 시각화해", 이어서 "순서 sw->hw로 하고(sw를 어떻게 hw에 구현할건지가 드러나는 스토리텔링)"(2026-10-12).
+2026-10-14 부록 1(위치 추정 · 장애물 지도 구조)을 빼 부록은 19쪽 한 장이다(아래 '부록 2 · 20쪽'은 지금의 19쪽). 쪽 번호는 2026-10-12 세 번째 재구성 순서(본 발표 18장 + 부록 2장: 요약 2–4 — 과제 항목별 현황 · 운반 임무 · 실기시험 기준, 소프트웨어 5–11 — 접근 상황 A–D 는 10 · 11, 하드웨어 12–15, 결론 16 · 일정 17, 질의응답 18, 위치 추정 두 장은 부록 19 · 20쪽) 기준이다. 사용자 지시: "요약->hw->sw->결론(향후일정)->질의응답 순으로", "hw, sw 분리", "시각화 가능한건 시각화해", 이어서 "순서 sw->hw로 하고(sw를 어떻게 hw에 구현할건지가 드러나는 스토리텔링)"(2026-10-12).
 
 수치는 로봇 저장소(`forklift/`)의 실행 기록 · 설정 · 검증 문서와 외부 원문에서 가져왔다. 시뮬레이션 결과는 Isaac Sim 합성 장면의 결과이고 실제 장비 성능이 아니다. 쪽별 세부 출처는 `SCRIPT.md` 의 `[Sources]` 에도 있다.
 
@@ -27,7 +27,7 @@
 | `assets/57_brief_{a,b,c,d}.png` | 10 · 11 (2026-10-14 화면에서 뺌, 사용자 지시) | 과제 제안서(Google Slides PDF 내보내기) 8–11쪽을 150 dpi 로 렌더해 제목과 설명을 잘라 낸 그림 (`prepare_figures.py brief`) |
 | `assets/53_goal_fix.png` | 9 (2026-10-14 화면에서 뺌, 수치는 표 마지막 행 · 원고) | `tests/unit/planning/test_d7_planner_options.py` 의 실측 차체 사례(목표 1 cm 앞 · 0.023 rad)를 forklift b66271f 의 `plan_hybrid_astar` 로 다시 계획(`git archive b66271f src`): 전진만 21.68 m, `D7_PLANNER_OPTIONS`(Reeds–Shepp · 상한 4 m) 0.99 m = 전진 0.50 + 후진 0.49 m. 왼쪽은 원 전체, 오른쪽은 같은 자리 확대(각각 축척 막대, 확대 칸의 두 움직임은 겹치지 않게 차체 위아래로 나눠 그림). 그림 안 표기는 "전진 전용 · 선회 21.7 m · 목적지 부근 확대 · ① 전진 0.50 m · ② 후진 0.49 m · 방향 오차 1.3° 보정", 색 의미는 슬라이드 범례. matplotlib (`prepare_figures.py`) |
 | `20_pipeline_stages_crop.png` | 6 | 3주차 `week-03/assets/20_pipeline_stages.png` 에서 위 제목 띠와 아래 단계 설명을 잘라 냄(세로 98–410 px, `prepare_figures.py stages`). 단계명과 색 범례(견본: 작업 범위 · 앞면 후보 · 측정점 존재 구간 · 개구부 · 검출 포켓, 색은 forklift `tools/deck/pipeline_stages.py` 값)는 HTML 로 다시 쓰고, 그림 안의 작은 글씨는 정리했다(화살표 설명 삭제, 시점 표시 19 → 26 px "카메라 시점 · 상부 시점 · 앞면 수평 분할", 영상 위 옛 표시는 오른쪽 픽셀로 메움) |
-| `assets/41_structure.png` | 부록 1 (19쪽) | `prepare_figures.py` structure (matplotlib) — slam_pose · slam_link · obstacle_grid · drive_permission · planning_memory · scan_match · scan_docking 의 데이터 흐름을 위치 · 장애물 · 경로 · 하역 네 줄로 |
+| `assets/41_structure.png` | 부록 1 (19쪽, 2026-10-14 장 삭제로 화면에서 뺌) | `prepare_figures.py` structure (matplotlib) — slam_pose · slam_link · obstacle_grid · drive_permission · planning_memory · scan_match · scan_docking 의 데이터 흐름을 위치 · 장애물 · 경로 · 하역 네 줄로 |
 | `assets/40_system.png` | 12 | `prepare_figures.py` system (matplotlib) — 하드웨어 기록과 5주차 회로 초안의 부품 · 상태. 모터 칸은 5주차 역분석 보고의 재사용 목록대로 "주행 · 리프트 (기존) · 조향 · 12 V 배터리" |
 | `assets/44_waveforms.png` | 14 | `prepare_figures.py hardware` — 5주차 `week-05/assets/data_la_edges.json`(DSLogic Pro 1 MHz 2채널, 주행 · 승강 · 조향)을 다시 그림. 숫자는 한 선이 켜져 있던 시간(10 ms 미만은 접점 튐), 짧은 세로선은 누르는 순간 두 선이 2.95–3.43 ms 같이 켜진 것 |
 | `assets/43_la_setup.jpg` | 14 | 5주차 `37_la_setup.jpg`(2026-09-29–30 측정 사진, 1050 × 1400, EXIF 제거)에서 릴레이 기판 전체(케이스 위 고리 ~ 기판 아래 끝)와 탐침이 들어가도록 전체 폭 · 세로 672–1098 px 를 자름(1050 × 426, 사람이 찍힌 아래쪽 제외). 슬라이드에서는 이 비율 그대로(잘라 내지 않음) 보임 |

@@ -383,22 +383,7 @@ add('포켓 인식', '포켓 인식 처리 과정', 60, f"""
     '화면: 3주차 4쪽 그림 · 근거는 3주차 6 · 8쪽')
 
 
-# ----------------------------------------------------------------- localization and obstacle structure
-add('위치 · 장애물 구조', '위치 추정 · 장애물 지도 구조', 85, f"""
-<h2 class="headline">오도메트리는 SLAM으로 보정, 장애물은 점유 격자로 판단, 이상 시 정지</h2>
-<div class="grow m7-fill">{figure('41_structure.png', '위치 추정과 장애물 지도의 구조. 위치, 장애물, 경로, 하역 네 줄이 입력 → 처리 → 판단을 거쳐 경로 추종으로 들어간다')}</div>
-<div class="takeaway">주행 허가는 실시간 관측으로만 판단하고, 장애물 기억은 경로 계획에만 씁니다</div>
-""",
-    """(부록, 질문 시) LiDAR 1대로 위치를 추정하고 장애물을 판단하는 구조입니다. 바퀴와 조향 엔코더로 계산한 이동량, 즉 오도메트리로 위치를 연속 계산합니다. LiDAR 스캔은 매번 SLAM으로 전송하고, 지도 정합 보정은 차량이 약 0.45미터 이동하거나 약 30도 회전할 때마다 갱신합니다. 포크 삽입과 리프트 중에는 위치가 급변하지 않도록 새 보정을 반영하지 않습니다. SLAM 응답이 0.25초 넘게 끊기면 오도메트리만으로 주행하지 않고 정지합니다. 같은 스캔으로 점유 격자도 생성합니다. 오래된 스캔일수록 위치 오차만큼 장애물을 크게 잡고, 현재 곡률로 정지할 때 지나는 칸이 모두 비어 있어야 해당 속도로 주행합니다. 경로 계획에는 장애물 기억과 SLAM 지도를 함께 사용해, 지나오며 관측한 장애물도 반영합니다. 목적지에서는 사전 등록 스캔과 현재 스캔을 ICP로 정합해 하역 위치를 보정합니다. (전환)""",
-    [('src/forklift_core/localization/slam_pose.py', 'map<-base(t) = map<-odom(마지막 SLAM 응답) × odom<-base(t, 오도메트리); 보정이 max_age_s(실행 0.25 s)보다 오래되면 LocalizationStale 로 정지'),
-     ('src/forklift_core/localization/slam_link.py', 'Isaac 은 LiDAR 주기마다 스캔을 보내고 같은 스캔의 응답(map<-odom)을 받을 때까지 물리를 진행하지 않음 (lockstep); KeyframeGate: 0.447 m 이동 또는 0.5 rad 회전 + 0.5 s 이상 간격인 스캔만 slam_toolbox 로, 나머지는 직전 보정을 그대로 응답'),
-     ('sim/isaac/run_transport.py slam_feedback.hold_phases', '접근(채택한 관측부터) · 삽입 · 승강 · 빼기 · 내리기 · 물러나기 동안 보정 고정'),
-     ('ros2/src/forklift_bringup/config/slam_toolbox_isaac_online.yaml', 'online_sync · mapping · 해상도 0.05 m · Ceres · do_loop_closing true'),
-     ('src/forklift_core/perception/obstacle_grid.py', '점유 칸을 r = e(age) + 2ρ sin(ψ(age)/2) + 센서 한계로 부풀림(오도메트리 표류의 측정값), 점유 칸 유지 occupied_max_age_s 0.3 s, 빔이 지나간 칸은 0.2 s 이내 스캔에서 FREE (config/obstacle_layer_single.yaml)'),
-     ('src/forklift_core/control/drive_permission.py', '비상정지 원호(현재 곡률로 멈추는 궤적)와 앞 경로의 칸이 FREE 여야 그 속도 허용'),
-     ('src/forklift_core/perception/planning_memory.py', '경로 계획에만: 칸별 마지막 끝점 · 마지막 FREE 시각 기억 + SLAM 정적 층 (주행 허가는 실시간 관측만)'),
-     ('src/forklift_core/localization/scan_match.py · scan_docking.py', 'point-to-line ICP(Gauss–Newton), 여러 초기값이 같은 답일 때만 사용, 벽 하나뿐이면 퇴화로 거부')],
-    '화면 생성: 코드 구조를 그린 흐름도 (prepare_figures.py structure, matplotlib)')
+# 2026-10-14 (user): the localization / obstacle structure appendix slide removed; its SLAM result slide stays.
 
 # ----------------------------------------------------------------- 7
 SLAM_COMPARE = [  # item, 2D LiDAR SLAM, camera (visual) SLAM -- datasheets, BKM, RTAB-Map paper (SOURCES.md)
@@ -416,7 +401,7 @@ add('위치 추정', 'LiDAR SLAM 위치 추정', 65, f"""
         ipanel('LiDAR SLAM 선정 근거', f'<table class="comparison t6 m7-slam"><tr><th>항목</th><th>2D LiDAR (선정)</th><th>카메라 (비전)</th></tr>{slam_rows}</table>'), 380)}
 <div class="takeaway">오도메트리 오차는 적재 상태로 선회할 때 덜 돌아 방향이 24° 어긋난 탓입니다 (마찰 가정값에 좌우)</div>
 """,
-    """(부록, 질문 시) 이 구조로 위치를 추정한 결과와 LiDAR를 선정한 근거입니다. 왼쪽 영상은 이전 차체 모델로 수행한 운반 실행입니다. 빨간 SLAM 추정 경로는 파란 실제 경로를 따라가지만, 주황색 오도메트리 경로는 점차 벗어납니다. 임무 종료 시점의 오도메트리 위치 오차는 3.4미터, SLAM은 약 4센티미터였고, 임무 전체 RMSE는 약 9센티미터였습니다. 3.4미터의 대부분은 적재 상태에서 선회할 때 실제 회전량이 계산보다 작아 방향이 24도 어긋난 데서 비롯됩니다. 오른쪽 표와 같이 카메라는 전방만 관측하고 거리가 멀수록 오차가 커지지만, LiDAR는 12미터까지 360도를 측정하고 그 지도를 경로 계획에 직접 사용할 수 있습니다. 과제 문서도 2D LiDAR를 SLAM용으로 지정했으므로, 위치 추정은 LiDAR가 담당하고 카메라는 팔레트 인식에 집중하도록 역할을 나눴습니다. (전환)""",
+    """(부록, 질문 시) LiDAR 1대로 위치를 추정한 결과와 LiDAR를 선정한 근거입니다. 바퀴와 조향 엔코더로 계산한 오도메트리를 SLAM으로 보정하는 구조입니다. 왼쪽 영상은 이전 차체 모델로 수행한 운반 실행입니다. 빨간 SLAM 추정 경로는 파란 실제 경로를 따라가지만, 주황색 오도메트리 경로는 점차 벗어납니다. 임무 종료 시점의 오도메트리 위치 오차는 3.4미터, SLAM은 약 4센티미터였고, 임무 전체 RMSE는 약 9센티미터였습니다. 3.4미터의 대부분은 적재 상태에서 선회할 때 실제 회전량이 계산보다 작아 방향이 24도 어긋난 데서 비롯됩니다. 오른쪽 표와 같이 카메라는 전방만 관측하고 거리가 멀수록 오차가 커지지만, LiDAR는 12미터까지 360도를 측정하고 그 지도를 경로 계획에 직접 사용할 수 있습니다. 과제 문서도 2D LiDAR를 SLAM용으로 지정했으므로, 위치 추정은 LiDAR가 담당하고 카메라는 팔레트 인식에 집중하도록 역할을 나눴습니다. (전환)""",
     [(SLAM, 'S3 장면 1 — 358 s 에서 SLAM 4.0 cm 대 바퀴 회전만 340 cm, 위치 RMSE 0.088 m'),
      ('ws1 artifacts/20261004_slam_s3/seed_1/run/slam_log.npz', '2026-10-06 재계산: 거리 92.9 대 93.6 m, 끝 방향 오차 −24.3°, 회전 시 실제/계산 비 빈 차 0.998 · 운반 0.925'),
      ('week-06/SOURCES.md', '영상은 이전 S3 실행(사진 추정 차체 dls08_provisional · forklift 5de6c3a, 마찰 가정값, 장애물은 시뮬레이터 정답) — 6주차 5쪽과 같음; 4 cm 는 끝 시점, 임무 전체 RMSE 8.8 cm · 최대 19 cm'),
@@ -738,7 +723,7 @@ add('확인 요청', '리보틱스 확인 요청', 75, f"""
     '출처: 4–6주차 피드백 · 5주차 미팅 질문 이어 받음')
 
 TITLE = '리보틱스 중간 미팅 · 자율 지게차 중간 점검'
-N_SLIDES = 20
+N_SLIDES = 19
 
 
 # 2026-10-12 (user): the company works on SLAM itself, so the talk follows the brief's items and
@@ -753,7 +738,7 @@ SECTIONS = [('요약', ['과제 이해와 진행 현황', '운반 임무 전체'
             ('결론', ['결론', '개발 일정']),
             ('질의응답', ['확인 요청'])]
 SECTION = {label: name for name, labels in SECTIONS for label in labels}
-APPENDIX = ('위치 · 장애물 구조', '위치 추정')
+APPENDIX = ('위치 추정',)
 ORDER = ['리보틱스 중간 미팅'] + [label for _, labels in SECTIONS for label in labels] + list(APPENDIX)
 
 
@@ -766,7 +751,7 @@ def build():
     for i, s in enumerate(main[1:], 1):
         s['title'] = f'{i:02d}  {SECTION[s["label"]]} · {s["title"]}'
     for i, s in enumerate((s for s in slides if s['label'] in APPENDIX), 1):
-        s['title'] = f'부록 {i}  {s["title"]}'
+        s['title'] = f'부록{" " + str(i) if len(APPENDIX) > 1 else ""}  {s["title"]}'
         s['seconds'] = 0                    # shown only for questions, outside the timed talk
     total = sum(s['seconds'] for s in slides)
     sections = []
