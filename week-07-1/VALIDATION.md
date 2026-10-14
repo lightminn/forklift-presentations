@@ -354,3 +354,7 @@ Claude 서브에이전트 3개(화면 · 원고와 흐름 · 기술 내용과 �
 
 - 고친 점: 0.25 s 는 보정 주기가 아니라 10 Hz 스캔마다 오는 SLAM 쪽 응답(processed · skipped)의 신선도(slam_pose.SlamPoseTracker max_age_s, isaac_slam_bridge 의 skipped 응답); 보류 구간은 근접 구간만이 아니라 approach 시작 ~ transport 시작, lower 시작 ~ settle(run_transport.py 3799–3816, slam_release 2 cm · 0.02 rad 재계획); 정합 방식 구체화(slam_toolbox_isaac_online.yaml: correlation_search_space_dimension 0.5 · resolution 0.01, coarse_search_angle_offset 0.349 · coarse_angle_resolution 0.0349, fine_search_angle_offset 0.00349, distance/angle_variance_penalty, scan_buffer_size 10 · 10 m, loop_search_maximum_distance 3.0, Ceres), 보정값 계산(isaac_slam_bridge.py 263행 compose(pose, invert(odom_from_base))), 오도메트리 입력(뒷바퀴 2개 · 조향 2개, wheel_odometry._curvature_inv_m, OdometryNoise 0.2 rad/s · 0.005 rad).
 - Karto 정밀 탐색의 방향 범위(거친 간격의 절반 = ±1°)는 slam_toolbox(Karto) 동작에 대한 이해이며 소스로 다시 확인하지 않았다.
+
+## 2026-10-14 QNA 9쪽에 "pure pursuit는 왜 뒤차축 기준인가요?" 추가 (사용자 질문)
+
+- 근거: forklift sim/models/dls08_measured/forklift.urdf left_steer · right_steer (base_link 기준 x = +0.32 m, 자식 front_*_wheel — 앞바퀴 조향), src/forklift_core/control/path_tracking.py (Rear-axle geometric tracking), planning/hybrid_astar.py (positions at the rear axle), run_transport.py odom_rear.
