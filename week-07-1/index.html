@@ -116,7 +116,7 @@ slam_toolbox online_sync, mapping, 해상도 0.05 m, Ceres, 루프 닫기; Isaac
 
 <section data-label="포켓 인식" data-screen-label="06" data-duration="60" data-speaker-notes="권장 60초
 
-이제 과제 단계별로 설명드리겠습니다. 첫 단계인 팔레트 인식은 학습 모델 대신 팔레트 규격의 치수와 형상 규칙을 사용합니다. 그림과 같이 깊이 영상에서 작업 범위 안의 점만 남기고, 수직 평면을 찾아 팔레트 앞면으로 설정합니다. 앞면을 세로 칸으로 분할해 받침목과 개구부를 구분하고, 개구부 폭이 규격 범위에 들면 두 포켓의 중심과 삽입 방향을 산출합니다. 학습 데이터 없이 치수만 바꿔 EPAL 6과 T11을 같은 코드로 처리하기 위해서입니다. EPAL 6 합성 장면에서는 검출 대상 60개를 모두 검출했고, 위치 오차는 95퍼센트가 8.2밀리미터 이하였습니다. 다만 깊이 잡음이 없는 장면이며, 유사 형상 물체에 대한 오검출 평가와 T11 평가는 남아 있습니다. 또한 포켓 입구가 시야를 벗어나면 검출할 수 없으므로, 다음 장의 삽입 중 포켓 추적이 이어받습니다. (전환)
+이제 과제 단계별로 설명드리겠습니다. 첫 단계인 팔레트 인식은 학습 모델 대신 팔레트 규격의 치수와 형상 규칙을 사용합니다. 그림과 같이 깊이 영상에서 작업 범위 안의 점만 남기고, 수직 평면을 찾아 팔레트 앞면으로 설정합니다. 앞면을 세로 칸으로 분할해 받침목과 개구부를 구분하고, 개구부 폭이 규격 범위에 들면 두 포켓의 중심과 삽입 방향을 산출합니다. 학습 데이터 없이 치수만 바꿔 EPAL 6과 T11을 같은 코드로 처리하기 위해서입니다. 시뮬레이션에서는 2에서 4미터 앞에 놓인 EPAL 6 팔레트 60개를 모두 찾았고, 위치 오차는 95퍼센트가 1센티미터 미만이었습니다. 다만 깊이 잡음이 없는 장면이며, 유사 형상 물체에 대한 오검출 평가와 T11 평가는 남아 있습니다. 또한 포켓 입구가 시야를 벗어나면 검출할 수 없으므로, 다음 장의 삽입 중 포켓 추적이 이어받습니다. (전환)
 
 [Sources]
 화면: 3주차 4쪽 그림 · 근거는 3주차 6 · 8쪽
@@ -132,7 +132,7 @@ EPAL 6 Gazebo 장면 100개 = positive 60 · occluded 20 · negative 20, 자세 
 <figure class="m7-media m7-pipe2"><img src="assets/20_pipeline_stages_crop.png" alt="깊이 영상, 팔레트 앞면, 받침목과 빈 공간, 판정된 포켓 위치의 네 단계">
 <div class="steps"><b>① 깊이 영상</b><i></i><b>② 앞면 추출</b><i></i><b>③ 받침목 · 개구부 분리</b><i></i><b>④ 포켓 위치 · 방향</b></div>
 <figcaption class="legend"><span class="lg"><span class="sw cell" style="background:#3c9660"></span>작업 범위</span><span class="lg"><span class="sw cell" style="background:#f1c232"></span>앞면 후보</span><span class="lg"><span class="sw cell" style="background:#966c40"></span>측정점 존재 구간</span><span class="lg"><span class="sw box" style="border-color:#ff40ff"></span>개구부 · 검출 포켓</span></figcaption></figure>
-<div class="m7-info "><p class="ph">선정 근거</p><div class="tb"><table class="comparison t6 m7-why"><tr><th>근거</th><th>내용</th></tr><tr><td>규격 치수 기반</td><td>학습 데이터 불필요 · 치수만 바꿔 EPAL 6 · T11 대응</td></tr><tr><td>합성 장면 평가</td><td>EPAL 6 (2–4 m) 전수 검출, 위치 오차는 95 %가 8.2 mm 이하</td></tr></table></div></div>
+<div class="m7-info "><p class="ph">선정 근거</p><div class="tb"><table class="comparison t6 m7-why"><tr><th>이유</th><th>설명</th></tr><tr><td>학습 데이터 불필요</td><td>팔레트 규격 치수만 입력, 치수를 바꾸면 EPAL 6과 T11 모두 인식</td></tr><tr><td>시뮬레이션 시험</td><td>2–4 m 앞 EPAL 6 팔레트 60개를 모두 찾고, 위치 오차는 95 %가 1 cm 미만</td></tr></table></div></div>
 </div>
 <div class="takeaway">가까워지면 포켓 입구가 시야를 벗어나므로 삽입 중 추적이 이어받습니다</div>
 </div></x-import>
