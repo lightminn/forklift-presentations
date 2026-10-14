@@ -316,9 +316,10 @@ add('엔코더 보드 두 종', '05  엔코더 보드 두 종', 60, f"""
 {sch('80_mt_sch.png', 'MT6701 보드 회로도. MT6701QT-ACD U1의 A, B, Z 핀과 U, V, W 핀을 반전 A, B, Z로, TLV70233 U2가 VCC를 3V3으로, CN1 HX JN1.27-2x4P', 'MT6701 보드 회로도 (MT_DS V1.0.0)')}
 {sch('81_kth_sch.png', 'KTH7801 보드 회로도. KTH7801-X-C-SOP8 U2의 MOSI, CS, MISO, SCLK, CS에 2.2 kΩ 풀업 R4, TLV70233 U1, CN1 HX JN1.27-2x4P', 'KTH7801 보드 회로도 (KTH_Enc V1.1.2)')}
 </div>
-{table(['보드', '출력', '커넥터 CN1 핀'], [
-    ('MT6701', 'A, B, Z와 반전 신호 (출고 설정)', '1 VCC, 2 GND, 3–8 A, A̅, B, B̅, Z, Z̅'),
-    ('KTH7801', 'SPI 모드 3, 각도 12비트 + CRC 4비트', '1 VCC, 2 CS, 4 CLK, 6 MOSI, 7 GND, 8 MISO')], 'comparison h7 nwall')}
+<table class="comparison h7 nwall enc7t"><tr><th></th><th>MT6701 보드 (바퀴)</th><th>KTH7801 보드 (조향 · 승강)</th></tr>
+<tr><td>보내는 값</td><td>바퀴가 돈 만큼 나오는 펄스</td><td>지금 각도 (숫자 값)</td></tr>
+<tr><td>신호 선</td><td>펄스 3쌍 (A, B, Z와 반전)</td><td>SPI 4선 (CS, CLK, MOSI, MISO)</td></tr>
+<tr><td>전원</td><td colspan="2">케이블로 5 V를 받아 보드에서 3.3 V로 낮춤</td></tr></table>
 <div class="takeaway">두 보드 모두 작게 두고, KTH7801의 긴 케이블 쪽 처리는 바로 옆 STDS 보드가 맡습니다</div>
 """,
     """엔코더 보드 두 종류의 회로도입니다. 왼쪽은 바퀴에 다는 MT6701 보드입니다. 칩은 QFN 패키지의 MT6701QT-ACD인데, 이 품번은 공장에서 U, V, W 핀이 A, B, Z의 반전 신호를 내도록 설정되어 나오므로, 따로 프로그래밍하지 않아도 세 쌍의 차동 신호가 나오고 보드에 차동 드라이버 칩을 둘 필요가 없습니다. 오른쪽은 조향과 승강에 다는 KTH7801 보드로, SOP-8 칩 하나와 레귤레이터만 있고 SPI 네 선과 전원, 접지만 커넥터로 나갑니다. KTH7801의 SPI는 클럭이 쉴 때 High인 모드 3이고, 한 번에 16비트를 주고받는데 이 품번은 그중 12비트가 각도, 4비트가 CRC입니다. 칩 선택 선은 2.2킬로옴으로 풀업해 MCU가 켜지기 전에는 선택되지 않게 했습니다. 두 보드 모두 뒷면에 커넥터와 레귤레이터가 있어, 케이블로 받은 5볼트를 3.3볼트로 낮춰 칩에 줍니다. (전환)""",

@@ -3,7 +3,7 @@
 <link rel="icon" href="data:,">
 <script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>7주차 자율 지게차 개발</title>
-<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=c6f6a9aa2152"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=af6ed075c3d5"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 <section class="title-section" data-label="개발 진행 보고" data-screen-label="01" data-duration="25" data-speaker-notes="권장 25초
 
@@ -125,7 +125,10 @@ Table 2 SOP-8 핀 (TEST 띄움), SPI CPOL = 1 · CPHA = 1 · 16비트 프레임,
 <figure class="shot sch"><img class="media" src="assets/80_mt_sch.png" alt="MT6701 보드 회로도. MT6701QT-ACD U1의 A, B, Z 핀과 U, V, W 핀을 반전 A, B, Z로, TLV70233 U2가 VCC를 3V3으로, CN1 HX JN1.27-2x4P"><figcaption>MT6701 보드 회로도 (MT_DS V1.0.0)</figcaption></figure>
 <figure class="shot sch"><img class="media" src="assets/81_kth_sch.png" alt="KTH7801 보드 회로도. KTH7801-X-C-SOP8 U2의 MOSI, CS, MISO, SCLK, CS에 2.2 kΩ 풀업 R4, TLV70233 U1, CN1 HX JN1.27-2x4P"><figcaption>KTH7801 보드 회로도 (KTH_Enc V1.1.2)</figcaption></figure>
 </div>
-<table class="comparison h7 nwall"><tr><th>보드</th><th>출력</th><th>커넥터 CN1 핀</th></tr><tr><td>MT6701</td><td>A, B, Z와 반전 신호 (출고 설정)</td><td>1 VCC, 2 GND, 3–8 A, A̅, B, B̅, Z, Z̅</td></tr><tr><td>KTH7801</td><td>SPI 모드 3, 각도 12비트 + CRC 4비트</td><td>1 VCC, 2 CS, 4 CLK, 6 MOSI, 7 GND, 8 MISO</td></tr></table>
+<table class="comparison h7 nwall enc7t"><tr><th></th><th>MT6701 보드 (바퀴)</th><th>KTH7801 보드 (조향 · 승강)</th></tr>
+<tr><td>보내는 값</td><td>바퀴가 돈 만큼 나오는 펄스</td><td>지금 각도 (숫자 값)</td></tr>
+<tr><td>신호 선</td><td>펄스 3쌍 (A, B, Z와 반전)</td><td>SPI 4선 (CS, CLK, MOSI, MISO)</td></tr>
+<tr><td>전원</td><td colspan="2">케이블로 5 V를 받아 보드에서 3.3 V로 낮춤</td></tr></table>
 <div class="takeaway">두 보드 모두 작게 두고, KTH7801의 긴 케이블 쪽 처리는 바로 옆 STDS 보드가 맡습니다</div>
 </div></x-import>
 </section>

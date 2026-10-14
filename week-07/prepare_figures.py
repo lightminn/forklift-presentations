@@ -19,26 +19,25 @@ from PIL import Image
 HERE = Path(__file__).resolve().parent
 
 
-def trim_render(img, pad=24, ui_top=0, ui_right=0):
+def trim_render(img, pad=24, ui_top=0, ui_right=0, ui_left=0):
     a = np.asarray(img.convert('RGB')).astype(int)
     h, w, _ = a.shape
     mask = a.max(axis=2) > 45
     mask[:ui_top] = False
+    mask[:, :ui_left] = False
     if ui_right:
         mask[:, w - ui_right:] = False
     # rows that are one thin light line across the whole canvas (a viewer artefact) are not board
-    full = mask.mean(axis=1) > 0.9
+    sat = a.max(axis=2) - a.min(axis=2)
+    light = (a.min(axis=2) > 150) & (sat < 30)
+    full = light.mean(axis=1) > 0.9
     a2 = a.copy()
     for y in np.where(full)[0]:
         src = y - 2 if y >= 2 else y + 2
         a2[y] = a2[src]
         mask[y] = mask[src]
-    # the same for columns (the editor's panel edge beside the 3D view; only where there is an editor frame)
-    for x in (np.where(mask.mean(axis=0) > 0.6)[0] if ui_right else []):
-        a2[:, x] = 0
-        mask[:, x] = False
     ys, xs = np.where(mask)
-    box = (max(xs.min() - pad, 0), max(ys.min() - pad, ui_top), min(xs.max() + pad, w - ui_right), min(ys.max() + pad, h))
+    box = (max(xs.min() - pad, ui_left), max(ys.min() - pad, ui_top), min(xs.max() + pad, w - ui_right), min(ys.max() + pad, h))
     out = Image.fromarray(a2.astype('uint8')).crop(box)
     return out
 
@@ -64,11 +63,11 @@ def main(src, out):
     o = lambda n: out / n
 
     # 3D renders (black background); mt6701_1 still has the editor's tab bar and right edge
-    renders = {'mt6701_1.png': ('80_mt_top.jpg', 90, 40),
+    renders = {'mt6701_1.png': ('80_mt_top.jpg', 90, 40, 30),
                'kth7801_1.png': ('81_kth_top.jpg', 0, 0),
                'stds_2.png': ('82_stds_top.jpg', 0, 0), 'stds_3.png': ('82_stds_bottom.jpg', 0, 0)}
-    for name, (dst, top, right) in renders.items():
-        fit(trim_render(Image.open(src / name), ui_top=top, ui_right=right), 1100).save(o(dst), quality=90)
+    for name, (dst, top, right, *left) in renders.items():
+        fit(trim_render(Image.open(src / name), ui_top=top, ui_right=right, ui_left=(left or [0])[0]), 1100).save(o(dst), quality=90)
 
     # schematics (paper background) -- PNG keeps the thin lines sharp
     for name, dst in (('mt6701_3.png', '80_mt_sch.png'), ('kth7801_3.png', '81_kth_sch.png'), ('stds_1.png', '82_stds_sch.png')):

@@ -639,3 +639,5 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .hw7.sch3 > .shot.sch { padding:2px; }
 .hw7.sch3 { grid-template-columns:auto minmax(0,1fr); }
 .hw7.sch3 > .shot.sch { height:100%; width:auto; aspect-ratio:1800 / 1340; justify-self:start; }
+.comparison.h7.enc7t th:first-child, .comparison.h7.enc7t td:first-child { width:14%; }
+.comparison.h7.enc7t td[colspan] { text-align:center; }
