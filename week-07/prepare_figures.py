@@ -74,7 +74,8 @@ def main(src, out):
         fit(trim_sheet(Image.open(src / name)), 1500).save(o(dst), optimize=True)
 
     main_sheet = Image.open(src / 'mainboard_1.png').convert('RGB')   # 2477 x 1770
-    fit(main_sheet, 1800).save(o('83_main_sch.png'), optimize=True)
+    # the whole sheet inside its frame (the coordinate strip around it dropped)
+    fit(main_sheet.crop((14, 50, 2440, 1746)), 1800).save(o('83_main_sch.png'), optimize=True)
     # blocks of the main sheet (original pixel coordinates, read off the sheet)
     blocks = {'83_main_drv.png': (95, 100, 790, 460),      # L channel: DRV8244 U? with its parts
               '83_main_rj.png': (835, 1030, 1850, 1355)}   # RJ1/RJ2 (KTH7801 cables)

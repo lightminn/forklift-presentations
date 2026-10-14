@@ -641,3 +641,9 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .hw7.sch3 > .shot.sch { height:100%; width:auto; aspect-ratio:1800 / 1340; justify-self:start; }
 .comparison.h7.enc7t th:first-child, .comparison.h7.enc7t td:first-child { width:14%; }
 .comparison.h7.enc7t td[colspan] { text-align:center; }
+/* slide 3: narrow stacked table, the schematic (frame cropped, no caption) as tall as the slide allows */
+.hw7.sch3 { gap:24px; }
+.hw7.sch3 > .shot.sch { aspect-ratio:2426 / 1696; padding:0; }
+.comparison.h7.vt7 { font-size:21px; line-height:1.45; align-self:center; }
+.comparison.h7.vt7 td { padding:14px 12px; white-space:nowrap; font-weight:400; }
+.comparison.h7.vt7 td b { color:#1b1f24; }

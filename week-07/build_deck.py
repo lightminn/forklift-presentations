@@ -246,11 +246,11 @@ add('전원과 제어 구성', '01  전원과 제어 구성', 55, f"""
 add('보드 구성과 신호 경로', '02  보드 구성과 신호 경로', 55, f"""
 <h2 class="headline">바퀴 엔코더는 RS-422 수신기로, 조향 · 승강 엔코더는 STDS를 거쳐 LVDS로 연결</h2>
 <div class="hw7 sch3 grow">
-{sch('83_main_sch.png', '메인보드 회로도 1쪽 MOTOR&SENSOR 전체. 위와 왼쪽 아래에 DRV8244 네 개, 가운데 AM26LV32 두 개와 1.27 mm 커넥터 두 개, 오른쪽에 SN74LVC1G125 두 개, SN65LVDS31 두 개, SN65LVDS32 한 개, 아래 RJ 잭 두 개', '메인보드 회로도')}
-{table(['측정', '신호 경로'], [
-    ('바퀴 L, R', 'MT6701 → RS-422'),
-    ('조향, 승강', 'KTH7801 → STDS → LVDS'),
-    ('전원', '5 V → LDO 3.3 V')], 'comparison h7 nwall')}
+{sch('83_main_sch.png', '메인보드 회로도 1쪽 MOTOR&SENSOR 전체. 위와 왼쪽 아래에 DRV8244 네 개, 가운데 AM26LV32 두 개와 1.27 mm 커넥터 두 개, 오른쪽에 SN74LVC1G125 두 개, SN65LVDS31 두 개, SN65LVDS32 한 개, 아래 RJ 잭 두 개')}
+<table class="comparison h7 vt7"><tr><th>신호 경로</th></tr>
+<tr><td><b>바퀴 L, R</b><br>MT6701 → RS-422</td></tr>
+<tr><td><b>조향, 승강</b><br>KTH7801 → STDS → LVDS</td></tr>
+<tr><td><b>전원</b><br>5 V → LDO 3.3 V</td></tr></table>
 </div>
 <div class="takeaway">바퀴 엔코더는 회전 펄스를, 조향과 승강 엔코더는 SPI로 각도 값을 보내므로 신호 종류에 맞는 차동 방식을 씁니다</div>
 """,
@@ -258,7 +258,7 @@ add('보드 구성과 신호 경로', '02  보드 구성과 신호 경로', 55, 
     [(MAIN, 'DRV8244SQRYJRQ1 × 4 (L · R · M · H 신호 이름), AM26LV32EIPWR U3 · U5, HX JN1.27-2x4P CN1 · CN2 (5 V · AGND · L/R_DA · DB · DZ와 반전), SN74LVC1G125DBVR U9 · U10, SN65LVDS31DR U6 · U7, SN65LVDS32DR U8, 5558067-1 RJ1 · RJ2'),
      (f'{TEAM} mt6701_3 · kth7801_3 · stds_1', '센서 쪽 TLV70233DBVR (VCC → 3V3), CN1 HX JN1.27-2x4P, STDS RJ1 5558067-1'),
      ('사용자 (2026-10-14)', '차동 신호 기반 통신, 5 V로 보내 3.3 V LDO로 강하, RJ50 선택')],
-    '그림: 팀 메인보드 회로도 1쪽 (크기만 줄임)')
+    '그림: 팀 메인보드 회로도 1쪽 (바깥 좌표 띠만 잘라 냄)')
 
 # ----------------------------------------------------------------- 4
 add('모터 드라이버 4채널', '03  모터 드라이버 4채널', 50, f"""
