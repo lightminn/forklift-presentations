@@ -88,6 +88,7 @@ NOISE = ['없음', '10 kHz', '100 kHz', '500 kHz', '1 MHz', '5 MHz', '10 MHz']
 SE_05 = [101, 99, 82, 67, 58, 39, 31]
 LV_05 = [101, 99, 83, 69, 68, 61, 52]
 LV_3 = [101, 97, 71, 67, 59, 49, 45]          # single-ended at 3 m: "Fail" in every row
+SHOW = [0, 2, 4, 6]       # rows drawn on the slide (user: fewer frequencies): none, 100 kHz, 1 MHz, 10 MHz
 
 V_CABLE = 20.0          # cm/ns, twisted pair (about 2/3 of light speed)
 # worst-case (max) delays on the MISO round trip, ns, each from its datasheet
@@ -153,25 +154,26 @@ def system_diagram():
 def snr_chart():
     W, H, L, B, T = 1000, 380, 64, 330, 18
     ymax = 110
-    gw = (W - L - 10) / len(NOISE)
-    bw = gw / 5.2
+    gw = (W - L - 10) / len(SHOW)
+    bw = gw / 5.6
     y = lambda v: B - v / ymax * (B - T)
     parts = []
     for v in (0, 20, 40, 60, 80, 100):
         parts.append(f'<line x1="{L}" x2="{W - 10}" y1="{y(v):.1f}" y2="{y(v):.1f}" stroke="#e3e7ec"/>'
                      f'<text x="{L - 10}" y="{y(v) + 6:.1f}" text-anchor="end" font-size="17" fill="#44505c">{v}</text>')
-    for i, name in enumerate(NOISE):
+    for i, k in enumerate(SHOW):
+        name = NOISE[k]
         x0 = L + i * gw + gw * 0.08
         for j, (vals, col) in enumerate(((SE_05, GREY), (LV_05, LIGHT), (None, RED), (LV_3, BLUE))):
             x = x0 + j * bw * 1.08
             if vals is None:
                 parts.append(f'<text x="{x + bw / 2:.1f}" y="{B - 8}" text-anchor="middle" font-size="26" font-weight="700" fill="{RED}">×</text>')
                 continue
-            v = vals[i]
+            v = vals[k]
             parts.append(f'<rect x="{x:.1f}" y="{y(v):.1f}" width="{bw:.1f}" height="{B - y(v):.1f}" fill="{col}"/>')
             if j in (0, 3):
-                parts.append(f'<text x="{x + bw / 2:.1f}" y="{y(v) - 6:.1f}" text-anchor="middle" font-size="15" fill="#1b1f24">{v}</text>')
-        parts.append(f'<text x="{L + i * gw + gw / 2:.1f}" y="{B + 30}" text-anchor="middle" font-size="18" fill="#1b1f24">{name}</text>')
+                parts.append(f'<text x="{x + bw / 2:.1f}" y="{y(v) - 6:.1f}" text-anchor="middle" font-size="20" fill="#1b1f24">{v}</text>')
+        parts.append(f'<text x="{L + i * gw + gw / 2:.1f}" y="{B + 32}" text-anchor="middle" font-size="22" fill="#1b1f24">{name}</text>')
     parts.append(f'<text x="14" y="{T + 2}" font-size="16" fill="#44505c">dB</text>')
     return (f'<svg class="diagram" viewBox="0 0 {W} {H}" role="img" aria-label="잡음 주파수별 SPI 신호 대 잡음비. '
             f'단일 종단 0.5 m는 101에서 31 dB로, LVDS 0.5 m는 101에서 52 dB로 내려가고, 3 m에서 단일 종단은 모두 실패, LVDS는 101에서 45 dB">'
@@ -342,7 +344,7 @@ add('차동 전송이 필요한 이유', '06  차동 전송이 필요한 이유'
     """차동 전송을 고른 근거입니다. TI가 SPI를 LVDS로 보내는 레퍼런스 디자인에서, 케이블에 1볼트 피크 투 피크 잡음을 주파수를 바꿔 가며 넣고 SPI로 받은 ADC 값의 신호 대 잡음비를 잰 결과입니다. 회색은 보통 SPI, 파란색은 LVDS입니다. 0.5미터에서는 잡음이 없을 때 둘 다 101데시벨이지만, 잡음 주파수가 10메가헤르츠까지 올라가면 보통 SPI는 31데시벨, LVDS는 52데시벨로 차이가 커집니다. 더 중요한 것은 3미터입니다. 빨간 X처럼 보통 SPI는 잡음이 없어도 3미터에서는 통신 자체가 되지 않았고, LVDS는 잡음이 있어도 45데시벨 이상을 유지했습니다. 차체에서 메인보드와 조향, 승강 축 사이에 케이블이 지나가고 모터 잡음도 있으므로, SPI는 LVDS로, 바퀴 엔코더는 RS-422 수신기로 받는 차동 방식으로 정했습니다. (전환)""",
     [(TIDA, 'TI TIDA-060017 (TIDUED8, 2018-07) 3.2.1.1 Noise Immunity Test · Table 4 — 1 Vpp 잡음, ADS8910B를 SPI 슬레이브로 2 kHz 사인 입력의 SNR, CAT5 케이블, SN65LVDS31/33 EVM; 단일 종단 3 m는 모든 행 Fail「Single-ended SPI application cannot support 3m cable length」'),
      ('사용자 (2026-10-14)', 'spi.png(같은 표) 참고, 「노이즈가 없다고 가정해도 3M만 가도 신호 전송이 거의 안되는 것을 확인」')],
-    '그림: TI 표 4의 수치를 막대로 다시 그림')
+    '그림: TI 표 4의 수치를 막대로 다시 그림 (잡음 없음 · 100 kHz · 1 MHz · 10 MHz 네 줄만)')
 
 # ----------------------------------------------------------------- 8
 add('STDS 보드와 메인보드 LVDS', '07  STDS 보드와 메인보드 LVDS', 60, f"""
