@@ -349,3 +349,8 @@ Claude 서브에이전트 3개(화면 · 원고와 흐름 · 기술 내용과 �
 
 - 8쪽 "SLAM이 방향을 정확히 어떻게 바로잡나요?": forklift src/forklift_core/localization/slam_pose.py(map←odom × odom←base, IncrementalWheelOdometry, SlamPoseTracker max_age 0.25 s · hold/release), slam_link.py KeyframeGate(0.447 m · 0.5 rad · 0.5 s).
 - 7쪽 "1.0 m, 0.6 m에서 정확히 어떻게 보정하나요?": sim/isaac/near_tracking.py correction_update · CORRECTION_POINTS_M (1.0, 0.6) · CORRECTION_MAX_YAW_RAD 0.12 · REDRAW_MAX_LATERAL_M 0.05, run_transport.py near_redraw(정지 뒤 촬영 프레임, front 검출, 0.6 m 보호 예측), pallet_mission.redraw_docking(모의 주행 2회, 6 mm · 6 mm · 0.015 rad).
+
+## 2026-10-14 QNA 8쪽 SLAM 답 정정 (사용자: "slam 쪽 답변이 정확하지가 않은 거 같음", "너무 두루뭉술")
+
+- 고친 점: 0.25 s 는 보정 주기가 아니라 10 Hz 스캔마다 오는 SLAM 쪽 응답(processed · skipped)의 신선도(slam_pose.SlamPoseTracker max_age_s, isaac_slam_bridge 의 skipped 응답); 보류 구간은 근접 구간만이 아니라 approach 시작 ~ transport 시작, lower 시작 ~ settle(run_transport.py 3799–3816, slam_release 2 cm · 0.02 rad 재계획); 정합 방식 구체화(slam_toolbox_isaac_online.yaml: correlation_search_space_dimension 0.5 · resolution 0.01, coarse_search_angle_offset 0.349 · coarse_angle_resolution 0.0349, fine_search_angle_offset 0.00349, distance/angle_variance_penalty, scan_buffer_size 10 · 10 m, loop_search_maximum_distance 3.0, Ceres), 보정값 계산(isaac_slam_bridge.py 263행 compose(pose, invert(odom_from_base))), 오도메트리 입력(뒷바퀴 2개 · 조향 2개, wheel_odometry._curvature_inv_m, OdometryNoise 0.2 rad/s · 0.005 rad).
+- Karto 정밀 탐색의 방향 범위(거친 간격의 절반 = ±1°)는 slam_toolbox(Karto) 동작에 대한 이해이며 소스로 다시 확인하지 않았다.
