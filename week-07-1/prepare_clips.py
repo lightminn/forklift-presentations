@@ -28,8 +28,12 @@ mission -- ws1 artifacts/20261011_meeting_video/seed_5_d7 (the d7 arm of artifac
   off): the overhead panel at 12x -> assets/71_mission.mp4, and the hall still from transport.mp4.
 obstacle -- ws1 artifacts/20261005_p5_l3/l8_measured/seed_5_n1 (week 6 slide 7, snapshot p5_df109cf): the
   overhead and map panels, 73-118 s at 2x -> assets/46_new_obstacle_single.mp4.
-slam -- ws1 artifacts/20261004_slam_s3/seed_1 (week 6 slide 5, --draw-odometry): the map panel with its
-  two error readouts, at 12x -> assets/45_slam_error.mp4.
+slam -- since 2026-10-14 the measured-chassis mission run (the same record as mission: ws1
+  artifacts/20261012_return_forward/seed_5_fwd7) composed again in ws1 artifacts/20261014_meeting_slam
+  (meeting_slam.sbatch, job 2603: the deck composer + --draw-odometry --clean-map --draw-pallet --stride 24,
+  so no plan lines or grid cells as on the S3 clip it replaces, the pallet footprint at its recorded pose,
+  and only the frames the 12x clip keeps): the map panel with its two error readouts, at 12x ->
+  assets/45_slam_error.mp4. Before: artifacts/20261004_slam_s3/seed_1 (week 6 slide 5, provisional chassis).
 """
 import json
 import subprocess
@@ -146,10 +150,11 @@ def obstacle(composite):
 
 
 def slam(composite):
-    """The S3 SLAM mission's map panel with the SLAM and odometry error readouts, 12x."""
+    """The SLAM mission's map panel with the SLAM and odometry error readouts, 12x (the composite may be
+    strided: its frame rate already carries the stride, so the same filter keeps real-time x 12)."""
     out = HERE / 'assets/45_slam_error.mp4'
     run(encode(['-i', str(composite), '-vf', f'{MAP_READOUT},setpts=PTS/12'], out, crf=28))
-    poster(out, 29.5, HERE / 'assets/45_slam_error_poster.jpg')
+    poster(out, 20.0, HERE / 'assets/45_slam_error_poster.jpg')
 
 
 if __name__ == '__main__':

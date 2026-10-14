@@ -330,3 +330,9 @@ Claude 서브에이전트 3개(화면 · 원고와 흐름 · 기술 내용과 �
 ## 2026-10-14 QNA 3쪽에 "왜 Hybrid A*를 골랐나요?" 추가 (사용자 질문)
 
 - 근거: forklift docs/plans/2026-09-11-development-roadmap.md M4(차량형이면 회전 반경 · footprint · 후진을 고려하는 Hybrid-A* 또는 State Lattice 비교, 원형 근사 2D 경로 금지), docs/design/2026-09-17-hybrid-astar-transport.md 1–21행(사용자 요청으로 Hybrid A* 구현, Dolgov 2008 · Nav2 Smac Hybrid-A* 참고). State Lattice 비교 기록은 없음.
+
+## 2026-10-14 부록 위치 추정 영상을 실측 차체 실행으로 교체, 팔레트 위치 표시 (사용자: "영상만 새로 뽑아봐" → "이전 영상이랑 똑같이 + 팔레트 위치도 보이게" → "ok 반영해")
+
+- 영상: 3쪽과 같은 기록(ws1 artifacts/20261012_return_forward/seed_5_fwd7)을 시뮬레이션 없이 다시 합성(ws1 artifacts/20261014_meeting_slam, job 2603, 55 s). 합성기는 20261012_meeting_clean 의 덱 사본에 --clean-map(계획 경로 · 점유 셀 · 새 장애물 상자 없음, 이전 S3 영상과 같은 모양), --draw-pallet(result.json samples 의 팔레트 위치 · 방향, EPAL 6 0.8 × 0.6 m), --stride 24(12배속 영상이 쓰는 프레임만)를 더한 것. prepare_clips.py slam 으로 자름(20.7 s), 사용자에게 먼저 보이고 승인받음.
+- 수치(slam_records.json 재계산): 오도메트리 최대 1.210 m(158.8 s, 운반 끝 무렵), SLAM 최대 0.151 m, SLAM RMSE 0.067 m, 끝 시점 SLAM 0.015 m · 오도메트리 0.489 m, 운반 주행 25.5 m. 헤드라인 · 띠 · 원고 · 범례(팔레트 · 목적지 추가) · 근거 줄을 이 값으로 바꿨고, "방향 24° 어긋남" 설명은 이 실행에 맞지 않아 뺐다.
+- 확인: 19쪽 1920 × 1080 렌더(범례 두 줄, 잘림 없음), 새 asset 과 미리 보인 영상의 프레임 md5 동일, unittest · node 테스트 통과.

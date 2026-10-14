@@ -102,6 +102,7 @@ def rgb(t):
 # Clip colours, from the scripts that draw them (so the legend is the clip's own palette).
 PLAN, PLAN_OLD, GRID, NEW_BOX = rgb((255, 214, 0)), rgb((150, 150, 160)), rgb((255, 130, 30)), rgb((255, 40, 40))  # compose_online_slam_video
 TRUTH, ESTIMATE, ODOMETRY, GOAL = rgb((70, 150, 255)), rgb((235, 45, 45)), rgb((255, 160, 30)), rgb((0, 200, 60))   # compose_slam_video
+PALLET = rgb((196, 150, 90))   # the deck composer's --draw-pallet fill (ws1 artifacts/20261014_meeting_slam)
 RC_YELLOW, RC_ORANGE, RC_BLUE, RC_RED = rgb((255, 196, 40)), rgb((240, 125, 30)), rgb((60, 145, 240)), rgb((225, 45, 35))  # prepare_reverse_clip
 DEPTH_RAMP = 'linear-gradient(90deg,' + ','.join(turbo(1 - k / 10) for k in range(11)) + ')'   # 0.25 m -> 3.0 m
 
@@ -395,16 +396,16 @@ SLAM_COMPARE = [  # item, 2D LiDAR SLAM, camera (visual) SLAM -- datasheets, BKM
 ]
 slam_rows = ''.join(f'<tr><td>{a}</td><td class="blue"><b>{b}</b></td><td>{c}</td></tr>' for a, b, c in SLAM_COMPARE)
 add('위치 추정', 'LiDAR SLAM 위치 추정', 65, f"""
-<h2 class="headline">임무 종료 시점 위치 오차는 오도메트리 3.4 m, LiDAR SLAM 약 4 cm</h2>
-{stage(mpanel(video('45_slam_error.mp4', 'SLAM 운반 실행에서 slam_toolbox가 생성한 지도와 추정 경로. 아래 수치는 SLAM 위치 오차와 오도메트리 위치 오차'),
-              legend(('line', TRUTH, '실제 경로'), ('line', ESTIMATE, 'SLAM 추정'), ('line', ODOMETRY, '오도메트리'))),
+<h2 class="headline">운반 중 위치 오차는 오도메트리 최대 1.2 m, LiDAR SLAM 최대 15 cm</h2>
+{stage(mpanel(video('45_slam_error.mp4', '실측 차체 운반 임무에서 slam_toolbox가 생성한 지도와 추정 경로, 팔레트 위치. 팔레트가 지게차와 함께 움직이기 시작하는 때가 적재 시점. 아래 수치는 SLAM 위치 오차와 오도메트리 위치 오차'),
+              legend(('line', TRUTH, '실제 경로'), ('line', ESTIMATE, 'SLAM 추정'), ('line', ODOMETRY, '오도메트리'), ('cell', PALLET, '팔레트'), ('ring', GOAL, '목적지'))),
         ipanel('LiDAR SLAM 선정 근거', f'<table class="comparison t6 m7-slam"><tr><th>항목</th><th>2D LiDAR (선정)</th><th>카메라 (비전)</th></tr>{slam_rows}</table>'), 380)}
-<div class="takeaway">오도메트리 오차는 적재 상태로 선회할 때 덜 돌아 방향이 24° 어긋난 탓입니다 (마찰 가정값에 좌우)</div>
+<div class="takeaway">오도메트리만으로는 25 m 운반 동안 1.2 m 벗어나, SLAM으로 계속 보정합니다</div>
 """,
-    """(부록, 질문 시) LiDAR 1대로 위치를 추정한 결과와 LiDAR를 선정한 근거입니다. 바퀴와 조향 엔코더로 계산한 오도메트리를 SLAM으로 보정하는 구조입니다. 왼쪽 영상은 이전 차체 모델로 수행한 운반 실행입니다. 빨간 SLAM 추정 경로는 파란 실제 경로를 따라가지만, 주황색 오도메트리 경로는 점차 벗어납니다. 임무 종료 시점의 오도메트리 위치 오차는 3.4미터, SLAM은 약 4센티미터였고, 임무 전체 RMSE는 약 9센티미터였습니다. 3.4미터의 대부분은 적재 상태에서 선회할 때 실제 회전량이 계산보다 작아 방향이 24도 어긋난 데서 비롯됩니다. 오른쪽 표와 같이 카메라는 전방만 관측하고 거리가 멀수록 오차가 커지지만, LiDAR는 12미터까지 360도를 측정하고 그 지도를 경로 계획에 직접 사용할 수 있습니다. 과제 문서도 2D LiDAR를 SLAM용으로 지정했으므로, 위치 추정은 LiDAR가 담당하고 카메라는 팔레트 인식에 집중하도록 역할을 나눴습니다. (전환)""",
-    [(SLAM, 'S3 장면 1 — 358 s 에서 SLAM 4.0 cm 대 바퀴 회전만 340 cm, 위치 RMSE 0.088 m'),
-     ('ws1 artifacts/20261004_slam_s3/seed_1/run/slam_log.npz', '2026-10-06 재계산: 거리 92.9 대 93.6 m, 끝 방향 오차 −24.3°, 회전 시 실제/계산 비 빈 차 0.998 · 운반 0.925'),
-     ('week-06/SOURCES.md', '영상은 이전 S3 실행(사진 추정 차체 dls08_provisional · forklift 5de6c3a, 마찰 가정값, 장애물은 시뮬레이터 정답) — 6주차 5쪽과 같음; 4 cm 는 끝 시점, 임무 전체 RMSE 8.8 cm · 최대 19 cm'),
+    """(부록, 질문 시) LiDAR 1대로 위치를 추정한 결과와 LiDAR를 선정한 근거입니다. 바퀴와 조향 엔코더로 계산한 오도메트리를 SLAM으로 보정하는 구조입니다. 왼쪽 영상은 앞에서 보여 드린 실측 차체 운반 임무와 같은 실행입니다. 갈색 사각형이 팔레트로, 지게차와 함께 움직이기 시작하는 때가 적재 시점입니다. 빨간 SLAM 추정 경로는 파란 실제 경로를 따라가지만, 주황색 오도메트리 경로는 점차 벗어납니다. 오도메트리만으로는 약 25미터를 운반하는 동안 위치가 최대 1.2미터 벗어났고, SLAM의 오차는 최대 15센티미터, 임무 전체 RMSE는 약 7센티미터였습니다. 임무 종료 시점에는 SLAM 1.5센티미터, 오도메트리 49센티미터였습니다. 오른쪽 표와 같이 카메라는 전방만 관측하고 거리가 멀수록 오차가 커지지만, LiDAR는 12미터까지 360도를 측정하고 그 지도를 경로 계획에 직접 사용할 수 있습니다. 과제 문서도 2D LiDAR를 SLAM용으로 지정했으므로, 위치 추정은 LiDAR가 담당하고 카메라는 팔레트 인식에 집중하도록 역할을 나눴습니다. (전환)""",
+    [('ws1 artifacts/20261012_return_forward/seed_5_fwd7/run/slam_records.json', '2026-10-14 계산 (applied map←odom ∘ odom←base 대 truth_base, 응답한 스캔 2,443개): 오도메트리 최대 1.210 m (158.8 s, 운반 끝 무렵, 방향 오차 −2.3°), SLAM 최대 0.151 m (163.9 s), SLAM RMSE 0.067 m, 끝 시점 SLAM 0.015 m · 오도메트리 0.489 m; 운반 구간(53.0–160.6 s) 주행 25.5 m, 임무 전체 67.5 m'),
+     ('ws1 artifacts/20261014_meeting_slam (job 2603)', '같은 실행을 시뮬레이션 없이 다시 합성: 3쪽 영상과 같은 기록, --draw-odometry --clean-map(계획 경로 · 점유 셀 없이, 이전 S3 영상과 같은 모양) --draw-pallet(result.json samples 0.1 s 의 팔레트 위치 · 방향, EPAL 6 0.8 × 0.6 m) --stride 24'),
+     (SLAM, '이전 영상: S3 장면 1 (사진 추정 차체) — 358 s 에서 SLAM 4.0 cm 대 바퀴 회전만 340 cm'),
      ('https://cdn.robotshop.com/media/r/rpk/rb-rpk-22/pdf/rplidar-a2m12-360-laser-range-scanner-datasheet.pdf', 'RPLIDAR A2M12 데이터시트 rev.1.0 — 0.2–12 m(흰 물체), 360°, 10 Hz · 0.225° (정확도 1/2/2.5 % 는 A2 시리즈 웹 사양표 값)'),
      ('https://www.realsenseai.com/wp-content/uploads/2026/03/RealSense-D400-Series-Datasheet-Mar-2026.pdf', 'D400 데이터시트 Rev 023 — 깊이 FOV 87° × 58°, 0.2 m – "3 m 이상, 조명에 따라", RMS ≤ 2 % (≤ 2 m), 반복 패턴은 거짓 깊이 가능'),
      ('https://dev.realsenseai.com/docs/tuning-depth-cameras-for-best-performance', 'Intel BKM Rev 1.9 — 깊이 오차는 거리의 제곱으로 증가 (848 × 480, 서브픽셀 0.08 가정 시 2 m 약 14 mm · 4 m 약 57 mm, 계산값)'),
@@ -412,7 +413,7 @@ add('위치 추정', 'LiDAR SLAM 위치 추정', 65, f"""
      ('https://joss.theoj.org/papers/10.21105/joss.02783', 'SLAM Toolbox (JOSS 2021) — CPU 전용, 2D 점유 격자를 Nav2 에 그대로 사용'),
      ('https://arxiv.org/abs/2506.04359', 'cuVSLAM 기술보고서 부록 B — Orin Nano Super 에서 RGB-D 모드는 424 × 240 에서만 안정 (GPU 가속 비전 SLAM)'),
      (FB6, '§4 LiDAR SLAM 과 비전 SLAM 비교 장표 (LiDAR 를 쓰는 근거) · 팀 메모: SLAM 은 깊게 들어가지 않음')],
-    '화면: 6주차 5쪽 실행을 글자 없이 다시 합성 (ws1 artifacts/20261012_meeting_clean/s3_odom.mp4, prepare_clips.py slam; 오차 수치 표기만 남김) · 비교표는 데이터시트 · 논문 조사 (2026-10-11)')
+    '화면: 3쪽 실측 차체 임무 기록을 글자 없이 다시 합성, 팔레트 위치 표시 (ws1 artifacts/20261014_meeting_slam/slam_fwd7_pallet.mp4, prepare_clips.py slam; 오차 수치 표기만 남김) · 비교표는 데이터시트 · 논문 조사 (2026-10-11)')
 
 # ----------------------------------------------------------------- 8
 PLANNER_ROWS = [  # item, implementation
