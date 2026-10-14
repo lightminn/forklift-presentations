@@ -111,7 +111,7 @@ LENGTHS = [0, 1, 2, 3, 5]
 # ----------------------------------------------------------------- figures
 def system_diagram():
     """Power and control layout, redrawn from the team's diagram.png in the deck's style."""
-    boxes = [(10, 178, 180, 116, '12 V 납축 배터리', '차량 주 전원'),
+    boxes = [(10, 178, 180, 116, '12 V 배터리', '차량 주 전원'),
              (262, 46, 256, 84, '12 V → 5 V 벅 컨버터', 'MCU와 센서 보드 전원'),
              (902, 46, 262, 84, '5 V → 3.3 V LDO', '센서 보드마다 (TLV70233)'),
              (262, 182, 256, 84, 'Nucleo STM32H533RE', 'Cortex-M33, 3.3 V 입출력'),
@@ -145,7 +145,7 @@ def system_diagram():
         parts.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="6" fill="#fff" stroke="{BLUE if "STM32" in t else "#8c97a3"}" stroke-width="{3 if "STM32" in t else 2}"/>'
                      f'<text x="{x + w / 2}" y="{y + h / 2 - 4}" text-anchor="middle" font-size="21" font-weight="700" fill="#1b1f24">{t}</text>'
                      f'<text x="{x + w / 2}" y="{y + h / 2 + 22}" text-anchor="middle" font-size="16" fill="#5d6670">{s}</text>')
-    return ('<svg class="diagram" viewBox="0 0 1180 462" role="img" aria-label="전원 계통과 제어 구성. 12 V 납축 배터리가 벅 컨버터와 DRV8244 네 개에 12 V를 주고, '
+    return ('<svg class="diagram" viewBox="0 0 1180 462" role="img" aria-label="전원 계통과 제어 구성. 12 V 배터리가 벅 컨버터와 DRV8244 네 개에 12 V를 주고, '
             '벅 컨버터의 5 V가 MCU와 센서 보드의 LDO로, LDO의 3.3 V가 엔코더 네 개로 간다. 엔코더는 ABZ와 SPI로 MCU에, MCU는 PWM, 방향, SPI, DRVOFF로 드라이버에, 드라이버는 모터 네 개에 연결된다">'
             f'<g font-family="var(--uos-font)">{"".join(parts)}</g></svg>')
 
@@ -233,8 +233,8 @@ add('전원과 제어 구성', '01  전원과 제어 구성', 55, f"""
 </div>
 <div class="takeaway">모터 구동 전원과 제어 · 센서 전원을 나누고, 센서 전원은 LDO를 한 번 더 거쳐 잡음이 적은 3.3 V로 받습니다</div>
 """,
-    """전체 전원과 제어 구성입니다. 차량의 주 전원은 12볼트 납축 배터리입니다. 아래쪽 모터 구동 전원은 12볼트를 그대로 DRV8244 네 개에 넣고, 드라이버가 바퀴 두 개와 조향, 승강 모터를 구동합니다. 위쪽 제어와 센서 전원은 먼저 벅 컨버터로 12볼트를 5볼트로 낮춰 MCU 보드인 Nucleo STM32H533RE에 주고, 같은 5볼트를 케이블로 센서 보드까지 보내 각 보드의 LDO에서 3.3볼트로 한 번 더 낮춥니다. 엔코더 네 개는 모두 자석의 회전을 재는 자기식이고, 바퀴는 ABZ 펄스, 조향과 승강은 SPI로 MCU에 각도를 알려 줍니다. MCU는 PWM과 방향 신호, SPI 설정, 출력 차단 신호로 드라이버를 제어합니다. (전환)""",
-    [(f'{TEAM} diagram.png', '기계차 전력 계통 및 제어 블록 다이어그램 — 12 V 납축 배터리, 12 V → 5 V 벅, 5 V → 3.3 V LDO, Nucleo STM32H533RE, 엔코더 MT6701 · KTH7801, DRV8244/DRV8245, 구동 · 조향 모터'),
+    """전체 전원과 제어 구성입니다. 차량의 주 전원은 12볼트 배터리입니다. 아래쪽 모터 구동 전원은 12볼트를 그대로 DRV8244 네 개에 넣고, 드라이버가 바퀴 두 개와 조향, 승강 모터를 구동합니다. 위쪽 제어와 센서 전원은 먼저 벅 컨버터로 12볼트를 5볼트로 낮춰 MCU 보드인 Nucleo STM32H533RE에 주고, 같은 5볼트를 케이블로 센서 보드까지 보내 각 보드의 LDO에서 3.3볼트로 한 번 더 낮춥니다. 엔코더 네 개는 모두 자석의 회전을 재는 자기식이고, 바퀴는 ABZ 펄스, 조향과 승강은 SPI로 MCU에 각도를 알려 줍니다. MCU는 PWM과 방향 신호, SPI 설정, 출력 차단 신호로 드라이버를 제어합니다. (전환)""",
+    [(f'{TEAM} diagram.png', '기계차 전력 계통 및 제어 블록 다이어그램 — 12 V 배터리, 12 V → 5 V 벅, 5 V → 3.3 V LDO, Nucleo STM32H533RE, 엔코더 MT6701 · KTH7801, DRV8244/DRV8245, 구동 · 조향 모터'),
      ('다시 그리며 고친 곳', '「TKH7801」→ KTH7801; KTH7801은 광학식이 아니라 홀 소자 자기식 (KTH7801 데이터시트 「Hall magnetic encoders」); 피드백에서 PWM 제외 (두 보드 모두 PWM 핀 미사용); 드라이버는 회로도대로 DRV8244 × 4; 모터에 승강 추가 (채널 H)'),
      (MAIN, 'DRV8244SQRYJRQ1 × 4 (L · R · M · H), 커넥터 5V 공급'),
      (DS_KTH, '「16-bit Programmable non-contact Hall magnetic encoders」')],

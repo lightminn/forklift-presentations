@@ -14,10 +14,10 @@ diagram · mainboard_1 · mt6701_1–3 · kth7801_1–3 · stds_1–3: 팀 EasyE
 
 ## 2쪽 · 전원과 제어 구성 (00:25–01:20, 55초)
 
-전체 전원과 제어 구성입니다. 차량의 주 전원은 12볼트 납축 배터리입니다. 아래쪽 모터 구동 전원은 12볼트를 그대로 DRV8244 네 개에 넣고, 드라이버가 바퀴 두 개와 조향, 승강 모터를 구동합니다. 위쪽 제어와 센서 전원은 먼저 벅 컨버터로 12볼트를 5볼트로 낮춰 MCU 보드인 Nucleo STM32H533RE에 주고, 같은 5볼트를 케이블로 센서 보드까지 보내 각 보드의 LDO에서 3.3볼트로 한 번 더 낮춥니다. 엔코더 네 개는 모두 자석의 회전을 재는 자기식이고, 바퀴는 ABZ 펄스, 조향과 승강은 SPI로 MCU에 각도를 알려 줍니다. MCU는 PWM과 방향 신호, SPI 설정, 출력 차단 신호로 드라이버를 제어합니다. (전환)
+전체 전원과 제어 구성입니다. 차량의 주 전원은 12볼트 배터리입니다. 아래쪽 모터 구동 전원은 12볼트를 그대로 DRV8244 네 개에 넣고, 드라이버가 바퀴 두 개와 조향, 승강 모터를 구동합니다. 위쪽 제어와 센서 전원은 먼저 벅 컨버터로 12볼트를 5볼트로 낮춰 MCU 보드인 Nucleo STM32H533RE에 주고, 같은 5볼트를 케이블로 센서 보드까지 보내 각 보드의 LDO에서 3.3볼트로 한 번 더 낮춥니다. 엔코더 네 개는 모두 자석의 회전을 재는 자기식이고, 바퀴는 ABZ 펄스, 조향과 승강은 SPI로 MCU에 각도를 알려 줍니다. MCU는 PWM과 방향 신호, SPI 설정, 출력 차단 신호로 드라이버를 제어합니다. (전환)
 
 [Sources]
-기계차 전력 계통 및 제어 블록 다이어그램 — 12 V 납축 배터리, 12 V → 5 V 벅, 5 V → 3.3 V LDO, Nucleo STM32H533RE, 엔코더 MT6701 · KTH7801, DRV8244/DRV8245, 구동 · 조향 모터: 팀 EasyEDA 자료 (2026-10-14) diagram.png
+기계차 전력 계통 및 제어 블록 다이어그램 — 12 V 배터리, 12 V → 5 V 벅, 5 V → 3.3 V LDO, Nucleo STM32H533RE, 엔코더 MT6701 · KTH7801, DRV8244/DRV8245, 구동 · 조향 모터: 팀 EasyEDA 자료 (2026-10-14) diagram.png
 「TKH7801」→ KTH7801; KTH7801은 광학식이 아니라 홀 소자 자기식 (KTH7801 데이터시트 「Hall magnetic encoders」); 피드백에서 PWM 제외 (두 보드 모두 PWM 핀 미사용); 드라이버는 회로도대로 DRV8244 × 4; 모터에 승강 추가 (채널 H): 다시 그리며 고친 곳
 DRV8244SQRYJRQ1 × 4 (L · R · M · H), 커넥터 5V 공급: 팀 EasyEDA 자료 (2026-10-14) mainboard_1.png
 「16-bit Programmable non-contact Hall magnetic encoders」: https://shop.mev-elektronik.com/wp-content/uploads/KTH7801_datasheet_EN.pdf
