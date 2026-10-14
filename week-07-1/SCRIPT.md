@@ -180,6 +180,7 @@ A2 계열 중 A2M12 를 고른 이유: 이미 보유: 사용자 답변 (2026-10-
 Gemini 335Le 대신 D435i 를 산 이유: 전에 써 본 적이 있어 개발에 익숙함, ROS 2 자료 · 예제가 많음: 사용자 답변 (2026-10-12)
 Gemini 335Le — Active & Passive Stereo, 기가비트 이더넷 M12 · PoE(802.3af) 또는 DC 9–24 V, IP67, 124 × 29 × 50 mm · 220 g, 이상 깊이 0.25–6 m, 깊이 FOV 90° × 65° (D435i 도 스테레오 깊이, USB 3): https://www.orbbec.com/gemini-335le/
 DRV8244-Q1 × 3 (L·M·R 채널, SPI 공유, DRVOFF 비상 차단) · MT6701 증분판(바퀴)·절대판(조향) · MCU 핀 배정 초안(Nucleo-64 morpho 2 × 38핀): week-05/build_deck.py
+2쪽 구성 갱신: DRV8244 × 4, 엔코더 MT6701(바퀴) · KTH7801(조향 · 승강), Nucleo STM32H533RE: week-07/SCRIPT.md (7주차 개발 진행 보고, 2026-10-14)
 §5 무선 통신 미고려 — 지게차–PC · 지게차–지게차: docs/references/week6_feedback.md
 LiDAR 장착 높이 1.05 m (시뮬레이션 값, 실물 브래킷 미제작): config/isaac_slam_lidar.yaml
 M.2 Key-E 2230 — "Populated with the included wireless module" (802.11ac 모듈, 포럼 기준 RTL8822CE · AzureWave AW-CB375NF): https://docs.nvidia.com/jetson/orin-nano-devkit/user-guide/latest/hardware_layout.html
@@ -214,7 +215,7 @@ DSLogic Pro 1 MHz 2채널, 주행 19 · 승강 28 · 조향 31개 레벨 변화;
 
 ## 15쪽 · 구동 보드 설계 (13:40–14:55, 75초)
 
-이 명령을 실행할 구동 보드의 회로 초안입니다. 모터 드라이버는 TI DRV8244 3개를 주행, 조향, 승강에 하나씩 배정할 계획입니다. 비교한 드라이버 중 온 저항이 47밀리옴으로 가장 작아 발열이 적고, SPI로 설정과 결함 진단이 가능합니다. 모터는 기존 12볼트 45와트 모터로 권선 저항이 약 1.2옴이므로, 정격 전류는 약 3.8암페어, 구속 시 최대 약 10암페어입니다. DRV8244의 과전류 보호 임계값은 21암페어 이상이므로 구속 상황에서도 여유가 있습니다. 모터 전류는 IPROPI 핀 저항에 걸리는 전압으로 측정하는데, 현재 초안의 3.6킬로옴으로는 약 4.4암페어까지만 측정되므로, 약 1.5킬로옴으로 변경해 10암페어까지 측정할 계획입니다. DRVOFF 핀은 출력을 즉시 차단하는 비상 차단용으로, 무선 비상정지와 연동할 예정입니다. 엔코더는 자기식 MT6701 한 종류로 통일했습니다. 조향축에는 절대각 출력을 사용해 전원 투입 즉시 각도를 확인하고, 바퀴에는 증분 출력을 사용해 MCU 타이머로 계수합니다. 정격 전류가 데이터시트의 연속 전류 기준인 4암페어에 근접하므로, 기판 방열을 검토한 뒤 PCB를 제작하겠습니다. (전환)
+이 명령을 실행할 구동 보드의 회로 초안입니다. 모터 드라이버는 TI DRV8244 4개를 왼쪽 바퀴, 오른쪽 바퀴, 조향, 승강에 하나씩 배정했습니다. 비교한 드라이버 중 온 저항이 47밀리옴으로 가장 작아 발열이 적고, SPI로 설정과 결함 진단이 가능합니다. 모터는 기존 12볼트 45와트 모터로 권선 저항이 약 1.2옴이므로, 정격 전류는 약 3.8암페어, 구속 시 최대 약 10암페어입니다. DRV8244의 과전류 보호 임계값은 21암페어 이상이므로 구속 상황에서도 여유가 있습니다. 모터 전류는 IPROPI 핀 저항에 걸리는 전압으로 측정하는데, 현재 초안의 3.6킬로옴으로는 약 4.4암페어까지만 측정되므로, 약 1.5킬로옴으로 변경해 10암페어까지 측정할 계획입니다. DRVOFF 핀은 출력을 즉시 차단하는 비상 차단용으로, 무선 비상정지와 연동할 예정입니다. 엔코더는 모두 자기식입니다. 바퀴에는 MT6701의 증분 출력을 MCU 타이머로 계수하고, 조향과 승강에는 KTH7801 절대 엔코더를 사용해 전원 투입 즉시 각도를 확인합니다. 정격 전류가 데이터시트의 연속 전류 기준인 4암페어에 근접하므로, 기판 방열을 검토한 뒤 PCB를 제작하겠습니다. (전환)
 
 [Sources]
 화면 생성: 5주차 팀 회로 초안(40_sch_drv8244.png)의 L 채널을 잘라 2배 확대 (prepare_figures.py hardware)
@@ -225,6 +226,7 @@ DRV8244-Q1 데이터시트 SLVSG24C — 4.5–35 V, RON 47 mΩ(VQFN-HR), AIPROPI
 MT6701 Rev.1.5 — 14 bit 절대각(SSI · I2C), ABZ 증분 ≤ 1024 PPR, 자석 간격 0.5–2.0 mm · 축 어긋남 ≤ 0.3 mm: https://uploadcdn.oneyac.com/attachments/files/brand_pdf/magntek/F3/CA/MT6701QT-STD.pdf
 5–8쪽: DRV8244 · DRV8873 · DRV8876 비교, MT6701 · AS5600 · AS5047P 비교, 회로 초안(DRV8244 × 3 L · M · R, SPI MISO · MOSI · CLK 공유, 채널별 CS · IN1 · IN2 · DRVOFF · nSLEEP · nFAULT · IPROPI), 엔코더판 2종, MCU 핀 배정(Nucleo-64 morpho 2 × 38핀) — 조건: 모터 전류 실측 후 확정: week-05/build_deck.py · SCRIPT.md
 10/16–22 모터 전류 실측 · PCB 설계, 10/30–11/12 구동 보드 제작: week-07-1 17쪽 일정
+2 · 4 · 5쪽: DRV8244 × 4 (L · R 바퀴, M 조향, H 승강), 바퀴 MT6701 증분(ABZ 1,024펄스), 조향 · 승강 KTH7801 절대(SPI), MCU Nucleo STM32H533RE; 최신 메인보드 L 채널 IPROPI 저항 R5 는 여전히 3.6 kΩ (week-07/assets/83_main_drv.png): week-07/SCRIPT.md (7주차 개발 진행 보고, 2026-10-14)
 [/Sources]
 
 ## 16쪽 · 결론 (14:55–15:25, 30초)
