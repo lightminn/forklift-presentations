@@ -321,7 +321,7 @@ MT6701 Rev.1.5 — 14 bit 절대각(SSI · I2C), ABZ 증분 ≤ 1024 PPR, 자석
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="14  하드웨어 · 구동 보드 설계"><div class="slide-body">
 <h2 class="headline">DRV8244 4개와 MT6701 · KTH7801 엔코더, STM32로 구동 보드 설계</h2>
 <div class="m7-stage grow" style="grid-template-columns:470px 1fr"><figure class="m7-media white"><img class="media" src="assets/45_sch_drv_channel.png" alt="DRV8244 모터 드라이버 한 채널의 회로 초안. SPI 선 · 방향 입력 · DRVOFF · 전류 측정 저항"><figcaption class="legend">드라이버 L 채널 회로 (같은 회로 4채널이 SPI 버스를 공유)</figcaption></figure><div class="m7-info "><p class="ph">부품 선정 근거</p><div class="tb"><table class="comparison t6 m7-board"><tr><th>기능</th><th>선정</th><th>근거</th></tr><tr><td>모터 (기존)</td><td><b>12 V · 45 W · 1.2 Ω</b></td><td>정격 3.8 A · 구속 10 A</td></tr><tr><td>모터 드라이버</td><td><b>DRV8244-Q1 × 4</b></td><td>47 mΩ · 과전류 21 A 이상</td></tr><tr><td>전류 측정</td><td><b>IPROPI 3.6 → 1.5 kΩ (예정)</b></td><td>측정 범위 4.4 → 10 A</td></tr><tr><td>비상 차단</td><td><b>DRVOFF 핀</b></td><td>무선 비상정지 연동 예정</td></tr><tr><td>조향 · 승강 각도</td><td><b>KTH7801 절대각 (SPI)</b></td><td>전원 투입 즉시 각도 확인</td></tr><tr><td>바퀴 회전</td><td><b>MT6701 증분 (ABZ)</b></td><td>MCU 타이머 계수</td></tr><tr><td>제어기</td><td><b>Nucleo STM32H533RE</b></td><td>핀 배정 초안 완료</td></tr></table></div></div></div>
-<div class="takeaway">정격 3.8 A가 연속 허용 4 A에 가까워 방열을 검토한 뒤 PCB를 제작합니다 (10/30–11/12)</div>
+<div class="takeaway">정격 3.8 A가 연속 허용 4 A에 가까워 방열을 검토한 뒤 PCB를 제작합니다</div>
 </div></x-import>
 </section>
 
