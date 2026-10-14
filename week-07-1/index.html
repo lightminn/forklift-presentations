@@ -110,7 +110,6 @@ slam_toolbox online_sync, mapping, 해상도 0.05 m, Ceres, 루프 닫기; Isaac
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="04  소프트웨어 · 시뮬레이션 환경"><div class="slide-body">
 <h2 class="headline">Isaac Sim 공장 홀에 실측 차체와 과제 센서 구성 적용</h2>
 <div class="m7-stage grow" style="grid-template-columns:360px 1fr"><figure class="m7-media light"><img class="media" src="assets/70_hall.jpg" alt="Isaac Sim 공장 홀을 위에서 본 장면. 지게차와 팔레트, 적재물이 보인다"></figure><div class="m7-info "><p class="ph">설정과 근거</p><div class="tb"><table class="comparison params6 m7-params"><tr><th>항목</th><th>값</th><th>근거</th></tr><tr><td>차체</td><td>실측 축거 · 바퀴 · 조향각</td><td><span class="kind" style="background:#6a4fb3">실측</span> 5주차 실측 (외형 · 질량은 카탈로그)</td></tr><tr><td>물리</td><td>Isaac Sim 5.1 · 120 Hz</td><td><span class="kind" style="background:#2e9a6b">구현</span> 바퀴 토크 구동 · 팔레트 물리 적재</td></tr><tr><td>LiDAR</td><td>A2M12 1,600점 · 10 Hz</td><td><span class="kind" style="background:#2f74c0">규격·사양</span> 카탈로그 사양</td></tr><tr><td>깊이 카메라</td><td>640 × 480 · 화각 69°</td><td><span class="kind" style="background:#c26a1a">가정</span> D435i 컬러 화각 기준</td></tr><tr><td>SLAM 연동</td><td>ROS 2 slam_toolbox</td><td><span class="kind" style="background:#2e9a6b">구현</span> 스캔 송신 → SLAM 응답 후 진행</td></tr><tr><td>바닥 장애물</td><td>LiDAR 높이 (1.05 m) 이상</td><td><span class="kind" style="background:#c26a1a">가정</span> 운용 가정 · 저상 소품 제외</td></tr><tr><td>마찰 · 토크</td><td>마찰 계수 0.8 / 0.7 · 3 N·m</td><td><span class="kind" style="background:#c26a1a">가정</span> 일반 범위 값 · 실측 후 교체</td></tr></table></div></div></div>
-<div class="takeaway">바퀴 마찰, 구동 토크, 센서 잡음은 실측값으로 교체할 예정입니다</div>
 </div></x-import>
 </section>
 
@@ -134,7 +133,6 @@ EPAL 6 Gazebo 장면 100개 = positive 60 · occluded 20 · negative 20, 자세 
 <figcaption class="legend"><span class="lg"><span class="sw cell" style="background:#3c9660"></span>작업 범위</span><span class="lg"><span class="sw cell" style="background:#f1c232"></span>앞면 후보</span><span class="lg"><span class="sw cell" style="background:#966c40"></span>측정점 존재 구간</span><span class="lg"><span class="sw box" style="border-color:#ff40ff"></span>개구부 · 검출 포켓</span></figcaption></figure>
 <div class="m7-info "><p class="ph">선정 근거</p><div class="tb"><table class="comparison t6 m7-why"><tr><th>이유</th><th>설명</th></tr><tr><td>학습 데이터 불필요</td><td>팔레트 규격 치수만 입력, 치수를 바꾸면 EPAL 6과 T11 모두 인식</td></tr><tr><td>시뮬레이션 시험</td><td>2–4 m 앞 EPAL 6 팔레트 60개를 모두 찾고, 위치 오차는 95 %가 1 cm 미만</td></tr></table></div></div>
 </div>
-<div class="takeaway">가까워지면 포켓 입구가 시야를 벗어나므로 삽입 중 추적이 이어받습니다</div>
 </div></x-import>
 </section>
 
@@ -218,7 +216,6 @@ A 출발 (−0.5, 1.17, 0.006) → 인식 (−0.2, 1.17) 카메라–앞면 2.35
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="09  소프트웨어 · 과제 접근 시나리오 A · B"><div class="slide-body">
 <h2 class="headline">A는 직진으로, B는 S자 곡선으로 진입 (제안서와 같은 배치)</h2>
 <div class="m7-cases2 grow"><div class="row"><p class="cap"><b>A 정면 정렬</b>1.15 m 전진 → 삽입</p><div class="body"><video class="media" src="assets/56_case_a.mp4" poster="assets/56_case_a_poster.jpg" autoplay loop muted playsinline aria-label="A 정면 정렬 상황의 시뮬레이션. 1.15 m 전진 → 삽입"></video></div></div><div class="row"><p class="cap"><b>B 측방 오프셋</b>S자 곡선 2.3 m → 재관측 → 삽입</p><div class="body"><video class="media" src="assets/56_case_b.mp4" poster="assets/56_case_b_poster.jpg" autoplay loop muted playsinline aria-label="B 측방 오프셋 상황의 시뮬레이션. S자 곡선 2.3 m → 재관측 → 삽입"></video></div></div><p class="legend"><span class="lg"><span class="sw line" style="background:#3c91f0"></span>전진 경로</span><span class="lg"><span class="sw line" style="background:#f07d1e"></span>후진 경로</span></p></div>
-<div class="takeaway">B는 측방 오프셋 약 0.4 m까지 전 · 후진 전환 없이 진입합니다 (인식 3.6 m, 직진 0.8 m)</div>
 </div></x-import>
 </section>
 
@@ -264,7 +261,6 @@ rmw_zenoh (멀티캐스트 탐색 없이 라우터 사용) — Wi-Fi 구성 후�
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="11  하드웨어 · 실차 시스템 구성"><div class="slide-body">
 <h2 class="headline">소프트웨어는 Jetson에서, 모터 제어는 STM32 구동 보드에서 실행</h2>
 <div class="grow m7-fill"><img class="m7-figimg" src="assets/40_system.png" alt="시스템 구성. 카메라와 LiDAR가 USB로 Jetson에, Jetson이 명령 · 상태로 STM32 보드에, STM32가 구동 · 엔코더 보드와 모터에 이어진다. 아래 무선 칸에 감시 PC(Wi-Fi)와 출력을 끊는 무선 비상정지"></div>
-<div class="takeaway">원격 정지 요구 수준과 다중 차량 운용은 마지막에 여쭙겠습니다</div>
 </div></x-import>
 </section>
 
@@ -282,7 +278,6 @@ rmw_zenoh (멀티캐스트 탐색 없이 라우터 사용) — Wi-Fi 구성 후�
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="12  하드웨어 · 실물 차체 실측"><div class="slide-body">
 <h2 class="headline">최대 조향각이 15°라 최소 회전 반경은 약 2.5 m, 포크 길이는 36 cm</h2>
 <div class="m7-stage grow" style="grid-template-columns:346px 1fr"><figure class="m7-media light"><img class="media" src="assets/30_chassis_pallet.jpg" alt="입고한 지게차 차체와 앞에 놓인 동봉 플라스틱 팔레트"></figure><div class="m7-info "><p class="ph">실측 결과</p><div class="tb"><table class="comparison t6 m7-chassis"><tr><th>항목</th><th>실측</th><th>비교 · 영향</th></tr><tr><td>최대 조향각</td><td><b>15°</b></td><td>최소 회전 반경 약 2.5 m (계산)</td></tr><tr><td>축거 · 윤거 · 바퀴 반경</td><td><b>0.66 · 0.53 · 0.125 m</b></td><td>회전 반경 · 주행 거리 계산</td></tr><tr><td>포크 길이 · 폭 · 두께</td><td><b>36 · 5.5 · 2.5 cm</b></td><td>EPAL 6 삽입 목표 33 cm (계산)</td></tr><tr><td>포크 간격</td><td><b>5.5–38 cm 조절</b></td><td>팔레트 받침목 간격에 맞춤</td></tr><tr><td>외형 · 질량</td><td><b>1.46 × 0.63 × 1.01 m · 24 kg</b></td><td>카탈로그 값과 일치</td></tr><tr><td>최대 적재 하중</td><td><b>10 kg (카탈로그)</b></td><td>시뮬레이션 팔레트 질량과 같음</td></tr></table></div></div></div>
-<div class="takeaway">실측값은 시뮬레이션 차체 모델에 반영했고, 회전 반경은 주행 시험으로 검증합니다</div>
 </div></x-import>
 </section>
 
@@ -299,7 +294,6 @@ DSLogic Pro 1 MHz 2채널, 주행 19 · 승강 28 · 조향 31개 레벨 변화;
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="13  하드웨어 · 기존 제어기 분석"><div class="slide-body">
 <h2 class="headline">기존 제어기는 릴레이 On/Off만 가능해 구동 보드를 자체 제작</h2>
 <div class="m7-stage grow" style="grid-template-columns:600px 1fr"><figure class="m7-media white"><img class="m7-figimg" src="assets/44_waveforms.png" alt="로직 애널라이저로 기록한 기존 제어기의 두 선. 주행 · 승강 · 조향 버튼마다 한 선만 켜지고, 누르는 동안 그대로 유지된다"><figcaption class="legend">로직 애널라이저(1 MHz)로 기록, 숫자는 버튼을 누르고 있던 시간</figcaption></figure><div class="m7-info"><img class="m7-photo" src="assets/43_la_setup.jpg" alt="기존 제어기 메인보드에 로직 애널라이저 탐침을 연결한 측정 구성"><table class="comparison t6 m7-ctrl"><tr><th>대상</th><th>관측</th><th>판단</th></tr><tr><td>신호</td><td>입력 동안 High 유지</td><td><b>PWM 아님</b></td></tr><tr><td>모터 구동</td><td>릴레이 On/Off · 방향 전환</td><td><b>속도 제어 불가</b></td></tr><tr><td>무선 수신</td><td>메인보드 통합형</td><td><b>미사용</b></td></tr><tr><td>재사용</td><td>전원 스위치 · 주행 · 리프트 모터</td><td><b>그대로 사용</b></td></tr></table></div></div>
-<div class="takeaway">경로 추종이 내는 속도와 조향각 명령을 연속값으로 실행해야 합니다</div>
 </div></x-import>
 </section>
 
@@ -387,7 +381,6 @@ D435i 확정 · RPLIDAR A2 계열 · Jetson 권장안 (2026-09-10, A2M12 기대 
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="17  질의응답 · 리보틱스 확인 요청"><div class="slide-body">
 <h2 class="headline">작업 범위와 평가 기준, 입력 조건을 먼저 여쭙니다</h2>
 <div class="m7-info grow"><div class="tb"><table class="comparison m7-q"><tr><th>구분</th><th>질문</th></tr><tr class=pri><td class=grp rowspan=4>여쭐 사항</td><td class="item">오늘 보여 드린 운반 임무가 실제 작업 흐름과 맞나요?</td></tr><tr class=pri><td class="item">하역 오차와 삽입 깊이는 어디까지 허용되고, 삽입 직전 정지와 틸트 없는 운반도 괜찮나요?</td></tr><tr><td class="item">포크 높이를 정밀하게 맞춰야 하나요? 허용 오차는 어느 정도인가요?</td></tr><tr><td class="item">현장에는 지게차가 동시에 몇 대 투입되고, 이를 관리하는 중앙 서버가 있나요?</td></tr><tr class=pri><td class=grp rowspan=5>정해 주실 사항</td><td class="item">팔레트와 목적지 위치를 미리 알려 주시나요, 로봇이 직접 찾아야 하나요?</td></tr><tr><td class="item">실내인지 실외인지, 통로 폭과 바닥, 장애물과 작업자 동선은 어떤가요?</td></tr><tr><td class="item">저희가 정한 팔레트 규격(EPAL 6, T11 0.6배 축소판, 적재 10 kg 이하)으로 개발과 시연을 이어가도 될까요?</td></tr><tr><td class="item">시연은 어떤 코스와 환경에서 진행하나요?</td></tr><tr><td class="item">원격 정지는 어느 수준까지 필요한가요?</td></tr><tr><td class=grp rowspan=1>요청 자료</td><td class="item">작업장 도면, 운용 영상, 사용하는 팔레트 도면을 받을 수 있을까요?</td></tr></table></div></div>
-<div class="takeaway">실차 시험의 운용 조건과 판정 기준을 함께 정하고자 합니다</div>
 </div></x-import>
 </section>
 
