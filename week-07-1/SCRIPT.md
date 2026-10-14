@@ -8,290 +8,74 @@
 
 안녕하십니까. '자율 지게차 중간 점검'이라는 주제로 발표할 김광민이라고 합니다. 오늘은 지금까지의 개발 결과와 남은 과제를 기술 중심으로 정리하고, 마지막으로 리보틱스 측에 확인을 요청드릴 사항을 말씀드리겠습니다. (전환)
 
-[Sources]
-중간 미팅
-과제: 주변 장애물을 고려한 최적의 팔레트 핸들링 경로 생성 및 제어: docs/references/quest.txt (과제 문서)
-§1 리보틱스 중간 미팅(형식은 중간 발표), 10/12 교수님 초안 검사 · 10/14 미팅: docs/references/week6_feedback.md
-[/Sources]
-
 ## 2쪽 · 과제 이해와 진행 현황 (00:20–01:25, 65초)
 
 먼저 과제 제안서의 요구사항별 접근 방법과 진행 현황을 요약하겠습니다. 위 줄은 소프트웨어로, 과제의 처리 순서대로 시뮬레이션에서 확인한 결과입니다. 센서는 제안서 구성대로 RGB-D 카메라 1대와 2D LiDAR 1대입니다. 카메라는 같은 스테레오 방식의 D435i를 선정했고, 팔레트 규격 치수를 기준으로 포켓을 검출합니다. LiDAR는 A2 계열 중 보유 중인 A2M12를 사용하며, SLAM 위치 보정과 장애물 판단에 함께 활용합니다. 과제의 두 목적인 장애물 회피 경로와 삽입 중 포켓 추적, 그리고 인식부터 하역까지의 다섯 단계는 시뮬레이션에서 하나의 임무로 연속 수행됩니다. 예시 A–D는 모두 인식부터 삽입까지 수행되며, B는 곡선으로 접근한 뒤 삽입 직전에 한 번 정지해 재관측합니다. 아래 줄은 하드웨어입니다. 소형 전동 지게차 차체를 실측하고 기존 제어기를 분석했으며, 속도 제어를 위해 구동 보드를 새로 설계하고 있습니다. 카메라와 LiDAR는 확보했고 아직 시험 전이며, 실차 적용은 구동 보드 제작 후 A부터 진행합니다. 이어서 시뮬레이션 임무 전체와 실기시험 기준 비교로 현재 결과를 요약한 뒤, 시뮬레이션에서 개발한 소프트웨어와 이를 실차에 구현하기 위한 하드웨어를 차례로 말씀드리고, 결론과 일정, 확인 요청 사항 순으로 마무리하겠습니다. (전환)
-
-[Sources]
-출처: 과제 제안서 · 하드웨어 기록 · 실행 기록 · 단계 그림은 뒤 장의 그림과 영상 첫 장면을 자른 것 (prepare_figures.py thumbs)
-센서(RGB-D Gemini 335Le · 2D RPLIDAR, SLAM · 장애물 목적) · 추천 플랫폼(소형 지게차 장난감 개조 또는 모바일 로봇 + 포크) · 목적(장애물 고려 경로, 삽입 중 pocket tracking) · 프로세스 5단계 · 예시 A–D: docs/references/quest.txt (과제 문서)
-D435i 확정 · RPLIDAR A2 계열 · Jetson 미구매: docs/hardware.md
-RPLIDAR A2M12 는 이미 보유 (docs/hardware.md 는 아직 "유력안"): 사용자 답변 (2026-10-12)
-인식(카메라 깊이) → 위치 → LiDAR 1대 장애물 지도 + Hybrid A* → 근접 추적 삽입 → 운반 · 하역 · 복귀, 한 임무 완주 (2026-10-11), 금지 접촉 0: ws1 artifacts/20261011_s4b/smoke/seed_1_v0.055
-현재 설정 9회 모두 완주 (새 상자 장면 포함): ws1 artifacts/20261008_d7_isaac/v2/d7
-A–D 를 seed 5 에서 과제 그림과 같은 배치로 한 번씩 실행(정렬 직진 0.8 m, D 는 뒤 · 옆 벽), 네 경우 모두 success complete · 금지 접촉 0 (A·B · C·D 장): ws1 artifacts/20261012_meeting_ad
-B 도 확인으로 표시 ("걍 확인이라 적으셈") — 로드맵 기준으로는 정지 후 삽입이라 미완료: 사용자 지시 (2026-10-13)
-B 는 멈추지 않고 삽입 — 멈춘 뒤 정렬하는 구현은 B 완료로 표시하지 않음(:161); 기능 통과 A–D 각 20회 중 19회(:226). 지금 실행은 정렬 직진 시작(2.1 m)에서 멈춰 다시 관측, EPAL 6 · 장면당 1회: docs/plans/2026-09-11-development-roadmap.md
-차체 실측 · 제어기 역분석(릴레이 on/off, 속도 조절 없음) → DRV8244 구동 보드 회로 초안: week-05/SCRIPT.md
-[/Sources]
 
 ## 3쪽 · 운반 임무 전체 (01:25–02:10, 45초)
 
 먼저 현재 시뮬레이션에서 처음부터 끝까지 연속으로 수행되는 운반 임무를 보여 드리겠습니다. 실측 차체 모델로 팔레트를 인식하고, 포크를 삽입해 적재한 뒤, 목적지에 하역하고 출발점으로 복귀합니다. 영상은 12배속입니다. 이 실행의 하역 오차는 18밀리미터, 출발점 복귀 오차는 49밀리미터였으며, 포크와 팔레트의 접촉은 없었습니다. 오른쪽은 영상의 진행 순서에 따른 단계별 구현입니다. 인식, 삽입, 위치 추정, 경로 계획은 소프트웨어 부분에서 설명드리겠습니다. 이 결과를 사람이 운전하는 지게차의 시험 기준과 비교해 보겠습니다. (전환)
 
-[Sources]
-화면 생성: 위 근접 추적 실행의 기록을 Isaac 에서 다시 렌더한 조감 칸 12배속 (ws1 artifacts/20261014_meeting_tracked, 합성은 compose_online_slam_video.py 덱 사본)
-2026-10-14 부터 이 영상: 스냅숏 fs_s4_3158055(포크 간격 0.3725 m 실험 설정), 실측 차체 · SLAM 위치 · LiDAR 1대 · --d7-planner --d7-docking · 근접 추적 켬(--near-tracking, 주입 없음) · 녹화 끔, 복귀 전환 없음. result.json: success, complete, 하역 18.4 mm, 복귀 4.9 cm · 0.028 rad, 금지 접촉 0, 삽입 315.1 / 313.9 mm, 시뮬 242.9 s; near_tracking: 계약 문제 0, 프레임 488 중 483 수락, 무장 36.2 s · 윗판 전환 55.2 s: ws1 artifacts/20261013_fork_spacing/s4/seed_5_v0.055_none_0
-녹화 없는 실행이라 조감 영상은 기록(slam_log 120 Hz 차체 자세 · 조향 · 바퀴, result samples 0.1 s 리프트 · 팔레트)을 같은 스냅숏 장면에 그대로 놓고 조감 카메라만 다시 렌더(run_transport_replay.py --replay-run, 2.5 fps = 12배속 30 fps); 계획 기록이 없어 노란 선은 지나온 궤적(compose --overview-trail --clean-map): ws1 artifacts/20261014_meeting_tracked (job 2617) · 로컬 합성
-이전 영상(10-12–14): forklift 33d46b9 (브랜치 feat/return-turnaround = 6bf45a8 + 복귀 전진 우선, docs/plans/2026-10-12-return-forward-turnaround.md) 의 스냅숏 p5_retturn_6bf45a8_v7(커밋 직전 판, 이 실행의 결정은 같음), 실측 차체 · SLAM 위치 · LiDAR 1대 · --d7-planner --d7-docking --return-turnaround · --video --robot-camera (근접 추적 끔). result.json: success, complete, 하역 19.4 mm, 복귀 2.3 cm · 0.020 rad, 금지 접촉 0, 진입 319.9 / 318.1 mm, 시뮬 244.3 s: ws1 artifacts/20261012_return_forward/seed_5_fwd7
-첫 실시간 복귀 계획 172.09 s: 직접 계획(전 구간 후진 22.8 m, 비교 비용 70.1)과 최대 곡률 후진 호 후보 10개(곡률 0.25 /m, 후진 가중 3) 중 reverse_arc:-1:90 선택(비용 56.6) — 설치 경로 전진 22.9 m · 후진 8.7 m(호 + 출발점 주차), cusp 정체 · 허가 밖 진입 없음: 같은 실행 paths.json · result.json live_plans (복귀)
-이전 녹화(forklift b66271f, 전환 없음): 같은 장면 · 같은 하역 19.4 mm · 진입 319.9 / 318.1 mm, 복귀는 전 구간 후진 22.8 m, 복귀 2.7 cm · 0.040 rad, 시뮬 219.6 s: ws1 artifacts/20261011_meeting_video/seed_5_d7
-같은 조건 장면 1: success, 하역 27.0 mm, 복귀 5.1 cm, 금지 접촉 0, 시뮬 273.8 s: ws1 artifacts/20261011_meeting_video/seed_1_d7
-목적지 도킹: 미리 등록한 위치의 LiDAR 스캔 정합 (등록 위치는 시뮬레이터 값): config/isaac_transport_measured.yaml
-Depth-only geometric baseline for a known, horizontal pallet shape: src/forklift_core/perception/pocket_detector.py
-map<-base = map<-odom(SLAM) × odom<-base(odometry); point-to-line ICP 목적지 도킹: src/forklift_core/localization/slam_pose.py · scan_match.py · scan_docking.py
-RearAxlePathTracker — 뒤차축 pure pursuit (곡률 = 2 · 횡오차 / 거리²), 전환점마다 정지: src/forklift_core/control/path_tracking.py
-이 녹화 실행은 근접 추적 끔: 정렬 직진 시작(2.1 m)에서 한 번 더 관측(near capture) 후 그 위치로 삽입: sim/isaac/run_transport.py
-[/Sources]
-
 ## 4쪽 · 자격시험 기준 비교 (02:10–03:05, 55초)
 
 비교 기준은 지게차운전기능사 실기시험입니다. 시험은 팔레트를 적재해 코스를 주행한 뒤 하역하는 과제로, 작업 흐름이 본 임무와 비슷합니다. 다만 시험의 허용치는 실제 지게차 규모의 절대값이라, 포크 길이가 36센티미터인 개발 차량에 그대로 대면 합격 여부가 큰 의미를 갖지 않습니다. 그래서 시험이 보는 항목을 개발 차량의 판정 항목으로 옮겨 시뮬레이션에서 측정했습니다. 완주한 실행 가운데 하역 오차는 최대 2.9센티미터, 덜 넣은 거리는 최대 3.7센티미터였고, 운반 중 포크 높이는 포크 중심 기준 20.5센티미터였습니다. 낙하나 밀림은 없었고, 이 항목은 규모와 상관없이 그대로 적용합니다. 마스트를 기울이는 틸트 기구는 없습니다. 나머지 항목의 허용치와 틸트 없는 운반의 허용 여부는 마지막에 여쭙겠습니다. 시험 코스는 치수가 차폭의 배수로 정해져 있어, 개발 차량 규모로 줄여 시뮬레이션 평가에 쓸 수 있습니다. (전환)
-
-[Sources]
-출처: Q-Net 공개문제 원문 (2025) · 실행 기록
-「[공개문제] 지게차운전기능사」 코스운전 및 작업 (한국산업인력공단, 2025-12-22 등록) — 유의사항 7 주행 중 포크 20–30 cm 유지, 실격 (8) 화물 · 파렛트 낙하 (9) 파손 (10) 포크로 드럼통 터치 (14) 포크 50 cm 초과 (15) 하역 20 cm 초과 (16)(17) 밀림 (18) 덜 삽입 20 cm 초과; 팔레트에 닿는 것 자체는 실격 아님. 코스 치수는 D(좌우 최외측 타이어 바깥 간 거리)의 배수. 도면은 저작물이라 화면에 싣지 않음: https://www.q-net.or.kr/cst006.do?artlSeq=5211260&brdId=Q006&code=1204&gId=&gSite=Q&id=cst00602
-시험 시간 4분 — 코스 · 차체 규모가 달라 비교에서 제외 (속도 · 작업 시간은 자율 동작 완성 뒤 단계): 같은 문서
-하역 6.74 mm, 진입 323.5 / 322.2 mm (캐리지 한계 0.346 m) · 캐리지 앞면–팔레트 간격 22.1 mm, 금지 접촉 0, 팔레트 밀림 없음; 운반 중 승강 관절 0.165 m (명령 lift_target_m 0.2 에 못 미침) → 포크 중심 0.205 m · 밑면 0.193 m · 윗면 0.218 m (fork_center_height 0.04, 두께 0.025): ws1 artifacts/20261011_s4b/smoke/seed_1_v0.055
-D7 v2 9회 3.0–22.6 mm, 녹화 장면 5 · 1: 19.4 · 27.0 mm, S4b dev9(seed 0–8, smoke 와 같은 스크립트 · 설정) 완주 8회 5.8–29.4 mm → 최대 29.4 mm = 기준 200 mm 의 14.7 % (D7 이전 6주차 실행 8.0 · 23.8 · 64.9 mm 는 제외): 현재 설정 완주 실행의 하역 오차
-insertion_measured: D7 v2 20.4–26.1 mm, 녹화 장면 5 · 1: 25.6 · 35.5 mm, dev9 21.7–37.4 mm → 약 2–4 cm: 현재 설정 실행의 캐리지 앞면–팔레트 간격
-10쪽 표준 운용 절차 대조 — 틸트 기구 없음: week-05/SCRIPT.md
-§2 실제 지게차 자격증 시험 기준과 우리 지게차 비교 표 (3주차 피드백: 국가공인 시험의 표준 운용 방법): docs/references/week6_feedback.md
-허용치가 실제 지게차 규모의 절대값이라 개발 차량(포크 36 cm)에 합격 판정은 의미가 약함 → 시험 항목을 판정 항목으로 옮겨 측정값만 보이고 허용치는 확인 요청 (안 3): 사용자 결정 (2026-10-13)
-[/Sources]
 
 ## 5쪽 · 시뮬레이션 환경 (03:05–03:55, 50초)
 
 다음은 소프트웨어입니다. 실차 주행 전까지는 Isaac Sim에서 개발합니다. 공장 홀 장면에 팀이 실측한 차체 값을 적용하고, 물리 연산은 120헤르츠로 수행합니다. 지게차는 바퀴 토크로 구동되며, 팔레트도 고정하지 않고 포크로 들어 올립니다. LiDAR는 A2M12 카탈로그 사양으로, 깊이 영상은 D435i 컬러 카메라 화각에 맞춰 합성합니다. SLAM은 ROS 2의 slam_toolbox로 수행하며, 시뮬레이터는 스캔마다 SLAM 응답을 받은 뒤 다음 단계로 진행합니다. 주황색 태그는 가정값입니다. 저상 바닥 장애물은 없다고 가정했고, 바퀴 마찰과 구동 토크는 일반적인 범위의 값을 적용했습니다. 센서 잡음도 실측 전 설정이며, 이 값들은 실측 결과가 나오는 대로 우선 교체합니다. (전환)
 
-[Sources]
-출처: 저장소 설정 · 모델 기록 (6주차 1쪽 이어 받음)
-실측 반영 모델 dls08_measured (실측하지 않은 항목은 추정값, 필드별 출처): sim/models/dls08_measured/README.md
-정지 · 운동 마찰 계수 0.8 / 0.7 (지게차 · 팔레트 충돌 형상, sim/isaac/scene.py configure_drives), 바퀴 토크 3 N·m — 시뮬레이터 전용 가정값: config/isaac_transport.yaml
-깊이 640 × 480, fx 465.74 → 수평 화각 69.0° (D435i RGB 시야를 흉내 낸 합성 설정, docs/design/2026-09-11-pocket-observation-and-scene-set.md 사용자 결정 1; D435i 깊이 화각 87° × 58° 아님), depth_quantize_mm 1, 잡음 없음: result.json pocket_camera · perception
-LiDAR 잡음 noise_std_m 0.02 (±0.06 m 절단, SLAM 과 같은 스캔): config/obstacle_layer_single.yaml
-EPAL 6 공식 제품 시트: config/pallet_geometry_epal6.yaml
-EPAL 6 과 T11 × 0.6 모두 필수, T11 정본 치수 미확정: forklift CLAUDE.md
-physics_hz 120, physical_wheel_drive true, pallet_fixed_attachment false, pose_teleportation_after_reset false (S4b · 녹화 실행): result.json settings_synthetic
-RPLIDAR A2M12 카탈로그 1,600빔 · 10 Hz · 0.2–12 m: config/isaac_slam_lidar.yaml
-slam_toolbox online_sync, mapping, 해상도 0.05 m, Ceres, 루프 닫기; Isaac 은 스캔마다 브리지 응답을 기다림 (sim/isaac · slam_link.py): tools/slam_bridge_container.sh · ros2/src/forklift_bringup/config/slam_toolbox_isaac_online.yaml
-5.1 (Kit 로그 Isaac-Sim Python/5.1): ws1 Isaac Sim
---min-obstacle-height-m 1.15 — 1.05 m 평면에 닿지 않는 소품 제거 (운용 가정): forklift bc4cc64
-[/Sources]
-
 ## 6쪽 · 포켓 인식 (03:55–04:55, 60초)
 
 이제 과제 단계별로 설명드리겠습니다. 첫 단계인 팔레트 인식은 학습 모델 대신 팔레트 규격의 치수와 형상 규칙을 사용합니다. 그림과 같이 깊이 영상에서 작업 범위 안의 점만 남기고, 수직 평면을 찾아 팔레트 앞면으로 설정합니다. 앞면을 세로 칸으로 분할해 받침목과 개구부를 구분하고, 개구부 폭이 규격 범위에 들면 두 포켓의 중심과 삽입 방향을 산출합니다. 학습 데이터 없이 치수만 바꿔 EPAL 6과 T11을 같은 코드로 처리하기 위해서입니다. 시뮬레이션에서는 2에서 4미터 앞에 놓인 EPAL 6 팔레트 60개를 모두 찾았고, 위치 오차는 95퍼센트가 1센티미터 미만이었습니다. 다만 깊이 잡음이 없는 장면이며, 유사 형상 물체에 대한 오검출 평가와 T11 평가는 남아 있습니다. 또한 포켓 입구가 시야를 벗어나면 검출할 수 없으므로, 다음 장의 삽입 중 포켓 추적이 이어받습니다. (전환)
-
-[Sources]
-화면: 3주차 4쪽 그림 · 근거는 3주차 6 · 8쪽
-Depth-only geometric baseline for a known, horizontal pallet shape — 작업 범위 → 앞면 평면 → 세로 칸(받침목 · 빈 공간) → 포켓 중심 · 방향: src/forklift_core/perception/pocket_detector.py
-판정 기준을 규격 치수에서 계산 (3주차 6쪽: 길이는 규격 비례, 측정점 수는 관측 면적 비례): src/forklift_core/perception/pallet_geometry.py
-4쪽 처리 과정(빈 공간 220 mm, 규격 허용 207.5–247.5 mm): week-03/SCRIPT.md
-EPAL 6 Gazebo 장면 100개 = positive 60 · occluded 20 · negative 20, 자세 2.0–4.0 m, 옛 장착 (0.75, 0, 0.5), 깊이 잡음 없음; 대상 60개 모두 검출, 위치 p95 dev 8.17 mm; 음성 0/20 은 단측 95 % 상한 13.9 % 라 오검출 성능은 주장하지 않음 (+ ADR 0004 D6 grounded 형상 결함), 홀드아웃 아님, T11 렌더 평가 없음: docs/validation/2026-09-14-epal6-capture-and-evaluation.md
-3주차 그림의 위 제목 띠와 아래 단계 설명을 잘라 내고 단계명은 HTML 로 (Gazebo 장면 s003 의 실제 중간 결과): week-03/assets/20_pipeline_stages.png
-[/Sources]
 
 ## 7쪽 · 삽입 중 포켓 추적 (04:55–06:15, 80초)
 
 과제에서 강조한 삽입 중 포켓 추적입니다. 처음에는 카메라를 차체 전방 상단에 장착했는데, 포크 삽입이 시작되면 마지막 약 25센티미터를 관측하지 못했습니다. 그래서 Crown 특허 사례와 같이 카메라를 캐리지 하단으로 옮겼고, 영상과 같이 삽입 중에도 팔레트 윗판이 시야에 남습니다. 영상의 색은 거리로, 빨간색일수록 가깝습니다. 구현은 오른쪽 그림과 같이 포크 끝과 팔레트 앞면 사이의 거리에 따라 다섯 단계로 나뉩니다. 먼저 시뮬레이터에서 측정한 영상 지연 약 0.09초를 반영해, 각 영상을 촬영 시점의 차량 위치에 정합합니다. 실물에서는 이 지연을 다시 측정합니다. 포크 끝이 앞면 약 0.55미터에 들어와 포켓 입구가 시야를 벗어나면, 윗판 가장자리로 팔레트 위치를 계속 추적합니다. 포크 끝이 앞면까지 1미터와 0.6미터 남은 지점에서는 정지해 재관측하고, 남은 직진 경로를 다시 생성합니다. 포크 끝이 앞면 15센티미터 이내에 들어오면 포크와 포켓 벽 사이의 간격을 계속 감시하고, 관측 오차와 정지 거리를 더한 값보다 좁아지면 정지합니다. 삽입은 캐리지 전방에 1.6센티미터 여유를 남기는 위치에서 완료합니다. 이 실행에서 포크는 팔레트와 접촉 없이 약 32센티미터 삽입되었습니다. 다만 깊이 잡음이 없는 합성 영상이므로, 잡음을 적용한 검증이 남아 있습니다. (전환)
 
-[Sources]
-화면 생성: 위 실행의 근접 깊이 프레임 506장(10 Hz)을 색 지도(turbo, 0.25–3.0 m)로, 사건 시각에 왼쪽 위 단계 라벨, 2배속 (prepare_clips.py depth) · 색 범례는 슬라이드 범례(같은 turbo 식)
-forklift b66271f, 실측 차체 · SLAM 위치 · LiDAR 1대 · 근접 추적(보정점 1.0 / 0.6 m), 포켓 깊이 확인(D5) 끔. result.json: success, 삽입 끝 진입 323.5 / 322.2 mm, 금지 접촉 0, 하역 6.74 mm: ws1 artifacts/20261011_s4b/smoke/seed_1_v0.055
-근접 추적 시작 44.3 s, 1.0 m 보정 54.03 s(정지 0.37 s), 0.6 m 보정 61.73 s, 추적 대상 앞면 → 윗판 전환 63.19 s(frames mode front → roof), 포크 끝 보호 시작 70.62 s(앞면 0.149 m), 삽입 끝 80.69 s. 그림의 약 1.5 m · 0.55 m 는 보정점(1.0 / 0.6 m)에서 뒤차축이 움직인 거리로 계산 (44.3 s 1.52 m, 63.19 s 0.55 m), 삽입 끝 −0.32 m 는 진입 323.5 / 322.2 mm: ws1 artifacts/20261011_s4b/smoke/seed_1_v0.055/run/near_tracking.json
-기존 장착(높이 0.50 m · 수평)은 삽입 마지막 약 0.25 m 무관측: docs/plans/2026-10-03-near-field-pocket-tracking.md
-Crown 특허 US9990535B2 — 포크 캐리지 하단 장착 (4주차 장착 사례 ②): https://patents.google.com/patent/US9990535B2/en
-카메라 지연 L = 91.668 ms (11 틱, 120 Hz) — 측정 대역 84.43–98.94 ms, Isaac 렌더 경로의 값 (실물 D435i 는 다시 측정): config/near_field_bounds_measured.json · forklift 2313dc9
-윗판 뒤 가장자리로 거리, 판재 · 틈 가장자리로 방향과 좌우 위치, 가려진 포켓은 팔레트 모델로 추정: src/forklift_core/perception/roof_tracking.py
-보정점 1.0 / 0.6 m(포크 끝 추정 – 앞면), 정지 후 새 관측으로 직진 다시 그림 + 모의 주행 도착 확인; 보호 구간 0.15 m 부터 포크–벽 간격 < b_t + 정지 휩쓸림 + 0.011 m 면 정지; 캐리지 앞 모서리 여유 0.016 m 에서 삽입 끝: forklift b66271f · sim/isaac/near_tracking.py
-접근 속도 0.055 m/s — 관측 주기의 모든 틱에서 정지 예산이 성립하는 가장 큰 0.005 단계: config/near_field_drive_terms.json
-추적 프레임에는 깊이 잡음을 넣지 않음 — 잡음 없는 합성 깊이에서의 추적 흐름 실증: memory: D8 범위 (2026-10-10 사용자 결정)
-[/Sources]
-
 ## 8쪽 · 위치 추정 (06:15–07:20, 65초)
 
 다음은 위치 추정입니다. 경로를 계획하고 따라가려면 지게차가 지도 위 자기 위치를 알아야 하므로, 바퀴와 조향 엔코더로 계산한 오도메트리를 LiDAR SLAM으로 계속 보정합니다. 왼쪽 영상은 실측 차체로 같은 운반 임무를 수행한 실행입니다. 갈색 사각형이 팔레트로, 지게차와 함께 움직이기 시작하는 때가 적재 시점입니다. 빨간 SLAM 추정 경로는 파란 실제 경로를 따라가지만, 주황색 오도메트리 경로는 점차 벗어납니다. 오도메트리만으로는 약 25미터를 운반하는 동안 위치가 최대 1.2미터 벗어났고, SLAM의 오차는 최대 15센티미터, 임무 전체 RMSE는 약 7센티미터였습니다. 임무 종료 시점에는 SLAM 1.5센티미터, 오도메트리 49센티미터였습니다. 오른쪽 표와 같이 카메라는 전방만 관측하고 거리가 멀수록 오차가 커지지만, LiDAR는 12미터까지 360도를 측정하고 그 지도를 경로 계획에 직접 사용할 수 있습니다. 과제 문서도 2D LiDAR를 SLAM용으로 지정했으므로, 위치 추정은 LiDAR가 담당하고 카메라는 팔레트 인식에 집중하도록 역할을 나눴습니다. 다음 장의 경로 계획은 이 SLAM 지도와 위치 위에서 이루어집니다. (전환)
-
-[Sources]
-화면: 3쪽 실측 차체 임무 기록을 글자 없이 다시 합성, 팔레트 위치 표시 (ws1 artifacts/20261014_meeting_slam/slam_fwd7_pallet.mp4, prepare_clips.py slam; 오차 수치 표기만 남김) · 비교표는 데이터시트 · 논문 조사 (2026-10-11)
-2026-10-14 계산 (applied map←odom ∘ odom←base 대 truth_base, 응답한 스캔 2,443개): 오도메트리 최대 1.210 m (158.8 s, 운반 끝 무렵, 방향 오차 −2.3°), SLAM 최대 0.151 m (163.9 s), SLAM RMSE 0.067 m, 끝 시점 SLAM 0.015 m · 오도메트리 0.489 m; 운반 구간(53.0–160.6 s) 주행 25.5 m, 임무 전체 67.5 m: ws1 artifacts/20261012_return_forward/seed_5_fwd7/run/slam_records.json
-같은 실행을 시뮬레이션 없이 다시 합성: 3쪽 영상과 같은 기록, --draw-odometry --clean-map(계획 경로 · 점유 셀 없이, 이전 S3 영상과 같은 모양) --draw-pallet(result.json samples 0.1 s 의 팔레트 위치 · 방향, EPAL 6 0.8 × 0.6 m) --stride 24: ws1 artifacts/20261014_meeting_slam (job 2603)
-이전 영상: S3 장면 1 (사진 추정 차체) — 358 s 에서 SLAM 4.0 cm 대 바퀴 회전만 340 cm: docs/validation/2026-10-04-online-slam-closed-loop.md
-RPLIDAR A2M12 데이터시트 rev.1.0 — 0.2–12 m(흰 물체), 360°, 10 Hz · 0.225° (정확도 1/2/2.5 % 는 A2 시리즈 웹 사양표 값): https://cdn.robotshop.com/media/r/rpk/rb-rpk-22/pdf/rplidar-a2m12-360-laser-range-scanner-datasheet.pdf
-D400 데이터시트 Rev 023 — 깊이 FOV 87° × 58°, 0.2 m – "3 m 이상, 조명에 따라", RMS ≤ 2 % (≤ 2 m), 반복 패턴은 거짓 깊이 가능: https://www.realsenseai.com/wp-content/uploads/2026/03/RealSense-D400-Series-Datasheet-Mar-2026.pdf
-Intel BKM Rev 1.9 — 깊이 오차는 거리의 제곱으로 증가 (848 × 480, 서브픽셀 0.08 가정 시 2 m 약 14 mm · 4 m 약 57 mm, 계산값): https://dev.realsenseai.com/docs/tuning-depth-cameras-for-best-performance
-Labbé & Michaud, J. Field Robotics 2019 — 카메라: 흰 벽 · 질감 없음 · 어두운 곳에서 위치 상실, 단거리 LiDAR: 넓은 빈 공간 · 긴 복도에서 문제: https://arxiv.org/abs/2403.06341
-SLAM Toolbox (JOSS 2021) — CPU 전용, 2D 점유 격자를 Nav2 에 그대로 사용: https://joss.theoj.org/papers/10.21105/joss.02783
-cuVSLAM 기술보고서 부록 B — Orin Nano Super 에서 RGB-D 모드는 424 × 240 에서만 안정 (GPU 가속 비전 SLAM): https://arxiv.org/abs/2506.04359
-§4 LiDAR SLAM 과 비전 SLAM 비교 장표 (LiDAR 를 쓰는 근거) · 팀 메모: SLAM 은 깊게 들어가지 않음: docs/references/week6_feedback.md
-[/Sources]
 
 ## 9쪽 · 새 장애물 대응 (07:20–08:30, 70초)
 
 경로 계획과 추종의 구현입니다. 경로는 Hybrid A*로 생성합니다. 실측 조향각 15도로 계산한 차체 한계 2.5미터에 여유를 둔 회전 반경 3.45미터로 0.25미터 길이의 전진 · 후진 호를 연결하며 탐색하고, 차체와 적재물을 포함하는 사각형에 0.1미터 여유를 두어 충돌을 검사합니다. 생성된 경로는 뒤차축 기준 pure pursuit로 추종하며, 전진과 후진이 바뀌는 지점에서는 정지합니다. 장애물은 LiDAR 1대의 스캔으로 점유 격자를 만들고, 현재 곡률로 정지할 때 지나는 칸이 모두 비어 있어야 해당 속도로 주행합니다. 영상은 운반 중 경로 위에 LiDAR 높이보다 높은 1.3미터 상자가 나타난 경우입니다. 왼쪽은 상부 시점, 오른쪽은 SLAM 지도와 LiDAR 점유 셀입니다. 정지 궤적이 막히자 지게차가 정지하고, 재계획 후 짧게 후진한 뒤 상자를 회피합니다. 현재 설정으로 다시 실행한 운반 중 · 복귀 중 장애물 장면도 모두 회피해 완주했습니다. 그렇다면 왜 바로 회피하지 않고 후진을 선택할까요? (전환)
 
-[Sources]
-화면: 6주차 7쪽 실행을 글자 없이 다시 합성 (ws1 artifacts/20261012_meeting_clean/n1.mp4, prepare_clips.py obstacle; 같은 구간 73–118 s · 2배속)
-result.json — success, 하역 64.9 mm, 상자 출현 77.2 s · 정지 약 78 s · 재계획 94.3 s 후 후진 (운반 중): videos-from-ws1/20261007_l8_measured_seed5_n1
-result.json — success, 하역 8.0 mm, 상자 출현 226.0 s · 재계획 227.7 s (복귀 중): videos-from-ws1/20261007_l8_measured_seed1_n2
-영상: 실측 차체(dls08_measured), LiDAR 1대(1.05 m) 장애물 지도 + SLAM 지도로 경로 계획, 새 상자 0.4 × 0.4 × 1.3 m, 포켓 깊이 확인 끔, 목표 연결 Dubins (D7 이전): forklift bc4cc64
-현재 설정(D7: Reeds–Shepp 목표 연결 · 도킹): 9회 모두 success complete, 하역 3.0–22.6 mm; 상자 장면 seed_1_n1 · 1_n2 · 3_n1 · 5_n1 하역 3.0 · 4.6 · 11.6 · 19.9 mm (장면당 1회): ws1 artifacts/20261008_d7_isaac/v2/d7
-curvature_limit 0.29, xy 0.2 m, yaw 10°, primitive 0.25 m, clearance 0.1 m, heuristic weight 1.8, reverse ×1.3, gear change 1.0 m, goal_connection reeds_shepp, shot_cap 4 m: result.json travel_planner_config (S4b · 녹화 실행)
-Dolgov et al., Practical Search Techniques in Path Planning for Autonomous Driving (2008) 기준, 참고 Nav2 Smac Hybrid-A* — docs/design/2026-09-17-hybrid-astar-transport.md: src/forklift_core/planning/hybrid_astar.py
-뒤차축 pure pursuit, 곡률 한계 0.36 /m, 전방 주시 0.28 m(접근), 전환점 정지 허용 0.03 m · 0.05 rad: src/forklift_core/control/path_tracking.py · tracker_configs
-비상정지 원호(현재 곡률로 멈추는 궤적)의 칸이 모두 FREE 여야 그 속도 허용 · 앞 경로도 같은 검사: src/forklift_core/control/drive_permission.py
-[/Sources]
-
 ## 10쪽 · 후진을 고르는 이유 (08:30–09:55, 85초)
 
 원인은 큰 회전 반경입니다. 경로 비용을 계산할 때 후진 거리에는 1.3의 가중치를, 전 · 후진 전환에는 1회당 1미터를 더하므로, 전진만으로 갈 수 있으면 전진 경로를 선택합니다. 영상은 앞의 장애물 장면을 다시 실행해 비스듬한 상부 시점에서 본 것입니다. 정지 위치에서 상자는 전방 2미터, 우측 0.6미터에 있었고, 노란 기존 경로는 최소 회전 반경에 가까운 경로임에도 상자 위를 지납니다. 빨간 영역은 그 위치에서 최소 회전 반경으로 선회할 때 차체가 지나는 스윕 영역이며, 상자가 그 안에 있습니다. 따라서 1.75미터 후진해 선회 거리를 확보한 뒤 상자를 회피합니다. 전 · 후진 전환은 목적지에서도 쓰입니다. 표 마지막 줄과 같이, 목적지 직전에 방향이 1.3도만 어긋나도 전진만 사용하면 계획 회전 반경 3.45미터로 지름 약 7미터의 원을 한 바퀴, 21.7미터를 선회해야 합니다. 그래서 목적지에 접속하는 마지막 구간에 전 · 후진 전환을 허용했고, 전진 0.5미터와 후진 0.5미터, 총 1미터로 보정이 끝났습니다. 다른 목적지 접근 계획에서도 원 선회 경로는 나타나지 않았습니다. C, D와 같이 먼저 후진해야 하는 상황에도 같은 계획기를 사용합니다. (전환)
-
-[Sources]
-화면 생성: 왼쪽은 위 실행의 고정 시점 영상에 경로와 휩쓸림 띠를 겹친 것, 2배속 · 재계획 순간 2.5 s 정지 · 왼쪽 위 단계 라벨 (prepare_reverse_clip.py) · 오른쪽은 플래너 재실행 그림 (prepare_figures.py) · 색 범례는 슬라이드 범례
-PlannerConfig: reverse_penalty 1.3, gear_change_penalty_m 1.0; D7_PLANNER_OPTIONS = Reeds–Shepp 목표 연결 + 연결 상한 4 m: src/forklift_core/planning/hybrid_astar.py
-planner_curvature_inv_m 0.29 (계획 회전 반경 3.45 m, 차체 한계 15° = 2.46 m 에 추종 여유): config/isaac_transport_measured.yaml
-6주차 상자 장면(l8_measured seed_5_n1, forklift df109cf)을 기록된 인자 그대로 + 고정 시점(--extra-views quarter, 눈 −2.0, −0.4, 9.0 · 대상 1.8, −0.4, 0 · 초점 2.2) 으로 다시 실행 (meeting_quarter_w6.sbatch): success complete, 하역 22 mm; 상자 출현 76.6 s (상자 위치는 6주차 실행과 같음), 재계획 83.9 s: ws1 artifacts/20261012_meeting_chase/q67_seed_5_n1
-멈춘 뒤차축 기준 상자 앞 2.03 m · 오른쪽 0.64 m; 따라가던 경로(운반 시작의 마지막 live 계획, 멈춘 위치에서 2.5 cm)는 상자 중심에서 0.7 cm, 4 m 동안 가장 작게 꺾는 원호(반경 1/0.29 m)에서 4.6 cm 이내; 그 원호의 차체 휩쓸림 띠(회전 중심에서 3.05–4.15 m, 짐 실은 사각형 앞 1.56 · 뒤 0.17 · 폭 0.80 m) 안에 상자 중심 3.46 m; 재계획 후진 1.75 m(주행 1.752 m) → 전진, 상자 중심까지 최소 1.63 m: 같은 실행 plan_history.json (prepare_reverse_clip.py)
-l8_measured 장면 1 + N1 정지 재계획: 목표 1 cm 앞 · 0.023 rad — 전진만 21.68 m, D7 0.99 m (전진 0.50 + 후진 0.49 m, 전환 1회) — prepare_figures.py 가 같은 사례를 다시 계획: tests/unit/planning/test_d7_planner_options.py
-D7 CPU 판정: 운반 목표 고리 1,686 → 0 (목표당 2,376 계획), 목표까지 길이 중앙값 21.69 → 1.03 m: forklift 1e3cdeb
-§3 Hybrid A* 가 왜 뒤로 가는지 · 앞뒤로 돌 때의 특성: docs/references/week6_feedback.md
-[/Sources]
 
 ## 11쪽 · 접근 상황 A · B (09:55–10:40, 45초)
 
 과제 제안서의 네 가지 접근 상황을 제안서 그림과 같은 배치로 시뮬레이션했습니다. 영상은 팔레트가 오른쪽에 오도록 비스듬한 상부 시점에서 본 것으로, 왼쪽이 A, 오른쪽이 B입니다. 파란 선은 전진, 주황 선은 후진 경로입니다. A는 팔레트 정면에서 인식해 그대로 직진 삽입합니다. B는 팔레트에 대해 측방으로 비켜 있는 경우로, S자 곡선으로 진입해 곡선 끝에서 한 번 재관측한 뒤 삽입합니다. 다만 팔레트 인식 거리가 약 3.6미터이고 마지막 0.8미터는 직진해야 하므로, 전 · 후진 전환 없이 곡선 하나로 보정할 수 있는 측방 오프셋은 약 0.4미터입니다. 이보다 크게 벗어나 있으면 전 · 후진 전환이 필요합니다. (전환)
 
-[Sources]
-화면 생성: 위 실행의 고정 시점 영상, 인식부터 리프트까지 2배속, 진행 중인 계획을 바닥에 겹침 · 왼쪽 위 단계 라벨 (prepare_ad_clips.py)
-meeting_ad3.sbatch (v3, 2026-10-12): 녹화 실행과 같은 현재 설정(d7 팔, 실측 차체, LiDAR 1대, SLAM)에 정렬 직진 0.8 m(임무 영상은 2.1 m) · 복귀 없음(하역까지) · seed 5 · 출발점을 인식 자리 0.3 m 뒤에 둠(--start-rear) · 관측 후보 하나 · 고정 시점(--extra-views quarter, 눈 0.6, −5.0, 7.0 · 대상 0.6, 1.1, 0 · 초점 2.2). 스냅숏 p5_s4b_b66271f_worldbox = b66271f + 월드 좌표 상자(new_obstacles.py frame: world) + --start-rear (run_transport.py, WORLDBOX_PATCH.txt): ws1 artifacts/20261012_meeting_ad
-예시 A–D 그림 (8–11쪽) — 같은 배치로 실행 (그림은 2026-10-14 화면에서 뺌, 사용자 지시): docs/references/quest.txt (과제 문서)
-A 출발 (−0.5, 1.17, 0.006) → 인식 (−0.2, 1.17) 카메라–앞면 2.35 m → 1.15 m 전진 · 정렬 직진 0.8 m · 삽입, 하역 19.3 mm; B 출발 (−1.65, 0.82, 0) → 인식 (−1.35, 0.82) 3.51 m · 축에서 0.35 m → 2.33 m 전진(기어 전환 없음), 하역 25.1 mm. 둘 다 success complete, 금지 접촉 0: ws1 artifacts/20261012_meeting_ad/v3_A · v3_B
-인식 성공 3.55 · 3.64 m, 실패 4.09 · 4.29 · 4.57 m (case_B* 기록, 깊이 잡음 없는 합성 영상). 정렬 직진 시작의 뒤차축은 앞면에서 0.11 + 1.29 + 0.8 = 2.20 m, 카메라 3.6 m 일 때 뒤차축은 3.6 + 0.959 = 4.56 m → 곡선 구간 2.36 m, 반경 3.45 m S자의 옆 이동 2R(1 − cos(asin(2.36 / 2R))) ≈ 0.42 m: 계산 · 기록
-[/Sources]
-
 ## 12쪽 · 접근 상황 C · D (10:40–11:35, 55초)
 
 C는 팔레트 바로 앞에서 오른쪽으로 비켜 있어 그대로는 진입할 수 없는 경우로, 먼저 1.3미터 후진해 거리를 확보한 뒤 방향을 맞춰 삽입합니다. D는 같은 위치에서 바로 뒤에 벽, 왼쪽에 장애물이 있는 경우입니다. 후방 공간이 부족하므로, 협소 공간에서 전진과 후진을 네 차례 반복해 방향을 맞춘 뒤 삽입했습니다. 이 배치에서는 마지막 정렬 직진 구간을 현재 임무와 같은 2.1미터로 두면 직진 시작 위치가 뒤쪽 벽과 겹치므로, 네 시나리오 모두 0.8미터로 줄여 실행했습니다. 네 경우 모두 포크와 팔레트의 접촉 없이 하역까지 완료했습니다. 지금까지가 시뮬레이션에서 개발한 소프트웨어이고, 이제 이를 실차에 구현하기 위한 하드웨어를 말씀드리겠습니다. (전환)
-
-[Sources]
-화면 생성: 위 실행의 고정 시점 영상, 인식부터 리프트까지 2배속, 진행 중인 계획을 바닥에 겹침 · 왼쪽 위 단계 라벨 (prepare_ad_clips.py)
-meeting_ad3.sbatch (v3, 2026-10-12): 녹화 실행과 같은 현재 설정(d7 팔, 실측 차체, LiDAR 1대, SLAM)에 정렬 직진 0.8 m(임무 영상은 2.1 m) · 복귀 없음(하역까지) · seed 5 · 출발점을 인식 자리 0.3 m 뒤에 둠(--start-rear) · 관측 후보 하나 · 고정 시점(--extra-views quarter, 눈 0.6, −5.0, 7.0 · 대상 0.6, 1.1, 0 · 초점 2.2). 스냅숏 p5_s4b_b66271f_worldbox = b66271f + 월드 좌표 상자(new_obstacles.py frame: world) + --start-rear (run_transport.py, WORLDBOX_PATCH.txt): ws1 artifacts/20261012_meeting_ad
-예시 A–D 그림 (8–11쪽) — 같은 배치로 실행 (그림은 2026-10-14 화면에서 뺌, 사용자 지시): docs/references/quest.txt (과제 문서)
-C 출발 (0.38, 0.87, 0) → 인식 (0.68, 0.87) 포크 끝–앞면 1.1 m · 축에서 0.3 m 오른쪽 → 1.25 m 후진 · 1.52 m 전진, 하역 24.3 mm; D 같은 자리 + 뒤 벽(앞면이 인식 자리 차체 뒤 0.5 m, 0.4 × 2.27 × 1.3 m) · 왼쪽 막이(1.63 × 0.66 × 1.3 m, 팔레트 왼쪽 0.25 m 바깥) — d_walls2.yaml → 1.75 m 전진 · 1.91 m 후진 · 0.47 m 전진 · 0.14 m 후진, 하역 13.6 mm. 둘 다 success complete, 금지 접촉 0: ws1 artifacts/20261012_meeting_ad/v3_C · v3_D
-인식 전에는 팔레트가 있을 수 있는 영역(x 2.1–4.1, y −0.7–2.0 m)이 장애물이라 포크 끝을 앞면에서 약 1.1 m 보다 가까이 둘 수 없음 — 출발을 더 붙인 v2 실행은 invalid_start: 사전 영역 (sim/isaac/run_transport.py, observation_viewpoints.BAY_PICKUP_ZONE)
-D 배치에서 정렬 직진 2.1 m 는 approach:invalid_goal, 0.8 m 는 여러 번 앞뒤 전환으로 계획: ad2_preview.py (CPU 미리보기)
-[/Sources]
 
 ## 13쪽 · 시스템 구성 (11:35–12:40, 65초)
 
 이제 이 소프트웨어를 실차에 구현하기 위한 하드웨어입니다. 먼저 실차 시스템 구성입니다. 왼쪽 센서는 과제 규격대로 RGB-D 카메라 1대와 2D LiDAR 1대입니다. 카메라는 과제의 Gemini 335Le 대신 같은 스테레오 방식인 D435i를 선정했습니다. 팀의 개발 경험이 있고, ROS 2 자료와 예제가 풍부하기 때문입니다. LiDAR는 과제의 A2 계열 중 보유 중인 A2M12를 사용합니다. 앞에서 보여 드린 포켓 인식, SLAM, 경로 계획과 추종, 삽입 중 추적은 가운데 Jetson에서 그대로 실행합니다. 오른쪽 STM32 보드는 경로 추종이 내는 속도 · 조향 명령을 받아 주행, 조향, 승강 모터를 제어하고, 엔코더로 바퀴 회전과 조향각을 측정합니다. 아래 점선 영역은 이번에 추가한 무선 구성입니다. 감시 PC와는 Wi-Fi로 상태와 지도만 주고받습니다. 무압축 깊이 영상은 초당 약 200메가비트로 Wi-Fi 실시간 전송이 어려워 차량에서 기록합니다. 비상정지는 Wi-Fi와 독립된 경로로 두어, 신호가 끊기면 즉시 정지하도록 합니다. 원격 정지의 요구 수준과 다중 차량 운용 여부는 마지막에 여쭙겠습니다. (전환)
 
-[Sources]
-출처: 하드웨어 기록 · 5주차 회로 초안 · 공식 문서 조사 (2026-10-11)
-D435i 확정 · RPLIDAR A2 계열 · Jetson Orin Nano Super 8GB 권장(미구매) · 개발 기준 ROS 2 Jazzy: docs/hardware.md
-A2 계열 중 A2M12 를 고른 이유: 이미 보유: 사용자 답변 (2026-10-12, LiDAR)
-Gemini 335Le 대신 D435i 를 산 이유: 전에 써 본 적이 있어 개발에 익숙함, ROS 2 자료 · 예제가 많음: 사용자 답변 (2026-10-12)
-Gemini 335Le — Active & Passive Stereo, 기가비트 이더넷 M12 · PoE(802.3af) 또는 DC 9–24 V, IP67, 124 × 29 × 50 mm · 220 g, 이상 깊이 0.25–6 m, 깊이 FOV 90° × 65° (D435i 도 스테레오 깊이, USB 3): https://www.orbbec.com/gemini-335le/
-DRV8244-Q1 × 3 (L·M·R 채널, SPI 공유, DRVOFF 비상 차단) · MT6701 증분판(바퀴)·절대판(조향) · MCU 핀 배정 초안(Nucleo-64 morpho 2 × 38핀): week-05/build_deck.py
-2쪽 구성 갱신: DRV8244 × 4, 엔코더 MT6701(바퀴) · KTH7801(조향 · 승강), Nucleo STM32H533RE: week-07/SCRIPT.md (7주차 개발 진행 보고, 2026-10-14)
-§5 무선 통신 미고려 — 지게차–PC · 지게차–지게차: docs/references/week6_feedback.md
-LiDAR 장착 높이 1.05 m (시뮬레이션 값, 실물 브래킷 미제작): config/isaac_slam_lidar.yaml
-M.2 Key-E 2230 — "Populated with the included wireless module" (802.11ac 모듈, 포럼 기준 RTL8822CE · AzureWave AW-CB375NF): https://docs.nvidia.com/jetson/orin-nano-devkit/user-guide/latest/hardware_layout.html
-ROS 2 Jazzy DDS tuning — 손실 있는 Wi-Fi 에서 큰 메시지의 IP 조각 손실로 연결이 멈춘 것처럼 보임 (계산: 무압축 깊이 848 × 480 · 30 fps 약 195 Mbit/s, LiDAR 스캔 약 1 Mbit/s): https://docs.ros.org/en/jazzy/How-To-Guides/DDS-tuning.html
-rmw_zenoh (멀티캐스트 탐색 없이 라우터 사용) — Wi-Fi 구성 후보, 미시험: https://docs.ros.org/en/jazzy/Installation/RMW-Implementations/Non-DDS-Implementations/Working-with-Zenoh.html
-산업 사례: 전용 무선 E-stop(FORT), 하트비트가 끊기면 정지, 수신기를 차량 E-stop 회로에 직결: https://store.clearpathrobotics.com/products/wireless-e-stop
-무선 제어는 통신 상실 포함 올바른 신호가 없으면 자동 정지: EU 기계지침 2006/42/EC 부속서 I 1.2.1 (2차 자료)
-[/Sources]
-
 ## 14쪽 · 실물 차체 (12:40–13:40, 60초)
 
 다음은 소프트웨어를 올릴 차체입니다. 입고된 차체를 실측해 앞의 시뮬레이션 모델에 반영했습니다. 가장 중요한 값은 조향각입니다. 최대 조향각이 15도로, 계산한 최소 회전 반경은 약 2.5미터입니다. 앞의 경로 계획에서 전진과 후진을 반복해 방향을 맞추도록 한 근거가 이 값입니다. 축거, 윤거, 바퀴 반경도 시뮬레이션 모델에 반영했습니다. 포크 길이가 36센티미터이므로 EPAL 6 팔레트의 삽입 목표는 33센티미터로 설정했고, 포크 간격은 5.5에서 38센티미터까지 조절됩니다. 최대 적재 하중은 카탈로그 기준 10킬로그램이며, 시뮬레이션 팔레트 질량도 10킬로그램으로 설정했습니다. 회전 반경은 조향각에서 계산한 값이므로 주행 시험으로 검증하겠습니다. (전환)
-
-[Sources]
-출처: 5주차 실측 (사진 2026-09-30, EXIF 제거)
-실측 축간 0.66 m · 윤거 0.53 m · 바퀴 0.125 m · 최대 조향 15° · 포크 360 × 55 × 25 mm · 외형 · 질량은 카탈로그와 같음을 실측으로 확인: sim/models/dls08_measured/README.md
-1쪽 실측 표 — 잠정 모델(사진 추정) 축간 0.64 · 윤거 0.51 · 바퀴 0.135 m, 조향 25.8° (0.45 rad), 포크 420 mm, 포크 중심 간격 55–380 mm 조절: week-05/build_deck.py · SCRIPT.md
-최소 회전 반경 = L / tan δ: 0.66 / tan 15° = 2.46 m, 사진 추정 0.64 / tan 0.45 = 1.32 m (뒤차축, 자전거 모델) → 1.86배: 계산
-삽입 깊이 규칙 min(깊이 × 0.6, 캐리지 한계 − 16 mm): dls08_measured 346 − 16 = 330 mm (EPAL 6 깊이 600 × 0.6 = 360 mm 보다 작음): forklift CLAUDE.md
-[/Sources]
 
 ## 15쪽 · 기존 제어기 분석 (13:40–14:45, 65초)
 
 경로 추종은 속도와 조향각을 연속값으로 명령하므로, 기존 제어기로 이를 실행할 수 있는지 분석했습니다. 오른쪽 위 사진과 같이 릴레이가 실장된 메인보드에 로직 애널라이저를 연결하고, 버튼 입력별로 신호를 기록했습니다. 왼쪽 파형을 보면 주행, 승강, 조향 모두 버튼마다 한 라인만 High가 되고, 입력하는 동안 그대로 유지됩니다. PWM이라면 빠르게 스위칭되어야 하므로, 이 신호는 단순 On/Off 신호입니다. 회로를 추적한 결과 모터는 릴레이로 켜고 끄며 방향만 전환하고, 속도 제어 기능은 없었습니다. 기존 제어기에 명령을 주입하더라도 On/Off 제어만 가능하므로, 기존 제어기 대신 구동 보드를 새로 제작하고 전원 스위치와 주행 · 리프트 모터는 그대로 사용합니다. (전환)
 
-[Sources]
-화면 생성: 5주차 파형 기록을 다시 그림 (prepare_figures.py hardware) · 측정 사진은 기판 · 장비 부분만 자름
-DSLogic Pro 1 MHz 2채널, 주행 19 · 승강 28 · 조향 31개 레벨 변화; 명령 구간 안 변화 0개 (1 µs 튐 제외); 누르는 순간 두 선 동시 High 2.95–3.43 ms (팀 판단: 접지 튐, 미확정) — 그림의 짧은 세로선; 조향 기록은 왼쪽 1회만 포함: week-05/assets/data_la_edges.json
-3–4쪽 파형 · 결론: 릴레이 on/off, 속도 조절 기능 없음, RF 메인보드 통합, 재활용: 전원 스위치 · 주행 모터 · 리프트 모터 (팀 리버스 엔지니어링 보고 2026-09-30), 전원 12.23 V: week-05/build_deck.py · SCRIPT.md
-로직 애널라이저로 버튼별 신호 측정 (리버스 엔지니어링): docs/references/week4_feedback.md
-[/Sources]
-
 ## 16쪽 · 구동 보드 설계 (14:45–16:00, 75초)
 
 이 명령을 실행할 구동 보드의 회로 초안입니다. 모터 드라이버는 TI DRV8244 4개를 왼쪽 바퀴, 오른쪽 바퀴, 조향, 승강에 하나씩 배정했습니다. 비교한 드라이버 중 온 저항이 47밀리옴으로 가장 작아 발열이 적고, SPI로 설정과 결함 진단이 가능합니다. 모터는 기존 12볼트 45와트 모터로 권선 저항이 약 1.2옴이므로, 정격 전류는 약 3.8암페어, 구속 시 최대 약 10암페어입니다. DRV8244의 과전류 보호 임계값은 21암페어 이상이므로 구속 상황에서도 여유가 있습니다. 모터 전류는 IPROPI 핀 저항에 걸리는 전압으로 측정하는데, 현재 초안의 3.6킬로옴으로는 약 4.4암페어까지만 측정되므로, 약 1.5킬로옴으로 변경해 10암페어까지 측정할 계획입니다. DRVOFF 핀은 출력을 즉시 차단하는 비상 차단용으로, 무선 비상정지와 연동할 예정입니다. 엔코더는 모두 자기식입니다. 바퀴에는 MT6701의 증분 출력을 MCU 타이머로 계수하고, 조향과 승강에는 KTH7801 절대 엔코더를 사용해 전원 투입 즉시 각도를 확인합니다. 정격 전류가 데이터시트의 연속 전류 기준인 4암페어에 근접하므로, 기판 방열을 검토한 뒤 PCB를 제작하겠습니다. (전환)
-
-[Sources]
-화면 생성: 5주차 팀 회로 초안(40_sch_drv8244.png)의 L 채널을 잘라 2배 확대 (prepare_figures.py hardware)
-DRV8244-Q1 데이터시트 SLVSG24C — 4.5–35 V, RON 47 mΩ(VQFN-HR), AIPROPI 4750 A/A, DRVOFF, SPI 진단; 연속 전류는 방열이 결정(표 7-1 DC 4.0 A, 85 °C · 4층): https://www.ti.com/lit/ds/symlink/drv8244-q1.pdf
-모터 12 V · 45 W, 권선 저항 약 1.2 Ω: 사용자 답변 (2026-10-12)
-정격 45 / 12 = 3.75 A, 멈춤 12 / 1.2 = 10 A; IPROPI 3.6 kΩ: 3600 / 4750 = 0.758 V/A, 3.3 V ↔ 4.35 A, 전류 제한 최대 VITRIP 2.97 V ↔ 3.92 A; 1.5 kΩ: 3.3 V ↔ 10.4 A, 2.97 V ↔ 9.4 A: 계산
-과전류 보호 IOCP 21–40 A (OCP_SEL 00, 기본 · HW 유일), 10.5–24 A 설정도 있음(SPI); 전류 제한 VITRIP 1.18–2.97 V (끌 수 있음), ITRIP = VITRIP / RIPROPI × AIPROPI; AIPROPI 오차 ±5 % (1.2–8.3 A): DRV8244-Q1 데이터시트 SLVSG24C 7.5.9 · 7.5.8
-MT6701 Rev.1.5 — 14 bit 절대각(SSI · I2C), ABZ 증분 ≤ 1024 PPR, 자석 간격 0.5–2.0 mm · 축 어긋남 ≤ 0.3 mm: https://uploadcdn.oneyac.com/attachments/files/brand_pdf/magntek/F3/CA/MT6701QT-STD.pdf
-5–8쪽: DRV8244 · DRV8873 · DRV8876 비교, MT6701 · AS5600 · AS5047P 비교, 회로 초안(DRV8244 × 3 L · M · R, SPI MISO · MOSI · CLK 공유, 채널별 CS · IN1 · IN2 · DRVOFF · nSLEEP · nFAULT · IPROPI), 엔코더판 2종, MCU 핀 배정(Nucleo-64 morpho 2 × 38핀) — 조건: 모터 전류 실측 후 확정: week-05/build_deck.py · SCRIPT.md
-10/16–22 모터 전류 실측 · PCB 설계, 10/30–11/12 구동 보드 제작: week-07-1 18쪽 일정
-2 · 4 · 5쪽: DRV8244 × 4 (L · R 바퀴, M 조향, H 승강), 바퀴 MT6701 증분(ABZ 1,024펄스), 조향 · 승강 KTH7801 절대(SPI), MCU Nucleo STM32H533RE; 최신 메인보드 L 채널 IPROPI 저항 R5 는 여전히 3.6 kΩ (week-07/assets/83_main_drv.png): week-07/SCRIPT.md (7주차 개발 진행 보고, 2026-10-14)
-[/Sources]
 
 ## 17쪽 · 결론 (16:00–16:30, 30초)
 
 정리하면, 실측 차체와 시뮬레이션에서 확인한 사항을 근거로 소프트웨어와 하드웨어의 설계 방향을 정했습니다. 소프트웨어는 회전 반경이 크므로 전 · 후진 전환 경로를 도입했고, 근접 구간에서 포켓 입구가 시야를 벗어나므로 윗판 기반 추적과 직전 보정, 간격 감시로 삽입을 완료합니다. 하드웨어는 이 소프트웨어의 속도 · 조향 명령을 실행하도록 기존 제어기 대신 구동 보드를 제작하고, 삽입 완료까지 관측하도록 카메라를 캐리지 하단으로 옮깁니다. 깊이 영상은 Wi-Fi로 전송하지 않고 차량에서 기록하며, 비상정지는 독립된 경로로 둡니다. LiDAR 높이보다 낮은 바닥 장애물이 없다는 가정은 현장 조건으로 확인받고자 합니다. 다음 목표는 이 임무를 실차로 이식하는 것입니다. (전환)
 
-[Sources]
-출처: 앞 장들의 결과 정리
-실측 조향 15°, 회전 반경 2.46 m (사진 추정 1.32 m): sim/models/dls08_measured/README.md
-기존 장착 마지막 약 0.25 m 무관측: docs/plans/2026-10-03-near-field-pocket-tracking.md
-기존 제어기 릴레이 on/off, 속도 조절 기능 없음: week-05/SCRIPT.md
-무압축 깊이 848 × 480 · 30 fps 약 195 Mbit/s (계산), 무선 E-stop 은 Wi-Fi 와 별도: 13쪽 시스템 구성 출처
-과제 센서 구성(RGB-D 1 · 2D LiDAR 1) 유지, 낮은 장애물은 운용 가정: forklift CLAUDE.md
-포켓 입구가 시야를 벗어난 뒤 윗판 가장자리로 추적 (7쪽): src/forklift_core/perception/roof_tracking.py
-§2 결론 장표 — 무엇이 어떻게 달라지니까 무엇으로 가야 하는지: docs/references/week6_feedback.md
-하드웨어 · 소프트웨어를 나눠 보임 · 소프트웨어 → 하드웨어 순서: 사용자 지시 (2026-10-12)
-[/Sources]
-
 ## 18쪽 · 개발 일정 (16:30–17:05, 35초)
 
 개발 일정입니다. 빨간 점선이 오늘 미팅 시점으로, 왼쪽이 지금까지 수행한 내용이고 오른쪽이 앞으로의 계획입니다. 9월 초 개발 계획을 세운 뒤, 소프트웨어는 시뮬레이션 환경과 팔레트 인식을 시작으로 경로 계획, 위치 추정과 장애물 지도, 삽입 중 포켓 추적을 개발했습니다. 하드웨어는 부품을 선정하고, 9월 하순 차체가 입고된 뒤 실측과 기존 제어기 분석을 마쳤으며, 현재 구동 보드를 설계하고 있습니다. 중간고사 전에는 모터 전류를 실측해 구동 보드 PCB를 설계하고, 시뮬레이션에서 A–D를 여러 장면으로 반복 평가합니다. 중간고사 이후에는 구동 보드를 제작하고 Jetson에 센서를 연동합니다. 11월 중순부터 실차 위치 추정과 팔레트 인식을, 12월 초까지 실차 전체 임무를 검증하고, 마지막 주에 최종 시연을 준비합니다. 일정은 실물 진행 상황에 따라 조정될 수 있습니다. (전환)
 
-[Sources]
-출처: 개발 로드맵 달력 · 저장소 이력 · 6주차 다음 작업 (실물 일정은 팀 계획)
-§4 달력 대응: 학기 주차는 금요일 시작(1주차 09/04), 8주차 10/23–29 중간고사, 9–10주차 10/30–11/12, 11–12주차 11/13–11/26, 13–14주차 11/27–12/10, 15주차 12/11–17 예비 · 최종 시연일 미정(15주차 가정), 16주차 12/18–21 기말고사: docs/plans/2026-09-11-development-roadmap.md
-2주차 개발 계획 자료 2026-09-08–09: forklift-presentations git 이력
-09/10 저장소 · 하드웨어 결정(ADR 0001), 09/11 Gazebo 정적 장면, 09/13–16 포켓 검출 · 평가, 09/17 Isaac Sim 전환(ADR 0004) · Hybrid A* 운반, 09/19 검출기 Isaac 연동, 09/26 공장 홀 · LiDAR SLAM, 10/01 실측 차체 모델 · A–D 재검증, 10/04 캐리지 하단 장착, 10/05–08 점유 격자 · 주행 허가 · 단일 LiDAR · D7, 10/08–12 근접 추적(D8) · 운반 복구, 10/12 A–D 렌더 (meeting_ad): forklift git 이력 (수행 막대)
-D435i 확정 · RPLIDAR A2 계열 · Jetson 권장안 (2026-09-10, A2M12 기대 09/15): docs/hardware.md · docs/decisions/0001
-차체 입고 · 초기 구조 조사 2026-09-23: docs/validation/2026-09-23-chassis-intake.md
-실측 사진 2026-09-29–30, 팀 실측 09/30, 제어기 역분석 보고 09/30, 모터 드라이버 · 엔코더 선정 · 회로 초안(5주차 자료 09/28–30); 모터 수치 · IPROPI 검토 10/12 (16쪽): week-05/SOURCES.md
-8쪽 다음 작업: 모터 전류 실측 → 전류 제한 · 방열 → PCB, 가정값 실측 교체, 센서 브래킷: week-06/build_deck.py
-시험 팔레트 만드는 방법(3D 프린터 · 스티로폼 · 목재 재단) — 11/13–26 배치는 팀 확인 전 제안: docs/references/week3_feedback.md
-일정은 간트 차트로, 개발 시작부터 끝까지: 사용자 지시 (2026-10-12)
-[/Sources]
-
 ## 19쪽 · 확인 요청 (17:05–18:20, 75초)
 
 마지막으로 리보틱스 측에 확인을 요청드릴 사항입니다. 파랗게 표시한 세 가지를 우선 여쭙고자 합니다. 첫째, 오늘 보여 드린 운반 임무가 실제 작업 흐름과 부합하는지입니다. 둘째, 시연 판정 기준입니다. 하역 오차와 포크 삽입 깊이의 허용치, 현재와 같이 삽입 직전에 정지해 재관측하는 방식의 허용 여부, 틸트 없는 운반의 허용 여부입니다. 셋째, 팔레트와 목적지 위치를 시스템에서 제공받는지, 로봇이 직접 탐색해야 하는지입니다. 이와 함께 포크 높이를 정밀하게 조절해야 하는지, 현장에 지게차가 동시에 몇 대 투입되고 이를 관리하는 중앙 관제 서버가 있는지도 여쭙고자 합니다. 그 밖에 운용 환경, 시연 코스, 원격 정지 수준도 정해 주시면 설계에 반영하겠습니다. 팔레트는 저희가 정한 EPAL 6과 T11 0.6배 축소판, 적재 10킬로그램 이하 기준으로 개발과 시연을 이어가도 될지 여쭙고자 합니다. 작업장 도면, 운용 영상, 팔레트 도면을 제공해 주시면 시뮬레이션 장면을 그에 맞게 구성하겠습니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.
-
-[Sources]
-출처: 4–6주차 피드백 · 5주차 미팅 질문 이어 받음
-§1 미팅 질문 세 구분 — 우리가 궁금한 것(과제 범위 · 평가 기준) · 기업이 제공할 수 있는 것 · 기업이 결정해 줘야 하는 것(예: 실내 · 실외); 파란 세 줄을 먼저 묻는다: docs/references/week4_feedback.md
-11쪽 미팅 질문 (실제 운용 상황 · 초기 제공 정보 · 시뮬레이션 설정 적합성): week-05/build_deck.py
-시험용 팔레트 EPAL 6 (800 × 600 mm) · T11 × 0.6 (660 × 660 mm)는 팀이 정한 규격; T11 진입구 235 / 350 mm 는 표준 원문으로 따로 확인 (docs/design/2026-09-17-t11-test-article-drawing.md): forklift docs/decisions/0002-test-pallet-and-geometry-generality.md
-들기 10 kg: memory: 하드웨어 사실 (2026-10-12)
-§1 팀 메모: 리보틱스 미팅 때 물어볼 것이 있음: docs/references/week6_feedback.md
-질문 추가: 포크 높이 정밀 조절 필요 여부 · 현장 동시 투입 대수와 중앙 관제 서버 유무: 사용자 지시 (2026-10-13)
-[/Sources]

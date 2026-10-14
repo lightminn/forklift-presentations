@@ -365,3 +365,8 @@ Claude 서브에이전트 3개(화면 · 원고와 흐름 · 기술 내용과 �
 - 조감 영상: 같은 스냅숏으로 장면을 만들고 기록(slam_log 120 Hz 차체 자세 · 조향 · 바퀴 회전, result samples 0.1 s 리프트 · 팔레트)을 프레임마다 놓은 뒤 0 속도 물리 1스텝과 렌더만 함(ws1 artifacts/20261014_meeting_tracked/snap/sim/isaac/run_transport_replay.py, job 2617, 2.5 fps 608 프레임; 바퀴 회전각 ±2π 초과 drive target 경고는 조감에 영향 없음). 사용자당 GPU 상한(측정 작업과 공유)에 걸려 admin QOS 로 실행. 합성은 ws1 메모리가 측정 작업으로 차서 로컬에서 덱 합성기(--clean-map --overview-trail; 계획 기록이 없어 노란 선은 지나온 궤적)로, PANEL1 자르기 12배속.
 - 화면: 소제목 "임무 흐름", ⑤ "출발점까지 경로 계획 → 복귀", 띠 "하역 오차 18 mm, 복귀 오차 49 mm". 원고의 복귀 방식 문장과 "삽입 중 포켓 추적은 별도 실행" 문장을 뺐다. 8쪽 원고 "앞에서 보여 드린 … 같은 실행"을 "실측 차체로 같은 운반 임무를 수행한 실행"으로(8쪽 영상은 이전 3쪽 실행 그대로). QNA 3쪽: 19 → 18 mm, 추적 적용 여부 · 복귀 방식 답을 새 실행 기준으로.
 - 확인: 3쪽 1920 × 1080 렌더, unittest · node 테스트 통과. 영상은 반영 전에 사용자에게 보임.
+
+## 2026-10-14 SCRIPT.md 에서 [Sources] 블록 삭제 (사용자: "대본에 Sources 이거 다 빼. 마크다운 렌더링해서 보니까 다 깨지네")
+
+- 원고는 쪽 제목과 발표 문장만 남겼다. 근거는 SOURCES.md 와 덱 발표자 노트(index.html data-speaker-notes, slide-metadata.json)에 그대로 있다.
+- 확인: SCRIPT.md 의 "Sources" 0건, unittest · node 테스트 통과.

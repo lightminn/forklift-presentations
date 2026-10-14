@@ -787,7 +787,7 @@ def build():
             f'style="background:#fff">\n{component}\n</section>')
         end = elapsed + s['seconds']
         script += [f'## {i}쪽 · {s["label"]} ({elapsed//60:02d}:{elapsed%60:02d}–{end//60:02d}:{end%60:02d}, {s["seconds"]}초)',
-                   '', s['notes'], '', '[Sources]', s['foot'], source_lines, '[/Sources]', '']
+                   '', s['notes'], '']   # no [Sources] blocks in the script (user, 2026-10-14: they break the Markdown view; SOURCES.md and the speaker notes keep them)
         elapsed = end
     html = f'''<!DOCTYPE html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{TITLE}</title>
