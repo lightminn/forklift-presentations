@@ -23,6 +23,11 @@ burned-in text (artifacts/20261012_meeting_clean: compose/compose_online_slam_vi
 composer with the title, panel captions, replan / new-obstacle banners, the "새 장애물" tag and the legend
 line taken out, the error readouts renamed; meeting_clean.sbatch, jobs 2413-2415). Nothing is simulated
 again; the paths, maps, cells and boxes are drawn from the same records as before.
+mission -- since 2026-10-14 the clip is a run with near-field tracking on (ws1 artifacts/20261013_fork_spacing/s4/
+  seed_5_v0.055_none_0, video off). Its overview was rendered from the records in ws1 artifacts/20261014_meeting_tracked
+  (snap/sim/isaac/run_transport_replay.py --replay-run, job 2617, 2.5 fps), composed with the deck composer
+  (--clean-map --overview-trail: the driven path in yellow; the run kept no plan history) and cut with the PANEL1 crop
+  at 12x, CRF 26, poster at 8 s. Before that:
 mission -- ws1 artifacts/20261011_meeting_video/seed_5_d7 (the d7 arm of artifacts/20261008_d7_isaac with
   --video --robot-camera; near-field tracking is off because its measured bounds condition requires video
   off): the overhead panel at 12x -> assets/71_mission.mp4, and the hall still from transport.mp4.

@@ -402,7 +402,7 @@ add('위치 추정', 'LiDAR SLAM 위치 추정', 65, f"""
         ipanel('LiDAR SLAM 선정 근거', f'<table class="comparison t6 m7-slam"><tr><th>항목</th><th>2D LiDAR (선정)</th><th>카메라 (비전)</th></tr>{slam_rows}</table>'), 380)}
 <div class="takeaway">오도메트리만으로는 25 m 운반 동안 1.2 m 벗어나, SLAM으로 계속 보정합니다</div>
 """,
-    """다음은 위치 추정입니다. 경로를 계획하고 따라가려면 지게차가 지도 위 자기 위치를 알아야 하므로, 바퀴와 조향 엔코더로 계산한 오도메트리를 LiDAR SLAM으로 계속 보정합니다. 왼쪽 영상은 앞에서 보여 드린 실측 차체 운반 임무와 같은 실행입니다. 갈색 사각형이 팔레트로, 지게차와 함께 움직이기 시작하는 때가 적재 시점입니다. 빨간 SLAM 추정 경로는 파란 실제 경로를 따라가지만, 주황색 오도메트리 경로는 점차 벗어납니다. 오도메트리만으로는 약 25미터를 운반하는 동안 위치가 최대 1.2미터 벗어났고, SLAM의 오차는 최대 15센티미터, 임무 전체 RMSE는 약 7센티미터였습니다. 임무 종료 시점에는 SLAM 1.5센티미터, 오도메트리 49센티미터였습니다. 오른쪽 표와 같이 카메라는 전방만 관측하고 거리가 멀수록 오차가 커지지만, LiDAR는 12미터까지 360도를 측정하고 그 지도를 경로 계획에 직접 사용할 수 있습니다. 과제 문서도 2D LiDAR를 SLAM용으로 지정했으므로, 위치 추정은 LiDAR가 담당하고 카메라는 팔레트 인식에 집중하도록 역할을 나눴습니다. 다음 장의 경로 계획은 이 SLAM 지도와 위치 위에서 이루어집니다. (전환)""",
+    """다음은 위치 추정입니다. 경로를 계획하고 따라가려면 지게차가 지도 위 자기 위치를 알아야 하므로, 바퀴와 조향 엔코더로 계산한 오도메트리를 LiDAR SLAM으로 계속 보정합니다. 왼쪽 영상은 실측 차체로 같은 운반 임무를 수행한 실행입니다. 갈색 사각형이 팔레트로, 지게차와 함께 움직이기 시작하는 때가 적재 시점입니다. 빨간 SLAM 추정 경로는 파란 실제 경로를 따라가지만, 주황색 오도메트리 경로는 점차 벗어납니다. 오도메트리만으로는 약 25미터를 운반하는 동안 위치가 최대 1.2미터 벗어났고, SLAM의 오차는 최대 15센티미터, 임무 전체 RMSE는 약 7센티미터였습니다. 임무 종료 시점에는 SLAM 1.5센티미터, 오도메트리 49센티미터였습니다. 오른쪽 표와 같이 카메라는 전방만 관측하고 거리가 멀수록 오차가 커지지만, LiDAR는 12미터까지 360도를 측정하고 그 지도를 경로 계획에 직접 사용할 수 있습니다. 과제 문서도 2D LiDAR를 SLAM용으로 지정했으므로, 위치 추정은 LiDAR가 담당하고 카메라는 팔레트 인식에 집중하도록 역할을 나눴습니다. 다음 장의 경로 계획은 이 SLAM 지도와 위치 위에서 이루어집니다. (전환)""",
     [('ws1 artifacts/20261012_return_forward/seed_5_fwd7/run/slam_records.json', '2026-10-14 계산 (applied map←odom ∘ odom←base 대 truth_base, 응답한 스캔 2,443개): 오도메트리 최대 1.210 m (158.8 s, 운반 끝 무렵, 방향 오차 −2.3°), SLAM 최대 0.151 m (163.9 s), SLAM RMSE 0.067 m, 끝 시점 SLAM 0.015 m · 오도메트리 0.489 m; 운반 구간(53.0–160.6 s) 주행 25.5 m, 임무 전체 67.5 m'),
      ('ws1 artifacts/20261014_meeting_slam (job 2603)', '같은 실행을 시뮬레이션 없이 다시 합성: 3쪽 영상과 같은 기록, --draw-odometry --clean-map(계획 경로 · 점유 셀 없이, 이전 S3 영상과 같은 모양) --draw-pallet(result.json samples 0.1 s 의 팔레트 위치 · 방향, EPAL 6 0.8 × 0.6 m) --stride 24'),
      (SLAM, '이전 영상: S3 장면 1 (사진 추정 차체) — 358 s 에서 SLAM 4.0 cm 대 바퀴 회전만 340 cm'),
@@ -522,18 +522,20 @@ MISSION_FLOW = [  # stage in the clip's order, how it is done in this run (2026-
     ('접근 · 삽입', 'Hybrid A* 접근 → 직진 삽입'),   # re-observation step dropped (user, 2026-10-13)
     ('적재 · 운반', '리프트 → 운반, 앞에 장애물이 있으면 정지'),   # plain words (user, 2026-10-14); the occupancy-grid detail is answered orally (QNA)
     ('하역', 'ICP 스캔 정합 → 위치 보정'),
-    ('복귀', '후진 선회로 방향 전환 → 전진 복귀'),
+    ('복귀', '출발점까지 경로 계획 → 복귀'),   # no forward / reverse wording (user, 2026-10-14)
 ]
 mission_flow = ''.join(f'<li><b>{a}</b><span>{b}</span></li>' for a, b in MISSION_FLOW)
 add('운반 임무 전체', '운반 임무 전체', 45, f"""
 <h2 class="headline">인식부터 복귀까지 한 임무로 자율 수행 (실측 차체 모델)</h2>
 {stage(mpanel(video(MISSION_VIDEO, '공장 홀을 상부 시점에서 본 지게차. 팔레트를 인식해 적재하고, 목적지에 하역한 뒤 출발점으로 복귀한다'),
               legend(('line', PLAN, '주행 경로'), ('ring', GOAL, '목적지'))),
-        ipanel('임무 흐름 (삽입 중 추적 미적용 실행)', f'<ol class="m7-vflow">{mission_flow}</ol><p class="m7-vnote"><b>위치 추정</b>전 구간에서 휠 오도메트리를 SLAM으로 보정</p>'), 424)}
-<div class="takeaway">하역 오차 19 mm, 복귀 오차 23 mm로 팔레트에 닿지 않고 임무를 마쳤습니다</div>
+        ipanel('임무 흐름', f'<ol class="m7-vflow">{mission_flow}</ol><p class="m7-vnote"><b>위치 추정</b>전 구간에서 휠 오도메트리를 SLAM으로 보정</p>'), 424)}
+<div class="takeaway">하역 오차 18 mm, 복귀 오차 49 mm로 팔레트에 닿지 않고 임무를 마쳤습니다</div>
 """,
-    """먼저 현재 시뮬레이션에서 처음부터 끝까지 연속으로 수행되는 운반 임무를 보여 드리겠습니다. 실측 차체 모델로 팔레트를 인식하고, 포크를 삽입해 적재한 뒤, 목적지에 하역하고 출발점으로 복귀합니다. 영상은 12배속입니다. 이 실행의 하역 오차는 19밀리미터, 출발점 복귀 오차는 23밀리미터였으며, 포크와 팔레트의 접촉은 없었습니다. 하역 뒤에는 후진으로 크게 선회해 방향을 바꾼 다음 전진으로 돌아오고, 출발점에서는 짧게 후진해 출발 자세에 맞춥니다. 오른쪽은 영상의 진행 순서에 따른 단계별 구현입니다. 인식, 삽입, 위치 추정, 경로 계획은 소프트웨어 부분에서 설명드리겠습니다. 삽입 중 포켓 추적은 별도 실행으로 보여 드립니다. 이 결과를 사람이 운전하는 지게차의 시험 기준과 비교해 보겠습니다. (전환)""",
-    [('ws1 artifacts/20261012_return_forward/seed_5_fwd7', 'forklift 33d46b9 (브랜치 feat/return-turnaround = 6bf45a8 + 복귀 전진 우선, docs/plans/2026-10-12-return-forward-turnaround.md) 의 스냅숏 p5_retturn_6bf45a8_v7(커밋 직전 판, 이 실행의 결정은 같음), 실측 차체 · SLAM 위치 · LiDAR 1대 · --d7-planner --d7-docking --return-turnaround · --video --robot-camera (근접 추적 끔). result.json: success, complete, 하역 19.4 mm, 복귀 2.3 cm · 0.020 rad, 금지 접촉 0, 진입 319.9 / 318.1 mm, 시뮬 244.3 s'),
+    """먼저 현재 시뮬레이션에서 처음부터 끝까지 연속으로 수행되는 운반 임무를 보여 드리겠습니다. 실측 차체 모델로 팔레트를 인식하고, 포크를 삽입해 적재한 뒤, 목적지에 하역하고 출발점으로 복귀합니다. 영상은 12배속입니다. 이 실행의 하역 오차는 18밀리미터, 출발점 복귀 오차는 49밀리미터였으며, 포크와 팔레트의 접촉은 없었습니다. 오른쪽은 영상의 진행 순서에 따른 단계별 구현입니다. 인식, 삽입, 위치 추정, 경로 계획은 소프트웨어 부분에서 설명드리겠습니다. 이 결과를 사람이 운전하는 지게차의 시험 기준과 비교해 보겠습니다. (전환)""",
+    [('ws1 artifacts/20261013_fork_spacing/s4/seed_5_v0.055_none_0', '2026-10-14 부터 이 영상: 스냅숏 fs_s4_3158055(포크 간격 0.3725 m 실험 설정), 실측 차체 · SLAM 위치 · LiDAR 1대 · --d7-planner --d7-docking · 근접 추적 켬(--near-tracking, 주입 없음) · 녹화 끔, 복귀 전환 없음. result.json: success, complete, 하역 18.4 mm, 복귀 4.9 cm · 0.028 rad, 금지 접촉 0, 삽입 315.1 / 313.9 mm, 시뮬 242.9 s; near_tracking: 계약 문제 0, 프레임 488 중 483 수락, 무장 36.2 s · 윗판 전환 55.2 s'),
+     ('ws1 artifacts/20261014_meeting_tracked (job 2617) · 로컬 합성', '녹화 없는 실행이라 조감 영상은 기록(slam_log 120 Hz 차체 자세 · 조향 · 바퀴, result samples 0.1 s 리프트 · 팔레트)을 같은 스냅숏 장면에 그대로 놓고 조감 카메라만 다시 렌더(run_transport_replay.py --replay-run, 2.5 fps = 12배속 30 fps); 계획 기록이 없어 노란 선은 지나온 궤적(compose --overview-trail --clean-map)'),
+     ('ws1 artifacts/20261012_return_forward/seed_5_fwd7', '이전 영상(10-12–14): forklift 33d46b9 (브랜치 feat/return-turnaround = 6bf45a8 + 복귀 전진 우선, docs/plans/2026-10-12-return-forward-turnaround.md) 의 스냅숏 p5_retturn_6bf45a8_v7(커밋 직전 판, 이 실행의 결정은 같음), 실측 차체 · SLAM 위치 · LiDAR 1대 · --d7-planner --d7-docking --return-turnaround · --video --robot-camera (근접 추적 끔). result.json: success, complete, 하역 19.4 mm, 복귀 2.3 cm · 0.020 rad, 금지 접촉 0, 진입 319.9 / 318.1 mm, 시뮬 244.3 s'),
      ('같은 실행 paths.json · result.json live_plans (복귀)', '첫 실시간 복귀 계획 172.09 s: 직접 계획(전 구간 후진 22.8 m, 비교 비용 70.1)과 최대 곡률 후진 호 후보 10개(곡률 0.25 /m, 후진 가중 3) 중 reverse_arc:-1:90 선택(비용 56.6) — 설치 경로 전진 22.9 m · 후진 8.7 m(호 + 출발점 주차), cusp 정체 · 허가 밖 진입 없음'),
      ('ws1 artifacts/20261011_meeting_video/seed_5_d7', '이전 녹화(forklift b66271f, 전환 없음): 같은 장면 · 같은 하역 19.4 mm · 진입 319.9 / 318.1 mm, 복귀는 전 구간 후진 22.8 m, 복귀 2.7 cm · 0.040 rad, 시뮬 219.6 s'),
      ('ws1 artifacts/20261011_meeting_video/seed_1_d7', '같은 조건 장면 1: success, 하역 27.0 mm, 복귀 5.1 cm, 금지 접촉 0, 시뮬 273.8 s'),
@@ -542,7 +544,7 @@ add('운반 임무 전체', '운반 임무 전체', 45, f"""
      ('src/forklift_core/localization/slam_pose.py · scan_match.py · scan_docking.py', 'map<-base = map<-odom(SLAM) × odom<-base(odometry); point-to-line ICP 목적지 도킹'),
      ('src/forklift_core/control/path_tracking.py', 'RearAxlePathTracker — 뒤차축 pure pursuit (곡률 = 2 · 횡오차 / 거리²), 전환점마다 정지'),
      ('sim/isaac/run_transport.py', '이 녹화 실행은 근접 추적 끔: 정렬 직진 시작(2.1 m)에서 한 번 더 관측(near capture) 후 그 위치로 삽입')],
-    '화면 생성: 위 장면 5 기록을 글자 없이 다시 합성한 영상(ws1 artifacts/20261012_meeting_clean/mission_fwd.mp4, Slurm 2494)의 조감 칸 12배속 (prepare_clips.py mission)')
+    '화면 생성: 위 근접 추적 실행의 기록을 Isaac 에서 다시 렌더한 조감 칸 12배속 (ws1 artifacts/20261014_meeting_tracked, 합성은 compose_online_slam_video.py 덱 사본)')
 
 # ----------------------------------------------------------------- 11
 # 2026-10-13 (user, option 3): the exam's tolerances are absolute values for a full-size truck, so a
