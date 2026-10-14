@@ -634,3 +634,8 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .comparison.h7.concl7 td.nxt { color:var(--uos-blue); font-weight:700; }
 .enc7 { grid-template-columns:1fr 1fr; grid-template-rows:minmax(0,1fr); gap:14px; }
 .board7.tall { grid-template-columns:0.72fr 0.95fr 1.18fr; }
+/* slide 3: schematic as large as the height allows, short table beside it */
+.hw7.sch3 { grid-template-columns:minmax(0,2.1fr) minmax(0,1fr); gap:18px; }
+.hw7.sch3 > .shot.sch { padding:2px; }
+.hw7.sch3 { grid-template-columns:auto minmax(0,1fr); }
+.hw7.sch3 > .shot.sch { height:100%; width:auto; aspect-ratio:1800 / 1340; justify-self:start; }
