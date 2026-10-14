@@ -51,7 +51,7 @@ DRV8244SQRYJRQ1 × 4 (L · R · M · H 신호 이름), AM26LV32EIPWR U3 · U5, H
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="02  보드 구성과 신호 경로"><div class="slide-body">
 <h2 class="headline">바퀴 엔코더는 RS-422 수신기로, 조향 · 승강 엔코더는 STDS를 거쳐 LVDS로 연결</h2>
 <div class="hw7 wide grow">
-<figure class="shot sch"><img class="media" src="assets/83_main_sch.png" alt="메인보드 회로도 1쪽 MOTOR&amp;SENSOR 전체. 위와 왼쪽 아래에 DRV8244 네 개, 가운데 AM26LV32 두 개와 1.27 mm 커넥터 두 개, 오른쪽에 SN74LVC1G125 두 개, SN65LVDS31 두 개, SN65LVDS32 한 개, 아래 RJ 잭 두 개"><figcaption>메인보드 회로도 (3쪽 중 1쪽, 모터와 센서)</figcaption></figure>
+<figure class="shot sch"><img class="media" src="assets/83_main_sch.png" alt="메인보드 회로도 1쪽 MOTOR&amp;SENSOR 전체. 위와 왼쪽 아래에 DRV8244 네 개, 가운데 AM26LV32 두 개와 1.27 mm 커넥터 두 개, 오른쪽에 SN74LVC1G125 두 개, SN65LVDS31 두 개, SN65LVDS32 한 개, 아래 RJ 잭 두 개"><figcaption>메인보드 회로도</figcaption></figure>
 <table class="comparison h7 nwall"><tr><th>측정</th><th>센서 쪽</th><th>케이블</th><th>메인보드 쪽</th></tr><tr><td>바퀴 L, R</td><td>MT6701 보드</td><td>1.27 mm 2×4</td><td>AM26LV32</td></tr><tr><td>조향 M, 승강 H</td><td>KTH7801 → STDS</td><td>RJ50 10핀</td><td>SN65LVDS31 · 32</td></tr><tr><td>전원</td><td>LDO로 3.3 V</td><td>같은 케이블 5 V</td><td>5 V 공급</td></tr></table>
 </div>
 <div class="takeaway">바퀴 엔코더는 회전 펄스를, 조향과 승강 엔코더는 SPI로 각도 값을 보내므로 신호 종류에 맞는 차동 방식을 씁니다</div>
