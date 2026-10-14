@@ -269,7 +269,7 @@ rmw_zenoh (멀티캐스트 탐색 없이 라우터 사용) — Wi-Fi 구성 후�
 
 <section data-label="실물 차체" data-screen-label="13" data-duration="60" data-speaker-notes="권장 60초
 
-다음은 소프트웨어를 올릴 차체입니다. 입고된 차체를 실측해 앞의 시뮬레이션 모델에 반영했습니다. 가장 큰 차이는 조향각이었습니다. 최대 조향각이 15도로, 계산한 최소 회전 반경은 약 2.5미터입니다. 사진으로 추정한 모델의 두 배에 가깝습니다. 앞의 경로 계획에서 전진과 후진을 반복해 방향을 맞추도록 한 근거가 이 값입니다. 축거, 윤거, 바퀴 반경은 사진 추정과 1에서 2센티미터 차이였습니다. 포크 길이가 36센티미터이므로 EPAL 6 팔레트의 삽입 목표는 33센티미터로 설정했고, 포크 간격은 5.5에서 38센티미터까지 조절됩니다. 최대 적재 하중은 카탈로그 기준 10킬로그램이며, 시뮬레이션 팔레트 질량도 10킬로그램으로 설정했습니다. 회전 반경은 조향각에서 계산한 값이므로 주행 시험으로 검증하겠습니다. (전환)
+다음은 소프트웨어를 올릴 차체입니다. 입고된 차체를 실측해 앞의 시뮬레이션 모델에 반영했습니다. 가장 중요한 값은 조향각입니다. 최대 조향각이 15도로, 계산한 최소 회전 반경은 약 2.5미터입니다. 앞의 경로 계획에서 전진과 후진을 반복해 방향을 맞추도록 한 근거가 이 값입니다. 축거, 윤거, 바퀴 반경도 시뮬레이션 모델에 반영했습니다. 포크 길이가 36센티미터이므로 EPAL 6 팔레트의 삽입 목표는 33센티미터로 설정했고, 포크 간격은 5.5에서 38센티미터까지 조절됩니다. 최대 적재 하중은 카탈로그 기준 10킬로그램이며, 시뮬레이션 팔레트 질량도 10킬로그램으로 설정했습니다. 회전 반경은 조향각에서 계산한 값이므로 주행 시험으로 검증하겠습니다. (전환)
 
 [Sources]
 출처: 5주차 실측 (사진 2026-09-30, EXIF 제거)
@@ -280,7 +280,7 @@ rmw_zenoh (멀티캐스트 탐색 없이 라우터 사용) — Wi-Fi 구성 후�
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="12  하드웨어 · 실물 차체 실측"><div class="slide-body">
 <h2 class="headline">최대 조향각이 15°라 최소 회전 반경은 약 2.5 m, 포크 길이는 36 cm</h2>
-<div class="m7-stage grow" style="grid-template-columns:346px 1fr"><figure class="m7-media light"><img class="media" src="assets/30_chassis_pallet.jpg" alt="입고한 지게차 차체와 앞에 놓인 동봉 플라스틱 팔레트"></figure><div class="m7-info "><p class="ph">실측 결과</p><div class="tb"><table class="comparison t6 m7-chassis"><tr><th>항목</th><th>실측</th><th>비교 · 영향</th></tr><tr><td>최대 조향각</td><td><b>15°</b></td><td>사진 추정 대비 회전 반경 1.9배</td></tr><tr><td>축거 · 윤거 · 바퀴 반경</td><td><b>0.66 · 0.53 · 0.125 m</b></td><td>사진 추정 대비 1–2 cm 차이</td></tr><tr><td>포크 길이 · 폭 · 두께</td><td><b>36 · 5.5 · 2.5 cm</b></td><td>EPAL 6 삽입 목표 33 cm (계산)</td></tr><tr><td>포크 간격</td><td><b>5.5–38 cm 조절</b></td><td>팔레트 받침목 간격에 맞춤</td></tr><tr><td>외형 · 질량</td><td><b>1.46 × 0.63 × 1.01 m · 24 kg</b></td><td>카탈로그 값과 일치</td></tr><tr><td>최대 적재 하중</td><td><b>10 kg (카탈로그)</b></td><td>시뮬레이션 팔레트 질량과 같음</td></tr></table></div></div></div>
+<div class="m7-stage grow" style="grid-template-columns:346px 1fr"><figure class="m7-media light"><img class="media" src="assets/30_chassis_pallet.jpg" alt="입고한 지게차 차체와 앞에 놓인 동봉 플라스틱 팔레트"></figure><div class="m7-info "><p class="ph">실측 결과</p><div class="tb"><table class="comparison t6 m7-chassis"><tr><th>항목</th><th>실측</th><th>비교 · 영향</th></tr><tr><td>최대 조향각</td><td><b>15°</b></td><td>최소 회전 반경 약 2.5 m (계산)</td></tr><tr><td>축거 · 윤거 · 바퀴 반경</td><td><b>0.66 · 0.53 · 0.125 m</b></td><td>회전 반경 · 주행 거리 계산</td></tr><tr><td>포크 길이 · 폭 · 두께</td><td><b>36 · 5.5 · 2.5 cm</b></td><td>EPAL 6 삽입 목표 33 cm (계산)</td></tr><tr><td>포크 간격</td><td><b>5.5–38 cm 조절</b></td><td>팔레트 받침목 간격에 맞춤</td></tr><tr><td>외형 · 질량</td><td><b>1.46 × 0.63 × 1.01 m · 24 kg</b></td><td>카탈로그 값과 일치</td></tr><tr><td>최대 적재 하중</td><td><b>10 kg (카탈로그)</b></td><td>시뮬레이션 팔레트 질량과 같음</td></tr></table></div></div></div>
 <div class="takeaway">실측값은 시뮬레이션 차체 모델에 반영했고, 회전 반경은 주행 시험으로 검증합니다</div>
 </div></x-import>
 </section>
