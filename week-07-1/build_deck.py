@@ -450,7 +450,7 @@ REVERSE_ROWS = [  # 2026-10-14 (user, option 1): the goal-fix drawing removed; i
     ('기존 경로', '최소 회전 반경에 가깝지만 상자 위를 지남'),
     ('선회 영역', '최소 회전 반경으로 돌아도 상자에 걸림'),
     ('선택', '1.75 m 후진한 뒤 선회해 회피'),
-    ('목적지 자세 보정', '전진만 21.7 m 선회, 전 · 후진은 1.0 m'),
+    ('방향 맞추기', '목적지 앞에서 전진만 21.7 m, 앞뒤로 1.0 m'),   # plainer (user, 2026-10-14)
 ]
 reverse_rows = ''.join(f'<tr><td>{a}</td><td>{b}</td></tr>' for a, b in REVERSE_ROWS)
 add('후진을 고르는 이유', '경로 계획의 후진 선택 조건', 85, f"""
