@@ -624,3 +624,13 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .board7.tall > .stack { grid-row:auto; }
 .board7.tall > .shot.sch { height:100%; }
 .board7.tall > table { align-self:center; }
+/* 12-slide version: both encoder boards on one slide, conclusion table */
+.enc7 { display:grid; grid-template-columns:auto 0.85fr 1.25fr; grid-template-rows:minmax(0,1fr) minmax(0,1fr); gap:8px 14px; min-height:0; }
+.enc7 > .shot { min-height:0; height:100%; }
+.enc7 .rl { align-self:center; margin:0; font-size:20px; font-weight:700; color:#44505c; }
+.comparison.h7.concl7 { font-size:21px; line-height:1.4; }
+.comparison.h7.concl7 th, .comparison.h7.concl7 td { padding:14px 14px; vertical-align:middle; }
+.comparison.h7.concl7 td { white-space:nowrap; }
+.comparison.h7.concl7 td.nxt { color:var(--uos-blue); font-weight:700; }
+.enc7 { grid-template-columns:1fr 1fr; grid-template-rows:minmax(0,1fr); gap:14px; }
+.board7.tall { grid-template-columns:0.72fr 0.95fr 1.18fr; }

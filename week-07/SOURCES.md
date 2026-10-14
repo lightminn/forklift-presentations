@@ -34,11 +34,11 @@
 
 | 파일 | 쪽 | 만든 방법 |
 |---|---|---|
-| `assets/80_mt_{top,bottom}.jpg`, `81_kth_{top,bottom}.jpg`, `82_stds_{top,bottom}.jpg` | 2, 6–8, 10 | 팀 3D 렌더의 검은 여백만 잘라 1100 px 로(mt6701_1 은 편집기 탭과 옆 패널 경계선도, kth7801_2 는 렌더를 가로지르는 선 하나도 지움) |
-| `assets/80_mt_sch.png`, `81_kth_sch.png`, `82_stds_sch.png` | 7, 8, 10 | 팀 회로도에서 그린 부분만 남김 |
-| `assets/81_kth_ldo.png` | 15 | KTH7801 회로도의 레귤레이터(U1) 부분 |
-| `assets/83_main_sch.png` | 4 | 메인보드 회로도 1쪽, 크기만 줄임 |
-| `assets/83_main_{drv,abz,lvds,buf,rj}.png` | 5, 11, 12, 16 | 메인보드 회로도에서 L 채널 · 바퀴 엔코더 수신 · LVDS · MISO 버퍼 · RJ 잭 부분을 잘라 냄 |
-| `assets/75_enc_top.jpg`, `75_enc_bottom.jpg`, `75_enc127_top.jpg`, `75_enc127_layout.jpg` | 17 | KTH7801 보드 이전 판(2.54 mm, 1.27 mm V1.0.1) 3D 렌더와 배치도 — 알파 배경을 검정으로, 여백만 잘라 900 px |
+| `assets/80_mt_top.jpg`, `81_kth_top.jpg` | 5 | 팀 3D 렌더의 검은 여백만 잘라 1100 px 로(mt6701_1 은 편집기 탭과 옆 패널 경계선도 지움) |
+| `assets/82_stds_{top,bottom}.jpg` | 8 | 같은 처리 |
+| `assets/80_mt_sch.png`, `81_kth_sch.png`, `82_stds_sch.png` | 6, 8 | 팀 회로도에서 그린 부분만 남김 |
+| `assets/83_main_sch.png` | 3 | 메인보드 회로도 1쪽, 크기만 줄임 |
+| `assets/83_main_{drv,rj}.png` | 4, 10 | 메인보드 회로도에서 L 채널 · RJ 잭 부분을 잘라 냄 |
+| `assets/75_enc_top.jpg`, `75_enc_bottom.jpg`, `75_enc127_top.jpg`, `75_enc127_layout.jpg` | 11 | KTH7801 보드 이전 판(2.54 mm, 1.27 mm V1.0.1) 3D 렌더와 배치도 — 알파 배경을 검정으로, 여백만 잘라 900 px |
 
-그래프(9 · 13 · 14쪽)와 3쪽 블록도는 `build_deck.py` 가 SVG 로 그린다.
+그래프(7 · 9쪽)와 2쪽 블록도는 `build_deck.py` 가 SVG 로 그린다.

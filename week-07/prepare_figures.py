@@ -64,8 +64,8 @@ def main(src, out):
     o = lambda n: out / n
 
     # 3D renders (black background); mt6701_1 still has the editor's tab bar and right edge
-    renders = {'mt6701_1.png': ('80_mt_top.jpg', 90, 40), 'mt6701_2.png': ('80_mt_bottom.jpg', 0, 0),
-               'kth7801_1.png': ('81_kth_top.jpg', 0, 0), 'kth7801_2.png': ('81_kth_bottom.jpg', 0, 0),
+    renders = {'mt6701_1.png': ('80_mt_top.jpg', 90, 40),
+               'kth7801_1.png': ('81_kth_top.jpg', 0, 0),
                'stds_2.png': ('82_stds_top.jpg', 0, 0), 'stds_3.png': ('82_stds_bottom.jpg', 0, 0)}
     for name, (dst, top, right) in renders.items():
         fit(trim_render(Image.open(src / name), ui_top=top, ui_right=right), 1100).save(o(dst), quality=90)
@@ -73,16 +73,11 @@ def main(src, out):
     # schematics (paper background) -- PNG keeps the thin lines sharp
     for name, dst in (('mt6701_3.png', '80_mt_sch.png'), ('kth7801_3.png', '81_kth_sch.png'), ('stds_1.png', '82_stds_sch.png')):
         fit(trim_sheet(Image.open(src / name)), 1500).save(o(dst), optimize=True)
-    # the KTH7801 board's regulator block (U1 TLV70233 with C3/C4), same on all three sensor-side boards
-    Image.open(src / 'kth7801_3.png').convert('RGB').crop((195, 415, 615, 655)).save(o('81_kth_ldo.png'), optimize=True)
 
     main_sheet = Image.open(src / 'mainboard_1.png').convert('RGB')   # 2477 x 1770
     fit(main_sheet, 1800).save(o('83_main_sch.png'), optimize=True)
     # blocks of the main sheet (original pixel coordinates, read off the sheet)
     blocks = {'83_main_drv.png': (95, 100, 790, 460),      # L channel: DRV8244 U? with its parts
-              '83_main_abz.png': (290, 492, 1345, 985),    # AM26LV32 U3/U5 + CN1/CN2 (wheel encoders)
-              '83_main_buf.png': (1420, 392, 1745, 830),   # U9/U10 LVC1G125: two MISO lines onto one
-              '83_main_lvds.png': (1860, 560, 2330, 1345), # U6/U7 LVDS31 (CLK, MOSI, CS out), U8 LVDS32 (MISO in)
               '83_main_rj.png': (835, 1030, 1850, 1355)}   # RJ1/RJ2 (KTH7801 cables)
     for dst, box in blocks.items():
         fit(main_sheet.crop(box), 1400).save(o(dst), optimize=True)
