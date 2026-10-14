@@ -79,13 +79,14 @@ spi.png(같은 표) 참고, 「노이즈가 없다고 가정해도 3M만 가도 
 
 ## 8쪽 · STDS 보드와 메인보드 LVDS (05:55–06:55, 60초)
 
-KTH7801 바로 옆에 두는 STDS 보드입니다. STDS는 단일 종단 신호를 차동 신호로 바꾼다는 뜻의 Single-ended To Differential Signal을 줄인 이름입니다. 메인보드에서 LVDS로 오는 클럭, MOSI, 칩 선택 세 쌍을 SN65LVDS32 수신기가 받아 보통 SPI 신호로 바꿔 KTH7801에 넘기고, KTH7801이 내는 MISO는 SN65LVDS1 송신기가 다시 LVDS로 바꿔 돌려보냅니다. 메인보드 쪽은 SN65LVDS31이 센서마다 클럭, MOSI, 칩 선택을 보내고, 돌아오는 MISO 두 쌍은 SN65LVDS32가 받습니다. MCU의 MISO 핀은 하나라서, 버퍼 SN74LVC1G125의 출력 허용 핀에 칩 선택을 연결해 선택된 센서의 MISO만 통과시킵니다. 수신 쪽 차동 선 사이에는 100옴 종단 저항을 답니다. 선 길이가 신호 파장의 10분의 1을 넘으면 전송선로로 보고 끝에서 반사되지 않게 임피던스를 맞춰야 하는데, 꼬임쌍 케이블에서 신호는 나노초에 약 20센티미터를 가므로 클럭 10메가헤르츠 기준으로는 2미터가 경계입니다. 하지만 KTH7801 출력의 상승 시간 10나노초를 흔히 쓰는 0.35 나누기 상승 시간으로 환산하면 약 35메가헤르츠라, 약 0.6미터부터 전송선로입니다. (전환)
+KTH7801 바로 옆에 두는 STDS 보드입니다. STDS는 단일 종단 신호를 차동 신호로 바꾼다는 뜻의 Single-ended To Differential Signal을 줄인 이름입니다. 메인보드에서 LVDS로 오는 클럭, MOSI, 칩 선택 세 쌍을 SN65LVDS32 수신기가 받아 보통 SPI 신호로 바꿔 KTH7801에 넘기고, KTH7801이 내는 MISO는 SN65LVDS1 송신기가 다시 LVDS로 바꿔 돌려보냅니다. 메인보드 쪽은 SN65LVDS31이 센서마다 클럭, MOSI, 칩 선택을 보내고, 돌아오는 MISO 두 쌍은 SN65LVDS32가 받습니다. 보통 SPI에서는 선택되지 않은 슬레이브가 MISO를 Hi-Z로 놓아 여러 센서가 한 선을 함께 씁니다. 그런데 LVDS를 거치면 송신기와 수신기가 MISO 선을 계속 구동해서 이 Hi-Z가 메인보드까지 전달되지 않습니다. 그래서 3상태 버퍼 SN74LVC1G125의 출력 허용 핀에 칩 선택을 연결해, 선택된 센서의 MISO만 통과시키고 나머지는 Hi-Z로 만듭니다. 수신 쪽 차동 선 사이에는 100옴 종단 저항을 답니다. 선 길이가 신호 파장의 10분의 1을 넘으면 전송선로로 보고 끝에서 반사되지 않게 임피던스를 맞춰야 하는데, 꼬임쌍 케이블에서 신호는 나노초에 약 20센티미터를 가므로 클럭 10메가헤르츠 기준으로는 2미터가 경계입니다. 하지만 KTH7801 출력의 상승 시간 10나노초를 흔히 쓰는 0.35 나누기 상승 시간으로 환산하면 약 35메가헤르츠라, 약 0.6미터부터 전송선로입니다. (전환)
 
 [Sources]
 STDS = Single-ended To Differential Signal (사용자 2026-10-14); STDS V1.0.0: U8 SN65LVDS32DR (1A/1B CLK, 2A/2B MOSI, 4A/4B CS → CLK · MOSI · CS), R1–R3 100 Ω (D–D\ 사이), U2 SN65LVDS1DBVR (MISO → MISO_D · MISO_D\), U1 TLV70233DBVR, CN1 HX JN1.27-2x4P, RJ1 5558067-1: 팀 EasyEDA 자료 (2026-10-14) stds_1–3
 U6 · U7 SN65LVDS31DR: KTH_CLK · KTH_MOSI · KTH_CS1/2 → 차동; U8 SN65LVDS32DR: KTH_MISO1/2_D → KTH_MISO1/2; U9 · U10 SN74LVC1G125DBVR: OE ← KTH_CS1 · KTH_CS2 (2.2 kΩ 풀업), Y → KTH_MISO: 팀 EasyEDA 자료 (2026-10-14) mainboard_1.png
 SN65LVDS32 — 4채널 LVDS 수신, 내부 종단 없음(외부 100 Ω): https://www.ti.com/lit/ds/symlink/sn65lvds32.pdf
 SN65LVDS1 — 1채널 LVDS 송신, 100 Ω 선로용: https://www.ti.com/lit/ds/symlink/sn65lvds1.pdf
+MISO 는 원래 nCS 가 High 면 Hi-Z 인데 LVDS 를 거치면 그게 안 되어 3상태 버퍼로 Hi-Z 를 만들어야 함; 회로도 확인: STDS U2 SN65LVDS1 은 출력 허용 핀이 없고, 메인보드 U8 SN65LVDS32 는 G = 3V3 · G# = AGND 로 늘 켜짐(네 채널 공용 허용 핀): 사용자 설명 (2026-10-14)
 SN74LVC1G125 — OE Low일 때 출력, High면 고임피던스: https://www.ti.com/lit/ds/symlink/sn74lvc1g125.pdf
 전기적 길이 = 주파수 × 선 길이 / 전파 속도, 0.1(λ/10) 초과 시 전송선로; 꼬임쌍 약 20 cm/ns; 10 MHz · 2 m → 0.1: 사용자 메모 (2026-10-14)
 KTH7801 TR 10 ns(Table 9) → 0.35 / tr ≈ 35 MHz → λ/10 ≈ 0.57 m (경험식): 계산
