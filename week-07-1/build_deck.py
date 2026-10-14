@@ -703,7 +703,7 @@ QUESTIONS = [  # group (week 4 feedback: asked / decided / provided), items; (Tr
     ('정해 주실 사항', [(True, '팔레트와 목적지 위치를 미리 알려 주시나요, 로봇이 직접 찾아야 하나요?'),
                   (False, '실내인지 실외인지, 통로 폭과 바닥, 장애물과 작업자 동선은 어떤가요?'),
                   (False, '저희가 정한 팔레트 규격(EPAL 6, T11 0.6배 축소판, 적재 10 kg 이하)으로 개발과 시연을 이어가도 될까요?'),   # user, 2026-10-14: ask for approval of our choice, not T11's opening
-                  (False, '시연은 실기시험 코스를 축소해서 진행하나요?'),
+                  (False, '시연은 어떤 코스와 환경에서 진행하나요?'),   # user, 2026-10-14
                   (False, '원격 정지는 어느 수준까지 필요한가요?')]),
     ('요청 자료', [(False, '작업장 도면, 운용 영상, 사용하는 팔레트 도면을 받을 수 있을까요?')]),
 ]
