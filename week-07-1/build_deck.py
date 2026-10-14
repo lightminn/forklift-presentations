@@ -559,7 +559,7 @@ EXAM = [  # item, exam rule (full-size truck), our measurement (simulation); tol
 exam_rows = ''.join(f'<tr><td class="it">{a}</td><td>{b}</td><td class="ours">{c}</td></tr>' for a, b, c in EXAM)
 
 add('자격시험 기준 비교', '지게차운전기능사 실기 판정 항목', 55, f"""
-<h2 class="headline">실기시험 판정 항목을 개발 차량에서 측정, 허용치는 확인 필요</h2>
+<h2 class="headline">시뮬레이션 결과와 실기시험 판정 기준 비교</h2>
 <div class="m7-info grow"><div class="tb"><table class="comparison m7-exam"><tr><th>항목</th><th>실기시험 (실제 지게차)</th><th>개발 차량 (시뮬레이션)</th></tr>{exam_rows}</table></div></div>
 <div class="takeaway">실제 지게차 규모의 허용치는 개발 차량에 맞지 않아, 정해 주시는 허용치로 평가하겠습니다</div>
 """,
