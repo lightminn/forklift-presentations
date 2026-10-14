@@ -1,6 +1,6 @@
 {
   "week": 7,
   "title": "7주차 개발 진행 보고",
-  "summary": "다중 지게차 교통 관리 시뮬레이션과 KTH7801 절대각 엔코더 보드 PCB",
+  "summary": "DRV8244 4채널 메인보드와 MT6701 · KTH7801 엔코더 보드, SPI의 LVDS 차동 전송과 클럭 한계",
   "status": "published"
 }

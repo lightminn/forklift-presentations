@@ -582,3 +582,45 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .pcbimgs .rl.now { color:var(--uos-blue); }
 .pcbimgs .cl { font-size:17px; color:#44505c; text-align:center; margin:0; }
 .pcbimgs .shot figcaption { color:#e8ecf1; font-size:16px; margin-top:2px; }
+/* ---- Week 7 hardware deck (2026-10-14): media beside a compact table, blue band ---- */
+.hw7 { display:grid; grid-template-columns:1.2fr 1fr; gap:22px; min-height:0; align-items:center; }
+.hw7.wide { grid-template-columns:1.55fr 1fr; }
+.hw7 > * { min-height:0; }
+.hw7 > .shot, .hw7 > .stack, .hw7 > .duo7 { height:100%; }
+.stack { display:flex; flex-direction:column; gap:10px; min-height:0; justify-content:center; }
+.stack > .shot { flex:1; min-height:0; }
+.duo7 { display:grid; grid-template-columns:1fr 0.62fr; gap:10px; min-height:0; }
+.duo7 > .shot { height:100%; min-height:0; }
+.shot.r3d { background:#000; border-radius:4px; padding:6px; }
+.shot.r3d figcaption { color:#e8ecf1; font-size:16px; margin-top:3px; }
+.shot.sch { border:1px solid var(--uos-rule); padding:6px; }
+.shot.sch figcaption { color:#44505c; font-size:16px; margin-top:3px; }
+.shot .media { border:0; }
+.board7 { display:grid; grid-template-columns:0.8fr 1.3fr; grid-template-rows:minmax(0,1fr) auto; gap:10px 18px; min-height:0; }
+.board7 > .stack { grid-row:1 / span 2; }
+.board7 > .shot { min-height:0; }
+.sum7 { display:flex; flex-direction:column; gap:12px; min-height:0; }
+.sum7 > .trio7 { flex:1; min-height:0; }
+.trio7 { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; min-height:0; }
+.trio7 > .shot { height:100%; min-height:0; }
+.comparison.h7 { font-size:19px; line-height:1.35; }
+.comparison.h7 th, .comparison.h7 td { padding:8px 10px; }
+.comparison.h7 td:first-child { width:auto; white-space:nowrap; }
+.comparison.h7.nwall td { white-space:nowrap; }
+.comparison.h7 tr.sum td { font-weight:700; color:var(--uos-blue); border-top:2px solid var(--uos-blue); }
+.comparison.h7.pins7 th, .comparison.h7.pins7 td { text-align:center; padding:6px 6px; }
+.comparison.h7.dly7 { font-size:18px; }
+.comparison.h7.dly7 td, .comparison.h7.dly7 th { padding:6px 10px; }
+.comparison.h7.dly7 td:last-child { white-space:nowrap; text-align:right; }
+.cap7 { margin:0; font-size:18px; font-weight:700; color:#44505c; text-align:center; }
+.sys7 .diagram { width:100%; height:auto; max-height:100%; }
+.lgd7 { flex-shrink:0; display:flex; flex-wrap:wrap; justify-content:center; gap:4px 26px; font-size:17px; color:#1b1f24; }
+.lgd7 .lg { display:inline-flex; align-items:center; gap:8px; white-space:nowrap; }
+.lgd7 .sw { display:inline-block; width:22px; height:14px; box-sizing:border-box; }
+.lgd7 .sw.ln { width:28px; height:4px; border-radius:2px; }
+.lgd7 .sw.dash { width:28px; height:0; border-top:4px dashed; }
+.lgd7 .sw.x { width:auto; height:auto; font-size:22px; font-weight:700; line-height:1; }
+.board7.tall { grid-template-columns:0.8fr 1fr 0.95fr; grid-template-rows:minmax(0,1fr); }
+.board7.tall > .stack { grid-row:auto; }
+.board7.tall > .shot.sch { height:100%; }
+.board7.tall > table { align-self:center; }
