@@ -52,7 +52,7 @@ DRVOFF를 무선 비상정지와 연동할 예정: week-07-1 15쪽
 「absolute는 KTH7801 이거쓸거임」, MT6701 · KTH7801 보드 구별: 사용자 (2026-10-14)
 MT6701 Rev.1.5 — INL ±1.0° 대표 · ±1.5° 최대, 14비트, ABZ 1–1024 PPR: https://uploadcdn.oneyac.com/attachments/files/brand_pdf/magntek/F3/CA/MT6701QT-STD.pdf
 MT6701 1.9판(2024-05) 주문 정보 — MT6701QT-ACD: AB 1,024펄스/회전, Z 1 LSB, UVW = -A-B-Z: https://atta.szlcsc.com/upload/public/pdf/source/20260616/FEB700C1922508565884FF0A90656B50.pdf
-KTH7801 Series (2024-09-27) — 16비트 절대각, 비선형 오차 ±0.35°(대표), SOP-8 = SPI · PWM, KTH7801-X-C-SOP8 = CRC 판, 5.6절 SPI CRC 프레임 12비트 각도 + CRC-4: https://shop.mev-elektronik.com/wp-content/uploads/KTH7801_datasheet_EN.pdf
+KTH7801 Series (2024-09-27) — 절대각 16비트(N 판), C 판(KTH7801-X-C-SOP8, 사용 품번)은 SPI 한 프레임이 각도 12비트 + CRC 4비트 (사용자 확인 2026-10-14), 비선형 오차 ±0.35°(대표), SOP-8 = SPI · PWM, KTH7801-X-C-SOP8 = CRC 판, 5.6절 SPI CRC 프레임 12비트 각도 + CRC-4: https://shop.mev-elektronik.com/wp-content/uploads/KTH7801_datasheet_EN.pdf
 5주차 엔코더 선정: MT6701로 증분 · 절대 모두: week-05/build_deck.py 6쪽
 [/Sources]
 

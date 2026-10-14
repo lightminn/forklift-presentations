@@ -94,7 +94,7 @@ DRVOFF를 무선 비상정지와 연동할 예정: week-07-1 15쪽
 「absolute는 KTH7801 이거쓸거임」, MT6701 · KTH7801 보드 구별: 사용자 (2026-10-14)
 MT6701 Rev.1.5 — INL ±1.0° 대표 · ±1.5° 최대, 14비트, ABZ 1–1024 PPR: https://uploadcdn.oneyac.com/attachments/files/brand_pdf/magntek/F3/CA/MT6701QT-STD.pdf
 MT6701 1.9판(2024-05) 주문 정보 — MT6701QT-ACD: AB 1,024펄스/회전, Z 1 LSB, UVW = -A-B-Z: https://atta.szlcsc.com/upload/public/pdf/source/20260616/FEB700C1922508565884FF0A90656B50.pdf
-KTH7801 Series (2024-09-27) — 16비트 절대각, 비선형 오차 ±0.35°(대표), SOP-8 = SPI · PWM, KTH7801-X-C-SOP8 = CRC 판, 5.6절 SPI CRC 프레임 12비트 각도 + CRC-4: https://shop.mev-elektronik.com/wp-content/uploads/KTH7801_datasheet_EN.pdf
+KTH7801 Series (2024-09-27) — 절대각 16비트(N 판), C 판(KTH7801-X-C-SOP8, 사용 품번)은 SPI 한 프레임이 각도 12비트 + CRC 4비트 (사용자 확인 2026-10-14), 비선형 오차 ±0.35°(대표), SOP-8 = SPI · PWM, KTH7801-X-C-SOP8 = CRC 판, 5.6절 SPI CRC 프레임 12비트 각도 + CRC-4: https://shop.mev-elektronik.com/wp-content/uploads/KTH7801_datasheet_EN.pdf
 5주차 엔코더 선정: MT6701로 증분 · 절대 모두: week-05/build_deck.py 6쪽
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="04  엔코더 배치와 칩 선정"><div class="slide-body">
@@ -104,7 +104,7 @@ KTH7801 Series (2024-09-27) — 16비트 절대각, 비선형 오차 ±0.35°(�
 <figure class="shot r3d"><img class="media" src="assets/80_mt_top.jpg" alt="MT6701 보드 3D 앞면. QFN-16 칩 U1, C1, C3, 2열 4핀 단자"><figcaption>MT6701 보드 (바퀴 L, R)</figcaption></figure>
 <figure class="shot r3d"><img class="media" src="assets/81_kth_top.jpg" alt="KTH7801 보드 3D 앞면. SOP-8 칩 U2, R4, C1, C2와 2열 4핀 단자"><figcaption>KTH7801 보드 (조향 M, 승강 H)</figcaption></figure>
 </div>
-<table class="comparison h7 nwall"><tr><th>항목</th><th>MT6701</th><th>KTH7801</th></tr><tr><td>출력</td><td>A, B, Z 펄스 (증분)</td><td>SPI 각도 값 (절대)</td></tr><tr><td>분해능</td><td>1,024펄스/회전</td><td>16비트</td></tr><tr><td>비선형 오차</td><td>±1.0° (대표값)</td><td><b>±0.35°</b> (대표값)</td></tr><tr><td>전원 켤 때</td><td>회전 수부터 셈</td><td><b>바로 현재 각도</b></td></tr><tr><td>패키지</td><td>QFN-16</td><td>SOP-8</td></tr><tr><td>품번</td><td>MT6701QT-ACD</td><td>KTH7801-X-C-SOP8</td></tr></table>
+<table class="comparison h7 nwall"><tr><th>항목</th><th>MT6701</th><th>KTH7801</th></tr><tr><td>출력</td><td>A, B, Z 펄스 (증분)</td><td>SPI 각도 값 (절대)</td></tr><tr><td>분해능</td><td>1,024펄스/회전</td><td>12비트 + CRC 4비트</td></tr><tr><td>비선형 오차</td><td>±1.0° (대표값)</td><td><b>±0.35°</b> (대표값)</td></tr><tr><td>전원 켤 때</td><td>회전 수부터 셈</td><td><b>바로 현재 각도</b></td></tr><tr><td>패키지</td><td>QFN-16</td><td>SOP-8</td></tr><tr><td>품번</td><td>MT6701QT-ACD</td><td>KTH7801-X-C-SOP8</td></tr></table>
 </div>
 <div class="takeaway">바퀴는 회전 펄스를 세면 되지만, 조향과 승강은 전원을 켜자마자 현재 각도를 알아야 해서 절대 엔코더를 씁니다</div>
 </div></x-import>

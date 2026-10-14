@@ -20,7 +20,7 @@
 |---|---|
 | TI TIDA-060017 / TIDUED8 (2018-07) | 3.2.1.1 · Table 4: 1 Vpp 잡음, CAT5, 단일 종단 SPI 0.5 m 101 → 31 dB, 3 m 전부 Fail, LVDS 0.5 m 101 → 52 dB, 3 m 101 → 45 dB |
 | MagnTek MT6701 Rev.1.5 (영문) · 1.9판(중문, 2024-05) | INL ±1.0° 대표 · ±1.5° 최대, VDD 3.0–5.5 V, QFN-16 ABZ Differential 핀(9 -Z · 11 -A · 12 -B), MT6701QT-ACD = AB 1,024펄스/회전 · UVW = -A-B-Z 출고 설정 |
-| CONNTEK KTH7801 Series (2024-09-27) | 16비트, 비선형 오차 ±0.35°(대표), 3.3 V 판 3.0–3.6 V, SOP-8 TEST 띄움, SPI CPOL = 1 · CPHA = 1 · 16비트 프레임, CRC 판 12비트 + CRC-4, Table 9 TSCK ≥ 100 ns · TDV ≤ 50 ns · TR 10 ns |
+| CONNTEK KTH7801 Series (2024-09-27) | 16비트(N 판; 사용하는 C 판은 각도 12비트 + CRC 4비트), 비선형 오차 ±0.35°(대표), 3.3 V 판 3.0–3.6 V, SOP-8 TEST 띄움, SPI CPOL = 1 · CPHA = 1 · 16비트 프레임, CRC 판 12비트 + CRC-4, Table 9 TSCK ≥ 100 ns · TDV ≤ 50 ns · TR 10 ns |
 | TI SN65LVDS31 (8.8) | tPHL 최대 2.5 ns |
 | TI SN65LVDS32 (8.8) | tPLH · tPHL 최대 3 ns, 내부 종단 없음 |
 | TI SN65LVDS1 (6.7) | 드라이버 tPLH · tPHL 최대 3.1 ns |
