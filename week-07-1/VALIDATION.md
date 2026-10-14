@@ -344,3 +344,8 @@ Claude 서브에이전트 3개(화면 · 원고와 흐름 · 기술 내용과 �
 - 쪽 번호 참조 갱신: 이 덱 근거 줄(17쪽 일정 → 18쪽, 12쪽 시스템 구성 → 13쪽, 15쪽 → 16쪽), week-07 덱 근거 줄(week-07-1 15쪽 → 16쪽, 17쪽 → 18쪽), QNA.md 절 제목(8–15쪽 → 9–16쪽, 부록 → 8쪽)과 본문 참조 2곳, README · PLAN · SOURCES 머리 메모.
 - QNA 8쪽: 이전 S3 영상 기준 "오도메트리 3.4 m" 답을 새 실행 기준(최대 1.2 m, 방향 약 2° 어긋남 × 약 25 m)으로 바꾸고 팔레트(갈색 사각형) 질문을 더했다.
 - 확인: 8 · 9 · 19쪽 1920 × 1080 렌더, week-07 재빌드 차이는 근거 두 줄뿐, unittest · node 테스트 통과.
+
+## 2026-10-14 QNA 7 · 8쪽에 보정 방식 두 질문 추가 (사용자 질문)
+
+- 8쪽 "SLAM이 방향을 정확히 어떻게 바로잡나요?": forklift src/forklift_core/localization/slam_pose.py(map←odom × odom←base, IncrementalWheelOdometry, SlamPoseTracker max_age 0.25 s · hold/release), slam_link.py KeyframeGate(0.447 m · 0.5 rad · 0.5 s).
+- 7쪽 "1.0 m, 0.6 m에서 정확히 어떻게 보정하나요?": sim/isaac/near_tracking.py correction_update · CORRECTION_POINTS_M (1.0, 0.6) · CORRECTION_MAX_YAW_RAD 0.12 · REDRAW_MAX_LATERAL_M 0.05, run_transport.py near_redraw(정지 뒤 촬영 프레임, front 검출, 0.6 m 보호 예측), pallet_mission.redraw_docking(모의 주행 2회, 6 mm · 6 mm · 0.015 rad).
