@@ -37,12 +37,9 @@ CROPS = {
     'a07_teleop.png': ('22_teleop_drive.png', (196, 96, 1600, 900)),
 }
 # scenario figures: page -> (out name, dpi the box was measured at, box)
-SCENARIO = {2: ('s02_truck.png', 70, (110, 140, 385, 392)),
-            3: ('s03_aisle.png', 90, (0, 122, 840, 495)),
-            4: ('s04_conveyor.png', 70, (0, 85, 680, 372)),
-            5: ('s05_line.png', 70, (150, 124, 600, 393)),
-            6: ('s06_random.png', 70, (35, 147, 640, 386)),
-            7: ('s07_trailer.png', 90, (140, 140, 760, 505))}
+# 3-7 (the scenario drawings) are no longer on the slides: slide 6 shows CPU planning animations of the
+# same layouts (tools/riibotics_cpu_video.py in the robot repository, user 2026-10-20).
+SCENARIO = {2: ('s02_truck.png', 70, (110, 140, 385, 392))}
 CSS_WIDTH = {'30_phone.png': 400, 'c3b_transport.png': 1018}   # everything else 1600
 
 

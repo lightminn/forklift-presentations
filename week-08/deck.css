@@ -695,3 +695,4 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .comparison.h7.isaac9 { font-size:23px; align-self:center; }
 .comparison.h7.isaac9 td { padding:16px 14px; white-space:nowrap; }
 .comparison.h7.isaac9 td:first-child { color:var(--uos-blue); font-weight:700; }
+.scen8 .shot .media { border:1px solid var(--uos-rule); }

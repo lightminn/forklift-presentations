@@ -3,7 +3,7 @@
 <link rel="icon" href="data:,">
 <script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>8주차 자율 지게차 개발</title>
-<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=57c70d0f6eff"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=384752ca21f0"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 <section class="title-section" data-label="개발 진행 보고" data-screen-label="01" data-duration="20" data-speaker-notes="권장 20초
 
@@ -129,17 +129,18 @@ Isaac 실행기의 수동 포크 승강 구동 — 10-17 미구동, 10-19 출력
 
 <section data-label="시연 시나리오" data-screen-label="07" data-duration="55" data-speaker-notes="권장 55초
 
-여기부터는 중간 미팅 뒤에 리보틱스에서 받은 시연 시나리오와 그 분석입니다. 리보틱스가 실제 현장에서 하는 작업 방식에 맞춰 다섯 가지를 보내 주었습니다. 첫째는 좁은 통로의 rack에서 팔레트를 꺼내 다른 칸에 넣는 것, 둘째는 높이 약 70센티미터 컨베이어 사이에서 옮기는 것, 셋째는 일자로 놓인 팔레트를 모두 옮기는 것, 넷째는 넓은 공간에 10도 이내로 틀어져 놓인 팔레트를 차례로 옮기는 것, 다섯째는 좌우가 벽으로 막힌 트레일러에서 꺼내고 넣는 것입니다. 여기에는 리보틱스가 내부적으로 개발하려는 동작도 섞여 있어서, 남은 기간에 구현할 수 있는 범위에서 골라 진행하자는 제안을 받았습니다. (전환)
+여기부터는 중간 미팅 뒤에 리보틱스에서 받은 시연 시나리오와 그 분석입니다. 리보틱스가 실제 현장에서 하는 작업 방식에 맞춰 다섯 가지를 보내 주었습니다. 화면의 영상은 각 시나리오를 우리 지게차 크기로 줄인 장면에서 경로 계획기로 움직여 본 것입니다. 첫째는 좁은 통로의 rack에서 팔레트를 꺼내 다른 칸에 넣는 것, 둘째는 높이 약 70센티미터 컨베이어 사이에서 옮기는 것, 셋째는 일자로 놓인 팔레트를 모두 옮기는 것, 넷째는 넓은 공간에 10도 이내로 틀어져 놓인 팔레트를 차례로 옮기는 것, 다섯째는 좌우가 벽으로 막힌 트레일러에서 꺼내고 넣는 것입니다. 여기에는 리보틱스가 내부적으로 개발하려는 동작도 섞여 있어서, 남은 기간에 구현할 수 있는 범위에서 골라 진행하자는 제안을 받았습니다. (전환)
 
 [Sources]
-그림: 리보틱스 시연 시나리오 PDF 3–7쪽에서 그림 부분만 잘라 냄
-3–7쪽 그림과 설명 (좁은 통로 3.8 m · 구역 간격 3.4 m · 컨베이어 약 70 cm · 틀어짐 10° 이내 · 트레일러 2.6 m): Riibotics 「서울시립대 과제 시연 시나리오」 PDF (2026-10-19 메일 재발송본, 환경 수치 포함)
+영상: 시나리오 배치를 우리 축척으로 옮긴 장면의 CPU 경로 계획 (② 컨베이어 높이는 미반영)
+3–7쪽 그림과 설명 (좁은 통로 3.8 m · 구역 간격 3.4 m · 컨베이어 약 70 cm · 틀어짐 10° 이내 · 트레일러 2.6 m); 영상 장면은 이 그림의 배치를 우리 축척으로 옮긴 것: Riibotics 「서울시립대 과제 시연 시나리오」 PDF (2026-10-19 메일 재발송본, 환경 수치 포함)
+CPU 경로 계획 애니메이션: Isaac 임무 설정(곡률 0.29, 여유 0.10, 정렬 2.1 m, 하역 1.5 m, D7)으로 관측 구간과 운반 · 복귀를 계획하고 단계 속도 사다리꼴로 그림(시뮬레이션 아님, 8배속); ③ ④ 는 세 팔레트를 차례로, ② 는 컨베이어 높이를 넣지 않은 바닥 움직임만: lightminn/forklift feat/riibotics-scenarios tools/riibotics_cpu_video.py
 구현 가능한 범위에서 진행 제안, 내부 개발 예정 동작 포함: Riibotics 정진용 CTO 메일 (2026-10-19, 중간 발표 자료 회신)
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="06  리보틱스 시연 시나리오"><div class="slide-body">
 <h2 class="headline">리보틱스가 실제 현장 작업에 맞춰 보낸 시연 시나리오 다섯 가지</h2>
 <div class="scen8 grow">
-<figure class="shot"><img class="media" src="assets/s03_aisle.png" alt="좁은 통로를 따라 rack 줄이 있고 지게차가 한 칸에서 팔레트를 꺼내 같은 줄 다른 빈칸에 넣는 그림. 통로 폭 3.8 m, 아래 구역 사이 3.4 m"><figcaption>① 좁은 통로 rack에서 꺼내 다른 칸에 적치</figcaption></figure><figure class="shot"><img class="media" src="assets/s04_conveyor.png" alt="높이 약 70 cm 컨베이어 끝에서 팔레트를 집어 다른 컨베이어 끝에 내려놓는 그림"><figcaption>② 높이 약 70 cm 컨베이어 사이 이송</figcaption></figure><figure class="shot"><img class="media" src="assets/s05_line.png" alt="세로 한 줄로 놓인 팔레트 세 개를 하나씩 옮겨 반대편 구역에 한 줄로 내려놓는 그림"><figcaption>③ 일자로 놓인 팔레트 모두 이송</figcaption></figure><figure class="shot"><img class="media" src="assets/s06_random.png" alt="넓은 구역에 조금씩 틀어져 놓인 팔레트 다섯 개를 하역 구역에 한 줄로 옮기는 그림"><figcaption>④ 랜덤 배치(10° 이내) 차례로 이송</figcaption></figure><figure class="shot"><img class="media" src="assets/s07_trailer.png" alt="안쪽 폭 2.6 m 트레일러에 팔레트가 두 줄로 들어 있고 입구로 들어가 꺼내 옮기는 그림"><figcaption>⑤ 좌우가 막힌 트레일러에서 꺼내기, 넣기</figcaption></figure>
+<figure class="shot"><video class="media" src="assets/s03_aisle.mp4" poster="assets/s03_aisle_poster.jpg" autoplay loop muted playsinline aria-label="위에서 본 좁은 통로. 지게차가 rack 줄의 한 칸에서 팔레트를 꺼내 아래 구역 사이 간격에서 방향을 바꾼 뒤 같은 줄 다른 빈칸에 넣고 돌아옴"></video><figcaption>① 좁은 통로 rack에서 꺼내 다른 칸에 적치</figcaption></figure><figure class="shot"><video class="media" src="assets/s04_conveyor.mp4" poster="assets/s04_conveyor_poster.jpg" autoplay loop muted playsinline aria-label="위에서 본 컨베이어 두 대. 지게차가 왼쪽 컨베이어 끝의 팔레트를 집어 오른쪽 컨베이어 끝에 내려놓음 (높이는 그리지 않음)"></video><figcaption>② 높이 약 70 cm 컨베이어 사이 이송</figcaption></figure><figure class="shot"><video class="media" src="assets/s05_line.mp4" poster="assets/s05_line_poster.jpg" autoplay loop muted playsinline aria-label="위에서 본 일자 배치. 왼쪽 줄의 팔레트 세 개를 앞에서부터 하나씩 집어 오른쪽 줄 안쪽 칸부터 내려놓음"></video><figcaption>③ 일자로 놓인 팔레트 모두 이송</figcaption></figure><figure class="shot"><video class="media" src="assets/s06_random.mp4" poster="assets/s06_random_poster.jpg" autoplay loop muted playsinline aria-label="위에서 본 랜덤 배치. 조금씩 틀어진 팔레트 세 개를 차례로 집어 하역 구역에 한 줄로 내려놓음"></video><figcaption>④ 랜덤 배치(10° 이내) 차례로 이송</figcaption></figure><figure class="shot"><video class="media" src="assets/s07_trailer.mp4" poster="assets/s07_trailer_poster.jpg" autoplay loop muted playsinline aria-label="위에서 본 트레일러. 입구로 곧게 들어가 앞줄 팔레트를 꺼내 옆 하역 자리에 내려놓고 돌아옴"></video><figcaption>⑤ 좌우가 막힌 트레일러에서 꺼내기, 넣기</figcaption></figure>
 </div>
 <div class="takeaway">남은 기간에 모두 하기는 어려우니 구현할 수 있는 범위에서 골라 진행하자는 제안을 함께 받았습니다</div>
 </div></x-import>
