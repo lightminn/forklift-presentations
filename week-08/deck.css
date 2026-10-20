@@ -705,3 +705,5 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .comparison.h7.concl13 { font-size:26px; align-self:center; }
 .comparison.h7.concl13 td { padding:22px 16px; white-space:nowrap; }
 .comparison.h7.concl13 td:first-child { color:var(--uos-blue); font-weight:700; width:16%; }
+/* 8주차 콘솔 녹화 (2026-10-21): 4쪽 작업 지정 창(622 x 424)과 임무 패널(338 x 484) */
+.steps8.two8 { grid-template-columns:1.47fr 0.70fr; }

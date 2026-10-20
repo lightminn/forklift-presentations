@@ -3,7 +3,7 @@
 <link rel="icon" href="data:,">
 <script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>8주차 자율 지게차 개발</title>
-<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=6e889a5b9abe"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=81151707a0e6"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 <section class="title-section" data-label="개발 진행 보고" data-screen-label="01" data-duration="20" data-speaker-notes="권장 20초
 
@@ -23,18 +23,17 @@
 이번 주에 만든 운용 콘솔입니다. 6주차 발표에서 무선 통신을 고려하지 않았다는 피드백을 받았습니다. 지금까지는 연구실 워크스테이션 터미널에서 명령을 넣고, 결과 영상은 미션이 끝난 뒤에 받아 봤습니다. 실제 현장에서는 지게차 옆에서 폰이나 노트북으로 바로 다뤄야 하므로 브라우저로 쓰는 콘솔을 만들었습니다. 콘솔이 하는 일은 세 가지입니다. 왼쪽처럼 지도와 LiDAR, 전방 카메라로 지게차 상태를 보고, 가운데처럼 옮길 팔레트와 내려놓을 위치를 골라 작업을 지시하고, 오른쪽처럼 조이스틱이나 게임패드로 직접 운전합니다. (전환)
 
 [Sources]
-그림: 콘솔 화면 캡처 세 장 (가운데 · 오른쪽은 가짜 차량, 가짜 차량 화면)
+영상: 콘솔 조작 녹화 (가짜 차량)
 무선 통신 미고려 — 콘솔 설계의 계기: lightminn/forklift docs/references/week6_feedback.md 5절
 1절 목적: 상태 감시, 작업 지시, 수동 조종 (육안 · 영상): lightminn/forklift main 4b65404 docs/design/2026-10-13-operator-console.md
-왼쪽 c3_live_auto.png: 콘솔 화면 캡처 — Isaac 실시간 실행기 연결 (콘솔 세션, 2026-10-17)
-가운데 03_wizard3.png, 오른쪽 22_teleop_drive.png: 콘솔 화면 캡처 — 가짜 차량 console.mock_vehicle (2026-10-20, 임시)
+왼쪽 임무 진행(6배속), 가운데 작업 지정, 오른쪽 수동 조종(키보드 Space · W · A · D): 콘솔 조작 녹화 — 가짜 차량 console.mock_vehicle, 헤드리스 Chromium 1600 × 900 (폰 400 × 860), 2026-10-21; 흰 점은 녹화에 덧그린 클릭 위치
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="01  운용 콘솔이 하는 일"><div class="slide-body">
 <h2 class="headline">지게차 한 대를 브라우저 화면 하나로 보고, 지시하고, 직접 운전</h2>
 <div class="trio8 grow">
-<figure class="shot"><img class="media" src="assets/a01_watch.png" alt="Isaac 지게차를 연결한 콘솔의 지도와 전방 카메라. 카메라에 팔레트가 보임"><figcaption>상태 보기 (지도, LiDAR, 카메라)</figcaption></figure>
-<figure class="shot"><img class="media" src="assets/a01_order.png" alt="작업 지정 창의 확인 단계. 팔레트 P-01, 하역 위치 D-A, 4단계 목록"><figcaption>작업 지시 (팔레트, 하역 위치)</figcaption></figure>
-<figure class="shot"><img class="media" src="assets/a01_drive.png" alt="수동 조종 탭. 누르고 있기 버튼, 조이스틱, 포크 올리기와 내리기, 속도와 곡률 명령 막대"><figcaption>직접 운전 (조이스틱, 게임패드)</figcaption></figure>
+<figure class="shot"><video class="media" src="assets/v01_watch.mp4" poster="assets/v01_watch_poster.jpg" autoplay loop muted playsinline aria-label="임무 중인 콘솔 지도. 지게차가 팔레트로 가서 집고 하역 위치로 옮기며 전방 카메라 창이 함께 바뀜"></video><figcaption>상태 보기 (지도, LiDAR, 카메라)</figcaption></figure>
+<figure class="shot"><video class="media" src="assets/v01_order.mp4" poster="assets/v01_order_poster.jpg" autoplay loop muted playsinline aria-label="작업 지정 창에서 작업 종류, 팔레트와 하역 위치를 고르고 작업을 시작함"></video><figcaption>작업 지시 (팔레트, 하역 위치)</figcaption></figure>
+<figure class="shot"><video class="media" src="assets/v01_drive.mp4" poster="assets/v01_drive_poster.jpg" autoplay loop muted playsinline aria-label="수동 조종 탭에서 누르고 있기 버튼이 켜지고 속도와 곡률 명령 막대가 움직임"></video><figcaption>직접 운전 (조이스틱, 게임패드, 키보드)</figcaption></figure>
 </div>
 </div></x-import>
 </section>
@@ -63,39 +62,37 @@ Isaac 실시간 실행기와 콘솔 연결; 실차 연결(설계 6절 C4)은 미
 화면 구성입니다. 물류 현장의 차량 관제 화면, 흔히 FMS라고 부르는 형식을 따랐습니다. 맨 위 1번 줄에는 연결 대상과 운행 모드, 조종 권한이 있습니다. 가운데 2번은 지도로, 점유 격자와 LiDAR 점, 계획 경로를 그립니다. 그 위에 3번 전방 카메라 창이 떠 있고, 오른쪽 4번에는 차량 상세와 수동 조종 탭이 있습니다. 왼쪽 5번 메뉴로 모니터링, 이벤트 기록, 통신 화면을 오갑니다. 오른쪽은 같은 화면을 폰 폭으로 연 모습입니다. 좁은 화면에서는 카메라, 수동 조종, 지도 순서로 세로로 쌓이고 정지 버튼은 아래에 고정됩니다. (전환)
 
 [Sources]
-그림: 콘솔 화면 캡처 (번호는 덱에서 덧붙임)
+영상: 콘솔 조작 녹화 (가짜 차량, 번호는 덱에서 덧붙임)
 web/ 화면은 FMS 형식: 왼쪽 메뉴(모니터링 · 이벤트 기록 · 통신), 가운데 지도와 그 위 전방 카메라 창, 오른쪽 차량 상세와 수동 조종 탭: lightminn/forklift main 4b65404 console/README.md
 8절: 폰에서는 카메라 → 수동 조종 → 지도 → 작업 지시 순서로 세로, STOP 하단 고정: lightminn/forklift main 4b65404 docs/design/2026-10-13-operator-console.md
-넓은 화면 c3_live_auto.png: 콘솔 화면 캡처 — Isaac 실시간 실행기 연결 (콘솔 세션, 2026-10-17)
-폰 화면 30_phone.png (400 × 860): 콘솔 화면 캡처 — 가짜 차량 console.mock_vehicle (2026-10-20, 임시)
+넓은 화면 임무 진행(6배속), 폰 화면 400 × 860 을 아래로 넘김: 콘솔 조작 녹화 — 가짜 차량 console.mock_vehicle, 헤드리스 Chromium 1600 × 900 (폰 400 × 860), 2026-10-21; 흰 점은 녹화에 덧그린 클릭 위치
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="03  화면 구성"><div class="slide-body">
 <h2 class="headline">가운데 지도와 그 위 카메라 창, 오른쪽 차량 상세로 나눈 차량 관제 화면 형식</h2>
 <div class="lay8 grow">
-<figure class="shot lay8fig"><div class="frame8"><img class="media" src="assets/a03_layout.png" alt="운용 콘솔 넓은 화면. 위 상태 줄, 왼쪽 메뉴, 가운데 지도와 왼쪽 아래 전방 카메라 창, 오른쪽 차량 상세"><span class="mk8" style="left:30.5%;top:3.5%">1</span><span class="mk8" style="left:50.0%;top:30.0%">2</span><span class="mk8" style="left:34.5%;top:70.0%">3</span><span class="mk8" style="left:88.5%;top:9.0%">4</span><span class="mk8" style="left:6.5%;top:13.5%">5</span></div></figure>
+<figure class="shot lay8fig"><div class="frame8"><video class="media" src="assets/v03_layout.mp4" poster="assets/v03_layout_poster.jpg" autoplay loop muted playsinline aria-label="임무 중인 운용 콘솔 넓은 화면. 위 상태 줄, 왼쪽 메뉴, 가운데 지도에서 지게차가 움직이고 왼쪽 아래 전방 카메라 창, 오른쪽 차량 상세"></video><span class="mk8" style="left:30.5%;top:3.5%">1</span><span class="mk8" style="left:50.0%;top:30.0%">2</span><span class="mk8" style="left:34.5%;top:70.0%">3</span><span class="mk8" style="left:88.5%;top:9.0%">4</span><span class="mk8" style="left:6.5%;top:13.5%">5</span></div></figure>
 <table class="comparison h7 nwall mk8t"><tr><th></th><th>영역</th></tr><tr><td>①</td><td>연결 대상, 운행 모드, 조종 권한</td></tr><tr><td>②</td><td>지도 (격자, LiDAR, 경로)</td></tr><tr><td>③</td><td>전방 카메라</td></tr><tr><td>④</td><td>차량 상세와 수동 조종 탭</td></tr><tr><td>⑤</td><td>모니터링, 이벤트 기록, 통신</td></tr></table>
-<figure class="shot phone8"><img class="media" src="assets/a03_phone.png" alt="폰 폭(400 px) 화면. 상태, 전방 카메라, 수동 조종 순서로 세로로 쌓이고 아래에 STOP 고정"><figcaption>폰 화면</figcaption></figure>
+<figure class="shot phone8"><video class="media" src="assets/v03_phone.mp4" poster="assets/v03_phone_poster.jpg" autoplay loop muted playsinline aria-label="폰 폭 화면을 아래로 넘기면 전방 카메라, 수동 조종, 지도, 차량 상세가 차례로 나오고 STOP은 아래에 고정"></video><figcaption>폰 화면</figcaption></figure>
 </div>
 </div></x-import>
 </section>
 
 <section data-label="작업 지정과 진행" data-screen-label="05" data-duration="55" data-speaker-notes="권장 55초
 
-미션을 지시하는 방법입니다. 작업 지정 창은 세 단계입니다. 먼저 작업 종류를 고릅니다. 지금은 팔레트 운반 하나이고, 차량이 지원한다고 알린 작업만 보입니다. 다음으로 옮길 팔레트와 내려놓을 하역 위치를 고르고, 마지막으로 확인하고 작업을 시작합니다. 지도에서 팔레트를 직접 눌러도 그 팔레트가 골라진 채로 대상 설정이 바로 열립니다. 작업이 시작되면 아래 띠처럼 관찰, 접근, 삽입, 들기, 빼기, 운반, 내리기, 후퇴, 복귀의 아홉 단계 중 지금 어디까지 왔는지 화면에 표시되고, 끝나면 결과 기록에 남습니다. 지도에서 대기 중인 팔레트를 누르면 그 팔레트가 골라진 채로 바로 대상 설정이 열립니다. (전환)
+미션을 지시하는 방법입니다. 작업 지정 창은 세 단계입니다. 먼저 작업 종류를 고릅니다. 지금은 팔레트 운반 하나이고, 차량이 지원한다고 알린 작업만 보입니다. 다음으로 옮길 팔레트와 내려놓을 하역 위치를 고르고, 마지막으로 확인하고 작업을 시작합니다. 지도에서 팔레트를 직접 눌러도 그 팔레트가 골라진 채로 대상 설정이 바로 열립니다. 작업이 시작되면 아래 띠처럼 관찰, 접근, 삽입, 들기, 빼기, 운반, 내리기, 후퇴, 복귀의 아홉 단계 중 지금 어디까지 왔는지 화면에 표시되고, 끝나면 결과 기록에 남습니다. (전환)
 
 [Sources]
-그림: 작업 지정 창 세 단계 (가짜 차량, 가짜 차량 화면)
+영상: 콘솔 조작 녹화 (가짜 차량)
 작업은 &#x27;작업 지정&#x27; 창에서 작업 종류 → 대상 설정 → 확인 세 단계, capabilities 에 밝힌 작업만, console/1 은 &#x27;팔레트 운반&#x27; 하나, 지도에서 팔레트를 누르면 2단계가 열림: lightminn/forklift main 4b65404 console/README.md
 결과 기록부(D13), 미션 진행 단계 표시: lightminn/forklift PR #61 (상시 운용 콘솔, 2026-10-19 머지)
 관찰 · 접근 · 삽입 · 들기 · 빼기 · 운반 · 내리기 · 후퇴 · 복귀: 콘솔 화면 작업 진행 막대
-01_wizard1 · 02b_wizard2 · 03_wizard3 (작업 지정 창): 콘솔 화면 캡처 — 가짜 차량 console.mock_vehicle (2026-10-20, 임시)
+왼쪽 작업 지정 창, 오른쪽 임무 패널(6배속): 콘솔 조작 녹화 — 가짜 차량 console.mock_vehicle, 헤드리스 Chromium 1600 × 900 (폰 400 × 860), 2026-10-21; 흰 점은 녹화에 덧그린 클릭 위치
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="04  작업 지정과 진행"><div class="slide-body">
 <h2 class="headline">작업 종류, 대상, 확인 세 단계로 지시하면 미션 진행을 단계별로 표시</h2>
-<div class="steps8 grow">
-<figure class="shot"><img class="media" src="assets/a04_step1.png" alt="작업 지정 1단계. 작업 종류 팔레트 운반, 4단계 설명"><figcaption>① 작업 종류</figcaption></figure>
-<figure class="shot"><img class="media" src="assets/a04_step2.png" alt="작업 지정 2단계. 팔레트 P-01과 P-02, 하역 위치 D-A와 D-B 선택"><figcaption>② 대상 설정</figcaption></figure>
-<figure class="shot"><img class="media" src="assets/a04_step3.png" alt="작업 지정 3단계. 팔레트 P-01, 하역 위치 D-A 확인과 작업 시작 버튼"><figcaption>③ 확인</figcaption></figure>
+<div class="steps8 two8 grow">
+<figure class="shot"><video class="media" src="assets/v01_order.mp4" poster="assets/v01_order_poster.jpg" autoplay loop muted playsinline aria-label="작업 지정 창. 작업 종류, 대상 설정, 확인 세 단계를 거쳐 작업 시작"></video><figcaption>작업 종류 → 대상 설정 → 확인</figcaption></figure>
+<figure class="shot"><video class="media" src="assets/v04_progress.mp4" poster="assets/v04_progress_poster.jpg" autoplay loop muted playsinline aria-label="임무 패널. 실행 중 단계와 진행률이 접근, 삽입, 운반으로 바뀌고 현재 목적지가 팔레트에서 하역 위치로 바뀜"></video><figcaption>진행 표시</figcaption></figure>
 </div>
 <div class="phase-flow stages8"><span>관찰</span><span class="arrow">→</span><span>접근</span><span class="arrow">→</span><span>삽입</span><span class="arrow">→</span><span>들기</span><span class="arrow">→</span><span>빼기</span><span class="arrow">→</span><span>운반</span><span class="arrow">→</span><span>내리기</span><span class="arrow">→</span><span>후퇴</span><span class="arrow">→</span><span>복귀</span></div>
 </div></x-import>
@@ -106,16 +103,16 @@ web/ 화면은 FMS 형식: 왼쪽 메뉴(모니터링 · 이벤트 기록 · 통
 직접 운전입니다. 수동 조종 탭에서 화면 조이스틱이나 게임패드, 키보드로 지게차를 몹니다. 조이스틱을 움직이면 지금 명령대로 가면 지나갈 경로를 지도에 보라색 점선으로 그리고, 같은 경로를 카메라 영상의 바닥에도 겹쳐 보여 줍니다. 그래서 영상만 보고 운전할 때도 차가 어디로 갈지 미리 알 수 있습니다. 포크는 올리기와 내리기 버튼으로 움직입니다. 자동 주행 중에도 일시정지하고 수동 조종으로 바꿔 차를 옮길 수 있습니다. (전환)
 
 [Sources]
-그림: 가짜 차량 수동 조종 화면 (가짜 차량 화면)
+영상: 콘솔 조작 녹화 (가짜 차량)
 1절 수동 조종(육안 · 영상), 5.3 영상 조종, 5.5 입력 장치(터치 · 키보드 · 게임패드), 8절 지도 · 카메라의 수동 조종 예상 궤적: lightminn/forklift main 4b65404 docs/design/2026-10-13-operator-console.md
 키보드 Space 누르고 있기 · WS 속도 · AD 조향 · RF 포크, ▲ 올리기 / ▼ 내리기: 콘솔 화면 수동 조종 탭
-22_teleop_drive.png (전진 + 왼쪽 조향): 콘솔 화면 캡처 — 가짜 차량 console.mock_vehicle (2026-10-20, 임시)
+수동 조종 시작 → 조종 준비 → Space 누른 채 W 전진, A · D 조향, S 후진 → ▲ 올리기: 콘솔 조작 녹화 — 가짜 차량 console.mock_vehicle, 헤드리스 Chromium 1600 × 900 (폰 400 × 860), 2026-10-21; 흰 점은 녹화에 덧그린 클릭 위치
 Isaac 실행기의 수동 포크 승강 구동 — 10-17 미구동, 10-19 출력 방식 합의; 일시정지 뒤 수동 조종 전환은 녹화 때 확인: 미확인 (2026-10-20)
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="05  직접 운전"><div class="slide-body">
 <h2 class="headline">조이스틱이나 게임패드로 몰고, 갈 경로를 지도와 카메라 바닥에 미리 표시</h2>
 <div class="hw7 wide grow">
-<figure class="shot"><img class="media" src="assets/a07_teleop.png" alt="수동 조종 중인 콘솔. 지도에 지게차 앞으로 보라색 점선 예상 궤적, 카메라 바닥에도 같은 궤적, 오른쪽에 조이스틱과 속도 · 곡률 명령"></figure>
+<figure class="shot"><video class="media" src="assets/v05_teleop.mp4" poster="assets/v05_teleop_poster.jpg" autoplay loop muted playsinline aria-label="수동 조종 중인 콘솔. 키보드로 전진하며 좌우로 꺾고 후진한 뒤 포크를 올림. 지도와 카메라 바닥에 보라색 점선 예상 궤적이 따라 움직임"></video></figure>
 <table class="comparison h7 nwall t8"><tr><th>구분</th><th>방식</th></tr><tr><td>입력</td><td>화면 조이스틱, 게임패드, 키보드</td></tr><tr><td>미리 보기</td><td>지도와 카메라 바닥에 예상 경로</td></tr><tr><td>포크</td><td>올리기, 내리기 버튼</td></tr><tr><td>조종 방식</td><td>눈으로 보며, 영상만 보며</td></tr></table>
 </div>
 <div class="lgd7"><span class="lg"><span class="sw dash" style="border-color:#a78bfa"></span>조종 예상 궤적</span></div>

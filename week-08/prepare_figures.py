@@ -25,17 +25,9 @@ from PIL import Image
 HERE = Path(__file__).resolve().parent
 
 # out name: (source, (left, top, right, bottom)) in screenshot pixels; None = whole image
-CROPS = {
-    'a01_watch.png': ('c3_live_auto.png', (200, 130, 1260, 890)),
-    'a01_order.png': ('03_wizard3.png', (490, 258, 1112, 642)),
-    'a01_drive.png': ('22_teleop_drive.png', (1262, 136, 1600, 620)),
-    'a03_layout.png': ('c3_live_auto.png', None),
-    'a03_phone.png': ('30_phone.png', None),
-    'a04_step1.png': ('01_wizard1.png', (490, 258, 1112, 642)),
-    'a04_step2.png': ('02_wizard2.png', (490, 238, 1112, 662)),
-    'a04_step3.png': ('03_wizard3.png', (490, 258, 1112, 642)),
-    'a07_teleop.png': ('22_teleop_drive.png', (196, 96, 1600, 900)),
-}
+# The console screenshots (a01_* · a03_* · a04_* · a07_*) are no longer on the slides: slides 1 and 3-5 show
+# recordings of the console on the fake vehicle instead (assets/v0*.mp4, README.md, user 2026-10-21).
+CROPS = {}
 # scenario figures: page -> (out name, dpi the box was measured at, box)
 # 3-7 (the scenario drawings) are no longer on the slides: slide 6 shows CPU planning animations of the
 # same layouts (tools/riibotics_cpu_video.py in the robot repository, user 2026-10-20).

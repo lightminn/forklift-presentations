@@ -51,8 +51,9 @@ ws1 `test_runs/riibotics/riib.sbatch` — 10-19 원거리 인식 임무 설정(�
 
 | 캡처 | 대상 | 쓴 곳 |
 |---|---|---|
-| `c3_live_auto.png` | Isaac 실시간 실행기 + 콘솔 (콘솔 세션 C3, 2026-10-17) | 1쪽 왼쪽, 3쪽 넓은 화면 |
-| `01_wizard1` · `02b_wizard2` · `03_wizard3` · `10_run_3s` · `11_done` · `22_teleop_drive` · `30_phone` | 가짜 차량 `console.mock_vehicle` (main 4b65404, 2026-10-20) — 게시본에 그대로 씀 (Isaac 녹화로 교체 예정) | 1쪽 가운데 · 오른쪽, 3쪽 폰, 4쪽 전부, 5쪽 |
+| `c3_live_auto.png` | Isaac 실시간 실행기 + 콘솔 (콘솔 세션 C3, 2026-10-17) | 2026-10-21 부터 화면에 안 씀 (녹화로 교체) |
+| `01_wizard1` · `02b_wizard2` · `03_wizard3` · `10_run_3s` · `11_done` · `22_teleop_drive` · `30_phone` | 가짜 차량 `console.mock_vehicle` (main 4b65404, 2026-10-20) | 2026-10-21 부터 화면에 안 씀 (녹화로 교체) |
+| 녹화 a(작업 지정 → 임무 끝) · b(수동 조종) · c(폰 관찰) | 가짜 차량 `console.mock_vehicle` (콘솔 코드 = main 4b65404), 헤드리스 Chromium 녹화, 2026-10-21 | 1쪽 세 영상, 3쪽 넓은 화면 · 폰, 4쪽 작업 지정 · 진행, 5쪽 수동 조종 (자른 영역과 배속은 README.md) |
 
 ## 화면에 쓰지 않은 사실
 

@@ -6,6 +6,7 @@
 - `prepare_figures.py`: 콘솔 화면 캡처와 리보틱스 시나리오 PDF 에서 `assets/a*` · `assets/s*` 를 잘라 만든다(conda base Python, PIL, `pdftoppm`). `python prepare_figures.py <캡처 폴더> <시나리오 PDF>`. 캡처 원본과 PDF 는 저장소에 넣지 않았다.
 - 콘솔 그림 일부는 가짜 차량(`console.mock_vehicle`)으로 찍었다(SOURCES.md).
 - 시나리오 PDF 그림을 공개 덱에 넣는 것은 사용자가 확인했다(2026-10-20).
+- `assets/v0*.mp4`: 콘솔 조작 녹화(가짜 차량 `console.mock_vehicle`, 헤드리스 Chromium 녹화 1600 × 900 · 폰 400 × 860, 2026-10-21). 녹화 원본에서 영역을 잘라 H.264 로 다시 인코딩했다: 임무 진행 6배속(`v01_watch` 지도 · 카메라 1060 × 760 at 200,130, `v03_layout` 화면 전체, `v04_progress` 임무 패널 338 × 484 at 1262,136), 작업 지정 창 1배(`v01_order` 622 × 424 at 490,238), 수동 조종 1배(`v01_drive` 패널, `v05_teleop` 1404 × 804 at 196,96), 폰 1배(`v03_phone`). 클릭 위치는 녹화 때 페이지에 그린 흰 점이다.
 - `assets/t10_*.mp4`: 팀원(shanghun) ws1 `artifacts/20261020_demo_scenarios/isaac/runs` 의 `overview.mp4` 를 `isaac_spec.crop` 으로 바닥만 잘라 다시 인코딩(`test_runs/riibotics/team_clips.sbatch`, 원본은 읽기만 함).
 - `assets/i09_line.mp4` · `assets/i09_random.mp4`: ws1 `test_runs/riibotics/r4_line_1_s1` · `r4_random_2` 의 `transport.mp4`(Isaac 탑뷰 1280 × 720)를 장면 부분만 잘라(850 × 720 at x 200 / 1150 × 640 at x 120) 6배속 · 540 px 높이 · H.264 CRF 27 로 다시 인코딩했다(`ffmpeg -vf crop,setpts=PTS/6,fps=30,scale`). 포스터는 12 s 프레임.
 
