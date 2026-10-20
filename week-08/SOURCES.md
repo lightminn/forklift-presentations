@@ -14,6 +14,26 @@
 | `sim/models/dls08_measured/` | 전장 × 전폭 1.46 × 0.63 m, 포크 중심 최저 0.04 m(실측 전) + 승강 0.28 m |
 | `config/isaac_transport_measured.yaml` · `config/isaac_slam_lidar.yaml` | 기구 곡률 한계 0.3665 1/m(뒤차축 회전 반경 2.73 m), LiDAR 평면 1.05 m |
 | `tools/riibotics_scenario_paths.py` (브랜치 feat/riibotics-scenarios) | 좁은 통로 · 트레일러 축소 장면의 경로 확인 |
+| `sim/isaac/run_transport.py --layout scene` · `tools/riibotics_isaac_scenes.py` (feat/riibotics-scenarios 827e757) | 9 · 10쪽 Isaac 자율 임무 재현 (장면 8종, 집을 팔레트는 명목 칸에서 3–8 cm · 2–3° 어긋남, 랜덤은 그림 기울기 10° 이내) |
+
+## Isaac 재현 실행 (9 · 10쪽)
+
+ws1 `test_runs/riibotics/riib.sbatch` — 10-19 원거리 인식 임무 설정(인식 · SLAM · 장애물 층 · D7 도킹 · YOLO11s 원거리 인식)에서 격자 계획만 끄고 장면 배치를 사전 지도로 씀(1.05 m LiDAR 가 바닥 팔레트를 못 봄). 완주 = 하역 오차 8 cm 이내 + 복귀.
+
+| 실행 | 결과 |
+|---|---|
+| r4_line_1 (seed 0) | 근접 캡처 실패(아래판 증거 4 < 15) |
+| r4_line_1_s1 · s2 | 완주, 하역 0.076 · 0.055 m, SLAM 최대 0.085 · 0.142 m — 9쪽 왼쪽 영상은 s1 |
+| r4_line_2 | 근접 캡처 실패(no_opening_pattern) |
+| r4_line_3 | 복귀까지 했으나 하역 0.098 m |
+| r4_random_1 · _s1 | 근접 직선 수용 실패(횡 6.7 · 9.8 cm, 3.8 · 6.0°) |
+| r4_random_2 | 완주, 하역 0.060 m — 9쪽 오른쪽 영상 |
+| r4_random_3 | 복귀까지 했으나 하역 0.095 m |
+| r4_trailer | 꺼낸 뒤 운반 중 허가 제한으로 진행 못 함, SLAM 최대 0.163 m |
+| r4_aisle | 랙 뒤 여유 가정(0.15 m)에서 꺼내기 직선이 경계에 2.8 mm — 장면 가정 문제라 10쪽 표에서 뺌 |
+| r5_aisle_out | 원거리 2.4 cm 정확, 근접 캡처가 0.91 m 옆 팔레트를 잡아 계획 실패 |
+
+하역 LiDAR 정합은 열린 하역 구역이라 모든 실행에서 `start_rejected:degenerate`(SLAM 위치로 하역). 설계와 해석은 Codex 교차검증으로 수렴(장면 모드 3회, 결과 · 안전 여유 3회).
 
 ## 리보틱스 자료
 

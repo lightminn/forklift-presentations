@@ -687,3 +687,11 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .comparison.h7.ask8 { font-size:22px; }
 .comparison.h7.ask8 td { padding:12px 14px; font-weight:400; }
 .comparison.h7.ask8 td { padding:9px 14px; }
+/* 8주차 Isaac 재현 (2026-10-20): 탑뷰 영상 두 개를 각자 비율대로 (638 x 540, 970 x 540) */
+.vid9 { display:grid; grid-template-columns:1.18fr 1.8fr; gap:18px; min-height:0; }
+.vid9 > .shot { height:100%; min-height:0; }
+.vid9 .shot .media { border:1px solid var(--uos-rule); }
+.lgd7 .sw.ring { width:16px; height:16px; border-radius:50%; border:3px solid; background:none; }
+.comparison.h7.isaac9 { font-size:23px; align-self:center; }
+.comparison.h7.isaac9 td { padding:16px 14px; white-space:nowrap; }
+.comparison.h7.isaac9 td:first-child { color:var(--uos-blue); font-weight:700; }
