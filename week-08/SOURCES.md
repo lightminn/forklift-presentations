@@ -22,7 +22,7 @@
 | `c3_live_auto.png` | Isaac 실시간 실행기 + 콘솔 (콘솔 세션 C3, 2026-10-17) | 1쪽 왼쪽, 3쪽 넓은 화면, 6쪽 카메라 |
 | `c3b_transport.png` | 같음 (운반 중, 포크 165 mm) | 6쪽 차량 상태 |
 | `c2a-isaac-live-2.png` | Isaac 공장 장면 + 관찰 전용 게이트웨이 (2026-10-15) | 5쪽 왼쪽 SLAM 지도 |
-| `01_wizard1` · `02b_wizard2` · `03_wizard3` · `10_run_3s` · `11_done` · `22_teleop_drive` · `30_phone` | 가짜 차량 `console.mock_vehicle` (main 4b65404, 2026-10-20) — **임시** | 1쪽 가운데 · 오른쪽, 3쪽 폰, 4쪽 전부, 5쪽 오른쪽, 7쪽 |
+| `01_wizard1` · `02b_wizard2` · `03_wizard3` · `10_run_3s` · `11_done` · `22_teleop_drive` · `30_phone` | 가짜 차량 `console.mock_vehicle` (main 4b65404, 2026-10-20) — 게시본에 그대로 씀 (Isaac 녹화로 교체 예정) | 1쪽 가운데 · 오른쪽, 3쪽 폰, 4쪽 전부, 5쪽 오른쪽, 7쪽, 8쪽 |
 
 ## 화면에 쓰지 않은 사실
 
