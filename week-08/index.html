@@ -202,13 +202,13 @@ r4_line_1_s1 · r4_random_2 transport.mp4 탑뷰, 장면 부분만 잘라 6배�
 같은 Isaac 지게차 모델로, 팔레트와 지게차 위치를 정답으로 주고 경로 계획과 경로 추종만 돌린 팀원의 연속 이송 결과입니다. 카메라 인식과 SLAM은 쓰지 않았습니다. 일자 배치는 세 개, 기울기 4에서 7도인 랜덤 배치는 다섯 개, 트레일러 한 줄은 세 개를 차례로 옮겼고, 팔레트나 벽에 닿은 적은 없었습니다. 컨베이어는 높이를 넣지 않고 바닥 움직임만 본 것입니다. 다만 그림대로 10도까지 기울인 랜덤 배치는 아홉 작업 중 하나만 경로가 나왔습니다. (전환)
 
 [Sources]
-영상: 팀원 Isaac 실행 (정답 위치로 경로 추종)
+영상: 팀원 Isaac 실행 (지게차 · 팔레트 위치를 정답으로 주고 경로 추종)
 I1_p4 1/1 · J1_p5_line 3/3 · J5_p6_random26_5d 5/5 (기울기 −4.3 – −7.3°) · J2_p7_dims_1col 3/3 (안쪽 1.36 m) · 접촉 0; J6_p6_drawn_tilt_5d (그림 기울기 0 · 8 · −10 · 6°) 9건 중 1건 완료 · J3_p7_drawn_2col (그림 비율 2.30 m, 두 줄) 4/4: ws1 artifacts/20261020_demo_scenarios/isaac/runs (팀원 shanghun, fleet 시뮬레이터 run_world, source_v34)
-정답 위치 · 경로 추종(인식 · SLAM 없음), 이웃 팔레트 금지 폭 --keep-m 0.2, --free-empty; 컨베이어는 바닥에 놓인 팔레트: 같은 실행 job.txt
+지게차 위치 = 시뮬레이터 정답(SLAM 없음), 팔레트 위치 = 장면의 칸 위치(카메라 인식 없음), 경로 계획 · 추종만, 이웃 팔레트 금지 폭 --keep-m 0.2, --free-empty; 컨베이어는 바닥에 놓인 팔레트: 같은 실행 job.txt
 각 overview.mp4 를 isaac_spec.crop 으로 바닥만 잘라 마지막 작업 4 s 뒤에서 자르고 10 · 20 · 30 · 20배속 (ws1 test_runs/riibotics/team_clips.sbatch): 영상
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="10  정답 위치로 본 연속 이송"><div class="slide-body">
-<h2 class="headline">위치를 정답으로 주면 일자·랜덤·트레일러는 Isaac에서 연속 이송까지 접촉 없이 완료</h2>
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="10  지게차·팔레트 위치를 정답으로 준 연속 이송"><div class="slide-body">
+<h2 class="headline">지게차와 팔레트 위치를 정답으로 주면 연속 이송까지 접촉 없이 완료</h2>
 <div class="team10 grow">
 <figure class="shot"><video class="media" src="assets/t10_conveyor.mp4" poster="assets/t10_conveyor_poster.jpg" autoplay loop muted playsinline aria-label="위에서 본 컨베이어 장면. 지게차가 왼쪽 컨베이어 끝 팔레트를 집어 오른쪽 컨베이어 끝에 내려놓음"></video><figcaption>② 컨베이어 (높이 미반영)</figcaption></figure>
 <figure class="shot"><video class="media" src="assets/t10_line.mp4" poster="assets/t10_line_poster.jpg" autoplay loop muted playsinline aria-label="위에서 본 일자 배치 장면. 한 줄로 놓인 팔레트 세 개를 차례로 집어 반대편 칸에 내려놓음"></video><figcaption>③ 일자 배치, 세 개 연속</figcaption></figure>
@@ -220,7 +220,7 @@ I1_p4 1/1 · J1_p5_line 3/3 · J5_p6_random26_5d 5/5 (기울기 −4.3 – −7.
 
 <section data-label="Isaac 결과" data-screen-label="12" data-duration="50" data-speaker-notes="권장 50초
 
-두 결과를 나란히 놓으면, 정답 위치로는 연속 이송까지 되는 장면에서 우리 자율 스택이 막힌 곳이 인식과 위치 추정이라는 것이 드러납니다. 일자 배치는 다섯 번 중 두 번, 랜덤 배치는 네 번 중 한 번 하역 오차 8센티미터 안으로 완주했습니다. 실패의 대부분은 삽입 직전 재관측이었습니다. 팔레트 아래판이 잘 안 보이거나, 뒤 팔레트가 겹쳐 보여 방향이 틀어지거나, 좁은 통로에서는 옆 칸 팔레트를 인식했습니다. 하역 구역이 넓게 비어 있어 LiDAR로 위치를 맞출 기준이 없어서, 하역 오차가 위치 추정 오차를 따라 9센티미터를 넘은 경우도 있었습니다. 트레일러는 팔레트를 꺼낸 뒤 나오는 중에 위치 추정 오차가 16센티미터까지 커지면서 벽 옆에서 멈췄습니다. (전환)
+두 결과를 나란히 놓으면, 지게차와 팔레트 위치를 정답으로 주면 연속 이송까지 되는 장면에서 우리 자율 스택이 막힌 곳이 인식과 위치 추정이라는 것이 드러납니다. 일자 배치는 다섯 번 중 두 번, 랜덤 배치는 네 번 중 한 번 하역 오차 8센티미터 안으로 완주했습니다. 실패의 대부분은 삽입 직전 재관측이었습니다. 팔레트 아래판이 잘 안 보이거나, 뒤 팔레트가 겹쳐 보여 방향이 틀어지거나, 좁은 통로에서는 옆 칸 팔레트를 인식했습니다. 하역 구역이 넓게 비어 있어 LiDAR로 위치를 맞출 기준이 없어서, 하역 오차가 위치 추정 오차를 따라 9센티미터를 넘은 경우도 있었습니다. 트레일러는 팔레트를 꺼낸 뒤 나오는 중에 위치 추정 오차가 16센티미터까지 커지면서 벽 옆에서 멈췄습니다. (전환)
 
 [Sources]
 표: 시나리오별 Isaac 결과 (② 컨베이어는 높이 협의로 재현하지 않음)
@@ -229,8 +229,8 @@ I1_p4 1/1 · J1_p5_line 3/3 · J5_p6_random26_5d 5/5 (기울기 −4.3 – −7.
 재관측 실패: 아래판 증거 4 &lt; 15 (일자), 새 직선 횡 6.7–9.8 cm · 3.8–6.0° (랜덤), 0.91 m 옆 팔레트 (통로): 같은 실행 near_capture · detection_diagnostics
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="11  시나리오별 Isaac 결과"><div class="slide-body">
-<h2 class="headline">정답 위치로는 대부분 완주하므로, 막힌 곳은 삽입 전 재관측과 위치 추정</h2>
-<table class="comparison h7 concl7 isaac9 isaac11 grow"><tr><th>시나리오</th><th>우리 자율 스택</th><th>정답 위치 경로 추종</th><th>막힌 점</th></tr><tr><td>③ 일자 배치</td><td>5회 중 2회 완주</td><td>3개 연속 완료</td><td>삽입 전 재관측 실패 2회</td></tr><tr><td>④ 랜덤 배치</td><td>4회 중 1회 완주</td><td>5개 연속 완료 (그림 기울기면 1개만)</td><td>뒤 팔레트 겹침으로 재관측 어긋남</td></tr><tr><td>⑤ 트레일러</td><td>꺼낸 뒤 운반 중 정지</td><td>한 줄 3개 연속 완료</td><td>위치 추정 오차 16 cm에서 허가 차단</td></tr><tr><td>① 좁은 통로</td><td>재관측이 옆 칸 팔레트를 인식</td><td>실행 안 함</td><td>이웃 팔레트 구분</td></tr><tr><td>② 컨베이어</td><td>만들지 않음</td><td>1개 완료 (높이 미반영)</td><td>포크 0.32 m, 컨베이어 0.37 m</td></tr></table>
+<h2 class="headline">지게차·팔레트 위치가 정답이면 대부분 완주하므로, 막힌 곳은 재관측과 위치 추정</h2>
+<table class="comparison h7 concl7 isaac9 isaac11 grow"><tr><th>시나리오</th><th>우리 자율 스택</th><th>지게차·팔레트 위치 정답</th><th>막힌 점</th></tr><tr><td>③ 일자 배치</td><td>5회 중 2회 완주</td><td>3개 연속 완료</td><td>삽입 전 재관측 실패 2회</td></tr><tr><td>④ 랜덤 배치</td><td>4회 중 1회 완주</td><td>5개 연속 완료 (그림 기울기면 1개만)</td><td>뒤 팔레트 겹침으로 재관측 어긋남</td></tr><tr><td>⑤ 트레일러</td><td>꺼낸 뒤 운반 중 정지</td><td>한 줄 3개 연속 완료</td><td>위치 추정 오차 16 cm에서 허가 차단</td></tr><tr><td>① 좁은 통로</td><td>재관측이 옆 칸 팔레트를 인식</td><td>실행 안 함</td><td>이웃 팔레트 구분</td></tr><tr><td>② 컨베이어</td><td>만들지 않음</td><td>1개 완료 (높이 미반영)</td><td>포크 0.32 m, 컨베이어 0.37 m</td></tr></table>
 </div></x-import>
 </section>
 
