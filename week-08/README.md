@@ -1,9 +1,10 @@
 # 8주차 발표자료 (수업 주간 발표)
 
-8주차 수업 발표용 자료(2026-10-20). 운용 콘솔을 중심으로 하고 하드웨어는 엔코더 자석 어댑터만 다룬다(사용자 지시 2026-10-20: GUI와 하드웨어, 안전보다 기능 · 실용, 10장 내외, 장당 밀도는 이전 주와 비슷하게). 표지 + 10장 · 530초. 출처는 [SOURCES.md](SOURCES.md), 확인 기록은 [VALIDATION.md](VALIDATION.md).
+8주차 수업 발표용 자료(2026-10-20). 앞 절반은 운용 콘솔(하는 일, 연결 구조, 화면 구성, 작업 지정과 진행, 직접 운전), 뒤 절반은 중간 미팅 뒤 리보틱스에서 받은 시연 시나리오의 분석과 구현 전략(시나리오 다섯 가지, 우리 차체로 축척 환산, 시나리오별 판단, 구현 순서, 리보틱스 확인 요청)이다(사용자 지시 2026-10-20 재구성). 표지 + 10장 · 560초. 출처는 [SOURCES.md](SOURCES.md), 확인 기록은 [VALIDATION.md](VALIDATION.md).
 
 - `build_deck.py`: 본문 · 원고 · 출처와 구조도(SVG). `index.html`, `SCRIPT.md`, `slide-metadata.json` 을 만든다.
-- `prepare_figures.py`: 콘솔 화면 캡처와 어댑터 미리보기에서 `assets/a*` 를 잘라 만든다(conda base Python, PIL). `python prepare_figures.py <캡처 폴더> <preview.png>`. 캡처 원본은 저장소에 넣지 않았다.
-- 일부 그림은 가짜 차량(`console.mock_vehicle`)으로 찍었다(SOURCES.md). Isaac 실시간 실행기 녹화로 바꾸는 것이 남은 일이다.
+- `prepare_figures.py`: 콘솔 화면 캡처와 리보틱스 시나리오 PDF 에서 `assets/a*` · `assets/s*` 를 잘라 만든다(conda base Python, PIL, `pdftoppm`). `python prepare_figures.py <캡처 폴더> <시나리오 PDF>`. 캡처 원본과 PDF 는 저장소에 넣지 않았다.
+- 콘솔 그림 일부는 가짜 차량(`console.mock_vehicle`)으로 찍었다(SOURCES.md).
+- 시나리오 PDF 그림을 공개 덱에 넣는 것은 사용자가 확인했다(2026-10-20).
 
 전체 생성 및 배포 절차는 [레포 안내](../README.md)를 따른다.

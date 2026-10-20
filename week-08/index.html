@@ -3,16 +3,16 @@
 <link rel="icon" href="data:,">
 <script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>8주차 자율 지게차 개발</title>
-<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=5cb825e57793"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=8a4790a52d05"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 <section class="title-section" data-label="개발 진행 보고" data-screen-label="01" data-duration="20" data-speaker-notes="권장 20초
 
-안녕하십니까. 8주차 자율 지게차 개발 진행 상황을 발표할 김광민이라고 합니다. 이번 주에는 지게차를 무선으로 다루는 운용 콘솔을 중심으로 말씀드리겠습니다. 콘솔이 하는 일과 연결 구조, 화면 구성을 먼저 보이고, 미션 지시, 지도와 카메라, 직접 운전, 미션을 이어서 처리하는 기능을 차례로 보인 뒤, 하드웨어로는 엔코더 자석 어댑터를 소개하고 결론으로 마치겠습니다. (전환)
+안녕하십니까. 8주차 자율 지게차 개발 진행 상황을 발표할 김광민이라고 합니다. 이번 주에는 두 가지를 말씀드리겠습니다. 앞부분은 지게차를 무선으로 다루는 운용 콘솔입니다. 콘솔이 하는 일과 연결 구조, 화면 구성, 미션 지시, 직접 운전을 보이겠습니다. 뒷부분은 중간 미팅 뒤 리보틱스에서 받은 시연 시나리오입니다. 시나리오를 우리 지게차 크기로 환산해 시나리오별로 실현 가능성을 따져 보고, 구현 순서와 리보틱스에 확인할 점으로 마치겠습니다. (전환)
 
 [Sources]
 진행 보고
 운용 콘솔 console/ · 설계 문서 · PR #61–#65: lightminn/forklift main 4b65404
-엔코더 자석 어댑터: lightminn/forklift 작업 트리 docs/design/encoder_magnet_adapter/ (README.md · preview.png, 2026-10-17, 미커밋)
+시연 시나리오 다섯 가지: Riibotics 「서울시립대 과제 시연 시나리오」 PDF (2026-10-19 메일 재발송본, 환경 수치 포함)
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.TitleSlide" hint-size="100%,100%" title="8주차
 자율 지게차 개발" subtitle="팔레트 핸들링 경로 생성 및 제어"></x-import><img class="partner-mark" src="assets/riibotics-logo.png" alt="Riibotics">
@@ -105,52 +105,7 @@ web/ 화면은 FMS 형식: 왼쪽 메뉴(모니터링 · 이벤트 기록 · 통
 </div></x-import>
 </section>
 
-<section data-label="지도" data-screen-label="06" data-duration="45" data-speaker-notes="권장 45초
-
-지도입니다. 왼쪽은 Isaac 공장 장면에서 SLAM으로 만든 점유 격자 지도를 콘솔에 띄운 모습입니다. 파란 칸이 벽과 선반 같은 장애물이고, 빨간 점이 지금 LiDAR가 보는 점입니다. 오른쪽처럼 미션 중에는 팔레트까지 가는 계획 경로를 회색 선으로 그리고, 후진하는 구간은 주황색으로 구분합니다. 지도는 끌어서 옮기고, 휠이나 두 손가락으로 확대하고, 차량 따라가기를 켜면 지게차를 화면 가운데에 둡니다. 격자, LiDAR, 경로 같은 표시 층은 따로 켜고 끌 수 있습니다. (전환)
-
-[Sources]
-그림: 콘솔 지도 두 장 (오른쪽은 가짜 차량, 가짜 차량 화면)
-지도: 끌기 이동, 휠/두 손가락 확대, 차량 따라가기, 표시 층 선택: lightminn/forklift main 4b65404 console/README.md
-8절 지도: 점유 격자, LiDAR 점, 계획 경로(후진 구간 구분), 팔레트 · 하역 위치: lightminn/forklift main 4b65404 docs/design/2026-10-13-operator-console.md
-왼쪽 c2a-isaac-live-2.png (공장 장면 SLAM): 콘솔 화면 캡처 — Isaac 관찰 전용 게이트웨이 (콘솔 세션, 2026-10-15)
-오른쪽 10_run_3s.png: 콘솔 화면 캡처 — 가짜 차량 console.mock_vehicle (2026-10-20, 임시)
-콘솔 화면 범례의 점유 격자 · LiDAR 점 · 계획 경로 · 후진 구간 색: 범례 색
-[/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="05  지도"><div class="slide-body">
-<h2 class="headline">SLAM 지도 위에 LiDAR 점과 계획 경로를 겹쳐 실시간 표시</h2>
-<div class="pair8 grow">
-<figure class="shot"><img class="media" src="assets/a05_slam.png" alt="Isaac 공장 장면을 SLAM으로 만든 점유 격자 지도. 벽과 선반 윤곽이 파란 칸으로 보이고 아래쪽에 지게차"><figcaption>Isaac 공장 장면 SLAM 지도</figcaption></figure>
-<figure class="shot"><img class="media" src="assets/a05_path.png" alt="가짜 차량 화면의 지도. 지게차에서 팔레트 P-01 앞까지 회색 계획 경로, 주변 장애물 격자와 LiDAR 점"><figcaption>팔레트까지 계획 경로</figcaption></figure>
-</div>
-<div class="lgd7"><span class="lg"><span class="sw" style="background:#4a72e0"></span>점유 격자</span><span class="lg"><span class="sw dot" style="background:#e05a4f"></span>LiDAR 점</span><span class="lg"><span class="sw ln" style="background:#7d848c"></span>계획 경로</span><span class="lg"><span class="sw ln" style="background:#f2a33a"></span>후진 구간</span></div>
-<div class="takeaway">끌어서 옮기고 확대하거나 차량을 따라가게 할 수 있고, 표시 층은 따로 켜고 끕니다</div>
-</div></x-import>
-</section>
-
-<section data-label="카메라와 차량 상태" data-screen-label="07" data-duration="45" data-speaker-notes="권장 45초
-
-카메라와 차량 상태입니다. 왼쪽은 Isaac 지게차의 전방 카메라 영상으로, 앞에 놓인 팔레트가 보입니다. 오른쪽은 팔레트를 들고 운반하는 중의 차량 상세입니다. 뒤 차축 기준 속도와 조향각, 포크 높이를 숫자로 보이고, 아래 막대로 아홉 단계 중 지금 운반 단계에 있다는 것을 보여 줍니다. 이 값들은 차량이 보내는 상태이고, 배터리처럼 아직 잴 장치가 없는 값은 지어내지 않고 측정 장치 없음으로 표시합니다. (전환)
-
-[Sources]
-그림: Isaac 연결 콘솔 화면에서 카메라 창과 차량 상세를 잘라 냄
-8절 차량 상태: 속도(뒤 차축 기준), 조향, 포크 높이, 자세와 보정 버전, 적재; 측정 수단이 없는 값은 &quot;측정 장치 없음&quot;: lightminn/forklift main 4b65404 docs/design/2026-10-13-operator-console.md
-왼쪽 c3_live_auto.png 카메라 창, 오른쪽 c3b_transport.png 차량 상세 (운반 중, 포크 165 mm): 콘솔 화면 캡처 — Isaac 실시간 실행기 연결 (콘솔 세션, 2026-10-17)
-[/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="06  카메라와 차량 상태"><div class="slide-body">
-<h2 class="headline">전방 카메라 영상과 속도, 조향, 포크 높이, 작업 단계를 한 화면에</h2>
-<div class="hw7 wide grow">
-<div class="duo8">
-<figure class="shot"><img class="media" src="assets/a06_cam.png" alt="Isaac 전방 카메라 창. 벽 앞 바닥에 놓인 팔레트"><figcaption>전방 카메라</figcaption></figure>
-<figure class="shot"><img class="media" src="assets/a06_state.png" alt="차량 상세. 속도 -0.29 m/s, 조향 -0.1°, 포크 높이 165 mm, 작업 진행 03 운반"><figcaption>운반 중 차량 상태</figcaption></figure>
-</div>
-<table class="comparison h7 nwall t8"><tr><th>항목</th><th>표시</th></tr><tr><td>속도</td><td>뒤 차축 기준 m/s</td></tr><tr><td>조향</td><td>조향각 (°)</td></tr><tr><td>포크 높이</td><td>mm</td></tr><tr><td>위치</td><td>지도 좌표와 방향</td></tr><tr><td>작업 진행</td><td>현재 단계와 남은 단계</td></tr></table>
-</div>
-<div class="takeaway">운반 중에는 포크 높이와 남은 단계를 보고 진행 상황을 바로 알 수 있습니다</div>
-</div></x-import>
-</section>
-
-<section data-label="직접 운전" data-screen-label="08" data-duration="50" data-speaker-notes="권장 50초
+<section data-label="직접 운전" data-screen-label="06" data-duration="50" data-speaker-notes="권장 50초
 
 직접 운전입니다. 수동 조종 탭에서 화면 조이스틱이나 게임패드, 키보드로 지게차를 몹니다. 조이스틱을 움직이면 지금 명령대로 가면 지나갈 경로를 지도에 보라색 점선으로 그리고, 같은 경로를 카메라 영상의 바닥에도 겹쳐 보여 줍니다. 그래서 영상만 보고 운전할 때도 차가 어디로 갈지 미리 알 수 있습니다. 포크는 올리기와 내리기 버튼으로 움직입니다. 자동 주행 중에도 일시정지하고 수동 조종으로 바꿔 차를 옮길 수 있습니다. (전환)
 
@@ -161,7 +116,7 @@ web/ 화면은 FMS 형식: 왼쪽 메뉴(모니터링 · 이벤트 기록 · 통
 22_teleop_drive.png (전진 + 왼쪽 조향): 콘솔 화면 캡처 — 가짜 차량 console.mock_vehicle (2026-10-20, 임시)
 Isaac 실행기의 수동 포크 승강 구동 — 10-17 미구동, 10-19 출력 방식 합의; 일시정지 뒤 수동 조종 전환은 녹화 때 확인: 미확인 (2026-10-20)
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="07  직접 운전"><div class="slide-body">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="05  직접 운전"><div class="slide-body">
 <h2 class="headline">조이스틱이나 게임패드로 몰고, 갈 경로를 지도와 카메라 바닥에 미리 표시</h2>
 <div class="hw7 wide grow">
 <figure class="shot"><img class="media" src="assets/a07_teleop.png" alt="수동 조종 중인 콘솔. 지도에 지게차 앞으로 보라색 점선 예상 궤적, 카메라 바닥에도 같은 궤적, 오른쪽에 조이스틱과 속도 · 곡률 명령"></figure>
@@ -172,63 +127,95 @@ Isaac 실행기의 수동 포크 승강 구동 — 10-17 미구동, 10-19 출력
 </div></x-import>
 </section>
 
-<section data-label="이어서 운용하기" data-screen-label="09" data-duration="55" data-speaker-notes="권장 55초
+<section data-label="시연 시나리오" data-screen-label="07" data-duration="55" data-speaker-notes="권장 55초
 
-이어서 운용하는 기능입니다. 이전에는 미션 하나를 돌리면 시뮬레이션이 끝났습니다. 이제는 실행기를 한 번 띄워 두면 한 세션에서 미션을 연달아 받습니다. 미션이 끝나면 바로 다음 미션을 지시할 수 있고, 중간에 취소하면 다른 팔레트나 하역 위치로 다시 지시할 수 있습니다. 운반 중에 취소해서 팔레트가 포크 위에 있을 때 그 팔레트를 다시 지시하면 내려놓고 다시 집지 않고 운반부터 이어 갑니다. 미션이 실패하면 수동 조종으로 차를 옮긴 뒤 다시 지시하고, 미션마다 결과가 기록에 남습니다. (전환)
+여기부터는 중간 미팅 뒤에 리보틱스에서 받은 시연 시나리오와 그 분석입니다. 리보틱스가 실제 현장에서 하는 작업 방식에 맞춰 다섯 가지를 보내 주었습니다. 첫째는 좁은 통로의 rack에서 팔레트를 꺼내 다른 칸에 넣는 것, 둘째는 높이 약 70센티미터 컨베이어 사이에서 옮기는 것, 셋째는 일자로 놓인 팔레트를 모두 옮기는 것, 넷째는 넓은 공간에 10도 이내로 틀어져 놓인 팔레트를 차례로 옮기는 것, 다섯째는 좌우가 벽으로 막힌 트레일러에서 꺼내고 넣는 것입니다. 여기에는 리보틱스가 내부적으로 개발하려는 동작도 섞여 있어서, 남은 기간에 구현할 수 있는 범위에서 골라 진행하자는 제안을 받았습니다. (전환)
 
 [Sources]
-그림: 미션 완료 뒤 차량 상세 (가짜 차량 화면)
-세션 하나에서 미션이 끝나거나 실패 · 취소돼도 실행기가 살아 있고 다음 미션을 받음; 운반 중 취소 뒤 실린 팔레트를 그대로 다시 내면 운반부터(6c); 결과 기록부; 실패 뒤 수동 조종 허용: lightminn/forklift PR #61 (상시 운용 콘솔, 2026-10-19 머지)
-도킹 중 긴 STOP 뒤 세션 유지(U30), 취소 복구 재개 재시험: lightminn/forklift PR #63–#65 (2026-10-19/20)
-U16 2시간 연속은 1.5 h 에 SLAM 응답 기한 초과로 미충족 — 장시간 운용은 주장하지 않음: 화면에 쓰지 않은 한계
+그림: 리보틱스 시연 시나리오 PDF 3–7쪽에서 그림 부분만 잘라 냄
+3–7쪽 그림과 설명 (좁은 통로 3.8 m · 구역 간격 3.4 m · 컨베이어 약 70 cm · 틀어짐 10° 이내 · 트레일러 2.6 m): Riibotics 「서울시립대 과제 시연 시나리오」 PDF (2026-10-19 메일 재발송본, 환경 수치 포함)
+구현 가능한 범위에서 진행 제안, 내부 개발 예정 동작 포함: Riibotics 정진용 CTO 메일 (2026-10-19, 중간 발표 자료 회신)
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="08  이어서 운용하기"><div class="slide-body">
-<h2 class="headline">실행기를 한 번 띄워 두고 미션을 연달아 처리, 취소나 실패 뒤에도 다음 미션을 받음</h2>
-<div class="hw7 grow">
-<figure class="shot"><img class="media" src="assets/a08_results.png" alt="차량 상세. 작업 진행 M-0001 P-01 → D-A 아홉 단계 모두 완료, 작업 지정에 작업을 받을 수 있습니다"><figcaption>미션 완료 뒤 바로 다음 작업 대기</figcaption></figure>
-<table class="comparison h7 nwall t8"><tr><th>상황</th><th>콘솔에서 할 수 있는 일</th></tr><tr><td>미션 완료</td><td>바로 다음 미션 지시</td></tr><tr><td>중간 취소</td><td>다른 팔레트, 하역 위치로 다시 지시</td></tr><tr><td>포크에 팔레트</td><td>다시 지시하면 운반부터 이어 감</td></tr><tr><td>미션 실패</td><td>수동으로 옮긴 뒤 다시 지시</td></tr><tr><td>기록</td><td>미션마다 결과 기록에 남음</td></tr></table>
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="06  리보틱스 시연 시나리오"><div class="slide-body">
+<h2 class="headline">리보틱스가 실제 현장 작업에 맞춰 보낸 시연 시나리오 다섯 가지</h2>
+<div class="scen8 grow">
+<figure class="shot"><img class="media" src="assets/s03_aisle.png" alt="좁은 통로를 따라 rack 줄이 있고 지게차가 한 칸에서 팔레트를 꺼내 같은 줄 다른 빈칸에 넣는 그림. 통로 폭 3.8 m, 아래 구역 사이 3.4 m"><figcaption>① 좁은 통로 rack에서 꺼내 다른 칸에 적치</figcaption></figure><figure class="shot"><img class="media" src="assets/s04_conveyor.png" alt="높이 약 70 cm 컨베이어 끝에서 팔레트를 집어 다른 컨베이어 끝에 내려놓는 그림"><figcaption>② 높이 약 70 cm 컨베이어 사이 이송</figcaption></figure><figure class="shot"><img class="media" src="assets/s05_line.png" alt="세로 한 줄로 놓인 팔레트 세 개를 하나씩 옮겨 반대편 구역에 한 줄로 내려놓는 그림"><figcaption>③ 일자로 놓인 팔레트 모두 이송</figcaption></figure><figure class="shot"><img class="media" src="assets/s06_random.png" alt="넓은 구역에 조금씩 틀어져 놓인 팔레트 다섯 개를 하역 구역에 한 줄로 옮기는 그림"><figcaption>④ 랜덤 배치(10° 이내) 차례로 이송</figcaption></figure><figure class="shot"><img class="media" src="assets/s07_trailer.png" alt="안쪽 폭 2.6 m 트레일러에 팔레트가 두 줄로 들어 있고 입구로 들어가 꺼내 옮기는 그림"><figcaption>⑤ 좌우가 막힌 트레일러에서 꺼내기, 넣기</figcaption></figure>
 </div>
-<div class="takeaway">운반 중 취소해도 포크 위 팔레트를 다시 지시하면 내려놓지 않고 바로 운반합니다</div>
+<div class="takeaway">남은 기간에 모두 하기는 어려우니 구현할 수 있는 범위에서 골라 진행하자는 제안을 함께 받았습니다</div>
 </div></x-import>
 </section>
 
-<section data-label="엔코더 자석 어댑터" data-screen-label="10" data-duration="50" data-speaker-notes="권장 50초
+<section data-label="축척 환산" data-screen-label="08" data-duration="55" data-speaker-notes="권장 55초
 
-하드웨어는 이번 주에 엔코더 자석 어댑터를 설계했습니다. 자기식 엔코더는 축 끝에 붙인 자석의 회전을 읽는데, 모터 축이 지름 2밀리미터, 돌출 길이 2밀리미터로 짧고 가늘어 자석을 바로 붙이기 어렵습니다. 그래서 축에 끼우는 높이 2밀리미터, 외경 5밀리미터의 링을 만들고, 윗면을 자석을 붙이는 평평한 면으로 했습니다. 축 끝을 더 늘리는 캡이 아니라 구멍이 뚫린 링이라 축에 끝까지 끼울 수 있습니다. 3D 프린터는 구멍 치수가 설계와 다르게 나오기 쉬워서 내경을 2.00부터 2.30밀리미터까지 네 가지로 만들어 두었고, 출력해 보고 축에 가장 잘 맞는 것을 고르겠습니다. 자석 크기와 센서 간격은 자석 규격이 정해지면 맞추겠습니다. (전환)
+시나리오는 실제 환경 크기로 적혀 있고, 실제 지게차와 우리 지게차의 크기 비율에 맞게 환경을 줄이라고 되어 있습니다. 리보틱스 지게차는 길이 2.8미터, 폭 1.13미터이고 우리 차체는 1.46미터에 0.63미터라서, 길이로는 0.52배, 폭으로는 0.56배입니다. 이 비율로 줄이면 좁은 통로는 약 2미터, 아래 구역 사이 간격은 1.8에서 1.9미터, 트레일러 안쪽 폭은 1.4미터 안팎, 컨베이어 높이는 약 0.37에서 0.39미터가 됩니다. 두 비율이 7퍼센트 정도 달라서, 어느 쪽을 기준으로 할지는 리보틱스에 확인하려고 합니다. (전환)
 
 [Sources]
-그림: 어댑터 미리보기(preview.png)에서 3D 모델과 단면만 잘라 냄
-사용자 요청(2026-10-17): 약 Ø2 mm, 돌출 2 mm DC 모터 축을 감싸 외경 Ø5 mm, 부품 높이 2 mm 의 자석 접착면 — 캡이 아니라 관통구멍 링; 내경 후보 2.00/2.10/2.20/2.30, 기본 2.10(끼워맞춤 미검증); 아래쪽 입구 C0.20, 바닥 바깥 C0.15; 자석 규격 미정이라 홈 · 턱 없음: lightminn/forklift 작업 트리 docs/design/encoder_magnet_adapter/ (README.md · preview.png, 2026-10-17, 미커밋)
-이번 주 하드웨어는 엔코더 자석 어댑터만 진행: 사용자 (2026-10-20)
+그림: 시나리오 PDF 2쪽의 지게차 평면도
+2쪽 실제 지게차 2.8 × 1.13 m, 크기 비율에 맞게 환경 설정; 3 · 4 · 7쪽 치수: Riibotics 「서울시립대 과제 시연 시나리오」 PDF (2026-10-19 메일 재발송본, 환경 수치 포함)
+전장 × 전폭 1.46 × 0.63 m (실측): lightminn/forklift sim/models/dls08_measured/README.md
+1.46 / 2.8 = 0.521, 0.63 / 1.13 = 0.558; 각 치수 × 두 비율: 계산
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="09  엔코더 자석 어댑터"><div class="slide-body">
-<h2 class="headline">Ø2 mm 모터 축에 끼워 Ø5 mm 자석 접착면을 만드는 높이 2 mm 링</h2>
-<div class="hw7 grow">
-<div class="duo8 ad8">
-<figure class="shot"><img class="media" src="assets/a09_model.png" alt="어댑터 3D 모델. 가운데 구멍이 뚫린 청록색 링"><figcaption>3D 모델</figcaption></figure>
-<figure class="shot"><img class="media" src="assets/a09_section.png" alt="어댑터 중심 단면. 외경 Ø5.00, 내경 Ø2.10, 높이 2.00, 외측 모따기 C0.15, 입구 모따기 C0.20"><figcaption>중심 단면 (mm)</figcaption></figure>
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="07  우리 지게차 크기로 환산"><div class="slide-body">
+<h2 class="headline">길이 비율 0.52, 폭 비율 0.56으로 줄이면 통로 폭 약 2 m, 트레일러 폭 약 1.4 m</h2>
+<div class="hw7 scale8 grow">
+<figure class="shot"><img class="media" src="assets/s02_truck.png" alt="리보틱스 실제 지게차 평면도. 길이 2.8 m, 폭 1.13 m"><figcaption>리보틱스 지게차</figcaption></figure>
+<table class="comparison h7 nwall t8"><tr><th>항목</th><th>시나리오</th><th>우리 축척 (×0.52–0.56)</th></tr><tr><td>지게차 길이 × 폭</td><td>2.8 × 1.13 m</td><td><b>1.46 × 0.63 m</b> (우리 차체)</td></tr><tr><td>좁은 통로 폭</td><td>3.8 m</td><td>1.98–2.12 m</td></tr><tr><td>구역 사이 간격</td><td>3.4 m</td><td>1.77–1.90 m</td></tr><tr><td>트레일러 안쪽 폭</td><td>2.6 m</td><td>1.36–1.45 m</td></tr><tr><td>컨베이어 높이</td><td>약 0.7 m</td><td>0.37–0.39 m</td></tr></table>
 </div>
-<table class="comparison h7 nwall t8"><tr><th>항목</th><th>치수와 용도</th></tr><tr><td>대상 축</td><td>DC 모터 축 Ø2 mm, 돌출 2 mm</td></tr><tr><td>형상</td><td>외경 Ø5 mm, 높이 2 mm, 관통 구멍</td></tr><tr><td>윗면</td><td>자석을 붙이는 평평한 면</td></tr><tr><td>시험편 내경</td><td>2.00, 2.10, 2.20, 2.30 mm</td></tr><tr><td>출력</td><td>3D 프린터, 모따기 면이 바닥</td></tr></table>
-</div>
-<div class="takeaway">내경이 다른 시험편 네 개를 출력해 축에 가장 잘 맞는 치수를 고를 예정입니다</div>
+<div class="takeaway">길이와 폭의 비율이 7 % 달라, 어느 쪽을 기준으로 줄일지 리보틱스에 확인합니다</div>
 </div></x-import>
 </section>
 
-<section data-label="결론 및 향후 작업" data-screen-label="11" data-duration="50" data-speaker-notes="권장 50초
+<section data-label="시나리오별 판단" data-screen-label="09" data-duration="60" data-speaker-notes="권장 60초
 
-결론입니다. 이번 주에는 지게차를 브라우저로 다루는 운용 콘솔을 만들어 Isaac 지게차에 연결했습니다. 화면 하나로 미션을 지시하고, 지도와 카메라로 상태를 보고, 직접 운전하고, 미션을 연달아 처리할 수 있습니다. 하드웨어로는 모터 축에 엔코더 자석을 붙이기 위한 어댑터를 설계했습니다. 앞으로는 콘솔의 게이트웨이를 실차 Jetson에 올려 Wi-Fi로 연결하고, 어댑터 시험편을 출력해 축에 맞는 치수를 고른 뒤 자석을 붙이겠습니다. 구동 보드는 지난주 회로도를 바탕으로 PCB 배치와 제작을 이어 가겠습니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.
+시나리오별로 지금 시스템에서 걸리는 점을 정리했습니다. 일자 배치와 랜덤 배치는 지금 하고 있는 팔레트 하나 운반의 연장이라 1차 목표로 잡았습니다. 다만 일자 배치는 앞 팔레트를 옮긴 뒤 뒤 팔레트를 다시 찾아야 하고, 랜덤 배치는 다음에 옮길 팔레트를 고르고 하역 구역의 어느 칸에 내려놓을지 정해야 합니다. 좁은 통로는 우리 차의 뒤차축 기준 최소 회전 반경이 2.73미터라 약 2미터 통로에서 한 번에 90도 꺾어 들어갈 수 없습니다. 트레일러는 팔레트가 두 줄이면 벽과 옆 팔레트 사이 여유가 몇 센티미터밖에 남지 않습니다. 그래서 이 두 가지는 축소한 장면을 만들어 경로가 나오는지부터 확인하고 있습니다. 컨베이어는 축소해도 0.37미터인데 우리 포크는 0.32미터까지밖에 안 올라가서 스테이션 높이를 낮출 수 있는지 협의해야 합니다. 공통으로, LiDAR가 1.05미터 높이에 있어서 바닥에 놓인 팔레트나 낮은 rack 부재는 보지 못하므로, 카메라와 미리 받은 배치 정보로 보완해야 합니다. (전환)
 
 [Sources]
-출처: 이번 덱 각 장 · 7주차 향후 작업
-6절 순서: 실차 연결(C4)은 하위 제어와 시험된 정지 뒤: lightminn/forklift main 4b65404 docs/design/2026-10-13-operator-console.md
-구동 보드 PCB 배치 → 제작, 자석 정렬 브래킷: week-07 11쪽
-시험편 출력 후 내경 선정: lightminn/forklift 작업 트리 docs/design/encoder_magnet_adapter/ (README.md · preview.png, 2026-10-17, 미커밋)
+표: 시나리오별 판단 (경로 확인 결과가 나오면 갱신)
+fork_center_height_m 0.04 + lift_travel_m 0.28 = 포크 중심 최고 0.32 m (최저 높이는 실측 전): lightminn/forklift sim/models/dls08_measured/parameters.yaml
+기구 곡률 한계 0.3665 1/m → 뒤차축 최소 회전 반경 2.73 m: lightminn/forklift config/isaac_transport_measured.yaml
+LiDAR 평면 1.05 m, 그보다 낮은 물체는 보지 못함: lightminn/forklift config/isaac_slam_lidar.yaml
+T11 0.66 m × 2열, 안쪽 1.36–1.45 m → 균등 간격 12–44 mm: 트레일러 계산
+좁은 통로 · 트레일러 경로 확인 (UBAI 실행 중): lightminn/forklift tools/riibotics_scenario_paths.py
+시나리오 분석 2회 수렴; 장면 가정 검토 P2 반영: Codex 교차검증 (2026-10-20)
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="10  결론 및 향후 작업"><div class="slide-body">
-<h2 class="headline">운용 콘솔로 Isaac 지게차를 지시하고 운전, 다음은 실차 연결과 어댑터 시험 출력</h2>
-<table class="comparison h7 concl7 grow"><tr><th>구분</th><th>이번 주</th><th>향후 작업</th></tr>
-<tr><td>운용 콘솔</td><td>미션 지시, 지도와 카메라, 직접 운전, 연속 운용</td><td class="nxt">Jetson에 게이트웨이 올리고 Wi-Fi 연결</td></tr><tr><td>엔코더</td><td>자석 어댑터 설계, 시험편 네 개</td><td class="nxt">시험 출력, 축 끼움 확인, 자석 부착</td></tr><tr><td>구동 보드</td><td>회로도 (7주차)</td><td class="nxt">PCB 배치 → 제작</td></tr></table>
-<div class="takeaway">다음 목표는 콘솔을 실차에 연결해 시뮬레이션과 같은 화면으로 운용하는 것입니다</div>
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="08  시나리오별 실현 가능성"><div class="slide-body">
+<h2 class="headline">일자·랜덤 배치는 지금 기능을 넓히고, 좁은 공간은 경로부터 확인, 컨베이어는 높이 협의</h2>
+<table class="comparison h7 concl7 judge8 grow"><tr><th>시나리오</th><th>걸리는 점</th><th>판단</th></tr><tr><td>③ 일자 배치</td><td>앞 팔레트를 옮긴 뒤 다음 팔레트 다시 찾기</td><td><b>1차 목표</b></td></tr><tr><td>④ 랜덤 배치</td><td>다음 팔레트 고르기, 하역 칸 배정</td><td><b>1차 목표</b></td></tr><tr><td>① 좁은 통로</td><td>회전 반경 2.73 m로 약 2 m 통로에서 90° 진입</td><td>경로 확인 중</td></tr><tr><td>⑤ 트레일러</td><td>2열이면 벽과 옆 팔레트 사이 여유가 수 cm</td><td>경로 확인 중</td></tr><tr><td>② 컨베이어</td><td>포크 최고 높이 0.32 m, 축소 높이는 0.37 m</td><td>높이 협의</td></tr></table>
+<div class="takeaway">LiDAR가 1.05 m 높이라 바닥 팔레트와 낮은 rack 부재는 카메라와 미리 받은 배치로 보완해야 합니다</div>
+</div></x-import>
+</section>
+
+<section data-label="구현 전략" data-screen-label="10" data-duration="55" data-speaker-notes="권장 55초
+
+구현 순서입니다. 1단계는 일자 배치와 랜덤 배치의 연속 이송입니다. 앞에서 보인 운용 콘솔은 이미 한 세션에서 미션을 연달아 받으므로, 여기에 다음 팔레트를 고르는 순서, 하역 구역의 칸 배정, 이미 옮긴 팔레트를 다음 경로의 장애물로 넣는 기능을 더하면 됩니다. 2단계는 좁은 통로와 트레일러입니다. 지금 축소 장면을 만들어 경로가 나오는지 확인하고 있고, 경로가 나오면 통로에서는 전진과 후진을 반복해 칸으로 들어가고, 트레일러에서는 입구 밖에서 정렬한 뒤 곧게 들어갔다가 후진으로 나오는 방식으로 구현합니다. 3단계는 같은 장면을 바닥에 테이프로 표시해 실차로 시연하는 것입니다. 컨베이어는 우리 포크로 팔레트를 들어 올릴 수 있는 스테이션 높이가 약 0.23미터 이하라서, 높이를 낮출 수 있는지 협의한 뒤에 진행하겠습니다. (전환)
+
+[Sources]
+표: 구현 단계
+한 세션에서 미션 연속 지시 · 취소 뒤 재지시 · 실린 팔레트 재지시: lightminn/forklift PR #61 (상시 운용 콘솔, 2026-10-19 머지)
+현재 모델에서 들기 시작할 수 있는 스테이션 높이 상한 EPAL 6 약 0.233 m, T11 약 0.273 m (Codex 재계산): lightminn/forklift src/forklift_core/perception/pallet_model.py · fork_fit.py
+전체 자동 이송이면 옮긴 · 남은 팔레트 구분, 가림을 빈칸으로 오판하지 않기, 적치 순서, 실패 뒤 목록 재정렬이 필요: Codex 교차검증 (2026-10-20)
+[/Sources]" style="background:#fff">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="09  구현 전략"><div class="slide-body">
+<h2 class="headline">일자·랜덤 배치 연속 이송을 먼저 완성하고, 좁은 공간은 경로 확인 뒤 진행</h2>
+<table class="comparison h7 concl7 plan8 grow"><tr><th>단계</th><th>대상</th><th>할 일</th></tr><tr><td>1단계</td><td>③ 일자, ④ 랜덤</td><td>다음 팔레트 선택, 하역 칸 배정, 옮긴 팔레트를 장애물로 반영</td></tr><tr><td>2단계</td><td>① 좁은 통로, ⑤ 트레일러</td><td>축소 장면에서 경로 확인 뒤 전후진 반복 진입, 직진 진입과 후진 탈출</td></tr><tr><td>3단계</td><td>실차</td><td>같은 장면을 바닥에 표시해 실차로 시연</td></tr><tr><td>보류</td><td>② 컨베이어</td><td>스테이션 높이를 0.23 m 이하로 협의</td></tr></table>
+<div class="takeaway">1단계는 운용 콘솔로 미션을 연달아 지시하는 기능 위에 팔레트 선택과 하역 칸 배정을 더하는 일입니다</div>
+</div></x-import>
+</section>
+
+<section data-label="결론 및 확인 요청" data-screen-label="11" data-duration="50" data-speaker-notes="권장 50초
+
+결론입니다. 이번 주에는 지게차를 브라우저로 다루는 운용 콘솔을 만들어 Isaac 지게차에 연결했고, 화면 하나로 미션을 지시하고 상태를 보고 직접 운전할 수 있게 했습니다. 그리고 리보틱스에서 받은 시연 시나리오 다섯 가지를 우리 차체 크기로 환산해, 일자 배치와 랜덤 배치를 1차 목표로 정했습니다. 진행하기 전에 리보틱스에 확인할 것은 표의 여섯 가지입니다. 축척 기준, 미션을 매번 지시하는지 한 번에 다 옮기는지, 팔레트와 빈칸 위치를 미리 주는지, 허용 오차의 기준, 컨베이어 높이, 대여 센서의 모델입니다. 다음 목표는 일자 배치와 랜덤 배치 시나리오를 Isaac에서 연속 이송으로 완주하는 것입니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.
+
+[Sources]
+출처: 이번 덱 각 장
+Gemini 335 시리즈(Ethernet 또는 USB) 대여 제안: Riibotics 정진용 CTO 메일 (2026-10-19, 중간 발표 자료 회신)
+Gemini 335 = USB, 335Le = Ethernet: Orbbec Gemini 330 시리즈 데이터시트
+하역 약 10 cm · 삽입 약 5 cm · 포크 높이 1 cm (축 미정): lightminn/forklift docs/references/2026-10-14-midterm-meeting.md (로컬)
+[/Sources]" style="background:#fff">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="10  결론 및 리보틱스 확인 요청"><div class="slide-body">
+<h2 class="headline">운용 콘솔로 Isaac 지게차를 지시하고 운전, 시연 시나리오는 일자·랜덤 배치부터</h2>
+<table class="comparison h7 ask8 grow"><tr><th>리보틱스에 확인할 것</th></tr><tr><td>축척은 길이와 폭 중 어느 비율을 기준으로 하나요?</td></tr><tr><td>미션마다 지시하나요, 한 번 지시로 전부 옮기나요?</td></tr><tr><td>팔레트와 빈칸의 위치를 미리 알려 주시나요?</td></tr><tr><td>허용 오차는 어느 축 기준이고, 축소 환경에서도 같은 값인가요?</td></tr><tr><td>컨베이어 높이를 0.23 m 이하로 낮출 수 있나요?</td></tr><tr><td>대여해 주실 센서는 Gemini 335(USB)와 335Le(Ethernet) 중 어느 것인가요?</td></tr></table>
+<div class="takeaway">다음 목표는 일자·랜덤 배치 시나리오를 Isaac에서 연속 이송으로 완주하는 것입니다</div>
 </div></x-import>
 </section>
 </x-import></x-dc></body></html>

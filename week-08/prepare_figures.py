@@ -1,6 +1,6 @@
 """Cut the week 8 figures from operator-console screenshots and the adapter preview (PIL only).
 
-    /home/light/anaconda3/bin/python prepare_figures.py <shots_dir> <adapter_preview.png> [out_dir]
+    /home/light/anaconda3/bin/python prepare_figures.py <shots_dir> <scenario.pdf> [out_dir]
 
 shots_dir holds headless-Chromium screenshots of the console (console/web on
 the robot repository's main): c3_* and c2a-* were taken on the Isaac live
@@ -10,9 +10,14 @@ placeholders until the Isaac recordings exist (VALIDATION.md). Viewports are
 1600 x 900 CSS px except the phone (400 x 860) and c3b_transport (1018 x 880);
 the fake-vehicle shots were retaken at device scale 2 (phone 3) on 2026-10-20,
 so crop boxes are in CSS px and scaled by each image's width over its viewport.
+scenario.pdf is Riibotics' demo scenario deck (2026-10-19, the resend with the
+environment numbers); pdftoppm renders it at 200 dpi and the figure part of
+pages 2-7 is cut out (boxes measured at the dpi noted beside each).
 Nothing is redrawn; each figure is a plain crop.
 """
+import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 from PIL import Image
@@ -29,29 +34,34 @@ CROPS = {
     'a04_step1.png': ('01_wizard1.png', (490, 258, 1112, 642)),
     'a04_step2.png': ('02_wizard2.png', (490, 238, 1112, 662)),
     'a04_step3.png': ('03_wizard3.png', (490, 258, 1112, 642)),
-    'a05_slam.png': ('c2a-isaac-live-2.png', (580, 186, 1040, 810)),
-    'a05_path.png': ('10_run_3s.png', (230, 140, 1230, 600)),
-    'a06_cam.png': ('c3_live_auto.png', (208, 600, 568, 888)),
-    'a06_state.png': ('c3b_transport.png', (700, 345, 1002, 585)),
     'a07_teleop.png': ('22_teleop_drive.png', (196, 96, 1600, 900)),
-    'a08_results.png': ('11_done.png', (1262, 600, 1600, 900)),
 }
+# scenario figures: page -> (out name, dpi the box was measured at, box)
+SCENARIO = {2: ('s02_truck.png', 70, (110, 140, 385, 392)),
+            3: ('s03_aisle.png', 90, (0, 122, 840, 495)),
+            4: ('s04_conveyor.png', 70, (0, 85, 680, 372)),
+            5: ('s05_line.png', 70, (150, 124, 600, 393)),
+            6: ('s06_random.png', 70, (35, 147, 640, 386)),
+            7: ('s07_trailer.png', 90, (140, 140, 760, 505))}
 CSS_WIDTH = {'30_phone.png': 400, 'c3b_transport.png': 1018}   # everything else 1600
 
 
 def main():
-    shots, preview = Path(sys.argv[1]), Path(sys.argv[2])
+    shots, pdf = Path(sys.argv[1]), Path(sys.argv[2])
     out = Path(sys.argv[3]) if len(sys.argv) > 3 else HERE / 'assets'
     out.mkdir(exist_ok=True)
     for name, (src, box) in CROPS.items():
         img = Image.open(shots / src).convert('RGB')
         k = img.width / CSS_WIDTH.get(src, 1600)
         (img.crop(tuple(round(v * k) for v in box)) if box else img).save(out / name, optimize=True)
-    # adapter preview (2100 x 1200): the 3D model and the dimensioned section, without its own title
-    p = Image.open(preview).convert('RGB')
-    p.crop((300, 330, 860, 800)).save(out / 'a09_model.png', optimize=True)
-    p.crop((1200, 330, 2000, 880)).save(out / 'a09_section.png', optimize=True)
-    print(f'wrote {len(CROPS) + 2} figures to {out}')
+    with tempfile.TemporaryDirectory() as tmp:
+        subprocess.run(['pdftoppm', '-r', '200', '-png', str(pdf), f'{tmp}/p'], check=True)
+        for page, (name, dpi, box) in SCENARIO.items():
+            img = Image.open(f'{tmp}/p-{page}.png').convert('RGB')
+            k = 200 / dpi
+            b = [round(v * k) for v in box]
+            img.crop((b[0], b[1], min(b[2], img.width), min(b[3], img.height))).save(out / name, optimize=True)
+    print(f'wrote {len(CROPS) + len(SCENARIO)} figures to {out}')
 
 
 if __name__ == '__main__':
