@@ -66,7 +66,7 @@ ws1 `test_runs/riibotics/riib.sbatch` — 10-19 원거리 인식 임무 설정(�
 
 ## 10쪽 팀원 Isaac 연속 이송 (정답 위치로 경로 추종)
 
-ws1 `artifacts/20261020_demo_scenarios/isaac/runs` (팀원 shanghun, fleet 시뮬레이터 `run_world` · `source_v34`, 2026-10-20). 같은 실측 차체의 PhysX 모델과 경로 추종기이고, 팔레트 · 차량 위치는 정답(카메라 인식 · SLAM 없음), 이웃 팔레트 금지 폭 `--keep-m 0.2`.
+ws1 `artifacts/20261020_demo_scenarios/isaac/runs` (팀원 shanghun, fleet 시뮬레이터 `run_world` · `source_v34`, 2026-10-20). 같은 실측 차체의 PhysX 모델과 경로 추종기이고, 팔레트 · 차량 위치는 정답(카메라 인식 · SLAM 없음), 이웃 팔레트 금지 폭 `--keep-m 0.2`(트레일러 J2 · J3 는 0.1, I 계열은 기본 0.3). 랜덤 배치는 그림 기울기(최대 10°)로 돌린 I2 · I3 · J6 가 1/3 · 1/3 · 1/9, 기울기 0° 칸 간격 1.22 m 의 I4 · I5 가 2/3.
 
 | 실행 | 결과 (`result.json` jobs) | 쓴 곳 |
 |---|---|---|
