@@ -707,3 +707,8 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .comparison.h7.concl13 td:first-child { color:var(--uos-blue); font-weight:700; width:16%; }
 /* 8주차 콘솔 녹화 (2026-10-21): 4쪽 작업 지정 창(622 x 424)과 임무 패널(338 x 484) */
 .steps8.two8 { grid-template-columns:1.47fr 0.70fr; }
+/* 8주차 구조도 사진판 (2026-10-21) */
+.sys8.sys8p { justify-content:center; }
+.sys8.sys8p .diagram { max-height:100%; }
+.comparison.h7.sys8t { font-size:21px; width:auto; margin:0 auto; }
+.comparison.h7.sys8t th, .comparison.h7.sys8t td { padding:8px 28px; text-align:center; }

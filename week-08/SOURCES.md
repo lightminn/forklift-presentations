@@ -78,3 +78,15 @@ ws1 `artifacts/20261020_demo_scenarios/isaac/runs` (팀원 shanghun, fleet 시�
 | J3_p7_drawn_2col | 그림 비율 2.30 m 두 줄 4/4 (치수와 다른 폭이라 화면에 안 씀) | — |
 
 영상: 마지막 작업 4 s 뒤에서 자르고 바닥만 잘라(`isaac_spec.crop`) 10 · 20 · 30 · 20배속, 960 px.
+
+## 2쪽 구조도 사진
+
+| 파일 | 원본 | 라이선스 |
+|---|---|---|
+| `d02_jetson.jpg` | Wikimedia Commons, File:NVIDIA Jetson Nano Developer Kit (47616885631) (cropped).jpg — SparkFun Electronics (Flickr). Jetson 계열 개발 키트 사진(우리가 쓸 Orin Nano 와 모양이 비슷한 다른 모델) | CC BY 2.0 |
+| `d02_stm32.jpg` | Wikimedia Commons, File:Embedded World 2016, Stm32 Nucleo.jpg — Ordercrazy. STM32 Nucleo 보드 사진(우리 구동 보드는 자체 제작 예정) | CC0 |
+| `d02_truck.jpg` | 5주차 `30_chassis_pallet.jpg` (2026-09-30 실물 사진, EXIF 제거)를 잘라 씀 | 팀 촬영 |
+| `d02_isaac.jpg` | ws1 `test_runs/riibotics/r4_line_1_s1/run/view_quarter.mp4` 20 s 프레임 | 우리 렌더 |
+| 노트북 · 폰 화면 | `v03_layout_poster.jpg` · `v03_phone_poster.jpg` (콘솔 녹화 프레임) | 우리 녹화 |
+
+사진은 모두 다시 인코딩해 EXIF 를 지웠다.

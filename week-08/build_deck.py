@@ -82,33 +82,65 @@ def lgd(*items):
 
 # ----------------------------------------------------------------- figures
 def structure_diagram():
-    """Browser -> gateway -> robot stack -> real truck or Isaac, drawn in the deck's style."""
-    W, H = 1180, 360
-    boxes = [(0, 120, 230, 120, '폰 · 태블릿 · 노트북', '브라우저 (설치 없음)', False),
-             (320, 120, 230, 120, '게이트웨이', '작업 단위 API', False),
-             (640, 120, 250, 120, 'ROS 2 로봇 스택', '미션, 위치 추정, 경로', False),
-             (980, 20, 200, 120, '실차', 'Jetson ↔ STM32', True),
-             (980, 220, 200, 120, 'Isaac Sim', 'ws1 실시간 실행기', False)]
+    """Browser -> gateway -> robot stack -> real truck (Jetson, STM32 board, chassis) or Isaac, with photos:
+    the console as it looks on a laptop and a phone (our recordings), the boards (Wikimedia Commons, SOURCES.md),
+    our chassis photo and an Isaac render."""
+    W, H = 1400, 430
+    a = lambda c: f'marker-end="url(#{c})"'
+
+    def pic(src, x, y, w, h, r=8, stroke='#c3cad3'):
+        cid = f'c8_{src.split(".")[0]}_{x}_{y}'
+        return (f'<clipPath id="{cid}"><rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{r}"/></clipPath>'
+                f'<image href="assets/{src}" x="{x}" y="{y}" width="{w}" height="{h}" preserveAspectRatio="xMidYMid slice" clip-path="url(#{cid})"/>'
+                f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{r}" fill="none" stroke="{stroke}" stroke-width="1.5"/>')
+
+    def label(x, y, t, sub=None, anchor='middle', size=22):
+        out = f'<text x="{x}" y="{y}" text-anchor="{anchor}" font-size="{size}" font-weight="700" fill="#1b1f24">{t}</text>'
+        if sub:
+            out += f'<text x="{x}" y="{y + 26}" text-anchor="{anchor}" font-size="17" fill="#44505c">{sub}</text>'
+        return out
+
+    def box(x, y, w, h, t, sub):
+        return (f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="8" fill="#eef4fb" stroke="{BLUE}" stroke-width="2.5"/>'
+                + label(x + w / 2, y + h / 2 - 4, t, sub))
+
     parts = [f'<defs><marker id="ah8" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">'
              f'<path d="M0,0 L10,5 L0,10 z" fill="{BLUE}"/></marker>'
              f'<marker id="ah8g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">'
              f'<path d="M0,0 L10,5 L0,10 z" fill="#9aa3ad"/></marker></defs>']
-    # the part that changes between the real truck and Isaac
-    parts.append('<rect x="962" y="4" width="216" height="352" rx="10" fill="none" stroke="#c3cad3" stroke-width="2" stroke-dasharray="8 6"/>'
-                 '<text x="1070" y="186" text-anchor="middle" font-size="17" fill="#5d6670">구동부만 바뀜</text>')
-    for x, y, w, h, t, sub, later in boxes:
-        stroke = '#c3cad3' if later else BLUE
-        fill = '#f7f9fb' if later else '#eef4fb'
-        parts.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="8" fill="{fill}" stroke="{stroke}" stroke-width="2.5"/>'
-                     f'<text x="{x + w / 2}" y="{y + 52}" text-anchor="middle" font-size="24" font-weight="700" fill="#1b1f24">{t}</text>'
-                     f'<text x="{x + w / 2}" y="{y + 86}" text-anchor="middle" font-size="18" fill="#44505c">{sub}</text>')
-    for x1, x2, lab in ((230, 318, 'Wi-Fi'), (550, 638, 'ROS 2')):
-        parts.append(f'<line x1="{x1}" y1="180" x2="{x2}" y2="180" stroke="{BLUE}" stroke-width="4" marker-end="url(#ah8)"/>'
-                     f'<text x="{(x1 + x2) / 2}" y="166" text-anchor="middle" font-size="17" fill="{BLUE}">{lab}</text>')
-    parts.append('<polyline points="890,160 935,160 935,80 976,80" fill="none" stroke="#9aa3ad" stroke-width="4" stroke-dasharray="10 7" marker-end="url(#ah8g)"/>'
-                 f'<polyline points="890,200 935,200 935,280 976,280" fill="none" stroke="{BLUE}" stroke-width="4" marker-end="url(#ah8)"/>')
-    return (f'<svg class="diagram" viewBox="0 0 {W} {H}" role="img" aria-label="폰, 태블릿, 노트북 브라우저가 Wi-Fi로 게이트웨이에, '
-            f'게이트웨이가 ROS 2로 로봇 스택에 붙고, 로봇 스택 아래 구동부가 실차(추후 연결) 또는 Isaac Sim">'
+    # the browsers: the console on a laptop and a phone (frames of our recordings)
+    parts.append('<rect x="10" y="100" width="240" height="150" rx="9" fill="#1b1f24"/>'
+                 + pic('v03_layout_poster.jpg', 18, 108, 224, 126, 3, '#1b1f24')
+                 + '<polygon points="0,252 260,252 246,268 14,268" fill="#c3cad3"/>'
+                 '<rect x="186" y="150" width="80" height="168" rx="13" fill="#1b1f24"/>'
+                 + pic('v03_phone_poster.jpg', 192, 160, 68, 146, 4, '#1b1f24'))
+    parts.append(label(133, 356, '폰 · 노트북 브라우저', '설치 없음'))
+    # Wi-Fi, then the gateway and the robot stack
+    parts.append(f'<line x1="276" y1="215" x2="346" y2="215" stroke="{BLUE}" stroke-width="4" {a("ah8")}/>'
+                 + ''.join(f'<path d="M{311 - r},{182 - 0.0} A{r},{r} 0 0 1 {311 + r},182" fill="none" stroke="{BLUE}" stroke-width="3.5" '
+                           f'stroke-linecap="round" transform="rotate(0 311 182)"/>' for r in (8, 16, 24))
+                 + f'<circle cx="311" cy="186" r="3.5" fill="{BLUE}"/>'
+                 f'<text x="311" y="245" text-anchor="middle" font-size="17" fill="{BLUE}">Wi-Fi</text>')
+    parts.append(box(352, 160, 168, 110, '게이트웨이', '작업 단위 API'))
+    parts.append(f'<line x1="520" y1="215" x2="572" y2="215" stroke="{BLUE}" stroke-width="4" {a("ah8")}/>'
+                 f'<text x="546" y="201" text-anchor="middle" font-size="17" fill="{BLUE}">ROS 2</text>')
+    parts.append(box(576, 150, 206, 130, 'ROS 2 로봇 스택', '미션, 위치 추정, 경로'))
+    # the drive side: the real truck (later) and Isaac Sim
+    parts.append('<rect x="832" y="4" width="564" height="422" rx="12" fill="none" stroke="#c3cad3" stroke-width="2" stroke-dasharray="8 6"/>'
+                 '<text x="1388" y="416" text-anchor="end" font-size="16" fill="#5d6670">구동부만 바뀜</text>')
+    parts.append(f'<polyline points="782,195 810,195 810,110 850,110" fill="none" stroke="#9aa3ad" stroke-width="4" stroke-dasharray="10 7" {a("ah8g")}/>'
+                 f'<polyline points="782,235 810,235 810,322 850,322" fill="none" stroke="{BLUE}" stroke-width="4" {a("ah8")}/>')
+    parts.append(pic('d02_jetson.jpg', 856, 48, 170, 122)
+                 + f'<line x1="1030" y1="110" x2="1060" y2="110" stroke="#9aa3ad" stroke-width="3.5" {a("ah8g")}/>'
+                 + pic('d02_stm32.jpg', 1066, 40, 120, 140)
+                 + f'<line x1="1190" y1="110" x2="1220" y2="110" stroke="#9aa3ad" stroke-width="3.5" {a("ah8g")}/>'
+                 + pic('d02_truck.jpg', 1226, 16, 152, 185))
+    parts.append(label(941, 200, 'Jetson', size=19) + label(1126, 206, 'STM32 구동 보드', size=19)
+                 + label(1302, 226, '실차 (추후 연결)', size=19))
+    parts.append(pic('d02_isaac.jpg', 856, 246, 232, 157)
+                 + label(1110, 318, 'Isaac Sim', 'ws1 실시간 실행기', anchor='start', size=24))
+    return (f'<svg class="diagram" viewBox="0 0 {W} {H}" role="img" aria-label="폰과 노트북 브라우저가 Wi-Fi로 게이트웨이에, '
+            f'게이트웨이가 ROS 2로 로봇 스택에 붙고, 로봇 스택 아래 구동부가 실차(Jetson, STM32 구동 보드, 차체, 추후 연결) 또는 Isaac Sim">'
             f'<g font-family="var(--uos-font)">{"".join(parts)}</g></svg>')
 
 
@@ -147,21 +179,14 @@ add('콘솔이 하는 일', '01  운용 콘솔이 하는 일', 50, f"""
 # ----------------------------------------------------------------- 2
 add('시스템 구조', '02  콘솔 연결 구조', 55, f"""
 <h2 class="headline">브라우저가 지게차의 게이트웨이에 붙고, 실차와 Isaac은 같은 로봇 스택을 공유</h2>
-<div class="hw7 wide grow">
-<div class="chart7 sys8">{structure_diagram()}</div>
-{table(['구분', '방식'], [
-    ('접속 기기', '폰, 태블릿, 노트북'),
-    ('설치', '없음 (브라우저)'),
-    ('입력', '터치, 키보드, 게임패드'),
-    ('무선 연결', 'Jetson이 Wi-Fi AP (1:1)'),
-    ('연결 대상', 'Isaac 완료, 실차 예정')], 'comparison h7 nwall t8')}
-</div>
+<div class="sys8 sys8p grow">{structure_diagram()}</div>
+{table(['입력', '무선 연결'], [('터치, 키보드, 게임패드', 'Jetson이 Wi-Fi AP (지게차와 1:1)')], 'comparison h7 nwall sys8t')}
 """,
     """연결 구조입니다. 폰이나 노트북의 브라우저가 Wi-Fi로 지게차에 있는 게이트웨이에 접속합니다. 앱을 따로 설치하지 않고, 입력은 터치, 키보드, 게임패드를 모두 받습니다. 게이트웨이는 팔레트 운반 같은 작업 단위로 요청을 받아 ROS 2 로봇 스택에 넘기고, 로봇 스택이 미션 실행, 위치 추정, 경로 계획을 맡습니다. 실차와 Isaac 시뮬레이션은 이 로봇 스택을 같이 쓰고 맨 아래 구동부만 바뀝니다. 그래서 지금 Isaac에서 쓰는 화면을 실차에서도 그대로 쓸 수 있습니다. 실차에서는 Jetson이 직접 Wi-Fi 공유기 역할을 해서 콘솔 기기와 일대일로 연결할 계획이고, 실차 연결은 아직 하지 않았습니다. 브라우저를 고른 이유는 폰에 ROS를 설치할 수 없기 때문이고, 게이트웨이가 ROS 토픽이 아니라 작업 단위 API를 주므로 나중에 여러 대를 관제하는 서버가 생겨도 같은 API를 그대로 중계하면 됩니다. (전환)""",
     [(DESIGN, '2절 결정: 로봇 쪽 전용 게이트웨이 + 웹 앱(A안), 웹 클라이언트(폰에 ROS 설치 불가, Gamepad API), 1단계 망 Jetson AP 1:1, 실차와 Isaac 이 같은 ROS 2 스택; 3절 구조도'),
      (README, 'web/ 빌드 없는 브라우저 콘솔, gateway/ 관찰 전용 게이트웨이(ROS 2 컨테이너)'),
      (PR61, 'Isaac 실시간 실행기와 콘솔 연결; 실차 연결(설계 6절 C4)은 미착수')],
-    '그림: 설계 문서 3절 구조도를 덱 배치로 다시 그림 (안전 계층은 생략)')
+    '그림: 설계 문서 3절 구조도를 사진과 함께 다시 그림 (안전 계층은 생략, 보드 사진은 Wikimedia Commons)')
 
 # ----------------------------------------------------------------- 3
 add('화면 구성', '03  화면 구성', 55, f"""
