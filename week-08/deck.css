@@ -696,3 +696,9 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .comparison.h7.isaac9 td { padding:16px 14px; white-space:nowrap; }
 .comparison.h7.isaac9 td:first-child { color:var(--uos-blue); font-weight:700; }
 .scen8 .shot .media { border:1px solid var(--uos-rule); }
+/* 8주차 팀원 Isaac 연속 이송 (2026-10-21): 16:9 영상 넷을 2 x 2 */
+.team10 { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); grid-template-rows:repeat(2,minmax(0,1fr)); gap:8px 20px; min-height:0; }
+.team10 > .shot { height:100%; min-height:0; }
+.team10 .shot .media { border:1px solid var(--uos-rule); }
+.comparison.h7.isaac11 { font-size:21px; }
+.comparison.h7.isaac11 td { padding:13px 12px; }
