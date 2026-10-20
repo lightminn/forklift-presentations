@@ -36,7 +36,6 @@
 <figure class="shot"><img class="media" src="assets/a01_order.png" alt="작업 지정 창의 확인 단계. 팔레트 P-01, 하역 위치 D-A, 4단계 목록"><figcaption>작업 지시 (팔레트, 하역 위치)</figcaption></figure>
 <figure class="shot"><img class="media" src="assets/a01_drive.png" alt="수동 조종 탭. 누르고 있기 버튼, 조이스틱, 포크 올리기와 내리기, 속도와 곡률 명령 막대"><figcaption>직접 운전 (조이스틱, 게임패드)</figcaption></figure>
 </div>
-<div class="takeaway">지금까지는 ws1 터미널에서 명령을 넣었지만, 이제는 지게차 옆에서 폰으로 바로 다룹니다</div>
 </div></x-import>
 </section>
 
@@ -56,7 +55,6 @@ Isaac 실시간 실행기와 콘솔 연결; 실차 연결(설계 6절 C4)은 미
 <div class="chart7 sys8"><svg class="diagram" viewBox="0 0 1180 360" role="img" aria-label="폰, 태블릿, 노트북 브라우저가 Wi-Fi로 게이트웨이에, 게이트웨이가 ROS 2로 로봇 스택에 붙고, 로봇 스택 아래 구동부가 실차(추후 연결) 또는 Isaac Sim"><g font-family="var(--uos-font)"><defs><marker id="ah8" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2f74c0"/></marker><marker id="ah8g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa3ad"/></marker></defs><rect x="962" y="4" width="216" height="352" rx="10" fill="none" stroke="#c3cad3" stroke-width="2" stroke-dasharray="8 6"/><text x="1070" y="186" text-anchor="middle" font-size="17" fill="#5d6670">구동부만 바뀜</text><rect x="0" y="120" width="230" height="120" rx="8" fill="#eef4fb" stroke="#2f74c0" stroke-width="2.5"/><text x="115.0" y="172" text-anchor="middle" font-size="24" font-weight="700" fill="#1b1f24">폰 · 태블릿 · 노트북</text><text x="115.0" y="206" text-anchor="middle" font-size="18" fill="#44505c">브라우저 (설치 없음)</text><rect x="320" y="120" width="230" height="120" rx="8" fill="#eef4fb" stroke="#2f74c0" stroke-width="2.5"/><text x="435.0" y="172" text-anchor="middle" font-size="24" font-weight="700" fill="#1b1f24">게이트웨이</text><text x="435.0" y="206" text-anchor="middle" font-size="18" fill="#44505c">작업 단위 API</text><rect x="640" y="120" width="250" height="120" rx="8" fill="#eef4fb" stroke="#2f74c0" stroke-width="2.5"/><text x="765.0" y="172" text-anchor="middle" font-size="24" font-weight="700" fill="#1b1f24">ROS 2 로봇 스택</text><text x="765.0" y="206" text-anchor="middle" font-size="18" fill="#44505c">미션, 위치 추정, 경로</text><rect x="980" y="20" width="200" height="120" rx="8" fill="#f7f9fb" stroke="#c3cad3" stroke-width="2.5"/><text x="1080.0" y="72" text-anchor="middle" font-size="24" font-weight="700" fill="#1b1f24">실차</text><text x="1080.0" y="106" text-anchor="middle" font-size="18" fill="#44505c">Jetson ↔ STM32</text><rect x="980" y="220" width="200" height="120" rx="8" fill="#eef4fb" stroke="#2f74c0" stroke-width="2.5"/><text x="1080.0" y="272" text-anchor="middle" font-size="24" font-weight="700" fill="#1b1f24">Isaac Sim</text><text x="1080.0" y="306" text-anchor="middle" font-size="18" fill="#44505c">ws1 실시간 실행기</text><line x1="230" y1="180" x2="318" y2="180" stroke="#2f74c0" stroke-width="4" marker-end="url(#ah8)"/><text x="274.0" y="166" text-anchor="middle" font-size="17" fill="#2f74c0">Wi-Fi</text><line x1="550" y1="180" x2="638" y2="180" stroke="#2f74c0" stroke-width="4" marker-end="url(#ah8)"/><text x="594.0" y="166" text-anchor="middle" font-size="17" fill="#2f74c0">ROS 2</text><polyline points="890,160 935,160 935,80 976,80" fill="none" stroke="#9aa3ad" stroke-width="4" stroke-dasharray="10 7" marker-end="url(#ah8g)"/><polyline points="890,200 935,200 935,280 976,280" fill="none" stroke="#2f74c0" stroke-width="4" marker-end="url(#ah8)"/></g></svg></div>
 <table class="comparison h7 nwall t8"><tr><th>구분</th><th>방식</th></tr><tr><td>접속 기기</td><td>폰, 태블릿, 노트북</td></tr><tr><td>설치</td><td>없음 (브라우저)</td></tr><tr><td>입력</td><td>터치, 키보드, 게임패드</td></tr><tr><td>무선 연결</td><td>Jetson이 Wi-Fi AP (1:1)</td></tr><tr><td>연결 대상</td><td>Isaac 완료, 실차 예정</td></tr></table>
 </div>
-<div class="takeaway">시뮬레이션에서 쓰는 화면과 기능을 실차에서도 그대로 쓰도록 맨 아래 구동부만 바꿉니다</div>
 </div></x-import>
 </section>
 
@@ -78,13 +76,12 @@ web/ 화면은 FMS 형식: 왼쪽 메뉴(모니터링 · 이벤트 기록 · 통
 <table class="comparison h7 nwall mk8t"><tr><th></th><th>영역</th></tr><tr><td>①</td><td>연결 대상, 운행 모드, 조종 권한</td></tr><tr><td>②</td><td>지도 (격자, LiDAR, 경로)</td></tr><tr><td>③</td><td>전방 카메라</td></tr><tr><td>④</td><td>차량 상세와 수동 조종 탭</td></tr><tr><td>⑤</td><td>모니터링, 이벤트 기록, 통신</td></tr></table>
 <figure class="shot phone8"><img class="media" src="assets/a03_phone.png" alt="폰 폭(400 px) 화면. 상태, 전방 카메라, 수동 조종 순서로 세로로 쌓이고 아래에 STOP 고정"><figcaption>폰 화면</figcaption></figure>
 </div>
-<div class="takeaway">폰에서는 같은 내용이 카메라, 수동 조종, 지도 순서로 세로로 쌓입니다</div>
 </div></x-import>
 </section>
 
 <section data-label="작업 지정과 진행" data-screen-label="05" data-duration="55" data-speaker-notes="권장 55초
 
-미션을 지시하는 방법입니다. 작업 지정 창은 세 단계입니다. 먼저 작업 종류를 고릅니다. 지금은 팔레트 운반 하나이고, 차량이 지원한다고 알린 작업만 보입니다. 다음으로 옮길 팔레트와 내려놓을 하역 위치를 고르고, 마지막으로 확인하고 작업을 시작합니다. 지도에서 팔레트를 직접 눌러도 그 팔레트가 골라진 채로 대상 설정이 바로 열립니다. 작업이 시작되면 아래 띠처럼 관찰, 접근, 삽입, 들기, 빼기, 운반, 내리기, 후퇴, 복귀의 아홉 단계 중 지금 어디까지 왔는지 화면에 표시되고, 끝나면 결과 기록에 남습니다. (전환)
+미션을 지시하는 방법입니다. 작업 지정 창은 세 단계입니다. 먼저 작업 종류를 고릅니다. 지금은 팔레트 운반 하나이고, 차량이 지원한다고 알린 작업만 보입니다. 다음으로 옮길 팔레트와 내려놓을 하역 위치를 고르고, 마지막으로 확인하고 작업을 시작합니다. 지도에서 팔레트를 직접 눌러도 그 팔레트가 골라진 채로 대상 설정이 바로 열립니다. 작업이 시작되면 아래 띠처럼 관찰, 접근, 삽입, 들기, 빼기, 운반, 내리기, 후퇴, 복귀의 아홉 단계 중 지금 어디까지 왔는지 화면에 표시되고, 끝나면 결과 기록에 남습니다. 지도에서 대기 중인 팔레트를 누르면 그 팔레트가 골라진 채로 바로 대상 설정이 열립니다. (전환)
 
 [Sources]
 그림: 작업 지정 창 세 단계 (가짜 차량, 가짜 차량 화면)
@@ -101,7 +98,6 @@ web/ 화면은 FMS 형식: 왼쪽 메뉴(모니터링 · 이벤트 기록 · 통
 <figure class="shot"><img class="media" src="assets/a04_step3.png" alt="작업 지정 3단계. 팔레트 P-01, 하역 위치 D-A 확인과 작업 시작 버튼"><figcaption>③ 확인</figcaption></figure>
 </div>
 <div class="phase-flow stages8"><span>관찰</span><span class="arrow">→</span><span>접근</span><span class="arrow">→</span><span>삽입</span><span class="arrow">→</span><span>들기</span><span class="arrow">→</span><span>빼기</span><span class="arrow">→</span><span>운반</span><span class="arrow">→</span><span>내리기</span><span class="arrow">→</span><span>후퇴</span><span class="arrow">→</span><span>복귀</span></div>
-<div class="takeaway">지도에서 대기 중인 팔레트를 누르면 그 팔레트가 골라진 채로 바로 대상 설정이 열립니다</div>
 </div></x-import>
 </section>
 
@@ -123,7 +119,6 @@ Isaac 실행기의 수동 포크 승강 구동 — 10-17 미구동, 10-19 출력
 <table class="comparison h7 nwall t8"><tr><th>구분</th><th>방식</th></tr><tr><td>입력</td><td>화면 조이스틱, 게임패드, 키보드</td></tr><tr><td>미리 보기</td><td>지도와 카메라 바닥에 예상 경로</td></tr><tr><td>포크</td><td>올리기, 내리기 버튼</td></tr><tr><td>조종 방식</td><td>눈으로 보며, 영상만 보며</td></tr></table>
 </div>
 <div class="lgd7"><span class="lg"><span class="sw dash" style="border-color:#a78bfa"></span>조종 예상 궤적</span></div>
-<div class="takeaway">자동 주행 중에도 일시정지하고 수동 조종으로 바꿔 차를 옮길 수 있습니다</div>
 </div></x-import>
 </section>
 
@@ -162,7 +157,6 @@ CPU 경로 계획 애니메이션: Isaac 임무 설정(곡률 0.29, 여유 0.10,
 <figure class="shot"><img class="media" src="assets/s02_truck.png" alt="리보틱스 실제 지게차 평면도. 길이 2.8 m, 폭 1.13 m"><figcaption>리보틱스 지게차</figcaption></figure>
 <table class="comparison h7 nwall t8"><tr><th>항목</th><th>시나리오</th><th>우리 축척 (×0.52–0.56)</th></tr><tr><td>지게차 길이 × 폭</td><td>2.8 × 1.13 m</td><td><b>1.46 × 0.63 m</b> (우리 차체)</td></tr><tr><td>좁은 통로 폭</td><td>3.8 m</td><td>1.98–2.12 m</td></tr><tr><td>구역 사이 간격</td><td>3.4 m</td><td>1.77–1.90 m</td></tr><tr><td>트레일러 안쪽 폭</td><td>2.6 m</td><td>1.36–1.45 m</td></tr><tr><td>컨베이어 높이</td><td>약 0.7 m</td><td>0.37–0.39 m</td></tr></table>
 </div>
-<div class="takeaway">길이와 폭의 비율이 7 % 달라, 어느 쪽을 기준으로 줄일지 리보틱스에 확인합니다</div>
 </div></x-import>
 </section>
 
@@ -205,7 +199,6 @@ r4_line_1_s1 · r4_random_2 transport.mp4 탑뷰, 장면 부분만 잘라 6배�
 <figure class="shot"><video class="media" src="assets/i09_random.mp4" poster="assets/i09_random_poster.jpg" autoplay loop muted playsinline aria-label="위에서 본 랜덤 배치 장면. 적재 구역의 두 번째 팔레트를 집어 하역 구역 가운데 칸에 내려놓고 돌아옴"></video><figcaption>④ 랜덤 배치, 두 번째 팔레트 (첫 번째는 옮겨 둔 상태)</figcaption></figure>
 </div>
 <div class="lgd7"><span class="lg"><span class="sw ln" style="background:#8fd0dc"></span>접근 경로</span><span class="lg"><span class="sw ln" style="background:#e8dc78"></span>운반 경로</span><span class="lg"><span class="sw ln" style="background:#cdb6dd"></span>복귀 경로</span><span class="lg"><span class="sw ring" style="border-color:#33ef63"></span>하역 위치</span></div>
-<div class="takeaway">카메라로 팔레트를 찾고 SLAM으로 위치를 잡아, 사람 지시 없이 집기부터 복귀까지 마쳤습니다</div>
 </div></x-import>
 </section>
 
@@ -222,7 +215,6 @@ r4_line_1_s1 · r4_random_2 transport.mp4 탑뷰, 장면 부분만 잘라 6배�
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="10  시나리오별 Isaac 결과"><div class="slide-body">
 <h2 class="headline">실패는 대부분 삽입 전 재관측, 좁은 공간은 이웃 팔레트 구분과 위치 추정 오차가 과제</h2>
 <table class="comparison h7 concl7 isaac9 grow"><tr><th>시나리오</th><th>Isaac 결과</th><th>막힌 점</th></tr><tr><td>③ 일자 배치</td><td>5회 중 2회 완주, 1회는 하역 오차 9.8 cm</td><td>삽입 전 재관측 실패 2회</td></tr><tr><td>④ 랜덤 배치</td><td>4회 중 1회 완주, 1회는 하역 오차 9.5 cm</td><td>뒤 팔레트가 겹쳐 보여 재관측 방향 어긋남 2회</td></tr><tr><td>⑤ 트레일러</td><td>팔레트를 꺼낸 뒤 운반 중 정지</td><td>위치 추정 오차 최대 16 cm, 벽 옆에서 주행 허가 차단</td></tr><tr><td>① 좁은 통로</td><td>삽입 전 재관측이 옆 칸 팔레트를 인식</td><td>이웃 팔레트 구분</td></tr></table>
-<div class="takeaway">팔레트가 가까이 붙은 장면에서는 삽입 전 재관측과 하역 위치 정밀도가 다음 과제입니다</div>
 </div></x-import>
 </section>
 
@@ -239,7 +231,6 @@ r4_line_1_s1 · r4_random_2 transport.mp4 탑뷰, 장면 부분만 잘라 6배�
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="11  구현 전략"><div class="slide-body">
 <h2 class="headline">일자·랜덤 배치 연속 이송을 먼저 완성하고, 좁은 공간은 이웃 팔레트 구분 뒤 진행</h2>
 <table class="comparison h7 concl7 plan8 grow"><tr><th>단계</th><th>대상</th><th>할 일</th></tr><tr><td>1단계</td><td>③ 일자, ④ 랜덤</td><td>삽입 전 재관측 안정화, 다음 팔레트 선택과 하역 칸 배정</td></tr><tr><td>2단계</td><td>① 좁은 통로, ⑤ 트레일러</td><td>이웃 팔레트 구분, 위치 추정 오차 줄이기</td></tr><tr><td>3단계</td><td>실차</td><td>같은 장면을 바닥에 표시해 실차로 시연</td></tr><tr><td>보류</td><td>② 컨베이어</td><td>스테이션 높이를 0.23 m 이하로 협의</td></tr></table>
-<div class="takeaway">1단계는 운용 콘솔로 미션을 연달아 지시하는 기능 위에 팔레트 선택과 하역 칸 배정을 더하는 일입니다</div>
 </div></x-import>
 </section>
 
