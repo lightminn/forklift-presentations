@@ -3,7 +3,7 @@
 <link rel="icon" href="data:,">
 <script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>8주차 자율 지게차 개발</title>
-<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=8a4790a52d05"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=0e3690208d90"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 <section class="title-section" data-label="개발 진행 보고" data-screen-label="01" data-duration="20" data-speaker-notes="권장 20초
 
@@ -167,27 +167,27 @@ Isaac 실행기의 수동 포크 승강 구동 — 10-17 미구동, 10-19 출력
 
 <section data-label="시나리오별 판단" data-screen-label="09" data-duration="60" data-speaker-notes="권장 60초
 
-시나리오별로 지금 시스템에서 걸리는 점을 정리했습니다. 일자 배치와 랜덤 배치는 지금 하고 있는 팔레트 하나 운반의 연장이라 1차 목표로 잡았습니다. 다만 일자 배치는 앞 팔레트를 옮긴 뒤 뒤 팔레트를 다시 찾아야 하고, 랜덤 배치는 다음에 옮길 팔레트를 고르고 하역 구역의 어느 칸에 내려놓을지 정해야 합니다. 좁은 통로는 우리 차의 뒤차축 기준 최소 회전 반경이 2.73미터라 약 2미터 통로에서 한 번에 90도 꺾어 들어갈 수 없습니다. 트레일러는 팔레트가 두 줄이면 벽과 옆 팔레트 사이 여유가 몇 센티미터밖에 남지 않습니다. 그래서 이 두 가지는 축소한 장면을 만들어 경로가 나오는지부터 확인하고 있습니다. 컨베이어는 축소해도 0.37미터인데 우리 포크는 0.32미터까지밖에 안 올라가서 스테이션 높이를 낮출 수 있는지 협의해야 합니다. 공통으로, LiDAR가 1.05미터 높이에 있어서 바닥에 놓인 팔레트나 낮은 rack 부재는 보지 못하므로, 카메라와 미리 받은 배치 정보로 보완해야 합니다. (전환)
+시나리오별로 지금 시스템에서 걸리는 점을 정리했습니다. 일자 배치와 랜덤 배치는 지금 하고 있는 팔레트 하나 운반의 연장이라 1차 목표로 잡았습니다. 다만 일자 배치는 앞 팔레트를 옮긴 뒤 뒤 팔레트를 다시 찾아야 하고, 랜덤 배치는 다음에 옮길 팔레트를 고르고 하역 구역의 어느 칸에 내려놓을지 정해야 합니다. 좁은 통로와 트레일러는 축소한 장면을 만들어 경로 계획기로 확인했습니다. 좁은 통로는 우리 차의 최소 회전 반경이 2.73미터라 약 2미터 통로에서 한 번에 90도 꺾어 들어갈 수 없습니다. 이웃 팔레트 간격과 정렬 거리 등을 바꾼 144개 조합을 계산해 보니, 집는 칸과 놓는 칸이 모두 구역 사이 간격 위에 있는 일부 조건에서 복귀까지 경로가 나왔고, 계산된 경로의 전진 후진 전환은 14에서 29번이었습니다. 트레일러는 EPAL 6 팔레트를 가운데 한 줄로 놓으면 꺼내기와 넣기, 복귀 경로가 모두 나왔고 전환은 5에서 7번이었습니다. 반면 T11 팔레트를 두 줄로 놓으면 차체와 포크, 팔레트를 감싼 사각형과 여유 거리 때문에 접근 또는 적재 진입 자세에서 막혔습니다. 이것은 경로 계획 결과이고 실제 주행은 아직 확인하지 않았습니다. 컨베이어는 축소해도 0.37미터인데 우리 포크는 0.32미터까지밖에 안 올라가서 스테이션 높이를 낮출 수 있는지 협의해야 합니다. 공통으로, LiDAR가 1.05미터 높이에 있어서 바닥에 놓인 팔레트나 낮은 rack 부재는 보지 못하므로, 카메라와 미리 받은 배치 정보로 보완해야 합니다. (전환)
 
 [Sources]
-표: 시나리오별 판단 (경로 확인 결과가 나오면 갱신)
+표: 시나리오별 판단 (좁은 공간 두 줄은 CPU 경로 계획 결과)
 fork_center_height_m 0.04 + lift_travel_m 0.28 = 포크 중심 최고 0.32 m (최저 높이는 실측 전): lightminn/forklift sim/models/dls08_measured/parameters.yaml
 기구 곡률 한계 0.3665 1/m → 뒤차축 최소 회전 반경 2.73 m: lightminn/forklift config/isaac_transport_measured.yaml
 LiDAR 평면 1.05 m, 그보다 낮은 물체는 보지 못함: lightminn/forklift config/isaac_slam_lidar.yaml
 T11 0.66 m × 2열, 안쪽 1.36–1.45 m → 균등 간격 12–44 mm: 트레일러 계산
-좁은 통로 · 트레일러 경로 확인 (UBAI 실행 중): lightminn/forklift tools/riibotics_scenario_paths.py
+통로 144건 성공 14 (간격 위 → 간격 위, 복귀 포함, 전환 14–29회 · 기본 설정만 17–29회); 간격 위 → 구역 위 5건은 복귀 검색에서만 실패; 트레일러 EPAL 6 중앙 1열 행간 0.20 m 에서 a–d 성공(standard footprint 전환 5–7회), T11 2열 60건 전부 실패(접근 직선 · 목표 자세 · 적재 predelivery 거부). CPU 경로 계획 결과, 주행 미검증: lightminn/forklift tools/riibotics_scenario_paths.py (77b7e2d, UBAI job 1026078, 264건)
 시나리오 분석 2회 수렴; 장면 가정 검토 P2 반영: Codex 교차검증 (2026-10-20)
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="08  시나리오별 실현 가능성"><div class="slide-body">
-<h2 class="headline">일자·랜덤 배치는 지금 기능을 넓히고, 좁은 공간은 경로부터 확인, 컨베이어는 높이 협의</h2>
-<table class="comparison h7 concl7 judge8 grow"><tr><th>시나리오</th><th>걸리는 점</th><th>판단</th></tr><tr><td>③ 일자 배치</td><td>앞 팔레트를 옮긴 뒤 다음 팔레트 다시 찾기</td><td><b>1차 목표</b></td></tr><tr><td>④ 랜덤 배치</td><td>다음 팔레트 고르기, 하역 칸 배정</td><td><b>1차 목표</b></td></tr><tr><td>① 좁은 통로</td><td>회전 반경 2.73 m로 약 2 m 통로에서 90° 진입</td><td>경로 확인 중</td></tr><tr><td>⑤ 트레일러</td><td>2열이면 벽과 옆 팔레트 사이 여유가 수 cm</td><td>경로 확인 중</td></tr><tr><td>② 컨베이어</td><td>포크 최고 높이 0.32 m, 축소 높이는 0.37 m</td><td>높이 협의</td></tr></table>
+<h2 class="headline">일자·랜덤 배치는 1차 목표, 좁은 공간은 조건부로 경로 확보, 컨베이어는 높이 협의</h2>
+<table class="comparison h7 concl7 judge8 grow"><tr><th>시나리오</th><th>걸리는 점</th><th>판단 (경로 계획 기준)</th></tr><tr><td>③ 일자 배치</td><td>앞 팔레트를 옮긴 뒤 다음 팔레트 다시 찾기</td><td><b>1차 목표</b></td></tr><tr><td>④ 랜덤 배치</td><td>다음 팔레트 고르기, 하역 칸 배정</td><td><b>1차 목표</b></td></tr><tr><td>① 좁은 통로</td><td>구역 사이 간격 위 칸끼리 경로 확보 (전후진 전환 14–29회)</td><td>일부 조건 확보</td></tr><tr><td>⑤ 트레일러</td><td>EPAL 6 1열은 꺼내기와 넣기 확보, T11 2열은 경로 미확보</td><td>1열 조건 확보</td></tr><tr><td>② 컨베이어</td><td>포크 최고 높이 0.32 m, 축소 높이는 0.37 m</td><td>높이 협의</td></tr></table>
 <div class="takeaway">LiDAR가 1.05 m 높이라 바닥 팔레트와 낮은 rack 부재는 카메라와 미리 받은 배치로 보완해야 합니다</div>
 </div></x-import>
 </section>
 
 <section data-label="구현 전략" data-screen-label="10" data-duration="55" data-speaker-notes="권장 55초
 
-구현 순서입니다. 1단계는 일자 배치와 랜덤 배치의 연속 이송입니다. 앞에서 보인 운용 콘솔은 이미 한 세션에서 미션을 연달아 받으므로, 여기에 다음 팔레트를 고르는 순서, 하역 구역의 칸 배정, 이미 옮긴 팔레트를 다음 경로의 장애물로 넣는 기능을 더하면 됩니다. 2단계는 좁은 통로와 트레일러입니다. 지금 축소 장면을 만들어 경로가 나오는지 확인하고 있고, 경로가 나오면 통로에서는 전진과 후진을 반복해 칸으로 들어가고, 트레일러에서는 입구 밖에서 정렬한 뒤 곧게 들어갔다가 후진으로 나오는 방식으로 구현합니다. 3단계는 같은 장면을 바닥에 테이프로 표시해 실차로 시연하는 것입니다. 컨베이어는 우리 포크로 팔레트를 들어 올릴 수 있는 스테이션 높이가 약 0.23미터 이하라서, 높이를 낮출 수 있는지 협의한 뒤에 진행하겠습니다. (전환)
+구현 순서입니다. 1단계는 일자 배치와 랜덤 배치의 연속 이송입니다. 앞에서 보인 운용 콘솔은 이미 한 세션에서 미션을 연달아 받으므로, 여기에 다음 팔레트를 고르는 순서, 하역 구역의 칸 배정, 이미 옮긴 팔레트를 다음 경로의 장애물로 넣는 기능을 더하면 됩니다. 2단계는 좁은 통로와 트레일러입니다. 경로 계획에서 경로가 나온 조건, 즉 구역 사이 간격 위의 칸과 EPAL 6 한 줄 트레일러부터 Isaac에서 그대로 재현해 실제로 따라갈 수 있는지 확인하겠습니다. 통로에서는 간격으로 후진해 방향을 돌린 뒤 칸으로 들어가고, 트레일러에서는 입구 밖에서 정렬한 뒤 곧게 들어갔다가 후진으로 나옵니다. 3단계는 같은 장면을 바닥에 테이프로 표시해 실차로 시연하는 것입니다. 컨베이어는 우리 포크로 팔레트를 들어 올릴 수 있는 스테이션 높이가 약 0.23미터 이하라서, 높이를 낮출 수 있는지 협의한 뒤에 진행하겠습니다. (전환)
 
 [Sources]
 표: 구현 단계
@@ -197,14 +197,14 @@ T11 0.66 m × 2열, 안쪽 1.36–1.45 m → 균등 간격 12–44 mm: 트레일
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="09  구현 전략"><div class="slide-body">
 <h2 class="headline">일자·랜덤 배치 연속 이송을 먼저 완성하고, 좁은 공간은 경로 확인 뒤 진행</h2>
-<table class="comparison h7 concl7 plan8 grow"><tr><th>단계</th><th>대상</th><th>할 일</th></tr><tr><td>1단계</td><td>③ 일자, ④ 랜덤</td><td>다음 팔레트 선택, 하역 칸 배정, 옮긴 팔레트를 장애물로 반영</td></tr><tr><td>2단계</td><td>① 좁은 통로, ⑤ 트레일러</td><td>축소 장면에서 경로 확인 뒤 전후진 반복 진입, 직진 진입과 후진 탈출</td></tr><tr><td>3단계</td><td>실차</td><td>같은 장면을 바닥에 표시해 실차로 시연</td></tr><tr><td>보류</td><td>② 컨베이어</td><td>스테이션 높이를 0.23 m 이하로 협의</td></tr></table>
+<table class="comparison h7 concl7 plan8 grow"><tr><th>단계</th><th>대상</th><th>할 일</th></tr><tr><td>1단계</td><td>③ 일자, ④ 랜덤</td><td>다음 팔레트 선택, 하역 칸 배정, 옮긴 팔레트를 장애물로 반영</td></tr><tr><td>2단계</td><td>① 좁은 통로, ⑤ 트레일러</td><td>간격 위 칸과 EPAL 6 1열 배치부터 Isaac에서 재현</td></tr><tr><td>3단계</td><td>실차</td><td>같은 장면을 바닥에 표시해 실차로 시연</td></tr><tr><td>보류</td><td>② 컨베이어</td><td>스테이션 높이를 0.23 m 이하로 협의</td></tr></table>
 <div class="takeaway">1단계는 운용 콘솔로 미션을 연달아 지시하는 기능 위에 팔레트 선택과 하역 칸 배정을 더하는 일입니다</div>
 </div></x-import>
 </section>
 
 <section data-label="결론 및 확인 요청" data-screen-label="11" data-duration="50" data-speaker-notes="권장 50초
 
-결론입니다. 이번 주에는 지게차를 브라우저로 다루는 운용 콘솔을 만들어 Isaac 지게차에 연결했고, 화면 하나로 미션을 지시하고 상태를 보고 직접 운전할 수 있게 했습니다. 그리고 리보틱스에서 받은 시연 시나리오 다섯 가지를 우리 차체 크기로 환산해, 일자 배치와 랜덤 배치를 1차 목표로 정했습니다. 진행하기 전에 리보틱스에 확인할 것은 표의 여섯 가지입니다. 축척 기준, 미션을 매번 지시하는지 한 번에 다 옮기는지, 팔레트와 빈칸 위치를 미리 주는지, 허용 오차의 기준, 컨베이어 높이, 대여 센서의 모델입니다. 다음 목표는 일자 배치와 랜덤 배치 시나리오를 Isaac에서 연속 이송으로 완주하는 것입니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.
+결론입니다. 이번 주에는 지게차를 브라우저로 다루는 운용 콘솔을 만들어 Isaac 지게차에 연결했고, 화면 하나로 미션을 지시하고 상태를 보고 직접 운전할 수 있게 했습니다. 그리고 리보틱스에서 받은 시연 시나리오 다섯 가지를 우리 차체 크기로 환산해, 일자 배치와 랜덤 배치를 1차 목표로 정했습니다. 진행하기 전에 리보틱스에 확인할 것은 표의 여덟 가지입니다. 축척 기준, 미션을 매번 지시하는지 한 번에 다 옮기는지, 팔레트와 빈칸 위치를 미리 주는지, 좁은 통로의 칸을 구역 사이 간격 위로 정해도 되는지, 트레일러를 한 줄 배치로 먼저 검증해도 되는지, 허용 오차의 기준, 컨베이어 높이, 대여 센서의 모델입니다. 다음 목표는 일자 배치와 랜덤 배치 시나리오를 Isaac에서 연속 이송으로 완주하는 것입니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.
 
 [Sources]
 출처: 이번 덱 각 장
@@ -214,7 +214,7 @@ Gemini 335 = USB, 335Le = Ethernet: Orbbec Gemini 330 시리즈 데이터시트
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="10  결론 및 리보틱스 확인 요청"><div class="slide-body">
 <h2 class="headline">운용 콘솔로 Isaac 지게차를 지시하고 운전, 시연 시나리오는 일자·랜덤 배치부터</h2>
-<table class="comparison h7 ask8 grow"><tr><th>리보틱스에 확인할 것</th></tr><tr><td>축척은 길이와 폭 중 어느 비율을 기준으로 하나요?</td></tr><tr><td>미션마다 지시하나요, 한 번 지시로 전부 옮기나요?</td></tr><tr><td>팔레트와 빈칸의 위치를 미리 알려 주시나요?</td></tr><tr><td>허용 오차는 어느 축 기준이고, 축소 환경에서도 같은 값인가요?</td></tr><tr><td>컨베이어 높이를 0.23 m 이하로 낮출 수 있나요?</td></tr><tr><td>대여해 주실 센서는 Gemini 335(USB)와 335Le(Ethernet) 중 어느 것인가요?</td></tr></table>
+<table class="comparison h7 ask8 grow"><tr><th>리보틱스에 확인할 것</th></tr><tr><td>축척은 길이와 폭 중 어느 비율을 기준으로 하나요?</td></tr><tr><td>미션마다 지시하나요, 한 번 지시로 전부 옮기나요?</td></tr><tr><td>팔레트와 빈칸의 위치를 미리 알려 주시나요?</td></tr><tr><td>집기와 내려놓기 칸을 구역 사이 간격 위로 정해도 되나요?</td></tr><tr><td>트레일러는 초기 검증을 팔레트 한 줄 배치로 해도 되나요?</td></tr><tr><td>허용 오차는 어느 축 기준이고, 축소 환경에서도 같은 값인가요?</td></tr><tr><td>컨베이어 높이를 0.23 m 이하로 낮출 수 있나요?</td></tr><tr><td>대여해 주실 센서는 Gemini 335(USB)와 335Le(Ethernet) 중 어느 것인가요?</td></tr></table>
 <div class="takeaway">다음 목표는 일자·랜덤 배치 시나리오를 Isaac에서 연속 이송으로 완주하는 것입니다</div>
 </div></x-import>
 </section>
