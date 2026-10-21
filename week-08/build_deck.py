@@ -56,9 +56,23 @@ def video(src, alt, cap=None):
             f'aria-label="{escape(alt, quote=True)}"></video>{c}</figure>')
 
 
-def table(head, rows, cls='comparison h7'):
+def table(head, rows, cls='comparison h7', merge_first=False):
     h = ''.join(f'<th>{x}</th>' for x in head)
-    body = ''.join('<tr>' + ''.join(f'<td>{x}</td>' for x in r) + '</tr>' for r in rows)
+    if not merge_first:
+        body = ''.join('<tr>' + ''.join(f'<td>{x}</td>' for x in r) + '</tr>' for r in rows)
+        return f'<table class="{cls}"><tr>{h}</tr>{body}</table>'
+    # consecutive rows with the same first cell share one rowspan cell
+    body = ''
+    for i, r in enumerate(rows):
+        if i and rows[i - 1][0] == r[0]:
+            first = ''
+        else:
+            n = 1
+            while i + n < len(rows) and rows[i + n][0] == r[0]:
+                n += 1
+            span = f' rowspan="{n}"' if n > 1 else ''
+            first = f'<td class="lead"{span}>{r[0]}</td>'
+        body += '<tr>' + first + ''.join(f'<td>{x}</td>' for x in r[1:]) + '</tr>'
     return f'<table class="{cls}"><tr>{h}</tr>{body}</table>'
 
 
@@ -348,7 +362,7 @@ PLAN_ROWS = [
 ]
 add('실현 가능성과 구현 전략', '11  실현 가능성과 구현 전략', 75, f"""
 <h2 class="headline">일자·랜덤 배치 연속 이송을 먼저 완성하고, 좁은 공간은 조건부, 컨베이어는 높이 협의</h2>
-{table(['단계', '시나리오', '실현 가능성', '할 일'], PLAN_ROWS, 'comparison h7 concl7 plan8 grow')}
+{table(['단계', '시나리오', '실현 가능성', '할 일'], PLAN_ROWS, 'comparison h7 concl7 plan8 grow', merge_first=True)}
 <div class="takeaway">LiDAR가 1.05 m 높이라 바닥 팔레트와 낮은 rack 부재는 카메라와 미리 받은 배치로 보완해야 합니다</div>
 """,
     """시나리오별 실현 가능성과 구현 순서입니다. 일자 배치와 랜덤 배치는 지금 하고 있는 팔레트 하나 운반의 연장이라 1차 목표로 잡았습니다. 앞 장에서 실패가 가장 많았던 삽입 직전 재관측을 먼저 안정화하고, 운용 콘솔이 이미 한 세션에서 미션을 연달아 받으므로 여기에 다음 팔레트를 고르는 순서, 하역 구역의 칸 배정, 이미 옮긴 팔레트를 다음 경로의 장애물로 넣는 기능을 더하겠습니다. 2단계는 좁은 공간입니다. 좁은 통로는 우리 차의 최소 회전 반경이 2.73미터라 약 2미터 통로에서 한 번에 90도 꺾어 들어갈 수 없습니다. 144개 조합을 경로 계획기로 계산해 보니 집는 칸과 놓는 칸이 모두 구역 사이 간격 위에 있는 일부 조건에서만 복귀까지 경로가 나왔고, Isaac에서는 옆 칸 팔레트를 잘못 인식했으므로 이웃 팔레트 구분이 먼저입니다. 트레일러는 EPAL 6 팔레트를 가운데 한 줄로 놓으면 꺼내기와 넣기, 복귀 경로가 모두 나왔지만 T11 팔레트 두 줄은 경로가 나오지 않았고, Isaac에서는 위치 추정 오차가 커지면서 멈췄으므로 이 오차를 줄이겠습니다. 3단계는 같은 장면을 바닥에 테이프로 표시해 실차로 시연하는 것입니다. 컨베이어는 축소해도 0.37미터인데 우리 포크는 0.32미터까지만 올라가고, 팔레트를 들어 올릴 수 있는 스테이션 높이가 약 0.23미터 이하라서 높이를 낮출 수 있는지 협의한 뒤에 진행하겠습니다. 공통으로, LiDAR가 1.05미터 높이라 바닥에 놓인 팔레트나 낮은 rack 부재는 보지 못하므로 카메라와 미리 받은 배치 정보로 보완해야 합니다. (전환)""",

@@ -3,7 +3,7 @@
 <link rel="icon" href="data:,">
 <script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>8주차 자율 지게차 개발</title>
-<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=bc91abeb1bd5"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=21fc5e9203ba"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 <section class="title-section" data-label="개발 진행 보고" data-screen-label="01" data-duration="20" data-speaker-notes="권장 20초
 
@@ -234,7 +234,7 @@ T11 0.66 m × 2열, 안쪽 1.36–1.45 m → 균등 간격 12–44 mm: 트레일
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="11  실현 가능성과 구현 전략"><div class="slide-body">
 <h2 class="headline">일자·랜덤 배치 연속 이송을 먼저 완성하고, 좁은 공간은 조건부, 컨베이어는 높이 협의</h2>
-<table class="comparison h7 concl7 plan8 grow"><tr><th>단계</th><th>시나리오</th><th>실현 가능성</th><th>할 일</th></tr><tr><td>1단계</td><td>③ 일자, ④ 랜덤</td><td><b>1차 목표</b></td><td>삽입 전 재관측 안정화, 다음 팔레트 선택과 하역 칸 배정</td></tr><tr><td>2단계</td><td>① 좁은 통로</td><td>일부 조건에서만 경로 확보</td><td>이웃 팔레트 구분</td></tr><tr><td>2단계</td><td>⑤ 트레일러</td><td>EPAL 6 한 줄만 경로 확보</td><td>위치 추정 오차 줄이기</td></tr><tr><td>3단계</td><td>실차</td><td>축소 장면 그대로 사용</td><td>같은 장면을 바닥에 표시해 시연</td></tr><tr><td>보류</td><td>② 컨베이어</td><td>포크 0.32 m, 축소 높이 0.37 m</td><td>스테이션 높이를 0.23 m 이하로 협의</td></tr></table>
+<table class="comparison h7 concl7 plan8 grow"><tr><th>단계</th><th>시나리오</th><th>실현 가능성</th><th>할 일</th></tr><tr><td class="lead">1단계</td><td>③ 일자, ④ 랜덤</td><td><b>1차 목표</b></td><td>삽입 전 재관측 안정화, 다음 팔레트 선택과 하역 칸 배정</td></tr><tr><td class="lead" rowspan="2">2단계</td><td>① 좁은 통로</td><td>일부 조건에서만 경로 확보</td><td>이웃 팔레트 구분</td></tr><tr><td>⑤ 트레일러</td><td>EPAL 6 한 줄만 경로 확보</td><td>위치 추정 오차 줄이기</td></tr><tr><td class="lead">3단계</td><td>실차</td><td>축소 장면 그대로 사용</td><td>같은 장면을 바닥에 표시해 시연</td></tr><tr><td class="lead">보류</td><td>② 컨베이어</td><td>포크 0.32 m, 축소 높이 0.37 m</td><td>스테이션 높이를 0.23 m 이하로 협의</td></tr></table>
 <div class="takeaway">LiDAR가 1.05 m 높이라 바닥 팔레트와 낮은 rack 부재는 카메라와 미리 받은 배치로 보완해야 합니다</div>
 </div></x-import>
 </section>
