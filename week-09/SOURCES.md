@@ -1,0 +1,55 @@
+# 9주차 출처
+
+쪽별 출처의 전체 목록은 `build_deck.py` 의 각 장 `sources` 와 발표자 노트의 [Sources] 블록이다(`SCRIPT.md` 에는 넣지 않는다).
+
+## 팀 메인보드 자료 (2026-10-28 사용자 전달, 저장소에 원본 없음)
+
+| 자료 | 쓴 곳 |
+|---|---|
+| 3D 렌더 앞면 (실크 V1.0.0) | 2쪽 그림 (`h02_board_top.jpg`) |
+| PCB 배치도 앞면 (외곽 114.173 × 91.567 mm, 헤더 간격 33.0 mm) | 3쪽 그림 (`h03_layout_top.jpg`), 2쪽 헤드라인 크기 |
+| 3D 렌더 뒷면 · PCB 배치도 뒷면 | 쓰지 않음 (설계자 실크) |
+| 회로도 1쪽 MOTOR&SENSOR (2026-10-27) | DRV8244SQRYJRQ1 × 4 (L · R · M · H), XT30 모터 커넥터 CN3–CN6, AM26LV32 · HX JN1.27 (바퀴 엔코더), SN65LVDS31/32 · SN74LVC1G125 · RJ1/RJ2 5558067-1 (절대 엔코더) — 7주차와 같은 회로 |
+| 회로도 2쪽 STM32 (2026-10-21) | 3쪽 핀 배정 표 (헤더 U2 · U4 HC-PM254-8.5H-2x22PZ) |
+| 회로도 3쪽 POWER (2026-10-20, 갱신 10-27) | 4쪽 입력 보호(LM74801, CSD18510Q5B × 2, UVLO 11.33 / 10.41 V, OVP ~16 V, SMBJ18CA, 외부 50 A 퓨즈, SW1), 5 V (LMR60440, 5.016 V), 배터리 감시 VCC/11 (ADC 핀 미배정) |
+| 회로도 5쪽 JETSON_19V (2026-10-21) | 4쪽 19 V 승압(LM5122, 약 3 A 목표 · 5 A 전력단), TPS26630(전류 제한 ~3.2 A), TLV6700 19.5 V OVP · 5 V 연동, J2 Jetson 원형 잭 5.5/2.5 mm; 「Prototype review required」 메모 → 4쪽 띠 |
+| 회로도 4쪽 | 받지 않음 |
+
+MCU 코어 보드는 사용자가 준 AliExpress 링크(1005006632336183)를 열 수 없어, 로봇 저장소 `docs/design/2026-10-22-h743-pinmap-draft-review.md` 의 보드 이름(WeAct Studio MiniSTM32H7xx, STM32H743VIT6)을 썼다. 사양은 ST STM32H743VI 제품 페이지(Cortex-M7 480 MHz, 2 MB 플래시, 1 MB RAM). G474 170 MHz, H533RE 250 MHz 는 ST 제품 정보.
+
+## 로봇 저장소 (lightminn/forklift, main f60da30a 기준)
+
+| 자료 | 쓴 곳 |
+|---|---|
+| `docs/references/week8_feedback.md` | 1쪽 피드백 네 줄 (UWB 는 다른 팀 이야기라 뺌) |
+| `docs/design/encoder_magnet_adapter/` (작업 트리, git 미추적, 2026-10-17) README · preview.png | 5쪽 치수와 그림 (`h05_adapter.png`, 형상과 단면만 잘라 냄); 실물 출력 · 장착은 미검증 |
+| `docs/plans/2026-10-26-slam-localization-default.md` 5b · 5d | 6쪽 표 위치 오차 중앙값(1차 확인 L 0.029–0.038 m, R 0.089–0.119 m), SLAM 끊김(2차 확인 R line_m 두 실행 slam_link_failed, 응답 1.149 · 1.096 s), 띠의 1 s 기한; 사용자 결정(2026-10-27)으로 기준 미충족 셋을 받아들인 예외 채택 |
+| `docs/plans/2026-10-27-slam-a-return-start-remeasure.md` (PR #179) | 6쪽 하역 도킹 옆 치우침 최대 0.012 대 0.219 m (seed · 스냅숏 · 목적지 구성이 다른 기술 비교) |
+| `docs/design/2026-10-22-fms-case-survey.md` (PR #87) | 7쪽 비교표 |
+| `console/README.md` (PR #90 · #93 · #95) | 7쪽 콘솔 세 기능 |
+| branch `diag/transport-start-stall` `docs/validation/2026-10-27-transport-start-stall.md` | 8쪽 출발 정지 원인, 실제 간격 기둥 0.181–0.215 m · 벽 0.205–0.208 m |
+| branch `feat/escape-presteer` `docs/plans/2026-10-27-escape-presteer.md` 2판 (b38048da) | 8쪽 띠 16번 중 13번 (띠 0.03 + 조향 0, 전체 escape_plan 대입) |
+
+## 6쪽 위치 오차 그래프
+
+ws1 `test_runs/live/s3conf2_3a37e216` 의 `s3b_R_line_m_s3`(지도 작성 동시, 3,371 s 에 slam_link_failed) · `s3b_L_line_m_s3`(등록부 지도 위 위치 추정, 3,933 s 세션 끝) `spool/slam.control` 의 행 `[t, 적용 후축 x, y, yaw, 참값 x, y, yaw]` 에서 위치 차의 크기를 1분 구간 중앙값으로 그렸다(시뮬 시간, team-spec 오도메트리, D7_HOLD 끔). 표의 세 수치는 다른 배치에서 나온 값이라 그래프의 56분 · 65분은 표에 쓰지 않았다.
+
+## 콘솔 캡처 (7쪽)
+
+가짜 차량 `console.mock_vehicle`(콘솔 코드 = main f60da30a, `git archive` 사본), 헤드리스 Chromium 1600 × 900, 2026-10-28. 조종 권한 → 「남은 팔레트 전부 옮기기」 → 대기열 재개(2단계 확인) → P-01 → D-A, P-02 → D-B 완료. 대기열 진행(`c07_queue.png`), 상태·경보(`c07_health.png`), 요약 자세히(`c07_summary.png`)를 잘라 냈다.
+
+## 사진
+
+| 파일 | 원본 | 라이선스 |
+|---|---|---|
+| `d02_jetson.jpg` | Wikimedia Commons, File:NVIDIA Jetson Nano Developer Kit (47616885631) (cropped).jpg — SparkFun Electronics (Flickr). 우리가 쓸 Orin Nano 와 모양이 비슷한 다른 모델 | CC BY 2.0 |
+| `d02_truck.jpg` | 5주차 `30_chassis_pallet.jpg` (2026-09-30 실물 사진, EXIF 제거)를 잘라 씀 | 팀 촬영 |
+
+## 8쪽 영상
+
+ws1 `test_runs/riibotics/t2d_1b60df21/t2d_c3_aisle_rack_s4` (T2 aisle_rack, seed 4) — 꺼낸 뒤 운반 추종 시간 초과로 끝난 실행의 `view_quarter.mp4` 55–135 s, 2배속.
+
+## 화면에 쓰지 않은 사실
+
+- 재접근 동안 SLAM 보정 보류(PR #155, V5: 실패 39 → 25, 재접근 정체 30 → 0)는 사용자와 상의해 뺐다(내부 처리 설명이 길고, 검증이 위치 추정 전환 전 방식에서 이루어짐).
+- 팔레트 인식(하판 없는 · 동봉 팔레트, 선반 구분, 학습 모델), 자율 조사 보류, ws1 자원 · 시험 인프라는 이번 덱 범위 밖이다(총괄 지시).
