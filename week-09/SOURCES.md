@@ -34,7 +34,19 @@ MCU 코어 보드는 사용자가 준 AliExpress 링크(1005006632336183)를 열
 
 ws1 `test_runs/live/s3conf2_3a37e216` 의 `s3b_R_line_m_s3`(지도 작성 동시, 3,371 s 에 slam_link_failed) · `s3b_L_line_m_s3`(등록부 지도 위 위치 추정, 3,933 s 세션 끝) `spool/slam.control` 의 행 `[t, 적용 후축 x, y, yaw, 참값 x, y, yaw]` 에서 위치 차의 크기를 1분 구간 중앙값으로 그렸다(시뮬 시간, team-spec 오도메트리, D7_HOLD 끔). 표의 세 수치는 다른 배치에서 나온 값이라 그래프의 56분 · 65분은 표에 쓰지 않았다.
 
-## 콘솔 캡처 (7쪽)
+## 9쪽 영상
+
+ws1 `test_runs/live/dk9a_36b9b7de/dk9a_random_m_s0` (잡 12032, 2026-10-28) — `ct1_queue.sbatch`, random_m 대기열 P-4:D-1 · P-5:D-2 · P-3:D-3, seed 0, 등록부 지도(random_m_team_spec_quantized_0facac3eea66) 위 위치 추정, D7_HOLD 켬, team-spec, 3/3 완료. `transport.mp4` 를 1160 × 660 at x 110 으로 잘라 12배속 · 540 px. 스냅숏 `dk9v_36b9b7de` 는 `trf_36b9b7de`(main 36b9b7de)에서 `record_video_overlay(t)` 한 줄만 `stamp` 로 바꾼 렌더용 사본.
+
+## 7쪽 장착 방식 그림
+
+로봇 저장소 `artifacts/cad/motor-shaft-magnet-adapter/install_guide.html`(git 미추적) — 칼라 · 중심 맞춤 관 · 자석의 CAD 치수 3D 안내(1차 설계 축 Ø2 · 자석 Ø5). 4–7단계를 단면 보기로 캡처.
+
+## 8쪽 보드 제작 비용
+
+로봇 저장소 `docs/references/team-hardware/2026-10-28/pcb-cost-comparison.md`(팀 문서, 로컬 전용): 설계별 5장, JLCPCB 견적 전 추정, 1 USD = 1,400원. 메인보드 합계 $558.91 + PCB(100 × 100 mm 초과라 견적 필요), MT_DS $75.53, KTH7801 $89.72, STDS $112.89, 4종 약 $837 + 메인보드 PCB. 작은 보드 3종 따로(양면) 약 $278 → 앞면 배치 약 $170. 메인보드 부품값은 5장 조립 기준 $402.11(1장만 $110.42).
+
+## 콘솔 캡처 (10쪽)
 
 가짜 차량 `console.mock_vehicle`(콘솔 코드 = main f60da30a, `git archive` 사본), 헤드리스 Chromium 1600 × 900, 2026-10-28. 조종 권한 → 「남은 팔레트 전부 옮기기」 → 대기열 재개(2단계 확인) → P-01 → D-A, P-02 → D-B 완료. 대기열 진행(`c07_queue.png`), 상태·경보(`c07_health.png`), 요약 자세히(`c07_summary.png`)를 잘라 냈다.
 
