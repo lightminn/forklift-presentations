@@ -40,7 +40,7 @@ ws1 `test_runs/live/dk9a_36b9b7de/dk9a_random_m_s0` (잡 12032, 2026-10-28) — 
 
 ## 7쪽 장착 방식 그림
 
-`build_deck.py` 의 `sleeve_diagram()` 이 그리는 단면 모식도. 장착 순서는 로봇 저장소 `artifacts/cad/motor-shaft-magnet-adapter/` README · `install_guide.html`(git 미추적): 마운트를 끼우고 판으로 눌러 높이 맞춤, 자석과 같은 지름의 중심 맞춤 관을 마운트에 걸쳐 씌움, 자석을 넣어 가운데만 접착, 굳으면 관을 위로 뺌. 치수는 축 Ø3, 마운트 외경 6 · 구멍 3.25 · 높이 1.6, 모터 면 틈 0.4, 자석 Ø6; 자석 두께 · 관 벽 두께는 그림용 값, 관 걸침 1.2 mm 는 1차 설계값.
+`tools/sleeve_anim.html`(three.js) 로 그린 3D 애니메이션 `h06_sleeve.mp4`(원통은 앞쪽 절반을 잘라 보임). 장착 순서는 로봇 저장소 `artifacts/cad/motor-shaft-magnet-adapter/` README · `install_guide.html`(git 미추적): 마운트를 끼우고 판으로 눌러 높이 맞춤, 자석과 같은 지름의 중심 맞춤 관을 마운트에 걸쳐 씌움, 자석을 넣어 가운데만 접착, 굳으면 관을 위로 뺌. 치수는 축 Ø3, 마운트 외경 6 · 구멍 3.25 · 높이 1.6, 모터 면 틈 0.4, 자석 Ø6; 자석 두께 · 관 벽 두께는 그림용 값, 관 걸침 1.2 mm 는 1차 설계값.
 
 ## 8쪽 보드 제작 비용
 

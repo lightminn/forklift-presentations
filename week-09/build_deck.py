@@ -79,6 +79,9 @@ def lgd(*items):
     for kind, colour, text in items:
         if kind == 'line':
             sw = f'<span class="sw ln" style="background:{colour}"></span>'
+        elif kind == 'split':
+            c1, c2 = colour
+            sw = f'<span class="sw" style="background:linear-gradient(90deg,{c1} 50%,{c2} 50%)"></span>'
         elif kind == 'dash':
             sw = f'<span class="sw dash" style="border-color:{colour}"></span>'
         else:
@@ -296,74 +299,23 @@ add('엔코더 자석 마운트', '05  엔코더 자석 마운트', 50, f"""
     '사진: 1차 출력물과 모터 축에 끼운 모습 (2026-10-26 팀 촬영)')
 
 # ----------------------------------------------------------------- 5b mount install (user, 2026-10-28)
-def sleeve_diagram():
-    """Two cross-sections of the magnet mounting: the centring sleeve over the collar with the magnet inside, then the
-    sleeve lifted off. Schematic to the planned dimensions (shaft 3, collar OD 6 / bore 3.25 / height 1.6, 0.4 mm gap,
-    a 6 mm magnet); the magnet thickness and the sleeve wall are drawn, not specified."""
-    k = 34                                  # px per mm
-    W, H = 1180, 470
-    SHAFT, MOTOR, COLLAR, TUBE = '#6b737b', '#d5dae0', '#1f9e4a', '#f2a33a'
-    MN, MS = '#d9534f', '#3d63b8'
-
-    def panel(cx, lifted):
-        base = 400                           # motor face (y in px)
-        r = lambda mm: mm * k
-        out = []
-        out.append(f'<rect x="{cx - r(7)}" y="{base}" width="{r(14)}" height="40" fill="{MOTOR}"/>')
-        out.append(f'<rect x="{cx - r(1.5)}" y="{base - r(2.0)}" width="{r(3.0)}" height="{r(2.0) + 40}" fill="{SHAFT}"/>')
-        ct = base - r(0.4) - r(1.6)          # collar top (flush with the shaft end)
-        for sgn in (-1, 1):                  # collar section, both sides of the bore
-            x0 = cx + sgn * r(1.625)
-            w = r(3.0 - 1.625)
-            out.append(f'<rect x="{min(x0, x0 + sgn * w)}" y="{ct}" width="{w}" height="{r(1.6)}" fill="{COLLAR}"/>')
-        mt = ct - r(2.5)                     # magnet on top
-        out.append(f'<rect x="{cx - r(3)}" y="{mt}" width="{r(3)}" height="{r(2.5)}" fill="{MS}"/>'
-                   f'<rect x="{cx}" y="{mt}" width="{r(3)}" height="{r(2.5)}" fill="{MN}"/>')
-        lift = r(4.2) if lifted else 0
-        tb, tt = ct + r(1.2) - lift, mt - r(1.0) - lift   # sleeve: overlaps the collar by 1.2, rises above the magnet
-        for sgn in (-1, 1):
-            x0 = cx + sgn * r(3.1)
-            w = r(1.6)
-            out.append(f'<rect x="{min(x0, x0 + sgn * w)}" y="{tt}" width="{w}" height="{tb - tt}" fill="{TUBE}"/>')
-        out.append(f'<line x1="{cx}" y1="{tt - 24}" x2="{cx}" y2="{base + 40}" stroke="#1b1f24" stroke-width="1.5" stroke-dasharray="10 5 2 5"/>')
-        if lifted:
-            out.append(f'<line x1="{cx + r(6.3)}" y1="{tb}" x2="{cx + r(6.3)}" y2="{tt - 10}" stroke="{BLUE}" stroke-width="4" marker-end="url(#ah9s)"/>')
-        return out, dict(base=base, ct=ct, mt=mt, tt=tt, tb=tb)
-
-    def label(x, y, tx, ty, text, anchor='start'):
-        return (f'<line x1="{x}" y1="{y}" x2="{tx}" y2="{ty}" stroke="#44505c" stroke-width="1.5"/>'
-                f'<circle cx="{x}" cy="{y}" r="4" fill="#44505c"/>'
-                f'<text x="{tx + (8 if anchor == "start" else -8)}" y="{ty + 7}" text-anchor="{anchor}" font-size="22" font-weight="700" fill="#1b1f24">{text}</text>')
-
-    p = [f'<defs><marker id="ah9s" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">'
-         f'<path d="M0,0 L10,5 L0,10 z" fill="{BLUE}"/></marker></defs>']
-    a, ga = panel(300, False)
-    b, gb = panel(880, True)
-    p += a + b
-    k_ = k
-    # labels on the left panel
-    p.append(label(300 - 3.9 * k_, (ga['tt'] + ga['tb']) / 2 - 40, 30, 70, '중심 맞춤 원통', 'start'))
-    p.append(label(300 + 1.5 * k_, ga['mt'] + 30, 560, 110, '자석', 'start'))
-    p.append(label(300 + 2.3 * k_, ga['ct'] + 25, 560, 250, '마운트(링)', 'start'))
-    p.append(label(300 + 0.4 * k_, ga['base'] - 10, 560, 345, '모터 축', 'start'))
-    p.append(f'<text x="300" y="462" text-anchor="middle" font-size="22" fill="#1b1f24">① 원통을 씌우고 자석을 넣어 접착</text>')
-    p.append(f'<text x="880" y="462" text-anchor="middle" font-size="22" fill="#1b1f24">② 굳으면 원통을 위로 빼냄</text>')
-    return (f'<svg class="diagram" viewBox="0 0 {W} {H}" role="img" aria-label="단면 그림. 왼쪽은 모터 축에 끼운 마운트 위에 자석을 올리고 '
-            f'그 바깥에 같은 안지름의 중심 맞춤 원통을 씌운 모습, 오른쪽은 굳은 뒤 원통을 위로 빼낸 모습. 축, 마운트, 자석의 중심선이 일치">'
-            f'<g font-family="var(--uos-font)">{"".join(p)}</g></svg>')
-
-
 INSTALL_NOTE = '원통 안지름이 마운트·자석 지름과 같아 둘의 중심이 함께 축에 맞음'
 add('자석 장착 방식', '06  자석 장착 방식', 45, f"""
 <h2 class="headline">마운트와 자석을 같은 지름의 원통 하나로 감싸 축 중심에 맞춰 붙임</h2>
-<div class="sleeve9 grow">{sleeve_diagram()}</div>
+<div class="sleeve9 grow">
+{video('h06_sleeve.mp4', '3D 애니메이션. 모터 축에 끼운 초록색 마운트 위로 단면이 잘린 주황색 원통이 내려와 씌워지고, 빨강과 파랑으로 나뉜 자석이 원통 안으로 내려와 마운트 위에 앉은 뒤, 원통이 위로 빠져나가 마운트와 자석만 남음')}
+<div class="stack sleeve9r">
+{lgd(('box', '#f2a33a', '중심 맞춤 원통'), ('split', ('#d9534f', '#3d63b8'), '자석'), ('box', '#1f9e4a', '마운트'), ('box', '#8f979f', '모터'))}
+<div class="phase-flow vert"><span><b>①</b> 마운트 위에 원통을 씌움</span><span><b>②</b> 원통 안으로 자석을 넣어 접착</span><span><b>③</b> 굳으면 원통을 위로 빼냄</span></div>
+</div>
+</div>
 {band(INSTALL_NOTE + '니다')}
 """,
-    """자석을 붙이는 방법입니다. 자석이 축 중심에서 벗어나면 엔코더가 읽는 각도에 오차가 생기기 때문에, 마운트와 자석의 중심을 축에 맞추는 것이 중요합니다. 먼저 마운트를 축에 끼우고 평평한 판으로 눌러, 판이 축 끝에 닿을 때 멈춥니다. 그러면 마운트 윗면이 축 끝과 같은 높이가 되고 모터 면과는 틈이 남습니다. 다음으로 자석과 같은 지름의 구멍이 뚫린 원통을 마운트 위에 씌웁니다. 마운트와 자석의 지름이 같아서 이 원통 하나로 둘의 중심을 함께 맞출 수 있습니다. 원통 안으로 자석을 넣는데, 접착제는 가운데에만 조금 발라 원통 벽에 붙지 않게 하고, 원통 옆 창으로 테두리에 접착제가 새지 않았는지 봅니다. 굳으면 원통을 위로 빼내면 됩니다. 그림은 축 3밀리미터, 마운트와 자석 6밀리미터 기준의 단면 모식도이고, 원통도 이 지름에 맞춰 출력합니다. (전환)""",
+    """자석을 붙이는 방법입니다. 자석이 축 중심에서 벗어나면 엔코더가 읽는 각도에 오차가 생기기 때문에, 마운트와 자석의 중심을 축에 맞추는 것이 중요합니다. 먼저 마운트를 축에 끼우고 평평한 판으로 눌러, 판이 축 끝에 닿을 때 멈춥니다. 그러면 마운트 윗면이 축 끝과 같은 높이가 되고 모터 면과는 틈이 남습니다. 다음으로 자석과 같은 지름의 구멍이 뚫린 원통을 마운트 위에 씌웁니다. 마운트와 자석의 지름이 같아서 이 원통 하나로 둘의 중심을 함께 맞출 수 있습니다. 원통 안으로 자석을 넣는데, 접착제는 가운데에만 조금 발라 원통 벽에 붙지 않게 하고, 원통 옆 창으로 테두리에 접착제가 새지 않았는지 봅니다. 굳으면 원통을 위로 빼내면 됩니다. 영상은 축 3밀리미터, 마운트와 자석 6밀리미터 기준으로 만든 3D 애니메이션이고, 원통은 안이 보이도록 앞쪽 절반을 잘라 그렸습니다. 원통도 이 지름에 맞춰 출력합니다. (전환)""",
     [('lightminn/forklift artifacts/cad/motor-shaft-magnet-adapter (git 미추적) README · install_guide.html', '장착 순서: 평판으로 눌러 칼라 윗면 = 축 끝(모터 면과 0.4 mm 틈), 젤형 순간접착제로 칼라 고정, 중심 맞춤 관(magnet_centring_tube_id5.20 · id5.30)을 칼라에 1.2 mm 걸쳐 씌움, 접착제는 가운데에만(관에 붙지 않게, 창으로 테두리 확인), 굳으면 관을 위로 뺌; 칼라와 자석이 같은 지름이라 한 구멍으로 둘 다 맞춤, 중심 어긋남 여유 0.2 mm(5.20 관)'),
-     ('그림', '단면 모식도를 새로 그림(SVG): 축 Ø3, 마운트 외경 6 · 구멍 3.25 · 높이 1.6, 모터 면 틈 0.4, 자석 Ø6; 자석 두께와 원통 벽 두께 · 걸침은 그림용 값(원통 걸침 1.2 mm 는 1차 설계값)'),
+     ('영상', 'week-09/tools/sleeve_anim.html(three.js r128)을 헤드리스 Chromium 에서 8 s 녹화(MediaRecorder) → H.264; 축 Ø3, 마운트 외경 6 · 구멍 3.25 · 높이 1.6, 모터 면 틈 0.4, 자석 Ø6, 원통 구멍 6.2 · 걸침 1.2(1차 설계값); 자석 두께 2.5 · 원통 벽은 그림용 값, 원통은 앞쪽 절반을 잘라 보임'),
      ('사용자 (2026-10-28)', '장착 방식(원통으로 맞추는 것)도 보여 달라')],
-    '그림: 장착 방식 단면 모식도')
+    '영상: 장착 순서 3D 애니메이션')
 
 # ----------------------------------------------------------------- 5c PCB cost (user, 2026-10-28)
 COST_ROWS = [

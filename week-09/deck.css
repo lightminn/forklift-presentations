@@ -764,8 +764,12 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .phase-flow.map9 { flex-shrink:0; justify-content:center; padding:10px 18px; font-size:19px; gap:12px; }
 .phase-flow.map9 .sep9 { color:#44505c; margin-left:18px; padding-left:18px; border-left:1px solid #c3cad3; }
 .phase-flow.map9 span { white-space:nowrap; }
-.sleeve9 { min-height:0; display:flex; justify-content:center; }
-.sleeve9 .diagram { height:100%; width:auto; max-width:100%; }
+.sleeve9 { min-height:0; display:grid; grid-template-columns:minmax(0,1.55fr) minmax(0,1fr); gap:28px; align-items:center; }
+.sleeve9 > .shot { height:100%; min-height:0; }
+.sleeve9r { gap:22px; justify-content:center; }
+.sleeve9r .lgd7 { justify-content:flex-start; font-size:21px; gap:10px 22px; }
+.sleeve9r .lgd7 .sw { width:26px; height:18px; }
+.sleeve9r .phase-flow.vert { font-size:23px; align-self:stretch; }
 .caps9 { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); grid-template-rows:minmax(0,1fr) minmax(0,1fr); gap:10px 24px; }
 .caps9 > .shot:nth-child(1) { grid-column:2; grid-row:1; }
 .caps9 > .shot:nth-child(2) { grid-column:1; grid-row:1 / span 2; }

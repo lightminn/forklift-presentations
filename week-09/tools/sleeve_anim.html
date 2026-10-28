@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>sleeve</title>
+<style>html,body{margin:0;background:#fff}canvas{display:block}</style></head>
+<body><canvas id="c" width="1200" height="800"></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// Magnet mounting with the centring sleeve, to the planned dimensions (mm): shaft 3, collar OD 6 / bore 3.25 /
+// height 1.6 with a 0.4 gap to the motor face, magnet 6 (thickness drawn 2.5), sleeve bore 6.2 overlapping the collar 1.2.
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1); renderer.setSize(1200, 800, false);
+renderer.setClearColor(0xffffff);
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(30, 1.5, 0.1, 500);
+camera.position.set(16, 13, 20); camera.lookAt(0, 2.4, 0);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x9aa3ad, 0.55));
+const key = new THREE.DirectionalLight(0xffffff, 0.55); key.position.set(12, 24, 10); key.castShadow = true;
+key.shadow.mapSize.set(2048, 2048); key.shadow.bias = -0.0008; Object.assign(key.shadow.camera, { left: -12, right: 12, top: 12, bottom: -12 });
+scene.add(key);
+const fill = new THREE.DirectionalLight(0xffffff, 0.35); fill.position.set(-14, 6, -8); scene.add(fill);
+const std = (color, o = {}) => new THREE.MeshStandardMaterial(Object.assign({ color, roughness: 0.55, metalness: 0 }, o));
+
+// motor end face (a disc with a hub) and the shaft
+const motor = new THREE.Mesh(new THREE.CylinderGeometry(9, 9, 3, 96), std(0x8f979f, { roughness: 0.8, metalness: 0.1 }));
+motor.position.y = -1.5; motor.receiveShadow = true; scene.add(motor);
+const hub = new THREE.Mesh(new THREE.CylinderGeometry(3.6, 3.6, 0.3, 64), std(0x7b838b, { metalness: 0.2 }));
+hub.position.y = -0.15; hub.receiveShadow = true; scene.add(hub);
+const shaft = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 2.3, 48), std(0xd4d8dc, { metalness: 0.4, roughness: 0.35 }));
+shaft.position.y = 2.0 - 2.3 / 2; shaft.castShadow = true; scene.add(shaft);
+
+// collar (green), a lathe of its section
+const ring = (ri, ro, y0, y1) => [[ri, y0], [ro, y0], [ro, y1], [ri, y1], [ri, y0]].map(p => new THREE.Vector2(p[0], p[1]));
+const collar = new THREE.Mesh(new THREE.LatheGeometry(ring(1.625, 3.0, 0, 1.6), 96), std(0x1f9e4a, { roughness: 0.75 }));
+collar.position.y = 0.4; collar.castShadow = true; collar.receiveShadow = true; scene.add(collar);
+
+// diametric magnet: red half and blue half
+const magnet = new THREE.Group();
+[[0xd9534f, Math.PI / 2], [0x3d63b8, Math.PI * 1.5]].forEach(([c, a]) => {
+  const g = new THREE.CylinderGeometry(3.0, 3.0, 2.5, 64, 1, false, a, Math.PI); g.translate(0, 1.25, 0);
+  const m = new THREE.Mesh(g, std(c, { metalness: 0.35, roughness: 0.35 })); m.castShadow = true; magnet.add(m);
+});
+const cut = new THREE.Mesh(new THREE.PlaneGeometry(6, 2.5), std(0x8c5d78, { side: THREE.DoubleSide })); cut.position.y = 1.25; magnet.add(cut);
+scene.add(magnet);
+
+// centring sleeve (orange, see-through), bore 6.2, from 1.2 below the collar top to 1 above the magnet
+const sleeveMat = std(0xf2a33a, { transparent: true, opacity: 1, roughness: 0.6, side: THREE.DoubleSide });
+const front = Math.atan2(19, 24);
+const sleeveGeo = new THREE.LatheGeometry(ring(3.1, 4.7, 0, 4.7), 96, front + Math.PI / 2, Math.PI);
+const sleeve = new THREE.Mesh(sleeveGeo, sleeveMat);
+const edgeMat = new THREE.LineBasicMaterial({ color: 0xb56d10, transparent: true, opacity: 0.9 });
+const edges = new THREE.LineSegments(new THREE.EdgesGeometry(sleeveGeo, 30), edgeMat); sleeve.add(edges);
+[front + Math.PI / 2, front + 1.5 * Math.PI].forEach(phi => {
+  const cap = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 4.7), sleeveMat);
+  cap.position.set(Math.sin(phi) * 3.9, 2.35, Math.cos(phi) * 3.9); cap.rotation.y = phi + Math.PI / 2; sleeve.add(cap);
+});
+scene.add(sleeve);
+
+const SLEEVE_DOWN = 2.0 - 1.2, MAG_DOWN = 2.0;
+const ease = t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+const seg = (t, a, b) => Math.min(1, Math.max(0, (t - a) / (b - a)));
+// timeline in seconds (8 s): sleeve down 0.6-2.2, magnet down 2.8-4.6, hold, sleeve up 5.6-7.0
+function pose(s) {
+  const d = ease(seg(s, 0.6, 2.2)), m = ease(seg(s, 2.8, 4.6)), u = ease(seg(s, 5.6, 7.0));
+  sleeve.position.y = SLEEVE_DOWN + 9 * (1 - d) + 9 * u;
+  sleeveMat.opacity = 1 - u; edgeMat.opacity = 0.9 * (1 - u);
+  sleeve.visible = u < 0.999;
+  magnet.position.y = MAG_DOWN + 10 * (1 - m);
+  magnet.rotation.y = front + Math.PI / 2;
+}
+window.render = s => { pose(s); renderer.render(scene, camera); };
+window.record = async (secs) => {
+  const stream = canvas.captureStream(30);
+  const rec = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9', videoBitsPerSecond: 8e6 });
+  const chunks = []; rec.ondataavailable = e => chunks.push(e.data);
+  rec.start();
+  const t0 = performance.now();
+  await new Promise(res => { const f = () => { const s = (performance.now() - t0) / 1000; render(Math.min(s, secs)); if (s < secs + 0.3) requestAnimationFrame(f); else res(); }; f(); });
+  rec.stop(); await new Promise(r => rec.onstop = r);
+  const buf = await new Blob(chunks).arrayBuffer();
+  let bin = ''; const u8 = new Uint8Array(buf); for (let i = 0; i < u8.length; i += 0x8000) bin += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000));
+  return btoa(bin);
+};
+render(0);
+</script></body></html>
