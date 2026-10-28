@@ -40,7 +40,7 @@ ws1 `test_runs/live/dk9a_36b9b7de/dk9a_random_m_s0` (잡 12032, 2026-10-28) — 
 
 ## 7쪽 장착 방식 그림
 
-로봇 저장소 `artifacts/cad/motor-shaft-magnet-adapter/install_guide.html`(git 미추적) — 칼라 · 중심 맞춤 관 · 자석의 CAD 치수 3D 안내(1차 설계 축 Ø2 · 자석 Ø5). 4–7단계를 단면 보기로 캡처.
+`build_deck.py` 의 `sleeve_diagram()` 이 그리는 단면 모식도. 장착 순서는 로봇 저장소 `artifacts/cad/motor-shaft-magnet-adapter/` README · `install_guide.html`(git 미추적): 마운트를 끼우고 판으로 눌러 높이 맞춤, 자석과 같은 지름의 중심 맞춤 관을 마운트에 걸쳐 씌움, 자석을 넣어 가운데만 접착, 굳으면 관을 위로 뺌. 치수는 축 Ø3, 마운트 외경 6 · 구멍 3.25 · 높이 1.6, 모터 면 틈 0.4, 자석 Ø6; 자석 두께 · 관 벽 두께는 그림용 값, 관 걸침 1.2 mm 는 1차 설계값.
 
 ## 8쪽 보드 제작 비용
 
@@ -48,7 +48,7 @@ ws1 `test_runs/live/dk9a_36b9b7de/dk9a_random_m_s0` (잡 12032, 2026-10-28) — 
 
 ## 콘솔 캡처 (10쪽)
 
-가짜 차량 `console.mock_vehicle`(콘솔 코드 = main f60da30a, `git archive` 사본), 헤드리스 Chromium 1600 × 900, 2026-10-28. 조종 권한 → 「남은 팔레트 전부 옮기기」 → 대기열 재개(2단계 확인) → P-01 → D-A, P-02 → D-B 완료. 대기열 진행(`c07_queue.png`), 상태·경보(`c07_health.png`), 요약 자세히(`c07_summary.png`)를 잘라 냈다.
+가짜 차량 `console.mock_vehicle`(콘솔 코드 = main f60da30a, `git archive` 사본), 헤드리스 Chromium 3200 × 1800 · 페이지 zoom 2(1600 × 900 배치를 두 배 해상도로), 2026-10-28. 조종 권한 → 「남은 팔레트 전부 옮기기」 → 대기열 재개(2단계 확인) → P-01 → D-A, P-02 → D-B 완료. 대기열 진행(`c07_queue.png`), 상태·경보 위쪽 열 줄(`c07_health.png`), 요약의 결과 줄과 팔레트별 표(`c07_summary.png`)만 잘라 냈다.
 
 ## 사진
 
