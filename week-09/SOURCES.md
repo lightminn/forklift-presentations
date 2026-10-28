@@ -2,7 +2,7 @@
 
 쪽별 출처의 전체 목록은 `build_deck.py` 의 각 장 `sources` 와 발표자 노트의 [Sources] 블록이다(`SCRIPT.md` 에는 넣지 않는다).
 
-## 팀 메인보드 자료 (2026-10-28 사용자 전달, 저장소에 원본 없음)
+## 팀 메인보드 자료 (2026-10-28 사용자 전달, 원본은 로봇 저장소 `docs/references/team-hardware/2026-10-28/` 에 로컬 전용)
 
 | 자료 | 쓴 곳 |
 |---|---|
@@ -22,7 +22,7 @@ MCU 코어 보드는 사용자가 준 AliExpress 링크(1005006632336183)를 열
 | 자료 | 쓴 곳 |
 |---|---|
 | `docs/references/week8_feedback.md` | 1쪽 피드백 네 줄 (UWB 는 다른 팀 이야기라 뺌) |
-| `docs/design/encoder_magnet_adapter/` (작업 트리, git 미추적, 2026-10-17) README · preview.png | 5쪽 치수와 그림 (`h05_adapter.png`, 형상과 단면만 잘라 냄); 실물 출력 · 장착은 미검증 |
+| `artifacts/cad/motor-shaft-magnet-adapter/` (git 미추적) README · `build_adapter.py` · `shaft3mm/` | 5쪽: 축 3 mm 판 칼라(외경 5, 높이 1.6 = 축 돌출 2.0 − 틈 0.4), 구멍 3.00–3.25 mm 0.05 간격 6종과 맞춤 시험 막대; 사용자 실측(2026-10-28) 3.25 mm 가 맞음, 자석 6 mm 에 맞춰 외경 6.00 mm 로 다시 출력 예정 |
 | `docs/plans/2026-10-26-slam-localization-default.md` 5b · 5d | 6쪽 표 위치 오차 중앙값(1차 확인 L 0.029–0.038 m, R 0.089–0.119 m), SLAM 끊김(2차 확인 R line_m 두 실행 slam_link_failed, 응답 1.149 · 1.096 s), 띠의 1 s 기한; 사용자 결정(2026-10-27)으로 기준 미충족 셋을 받아들인 예외 채택 |
 | `docs/plans/2026-10-27-slam-a-return-start-remeasure.md` (PR #179) | 6쪽 하역 도킹 옆 치우침 최대 0.012 대 0.219 m (seed · 스냅숏 · 목적지 구성이 다른 기술 비교) |
 | `docs/design/2026-10-22-fms-case-survey.md` (PR #87) | 7쪽 비교표 |
@@ -43,6 +43,9 @@ ws1 `test_runs/live/dk9a_36b9b7de/dk9a_random_m_s0` (잡 12032, 2026-10-28) — 
 가짜 차량 `console.mock_vehicle`(콘솔 코드 = main f60da30a, `git archive` 사본), 헤드리스 Chromium 1600 × 900, 2026-10-28. 조종 권한 → 「남은 팔레트 전부 옮기기」 → 대기열 재개(2단계 확인) → P-01 → D-A, P-02 → D-B 완료. 대기열 진행(`c07_queue.png`), 상태·경보(`c07_health.png`), 요약 자세히(`c07_summary.png`)를 잘라 냈다.
 
 ## 사진
+
+5쪽 `h05_print.jpg` · `h05_mounted.jpg`: 팀 촬영(2026-10-26) 1차 출력물과 모터 축에 끼운 모습, 원본은 로봇 저장소 `docs/references/team-hardware/2026-10-26-adapter-print/`(로컬 전용). 방향을 바로잡고 잘라 다시 인코딩해 EXIF 를 지웠다.
+
 
 | 파일 | 원본 | 라이선스 |
 |---|---|---|

@@ -1,7 +1,7 @@
-"""Make week 9's figures in assets/ from the team's main-board pictures, the encoder adapter preview,
-and console captures (conda base Python: PIL).
+"""Make week 9's figures in assets/ from the team's main-board pictures, the photos of the first encoder
+magnet mount print and console captures (conda base Python: PIL).
 
-    python prepare_figures.py <board pictures folder> <adapter preview.png> <captures folder>
+    python prepare_figures.py <board pictures folder> <mount photos folder> <captures folder>
 
 The board pictures are the eight KakaoTalk_20261028_03*.png the user sent on 2026-10-28; only the top-side
 3D render and the top-side layout are used (the bottom side carries the designer's silkscreen, which the
@@ -11,7 +11,7 @@ Every output is re-encoded, so no metadata is carried over.
 import sys
 from pathlib import Path
 
-from PIL import Image, ImageFilter
+from PIL import Image, ImageFilter, ImageOps
 
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / 'assets'
@@ -29,7 +29,7 @@ def save(im, name, quality=90):
     print(name, im.size)
 
 
-def main(board, preview, caps):
+def main(board, preview, caps):  # preview: the mount photos folder
     board, caps = Path(board), Path(caps)
     # the main board, top side: the render on black, cropped to the board with a small margin
     im = Image.open(board / BOARD_3D_TOP)
@@ -40,10 +40,12 @@ def main(board, preview, caps):
     box = (880, 1118, 1165, 1218)
     im.paste(im.crop(box).filter(ImageFilter.MedianFilter(9)), box[:2])
     save(im, 'h03_layout_top.jpg')
-    # the adapter preview: the render and the section only (the slide has the title, the bore sizes and the notes)
-    im = Image.open(preview)
-    w, h = im.size
-    save(im.crop((int(w * 0.12), int(h * 0.22), int(w * 0.95), int(h * 0.74))), 'h05_adapter.png')
+    # the first mount print (2026-10-26 phone photos, 3000 x 4000): the parts on the desk, and one on the motor shaft
+    prints = Path(preview)
+    im = ImageOps.exif_transpose(Image.open(prints / '20261026_145724.jpg'))  # the phone stores it rotated
+    save(im.crop((620, 1080, 2340, 2700)).resize((860, 810)), 'h05_print.jpg', 86)
+    im = ImageOps.exif_transpose(Image.open(prints / '20261026_145743.jpg'))
+    save(im.crop((500, 1380, 1960, 2840)).resize((810, 810)), 'h05_mounted.jpg', 86)
     # console captures (1600 x 900 CSS px): the queue panel, the status page, the results summary
     q = Image.open(caps / 'w9_c5.png')
     save(q.crop((1262, 330, 1590, 900)), 'c07_queue.png')

@@ -705,6 +705,7 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 /* 9주차 (2026-10-28) */
 .comparison.h7.fb9 { font-size:22px; align-self:center; height:auto; }
 .comparison.h7.fb9 td { padding:20px 14px; vertical-align:middle; white-space:nowrap; }
+.comparison.h7.fb9 td:not(:first-child) { white-space:normal; }
 .comparison.h7.fb9 td:first-child { color:var(--uos-blue); }
 .hw7.board9 { grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:20px; }
 .hw7.board9 > .shot.r3d { height:100%; }
@@ -719,10 +720,10 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .pw9 .diagram { height:100%; }
 .comparison.h7.pwt9 { font-size:18px; height:auto; }
 .comparison.h7.pwt9 td { padding:5px 10px; white-space:nowrap; vertical-align:middle; }
-.shot.adp9 { flex:1; min-height:0; }
-.shot.adp9 .media { max-height:100%; }
-.comparison.h7.adpt9 { font-size:18px; }
-.comparison.h7.adpt9 td { padding:6px 12px; white-space:nowrap; }
+.adp9 { display:flex; gap:40px; min-height:0; justify-content:center; }
+.adp9 > .shot { height:100%; min-height:0; flex:0 1 auto; width:auto; }
+.comparison.h7.adpt9 { font-size:17px; }
+.comparison.h7.adpt9 td { padding:4px 10px; white-space:nowrap; }
 .loc9 { display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,1fr); gap:20px; min-height:0; align-items:center; }
 .loc9 > .shot { height:100%; min-height:0; }
 .loc9 .shot .media { border:1px solid var(--uos-rule); }
@@ -749,4 +750,5 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .comparison.h7.endt9 td.lead { width:1%; }
 .comparison.h7.endt9 td { padding:10px 8px; vertical-align:middle; }
 .comparison.h7.endt9 td.lead { color:var(--uos-blue); font-weight:700; white-space:nowrap; }
-.comparison.h7.endt9 td:nth-child(2) { font-weight:700; }
+.comparison.h7.endt9 td { font-weight:400; }
+.comparison.h7.endt9 td b { font-weight:700; }

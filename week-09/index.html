@@ -3,7 +3,7 @@
 <link rel="icon" href="data:,">
 <script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>9주차 자율 지게차 개발</title>
-<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=f1e2bbef883c"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=e86f6ec06baa"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 <section class="title-section" data-label="개발 진행 보고" data-screen-label="01" data-duration="20" data-speaker-notes="권장 20초
 
@@ -20,7 +20,7 @@
 
 <section data-label="8주차 피드백 대응" data-screen-label="02" data-duration="45" data-speaker-notes="권장 45초
 
-지난주 피드백에 대한 대응입니다. 가장 큰 지적은 시뮬레이션 같은 상위 제어보다 하드웨어와 하위 제어를 먼저 하라는 것이었습니다. 그래서 이번 주에는 하드웨어 쪽에서 메인보드의 전체 회로도와 PCB 배치를 마쳤고, 엔코더 자석을 모터 축에 붙이는 마운트를 설계했습니다. 다음 주에 메인보드를 제작하고 마운트를 출력해 달 계획입니다. 두 번째로 STM32G474가 느리다는 의견이 있었는데, 저희는 7주차에 250메가헤르츠인 Nucleo H533RE를 쓰고 있었고, 이번에 480메가헤르츠인 STM32H743 코어 보드로 바꿔 메인보드에 꽂도록 설계했습니다. 세 번째로 콘솔을 상용 FMS와 비교해 보라는 의견에는 관제 제품 일곱 개를 조사해 작업 대기열, 장비 상태와 경보, 실적 요약 세 가지를 콘솔에 넣었습니다. 시연 장소와 배터리 충전은 아직 확인하지 못했습니다. 다만 배터리 전압을 MCU로 읽을 수 있게 메인보드에 분압 회로는 넣어 두었습니다. (전환)
+지난주 피드백에 대한 대응입니다. 가장 큰 지적은 시뮬레이션 같은 상위 제어보다 하드웨어와 하위 제어를 먼저 하라는 것이었습니다. 그래서 이번 주에는 하드웨어 쪽에서 메인보드의 전체 회로도와 PCB 배치를 마쳤고, 엔코더 자석을 모터 축에 붙이는 마운트를 출력해 축에 맞는 구멍 지름을 찾았습니다. 다음 주에 메인보드를 제작하고, 마운트를 실제 자석에 맞춰 다시 출력해 달 계획입니다. 두 번째로 STM32G474가 느리다는 의견이 있었는데, 저희는 7주차에 250메가헤르츠인 Nucleo H533RE를 쓰고 있었고, 이번에 480메가헤르츠인 STM32H743 코어 보드로 바꿔 메인보드에 꽂도록 설계했습니다. 세 번째로 콘솔을 상용 FMS와 비교해 보라는 의견에는 관제 제품 일곱 개를 조사해 작업 대기열, 장비 상태와 경보, 실적 요약 세 가지를 콘솔에 넣었습니다. 시연 장소와 배터리 충전은 아직 확인하지 못했습니다. 다만 배터리 전압을 MCU로 읽을 수 있게 메인보드에 분압 회로는 넣어 두었습니다. (전환)
 
 [Sources]
 표: 8주차 피드백별 대응
@@ -32,7 +32,7 @@ STM32H743VI Cortex-M7 480 MHz · 플래시 2 MB · RAM 1 MB; STM32G474 Cortex-M4
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="01  8주차 피드백 대응"><div class="slide-body">
 <h2 class="headline">메인보드 PCB 배치와 H743 코어 보드 적용, 콘솔 운용 기능 3가지 추가</h2>
-<table class="comparison h7 fb9 grow"><tr><th>8주차 피드백</th><th>이번 주 진행</th><th>다음 단계</th></tr><tr><td>하드웨어·하위 제어 우선</td><td>메인보드 PCB(114×92 mm)와 자석 마운트 설계</td><td>메인보드 제작, 마운트 출력·장착 뒤 엔코더 확인</td></tr><tr><td>STM32G474 속도 부족</td><td>STM32H743(480 MHz) 코어 보드 장착 설계</td><td>—</td></tr><tr><td>상용 FMS와 콘솔 비교</td><td>상용 7종 참고해 대기열·상태·실적 화면 추가</td><td>—</td></tr><tr><td>시연 장소와 배터리 충전</td><td>보드에 전압 분압 회로 반영 (핀 미배정)</td><td>확인 필요</td></tr></table>
+<table class="comparison h7 fb9 grow"><tr><th>8주차 피드백</th><th>이번 주 진행</th><th>다음 단계</th></tr><tr><td>하드웨어·하위 제어 우선</td><td>메인보드 PCB(114×92 mm) 설계, 마운트 구멍(3.25 mm) 확인</td><td>메인보드 제작, 마운트 출력·자석 부착 뒤 엔코더 확인</td></tr><tr><td>STM32G474 속도 부족</td><td>STM32H743(480 MHz) 코어 보드 장착 설계</td><td>—</td></tr><tr><td>상용 FMS와 콘솔 비교</td><td>상용 7종 참고해 대기열·상태·실적 화면 추가</td><td>—</td></tr><tr><td>시연 장소와 배터리 충전</td><td>보드에 전압 분압 회로 반영 (핀 미배정)</td><td>확인 필요</td></tr></table>
 <div class="takeaway">피드백에서 느리다고 한 G474(170 MHz)와 7주차에 쓰던 H533RE(250 MHz) 대신 480 MHz H743을 씁니다</div>
 </div></x-import>
 </section>
@@ -94,20 +94,23 @@ d02_truck.jpg 팀 차체 사진(5주차), d02_jetson.jpg Wikimedia Commons NVIDI
 </div></x-import>
 </section>
 
-<section data-label="엔코더 자석 마운트" data-screen-label="06" data-duration="45" data-speaker-notes="권장 45초
+<section data-label="엔코더 자석 마운트" data-screen-label="06" data-duration="50" data-speaker-notes="권장 50초
 
-엔코더 자석 마운트입니다. 바퀴 모터의 축은 지름이 약 2밀리미터이고 2밀리미터만 튀어나와 있어서, 지름 5밀리미터인 엔코더 자석을 바로 붙일 자리가 없습니다. 그래서 축에 끼우는 링을 설계했습니다. 바깥 지름 5밀리미터, 높이 2밀리미터이고 가운데가 뚫려 있어, 축에 끼운 뒤 위쪽 평평한 면에 자석을 붙입니다. 문제는 구멍 지름입니다. 3D 프린터로 뽑으면 설계 치수와 실제 치수가 조금씩 달라서, 2.00, 2.10, 2.20, 2.30밀리미터 네 가지를 한 번에 출력해 실제 축에 끼워 보고, 힘을 많이 주지 않고 들어가면서 가장 덜 흔들리는 것을 고르려고 합니다. 아직 출력과 장착은 하지 않았고 다음 주에 합니다. (전환)
+엔코더 자석 마운트입니다. 바퀴 모터 뒤쪽으로 나온 축에 엔코더 자석을 붙여야 하는데, 축을 재 보니 지름 3밀리미터에 2밀리미터 정도만 튀어나와 있어 자석을 바로 붙일 자리가 없습니다. 그래서 축에 끼우는 링을 PLA로 출력해 그 윗면에 자석을 붙입니다. 링 높이는 1.6밀리미터로, 끼웠을 때 윗면이 축 끝과 같은 높이가 되고 아래는 모터 면과 0.4밀리미터 떨어집니다. 3D 프린터로 뽑은 구멍은 설계보다 작게 나오기 때문에, 구멍 지름을 3.00밀리미터부터 3.25밀리미터까지 0.05밀리미터씩 여섯 가지로 뽑고 맞춤 시험 막대도 같이 뽑았습니다. 왼쪽이 그 출력물이고, 실제 축에 끼워 보니 가장 큰 3.25밀리미터가 딱 맞았습니다. 오른쪽이 모터 축에 끼운 모습입니다. 이번 출력은 지름 5밀리미터 자석용이었는데 실제로 붙일 자석은 6밀리미터라서, 바깥 지름을 6밀리미터로 바꿔 다시 출력한 뒤 자석을 붙이고 회전과 엔코더 신호를 확인하겠습니다. (전환)
 
 [Sources]
-그림: CAD 미리보기에서 형상과 단면만 잘라 냄
-2026-10-17 사용자 요청: 약 Ø2 mm · 돌출 2 mm 축, 외경 Ø5 mm · 부품 높이 2 mm 관통 링; 내경 후보 2.00 / 2.10(기본) / 2.20 / 2.30, 입구 C0.20, 바닥 바깥 C0.15, 상부 환형 접착면; Bambu PLA Basic 시작 설정; 실물 출력 · 끼워맞춤 · 접착 · 회전 · 엔코더 성능 미검증: lightminn/forklift docs/design/encoder_magnet_adapter/README.md · preview.png (작업 트리, 2026-10-17)
-실물 사진과 맞은 치수는 받는 대로 갱신: 사용자 (2026-10-28)
+사진: 1차 출력물과 모터 축에 끼운 모습 (2026-10-26 팀 촬영)
+모터 축 3 mm, shaft3mm 폴더의 구멍 3.00–3.25 mm 가운데 가장 큰 3.25 mm 가 딱 맞음(실측); 1차 출력은 자석 5 mm 용이라 자석 6 mm 에 맞춰 외경 6.00 mm 로 다시 출력 예정: 사용자 (2026-10-28)
+shaft3mm/: collar_OD5_H1.6_bore3.00–3.25(0.05 간격), fit_test_bar_bore3.00-3.25; SHAFT_H 2.0(대략 실측) − GAP 0.4 = 높이 1.6, 윗면이 축 끝과 같은 높이; FDM 구멍은 작게 나옴: lightminn/forklift artifacts/cad/motor-shaft-magnet-adapter (git 미추적, README · build_adapter.py)
+팀 촬영 2026-10-26 (휴대폰 사진 두 장, 방향 바로잡고 잘라 다시 인코딩): 사진
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="05  엔코더 자석 마운트"><div class="slide-body">
-<h2 class="headline">지름 2 mm 모터 축에 5 mm 자석을 붙이는 링 마운트 시험편 4종 설계</h2>
-<figure class="shot adp9"><img class="media" src="assets/h05_adapter.png" alt="마운트 3D 형상과 중심 단면. 가운데 구멍이 뚫린 청록색 링, 오른쪽 단면에 외경 5.00, 구멍 2.10, 높이 2.00, 외측 모따기 C0.15, 입구 모따기 C0.20"><figcaption>마운트 3D 형상과 단면 치수</figcaption></figure>
-<table class="comparison h7 adpt9"><tr><th>설계 항목</th><th>치수와 사양</th></tr><tr><td>모터 축과 자석 크기</td><td>축 지름 약 2 mm (돌출 2 mm), 자석 지름 5 mm</td></tr><tr><td>마운트 외형</td><td>외경 5.00 mm, 높이 2.00 mm 관통 링</td></tr><tr><td>모따기 치수</td><td>아래 구멍 입구 0.20 mm, 바닥 바깥 0.15 mm</td></tr><tr><td>구멍 지름 시험편</td><td>2.00 / 2.10(기본안) / 2.20 / 2.30 mm 4종</td></tr><tr><td>제작과 조립 방식</td><td>PLA 3D 프린터 출력, 윗면에 자석 접착 (시험 전)</td></tr></table>
-<div class="takeaway">네 가지 구멍 지름을 함께 출력해 축에 무리 없이 들어가면서 흔들림이 가장 적은 치수를 고릅니다</div>
+<h2 class="headline">3 mm 바퀴 모터 뒤 축에 끼워 본 결과 구멍 3.25 mm 마운트 치수 확정</h2>
+<div class="adp9 grow">
+<figure class="shot"><img class="media" src="assets/h05_print.jpg" alt="책상 위의 1차 출력물. 회색 PLA 링 아홉 개와 구멍 여섯 개가 뚫린 맞춤 시험 막대"><figcaption>1차 출력 링과 시험 막대</figcaption></figure>
+<figure class="shot"><img class="media" src="assets/h05_mounted.jpg" alt="바퀴 모터 뒷면. 가운데 축에 회색 링이 끼워져 있고 양옆으로 노란색, 초록색 전원선"><figcaption>바퀴 모터 축에 끼운 모습</figcaption></figure>
+</div>
+<table class="comparison h7 adpt9"><tr><th>항목</th><th>치수 · 내용</th><th>근거 · 상태</th></tr><tr><td>형태와 재료</td><td>바퀴 모터 뒤 축 링 (PLA 출력)</td><td>관통 구멍 · 윗면에 자석 접착</td></tr><tr><td>축과 링 높이</td><td>축 지름 3 mm · 돌출 약 2 mm</td><td>실측 · 높이 1.6 mm (틈 0.4 mm)</td></tr><tr><td>구멍 지름</td><td>3.00–3.25 mm 6종 중 3.25 mm</td><td>실측 · 출력 수축 감안해 끼워 봄</td></tr><tr><td>링 외경</td><td>1차 5.00 mm → 6.00 mm 예정</td><td>실제 쓸 지름 6 mm 자석에 맞춤</td></tr><tr><td>다음 단계</td><td>외경 6 mm 재출력 후 접착 · 회전 시험</td><td>엔코더 신호 확인까지 진행 예정</td></tr></table>
 </div></x-import>
 </section>
 
@@ -162,7 +165,7 @@ ws1 test_runs/live/dk9a_36b9b7de/dk9a_random_m_s0 (잡 12032, 2026-10-28): rando
 
 <section data-label="결론과 다음 주 계획" data-screen-label="09" data-duration="55" data-speaker-notes="권장 55초
 
-결론과 다음 주 계획입니다. 이번 주에는 피드백대로 하드웨어를 앞으로 당겨, H743 코어 보드와 Jetson 전원까지 들어간 메인보드의 회로도와 PCB 배치를 마쳤고 엔코더 자석 마운트를 설계했습니다. 소프트웨어에서는 미리 만든 지도 위에서 위치를 추정해 오차를 3에서 4센티미터로 줄였고, 콘솔에 대기열과 상태, 경보, 실적 요약을 넣었습니다. 다음 주에는 메인보드를 제작하고, 마운트를 출력해 모터에 단 뒤 엔코더 신호가 제대로 나오는지 확인하겠습니다. 소프트웨어에서는 리보틱스 시연 장면 문제를 먼저 풉니다. 왼쪽 영상처럼 좁은 통로에서 팔레트를 꺼낸 직후 지게차가 랙 기둥 옆에 서서 움직이지 못합니다. 트레일러 장면에서도 벽 옆에서 같은 일이 생깁니다. 실제 간격은 18에서 21센티미터인데, LiDAR로 기둥과 벽을 장애물로 표시할 때 붙이는 여유 범위가 그 간격을 거의 덮어서 움직일 길이 없다고 판단하기 때문입니다. 출발 직후 이미 표시된 범위를 풀어 주고 출발 전에 조향을 0으로 맞추는 수정으로, CPU에서 재현한 16번 중 13번이 풀렸고 Isaac에서 확인할 차례입니다. 또 지금 방식은 위치를 크게 잃으면 지도 위에서 스스로 다시 찾지 못해서, 다시 찾는 전역 재위치를 만들겠습니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.
+결론과 다음 주 계획입니다. 이번 주에는 피드백대로 하드웨어를 앞으로 당겨, H743 코어 보드와 Jetson 전원까지 들어간 메인보드의 회로도와 PCB 배치를 마쳤고 엔코더 자석 마운트의 축 끼워맞춤을 확인했습니다. 소프트웨어에서는 미리 만든 지도 위에서 위치를 추정해 오차를 3에서 4센티미터로 줄였고, 콘솔에 대기열과 상태, 경보, 실적 요약을 넣었습니다. 다음 주에는 메인보드를 제작하고, 마운트를 6밀리미터 자석에 맞춰 다시 출력해 모터에 단 뒤 엔코더 신호가 제대로 나오는지 확인하겠습니다. 소프트웨어에서는 리보틱스 시연 장면 문제를 먼저 풉니다. 왼쪽 영상처럼 좁은 통로에서 팔레트를 꺼낸 직후 지게차가 랙 기둥 옆에 서서 움직이지 못합니다. 트레일러 장면에서도 벽 옆에서 같은 일이 생깁니다. 실제 간격은 18에서 21센티미터인데, LiDAR로 기둥과 벽을 장애물로 표시할 때 붙이는 여유 범위가 그 간격을 거의 덮어서 움직일 길이 없다고 판단하기 때문입니다. 출발 직후 이미 표시된 범위를 풀어 주고 출발 전에 조향을 0으로 맞추는 수정으로, CPU에서 재현한 16번 중 13번이 풀렸고 Isaac에서 확인할 차례입니다. 또 지금 방식은 위치를 크게 잃으면 지도 위에서 스스로 다시 찾지 못해서, 다시 찾는 전역 재위치를 만들겠습니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.
 
 [Sources]
 영상: Isaac Sim 리보틱스 좁은 통로 장면 (비스듬한 시점)
@@ -175,7 +178,7 @@ ws1 test_runs/riibotics/t2d_1b60df21/t2d_c3_aisle_rack_s4/run/view_quarter.mp4 �
 <h2 class="headline">다음 주는 메인보드·마운트를 제작하고 리보틱스 시연 장면 출발 막힘과 재위치를 해결</h2>
 <div class="end9 grow">
 <figure class="shot"><video class="media" src="assets/n08_aisle_stall.mp4" poster="assets/n08_aisle_stall_poster.jpg" autoplay loop muted playsinline aria-label="리보틱스 좁은 통로 장면을 비스듬히 위에서 본 Isaac 렌더. 지게차가 랙 칸에서 팔레트를 꺼낸 뒤 랙 기둥 옆에서 더 움직이지 못하고 서 있음"></video><figcaption>팔레트 인출 직후 랙 기둥 옆 정지 장면</figcaption></figure>
-<table class="comparison h7 endt9"><tr><th>구분</th><th>대상</th><th>현재 → 다음 단계</th></tr><tr><td class="lead" rowspan="2">하드웨어</td><td>메인보드</td><td>회로도와 PCB 배치 완료 → 메인보드 제작</td></tr><tr><td>엔코더 마운트</td><td>구멍 지름 4종 시험편 설계 → 3D 프린터 출력·장착 및 엔코더 신호 확인</td></tr><tr><td class="lead" rowspan="2">소프트웨어</td><td>리보틱스 시연 장면 (좁은 통로, 트레일러)</td><td>여유 범위가 간격(0.18–0.21 m)을 덮어 막힘 → 출발 직후 해제·조향 정렬 시험</td></tr><tr><td>위치 추정</td><td>사전 지도 오차 3–4 cm 달성 → 위치를 잃었을 때 다시 찾는 전역 재위치 추가</td></tr></table>
+<table class="comparison h7 endt9"><tr><th>구분</th><th>대상</th><th>현재 → 다음 단계</th></tr><tr><td class="lead" rowspan="2">하드웨어</td><td><b>메인보드</b></td><td>회로도와 PCB 배치 완료 → 메인보드 제작</td></tr><tr><td><b>엔코더 마운트</b></td><td>축 구멍 3.25 mm 맞춤 확인 → 외경 6 mm 출력·장착 뒤 신호 확인</td></tr><tr><td class="lead" rowspan="2">소프트웨어</td><td><b>리보틱스 시연 장면 (좁은 통로, 트레일러)</b></td><td>여유 범위가 간격(0.18–0.21 m)을 덮어 막힘 → 출발 직후 해제·조향 정렬 시험</td></tr><tr><td><b>위치 추정</b></td><td>사전 지도 오차 3–4 cm 달성 → 위치를 잃었을 때 다시 찾는 전역 재위치 추가</td></tr></table>
 </div>
 <div class="takeaway">리보틱스 시연 장면 출발 수정안은 CPU 재현에서 16번 중 13번 풀렸고 Isaac 시뮬레이션 확인은 아직입니다</div>
 </div></x-import>
