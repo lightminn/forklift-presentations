@@ -3,7 +3,7 @@
 <link rel="icon" href="data:,">
 <script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>9주차 자율 지게차 개발</title>
-<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=8e02e5f11de2"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=68e381c14d06"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 <section class="title-section" data-label="개발 진행 보고" data-screen-label="01" data-duration="20" data-speaker-notes="권장 20초
 
@@ -151,7 +151,7 @@ PCB 가격도 넣어: 사용자 (2026-10-28)
 
 <section data-label="미리 만든 지도 위치 추정" data-screen-label="09" data-duration="60" data-speaker-notes="권장 60초
 
-소프트웨어입니다. 지금까지는 지게차가 운행하면서 SLAM으로 지도를 만들고, 동시에 그 지도 위에서 자기 위치를 찾았습니다. 그러면 지도 자체가 계속 바뀌어 위치가 흔들립니다. 이번 주에는 방식을 바꿔, 처음 한 번 주행해 지도를 만들어 두고 실제 작업 때는 그 고정된 지도 위에서 위치만 찾게 했습니다. 왼쪽 영상은 지금 방식으로 Isaac에서 팔레트 세 개를 차례로 옮기는 장면입니다. 오른쪽 위 그래프는 같은 장면을 한 시간 동안 운행하며 잰 위치 오차입니다. 주황색인 기존 방식은 10에서 20센티미터를 오르내리다가, 지도가 커지면서 계산이 1초 안에 끝나지 못해 56분쯤 SLAM이 끊겼습니다. 파란색인 지금 방식은 65분 내내 3에서 4센티미터를 유지했습니다. 여러 번 돌린 결과로 보면 위치 오차 중앙값이 9에서 12센티미터에서 3에서 4센티미터로 줄었고, 하역 칸에 맞춰 들어갈 때 옆으로 치우치는 정도도 최대 22센티미터에서 1.2센티미터로 줄었습니다. (전환)
+소프트웨어입니다. 지금까지는 지게차가 운행하면서 SLAM으로 지도를 만들고, 동시에 그 지도 위에서 자기 위치를 찾았습니다. 그러면 지도 자체가 계속 바뀌어 위치가 흔들립니다. 이번 주에는 방식을 바꿔, 처음 한 번 주행해 지도를 만들어 두고 실제 작업 때는 그 고정된 지도 위에서 위치만 찾게 했습니다. 왼쪽 영상은 지금 방식으로 Isaac에서 팔레트 세 개를 차례로 옮기는 장면입니다. 오른쪽 위 그래프는 같은 장면을 한 시간 동안 운행하며 잰 위치 오차입니다. 주황색인 기존 방식은 10에서 20센티미터를 오르내리다가, 지도가 커지면서 계산이 1초 안에 끝나지 못해 56분쯤 SLAM이 끊겼습니다. 파란색인 지금 방식은 65분 내내 3에서 4센티미터를 유지했습니다. 지도는 누가 미리 주는 것이 아닙니다. 새 장소에서 처음 한 번 주행할 때 지게차가 LiDAR로 직접 지도를 만들어 저장하고, 그다음부터의 작업은 그 지도 위에서 위치만 찾습니다. 선반이나 벽 같은 배치가 바뀌면 그 장소를 다시 한 번 주행해 지도를 새로 만듭니다. 시뮬레이션에서는 이 첫 주행도 평소 작업처럼 팔레트를 옮기며 했고, 실차에서 첫 주행을 어떻게 할지는 아직 정하는 중입니다. 여러 번 돌린 결과로 보면 위치 오차 중앙값이 9에서 12센티미터에서 3에서 4센티미터로 줄었고, 하역 칸에 맞춰 들어갈 때 옆으로 치우치는 정도도 최대 22센티미터에서 1.2센티미터로 줄었습니다. (전환)
 
 [Sources]
 영상: Isaac Sim 탑뷰 (12배속), 그림: S3 2차 확인 일자 배치 seed 3 두 실행의 위치 오차 (1분 중앙값)
@@ -159,6 +159,7 @@ PCB 가격도 넣어: 사용자 (2026-10-28)
 하역 도킹 1회차 estimate_vs_truth_at_match |dy| 최대: A 0.012 m(36개) 대 mapping rh 0.219 m(9개); 두 배치는 seed · 스냅숏 · 목적지 구성이 달라 기술 비교: lightminn/forklift main f60da30a docs/plans/2026-10-27-slam-a-return-start-remeasure.md (PR #179)
 ws1 test_runs/live/s3conf2_3a37e216 의 s3b_R_line_m_s3 · s3b_L_line_m_s3 spool/slam.control 행 [t, 적용 후축 x, y, yaw, 참값 x, y, yaw] 에서 |적용 − 참| 위치를 1분 구간 중앙값으로 (시뮬 시간, team-spec 오도메트리, D7_HOLD 끔): 그래프
 ws1 test_runs/live/dk9a_36b9b7de/dk9a_random_m_s0 (잡 12032, 2026-10-28): random_m 대기열 P-4:D-1, P-5:D-2, P-3:D-3, seed 0, 등록부 지도(random_m_team_spec_quantized_0facac3eea66) 위 위치 추정, D7_HOLD 켬, 3/3 완료; transport.mp4 탑뷰를 1160 × 660 at x 110 으로 잘라 12배속. 스냅숏 dk9v_36b9b7de 는 trf_36b9b7de 에서 record_video_overlay(t) 한 줄만 stamp 로 바꾼 렌더용 사본: 영상
+console/README.md「SLAM 지도」: 조사 에폭(slam_survey.sbatch, live 미션을 지도 작성 모드로 돔)으로 묶음을 만들고 수락 검사 뒤 등록부에 올림, 배치가 바뀌면 다시 조사; 실차 지도의 수락 · 조사 주행 방법은 미정(계획 6장), 자율 조사는 보류(사용자 결정, S-P1 뒤): 지도 만드는 법
 조사 에폭(slam_survey.sbatch)으로 장면별 지도 묶음을 만들어 등록부(config/slam_map_bundles.yaml)에 올리고, 콘솔 live 는 그 묶음 위에서 위치 추정: 운용 흐름
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="08  미리 만든 지도 위치 추정"><div class="slide-body">
@@ -171,6 +172,7 @@ ws1 test_runs/live/dk9a_36b9b7de/dk9a_random_m_s0 (잡 12032, 2026-10-28): rando
 <table class="comparison h7 loct9"><tr><th></th><th>기존</th><th>지금</th></tr><tr><td>방식</td><td>지도를 만들며<br>위치 찾기</td><td><b>만들어 둔 지도에서<br>위치만 찾기</b></td></tr><tr><td>위치 오차</td><td>9–12 cm</td><td><b>3–4 cm</b></td></tr><tr><td>1시간 운행</td><td>SLAM 끊김</td><td><b>끊김 없음</b></td></tr></table>
 </div>
 </div>
+<div class="phase-flow map9"><span><b>① 첫 주행</b> 지게차가 LiDAR로 지도 작성</span><span class="arrow">→</span><span><b>② 작업</b> 그 지도에서 위치만 찾기</span><span class="sep9">지도는 따로 받지 않고, 배치가 바뀌면 다시 주행</span></div>
 </div></x-import>
 </section>
 

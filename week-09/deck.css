@@ -761,3 +761,6 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .comparison.h7.cost9 td { padding:18px 16px; white-space:nowrap; vertical-align:middle; }
 .comparison.h7.cost9 td:nth-child(3), .comparison.h7.cost9 td:nth-child(4) { color:var(--uos-blue); font-weight:700; }
 .note9 { flex-shrink:0; text-align:right; font-size:16px; color:#5d6670; }
+.phase-flow.map9 { flex-shrink:0; justify-content:center; padding:10px 18px; font-size:19px; gap:12px; }
+.phase-flow.map9 .sep9 { color:#44505c; margin-left:18px; padding-left:18px; border-left:1px solid #c3cad3; }
+.phase-flow.map9 span { white-space:nowrap; }
