@@ -94,50 +94,7 @@ d02_truck.jpg 팀 차체 사진(5주차), d02_jetson.jpg Wikimedia Commons NVIDI
 </div></x-import>
 </section>
 
-<section data-label="엔코더 자석 마운트" data-screen-label="06" data-duration="50" data-speaker-notes="권장 50초
-
-엔코더 자석 마운트입니다. 바퀴 모터 뒤쪽으로 나온 축에 엔코더 자석을 붙여야 하는데, 축을 재 보니 지름 3밀리미터에 2밀리미터 정도만 튀어나와 있어 자석을 바로 붙일 자리가 없습니다. 그래서 축에 끼우는 링을 PLA로 출력해 그 윗면에 자석을 붙입니다. 링 높이는 1.6밀리미터로, 끼웠을 때 윗면이 축 끝과 같은 높이가 되고 아래는 모터 면과 0.4밀리미터 떨어집니다. 3D 프린터로 뽑은 구멍은 설계보다 작게 나오기 때문에, 구멍 지름을 3.00밀리미터부터 3.25밀리미터까지 0.05밀리미터씩 여섯 가지로 뽑고 맞춤 시험 막대도 같이 뽑았습니다. 왼쪽이 그 출력물이고, 실제 축에 끼워 보니 가장 큰 3.25밀리미터가 딱 맞았습니다. 오른쪽이 모터 축에 끼운 모습입니다. 이번 출력은 지름 5밀리미터 자석용이었는데 실제로 붙일 자석은 6밀리미터라서, 바깥 지름을 6밀리미터로 바꿔 다시 출력한 뒤 자석을 붙이고 회전과 엔코더 신호를 확인하겠습니다. (전환)
-
-[Sources]
-사진: 1차 출력물과 모터 축에 끼운 모습 (2026-10-26 팀 촬영)
-모터 축 3 mm, shaft3mm 폴더의 구멍 3.00–3.25 mm 가운데 가장 큰 3.25 mm 가 딱 맞음(실측); 1차 출력은 자석 5 mm 용이라 자석 6 mm 에 맞춰 외경 6.00 mm 로 다시 출력 예정: 사용자 (2026-10-28)
-shaft3mm/: collar_OD5_H1.6_bore3.00–3.25(0.05 간격), fit_test_bar_bore3.00-3.25; SHAFT_H 2.0(대략 실측) − GAP 0.4 = 높이 1.6, 윗면이 축 끝과 같은 높이; FDM 구멍은 작게 나옴: lightminn/forklift artifacts/cad/motor-shaft-magnet-adapter (git 미추적, README · build_adapter.py)
-팀 촬영 2026-10-26 (휴대폰 사진 두 장, 방향 바로잡고 잘라 다시 인코딩): 사진
-[/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="05  엔코더 자석 마운트"><div class="slide-body">
-<h2 class="headline">3 mm 바퀴 모터 뒤 축에 끼워 본 결과 구멍 3.25 mm 마운트 치수 확정</h2>
-<div class="adp9 grow">
-<figure class="shot"><img class="media" src="assets/h05_print.jpg" alt="책상 위의 1차 출력물. 회색 PLA 링 아홉 개와 구멍 여섯 개가 뚫린 맞춤 시험 막대"><figcaption>1차 출력 링과 시험 막대</figcaption></figure>
-<figure class="shot"><img class="media" src="assets/h05_mounted.jpg" alt="바퀴 모터 뒷면. 가운데 축에 회색 링이 끼워져 있고 양옆으로 노란색, 초록색 전원선"><figcaption>바퀴 모터 축에 끼운 모습</figcaption></figure>
-</div>
-<table class="comparison h7 adpt9"><tr><th>항목</th><th>내용</th></tr><tr><td>구멍 지름</td><td>3.25 mm</td></tr><tr><td>마운트 외경</td><td>5 mm → 6 mm</td></tr><tr><td>다음 단계</td><td>외경 6 mm 재출력 → 자석 부착 → 엔코더 신호 확인</td></tr></table>
-</div></x-import>
-</section>
-
-<section data-label="자석 장착 방식" data-screen-label="07" data-duration="45" data-speaker-notes="권장 45초
-
-자석을 붙이는 방법입니다. 자석이 축 중심에서 벗어나면 엔코더가 읽는 각도에 오차가 생기기 때문에, 마운트와 자석의 중심을 축에 맞추는 것이 중요합니다. 먼저 마운트를 축에 끼우고 평평한 판으로 눌러, 판이 축 끝에 닿을 때 멈춥니다. 그러면 마운트 윗면이 축 끝과 같은 높이가 되고 모터 면과는 틈이 남습니다. 다음으로 자석과 같은 지름의 구멍이 뚫린 원통을 마운트 위에 씌웁니다. 마운트와 자석의 지름이 같아서 이 원통 하나로 둘의 중심을 함께 맞출 수 있습니다. 원통 안으로 자석을 넣는데, 접착제는 가운데에만 조금 발라 원통 벽에 붙지 않게 하고, 원통 옆 창으로 테두리에 접착제가 새지 않았는지 봅니다. 굳으면 원통을 위로 빼내면 됩니다. 영상은 축 3밀리미터, 마운트와 자석 6밀리미터 기준으로 만든 3D 애니메이션이고, 원통은 안이 보이도록 앞쪽 절반을 잘라 그렸습니다. 원통도 이 지름에 맞춰 출력합니다. (전환)
-
-[Sources]
-영상: 장착 순서 3D 애니메이션
-장착 순서: 평판으로 눌러 칼라 윗면 = 축 끝(모터 면과 0.4 mm 틈), 젤형 순간접착제로 칼라 고정, 중심 맞춤 관(magnet_centring_tube_id5.20 · id5.30)을 칼라에 1.2 mm 걸쳐 씌움, 접착제는 가운데에만(관에 붙지 않게, 창으로 테두리 확인), 굳으면 관을 위로 뺌; 칼라와 자석이 같은 지름이라 한 구멍으로 둘 다 맞춤, 중심 어긋남 여유 0.2 mm(5.20 관): lightminn/forklift artifacts/cad/motor-shaft-magnet-adapter (git 미추적) README · install_guide.html
-week-09/tools/sleeve_anim.html(three.js r128)을 헤드리스 Chromium 에서 8 s 녹화(MediaRecorder) → H.264; 축 Ø3, 마운트 외경 6 · 구멍 3.25 · 높이 1.6, 모터 면 틈 0.4, 자석 Ø6, 원통 구멍 6.2 · 걸침 1.2(1차 설계값); 자석 두께 2.5 · 원통 벽은 그림용 값, 원통은 앞쪽 절반을 잘라 보임: 영상
-장착 방식(원통으로 맞추는 것)도 보여 달라: 사용자 (2026-10-28)
-[/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="06  자석 장착 방식"><div class="slide-body">
-<h2 class="headline">마운트와 자석을 같은 지름의 원통 하나로 감싸 축 중심에 맞춰 붙임</h2>
-<div class="sleeve9 grow">
-<figure class="shot"><video class="media" src="assets/h06_sleeve.mp4" poster="assets/h06_sleeve_poster.jpg" autoplay loop muted playsinline aria-label="3D 애니메이션. 모터 축에 끼운 초록색 마운트 위로 단면이 잘린 주황색 원통이 내려와 씌워지고, 빨강과 파랑으로 나뉜 자석이 원통 안으로 내려와 마운트 위에 앉은 뒤, 원통이 위로 빠져나가 마운트와 자석만 남음"></video></figure>
-<div class="stack sleeve9r">
-<div class="lgd7"><span class="lg"><span class="sw" style="background:#f2a33a"></span>중심 맞춤 원통</span><span class="lg"><span class="sw" style="background:linear-gradient(90deg,#d9534f 50%,#3d63b8 50%)"></span>자석</span><span class="lg"><span class="sw" style="background:#1f9e4a"></span>마운트</span><span class="lg"><span class="sw" style="background:#8f979f"></span>모터</span></div>
-<div class="phase-flow vert"><span><b>①</b> 마운트 위에 원통을 씌움</span><span><b>②</b> 원통 안으로 자석을 넣어 접착</span><span><b>③</b> 굳으면 원통을 위로 빼냄</span></div>
-</div>
-</div>
-<div class="takeaway">원통 안지름이 마운트·자석 지름과 같아 둘의 중심이 함께 축에 맞음니다</div>
-</div></x-import>
-</section>
-
-<section data-label="보드 부품값" data-screen-label="08" data-duration="45" data-speaker-notes="권장 45초
+<section data-label="보드 부품값" data-screen-label="06" data-duration="45" data-speaker-notes="권장 45초
 
 보드 부품값입니다. 팀원이 보드 네 종류에 들어가는 부품값을 LCSC 가격으로 추정했습니다. 다섯 장씩 만들면 합계 약 487달러, 우리 돈 약 68만 원이고, 그 대부분인 402달러가 메인보드입니다. 메인보드에는 모터 드라이버 네 개와 전원부 부품이 들어가기 때문입니다. 한 장씩만 만들면 합계 약 135달러입니다. 작은 보드는 최소 주문 단위가 있어 한 장만 사도 장당 값이 조금 비쌉니다. 여기에 PCB 제작비와 조립비는 넣지 않았습니다. 모터 드라이버 DRV8244처럼 재고가 모자란 부품은 다른 곳에서 사거나 대체품으로 바꿉니다. (전환)
 
@@ -147,10 +104,53 @@ week-09/tools/sleeve_anim.html(three.js r128)을 헤드리스 Chromium 에서 8 
 PCB 가격도 넣어; 부품 가격으로 적고 SMT 조립비는 넣지 말 것: 사용자 (2026-10-28)
 부품값 5장 $402.11 + $13.08 + $25.83 + $46.32 = $487.34(× 1,400 = 약 68.2만 원); 1장만 $110.42 + $4.93 + $7.62 + $11.73 = $134.70: 계산
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="07  보드 부품값"><div class="slide-body">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="05  보드 부품값"><div class="slide-body">
 <h2 class="headline">보드 4종 부품값은 5장씩 약 $487 (약 68만 원), 1장씩이면 약 $135</h2>
 <table class="comparison h7 cost9 grow"><tr><th>보드</th><th>크기 (mm)</th><th>부품값 (5장)</th><th>부품값 (1장)</th></tr><tr><td>메인보드</td><td>114.2 × 91.6</td><td>$402</td><td>$110</td></tr><tr><td>바퀴 엔코더 (MT6701)</td><td>22.8 × 10.4</td><td>$13</td><td>$5</td></tr><tr><td>절대 엔코더 (KTH7801)</td><td>22.8 × 10.4</td><td>$26</td><td>$8</td></tr><tr><td>STDS 변환 보드</td><td>32.6 × 18.4</td><td>$46</td><td>$12</td></tr><tr><td><b>합계</b></td><td></td><td><b>$487</b></td><td><b>$135</b></td></tr></table>
 <p class="note9">LCSC 가격 기준 추정, PCB 제작비와 조립비 제외 (1 USD = 1,400원)</p>
+</div></x-import>
+</section>
+
+<section data-label="엔코더 자석 마운트" data-screen-label="07" data-duration="50" data-speaker-notes="권장 50초
+
+엔코더 자석 마운트입니다. 바퀴 모터 뒤쪽으로 나온 축에 엔코더 자석을 붙여야 하는데, 축을 재 보니 지름 3밀리미터에 2밀리미터 정도만 튀어나와 있어 자석을 바로 붙일 자리가 없습니다. 그래서 축에 끼우는 링을 PLA로 출력해 그 윗면에 자석을 붙입니다. 링 높이는 1.6밀리미터로, 끼웠을 때 윗면이 축 끝과 같은 높이가 되고 아래는 모터 면과 0.4밀리미터 떨어집니다. 3D 프린터로 뽑은 구멍은 설계보다 작게 나오기 때문에, 구멍 지름을 3.00밀리미터부터 3.25밀리미터까지 0.05밀리미터씩 여섯 가지로 뽑고 맞춤 시험 막대도 같이 뽑았습니다. 왼쪽이 그 출력물이고, 실제 축에 끼워 보니 가장 큰 3.25밀리미터가 딱 맞았습니다. 오른쪽이 모터 축에 끼운 모습입니다. 이번 출력은 지름 5밀리미터 자석용이었는데 실제로 붙일 자석은 6밀리미터라서, 바깥 지름을 6밀리미터로 바꿔 다시 출력한 뒤 자석을 붙이고 회전과 엔코더 신호를 확인하겠습니다. (전환)
+
+[Sources]
+사진: 1차 출력물과 모터 축에 끼운 모습 (2026-10-26 팀 촬영)
+모터 축 3 mm, shaft3mm 폴더의 구멍 3.00–3.25 mm 가운데 가장 큰 3.25 mm 가 딱 맞음(실측); 1차 출력은 자석 5 mm 용이라 자석 6 mm 에 맞춰 외경 6.00 mm 로 다시 출력 예정: 사용자 (2026-10-28)
+shaft3mm/: collar_OD5_H1.6_bore3.00–3.25(0.05 간격), fit_test_bar_bore3.00-3.25; SHAFT_H 2.0(대략 실측) − GAP 0.4 = 높이 1.6, 윗면이 축 끝과 같은 높이; FDM 구멍은 작게 나옴: lightminn/forklift artifacts/cad/motor-shaft-magnet-adapter (git 미추적, README · build_adapter.py)
+팀 촬영 2026-10-26 (휴대폰 사진 두 장, 방향 바로잡고 잘라 다시 인코딩): 사진
+[/Sources]" style="background:#fff">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="06  엔코더 자석 마운트"><div class="slide-body">
+<h2 class="headline">3 mm 바퀴 모터 뒤 축에 끼워 본 결과 구멍 3.25 mm 마운트 치수 확정</h2>
+<div class="adp9 grow">
+<figure class="shot"><img class="media" src="assets/h05_print.jpg" alt="책상 위의 1차 출력물. 회색 PLA 링 아홉 개와 구멍 여섯 개가 뚫린 맞춤 시험 막대"><figcaption>1차 출력 링과 시험 막대</figcaption></figure>
+<figure class="shot"><img class="media" src="assets/h05_mounted.jpg" alt="바퀴 모터 뒷면. 가운데 축에 회색 링이 끼워져 있고 양옆으로 노란색, 초록색 전원선"><figcaption>바퀴 모터 축에 끼운 모습</figcaption></figure>
+</div>
+<table class="comparison h7 adpt9"><tr><th>항목</th><th>내용</th></tr><tr><td>구멍 지름</td><td>3.25 mm</td></tr><tr><td>마운트 외경</td><td>5 mm → 6 mm</td></tr><tr><td>다음 단계</td><td>외경 6 mm 재출력 → 자석 부착 → 엔코더 신호 확인</td></tr></table>
+</div></x-import>
+</section>
+
+<section data-label="자석 장착 방식" data-screen-label="08" data-duration="45" data-speaker-notes="권장 45초
+
+자석을 붙이는 방법입니다. 자석이 축 중심에서 벗어나면 엔코더가 읽는 각도에 오차가 생기기 때문에, 마운트와 자석의 중심을 축에 맞추는 것이 중요합니다. 먼저 마운트를 축에 끼우고 평평한 판으로 눌러, 판이 축 끝에 닿을 때 멈춥니다. 그러면 마운트 윗면이 축 끝과 같은 높이가 되고 모터 면과는 틈이 남습니다. 다음으로 자석과 같은 지름의 구멍이 뚫린 원통을 마운트 위에 씌웁니다. 마운트와 자석의 지름이 같아서 이 원통 하나로 둘의 중심을 함께 맞출 수 있습니다. 원통 안으로 자석을 넣는데, 접착제는 가운데에만 조금 발라 원통 벽에 붙지 않게 하고, 원통 옆 창으로 테두리에 접착제가 새지 않았는지 봅니다. 굳으면 원통을 위로 빼내면 됩니다. 영상은 축 3밀리미터, 마운트와 자석 6밀리미터 기준으로 만든 3D 애니메이션이고, 원통은 안이 보이도록 앞쪽 절반을 잘라 그렸습니다. 원통도 이 지름에 맞춰 출력합니다. (전환)
+
+[Sources]
+영상: 장착 순서 3D 애니메이션
+장착 순서: 평판으로 눌러 칼라 윗면 = 축 끝(모터 면과 0.4 mm 틈), 젤형 순간접착제로 칼라 고정, 중심 맞춤 관(magnet_centring_tube_id5.20 · id5.30)을 칼라에 1.2 mm 걸쳐 씌움, 접착제는 가운데에만(관에 붙지 않게, 창으로 테두리 확인), 굳으면 관을 위로 뺌; 칼라와 자석이 같은 지름이라 한 구멍으로 둘 다 맞춤, 중심 어긋남 여유 0.2 mm(5.20 관): lightminn/forklift artifacts/cad/motor-shaft-magnet-adapter (git 미추적) README · install_guide.html
+week-09/tools/sleeve_anim.html(three.js r128)을 헤드리스 Chromium 에서 8 s 녹화(MediaRecorder) → H.264; 축 Ø3, 마운트 외경 6 · 구멍 3.25 · 높이 1.6, 모터 면 틈 0.4, 자석 Ø6, 원통 구멍 6.2 · 걸침 1.2(1차 설계값); 자석 두께 2.5 · 원통 벽은 그림용 값, 원통은 앞쪽 절반을 잘라 보임: 영상
+장착 방식(원통으로 맞추는 것)도 보여 달라: 사용자 (2026-10-28)
+[/Sources]" style="background:#fff">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="07  자석 장착 방식"><div class="slide-body">
+<h2 class="headline">마운트와 자석을 같은 지름의 원통 하나로 감싸 축 중심에 맞춰 붙임</h2>
+<div class="sleeve9 grow">
+<figure class="shot"><video class="media" src="assets/h06_sleeve.mp4" poster="assets/h06_sleeve_poster.jpg" autoplay loop muted playsinline aria-label="3D 애니메이션. 모터 축에 끼운 초록색 마운트 위로 단면이 잘린 주황색 원통이 내려와 씌워지고, 빨강과 파랑으로 나뉜 자석이 원통 안으로 내려와 마운트 위에 앉은 뒤, 원통이 위로 빠져나가 마운트와 자석만 남음"></video></figure>
+<div class="stack sleeve9r">
+<div class="lgd7"><span class="lg"><span class="sw" style="background:#f2a33a"></span>중심 맞춤 원통</span><span class="lg"><span class="sw" style="background:linear-gradient(90deg,#d9534f 50%,#3d63b8 50%)"></span>자석</span><span class="lg"><span class="sw" style="background:#1f9e4a"></span>마운트</span><span class="lg"><span class="sw" style="background:#8f979f"></span>모터</span></div>
+<div class="phase-flow vert"><span><b>①</b> 마운트 위에 원통을 씌움</span><span><b>②</b> 원통 안으로 자석을 넣어 접착</span><span><b>③</b> 굳으면 원통을 위로 빼냄</span></div>
+</div>
+</div>
+<div class="takeaway">원통 안지름이 마운트·자석 지름과 같아 둘의 중심이 함께 축에 맞음니다</div>
 </div></x-import>
 </section>
 

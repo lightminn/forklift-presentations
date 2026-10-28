@@ -23,30 +23,30 @@ MCU 코어 보드는 사용자가 준 AliExpress 링크(1005006632336183)를 열
 |---|---|
 | `docs/references/week8_feedback.md` | 1쪽 피드백 네 줄 (UWB 는 다른 팀 이야기라 뺌) |
 | `artifacts/cad/motor-shaft-magnet-adapter/` (git 미추적) README · `build_adapter.py` · `shaft3mm/` | 5쪽: 축 3 mm 판 칼라(외경 5, 높이 1.6 = 축 돌출 2.0 − 틈 0.4), 구멍 3.00–3.25 mm 0.05 간격 6종과 맞춤 시험 막대; 사용자 실측(2026-10-28) 3.25 mm 가 맞음, 자석 6 mm 에 맞춰 외경 6.00 mm 로 다시 출력 예정 |
-| `docs/plans/2026-10-26-slam-localization-default.md` 5b · 5d | 6쪽 표 위치 오차 중앙값(1차 확인 L 0.029–0.038 m, R 0.089–0.119 m), SLAM 끊김(2차 확인 R line_m 두 실행 slam_link_failed, 응답 1.149 · 1.096 s), 띠의 1 s 기한; 사용자 결정(2026-10-27)으로 기준 미충족 셋을 받아들인 예외 채택 |
-| `docs/plans/2026-10-27-slam-a-return-start-remeasure.md` (PR #179) | 6쪽 하역 도킹 옆 치우침 최대 0.012 대 0.219 m (seed · 스냅숏 · 목적지 구성이 다른 기술 비교) |
-| `docs/design/2026-10-22-fms-case-survey.md` (PR #87) | 7쪽 캡처 설명의 참고 제품, 띠(1대 구성에서 뺀 기능, 아직 없는 금지 구역 · 배터리 표시) |
-| `console/README.md` (PR #90 · #93 · #95) | 7쪽 콘솔 세 기능 |
-| branch `diag/transport-start-stall` `docs/validation/2026-10-27-transport-start-stall.md` | 8쪽 출발 정지 원인, 실제 간격 기둥 0.181–0.215 m · 벽 0.205–0.208 m |
-| branch `feat/escape-presteer` `docs/plans/2026-10-27-escape-presteer.md` 2판 (b38048da) | 8쪽 띠 16번 중 13번 (띠 0.03 + 조향 0, 전체 escape_plan 대입) |
+| `docs/plans/2026-10-26-slam-localization-default.md` 5b · 5d | 08 장 표 위치 오차 중앙값(1차 확인 L 0.029–0.038 m, R 0.089–0.119 m), SLAM 끊김(2차 확인 R line_m 두 실행 slam_link_failed, 응답 1.149 · 1.096 s), 띠의 1 s 기한; 사용자 결정(2026-10-27)으로 기준 미충족 셋을 받아들인 예외 채택 |
+| `docs/plans/2026-10-27-slam-a-return-start-remeasure.md` (PR #179) | 08 장 하역 도킹 옆 치우침 최대 0.012 대 0.219 m (seed · 스냅숏 · 목적지 구성이 다른 기술 비교) |
+| `docs/design/2026-10-22-fms-case-survey.md` (PR #87) | 09 장 캡처 설명의 참고 제품, 띠(1대 구성에서 뺀 기능, 아직 없는 금지 구역 · 배터리 표시) |
+| `console/README.md` (PR #90 · #93 · #95) | 09 장 콘솔 세 기능 |
+| branch `diag/transport-start-stall` `docs/validation/2026-10-27-transport-start-stall.md` | 10 장 출발 정지 원인, 실제 간격 기둥 0.181–0.215 m · 벽 0.205–0.208 m |
+| branch `feat/escape-presteer` `docs/plans/2026-10-27-escape-presteer.md` 2판 (b38048da) | 10 장 수정 방향(출발 띠 해제 + 출발 전 조향 0) |
 
-## 6쪽 위치 오차 그래프
+## 08 장 위치 오차 그래프
 
 ws1 `test_runs/live/s3conf2_3a37e216` 의 `s3b_R_line_m_s3`(지도 작성 동시, 3,371 s 에 slam_link_failed) · `s3b_L_line_m_s3`(등록부 지도 위 위치 추정, 3,933 s 세션 끝) `spool/slam.control` 의 행 `[t, 적용 후축 x, y, yaw, 참값 x, y, yaw]` 에서 위치 차의 크기를 1분 구간 중앙값으로 그렸다(시뮬 시간, team-spec 오도메트리, D7_HOLD 끔). 표의 세 수치는 다른 배치에서 나온 값이라 그래프의 56분 · 65분은 표에 쓰지 않았다.
 
-## 9쪽 영상
+## 08 장 영상
 
 ws1 `test_runs/live/dk9a_36b9b7de/dk9a_random_m_s0` (잡 12032, 2026-10-28) — `ct1_queue.sbatch`, random_m 대기열 P-4:D-1 · P-5:D-2 · P-3:D-3, seed 0, 등록부 지도(random_m_team_spec_quantized_0facac3eea66) 위 위치 추정, D7_HOLD 켬, team-spec, 3/3 완료. `transport.mp4` 를 1160 × 660 at x 110 으로 잘라 12배속 · 540 px. 스냅숏 `dk9v_36b9b7de` 는 `trf_36b9b7de`(main 36b9b7de)에서 `record_video_overlay(t)` 한 줄만 `stamp` 로 바꾼 렌더용 사본.
 
-## 7쪽 장착 방식 그림
+## 07 장 장착 방식 애니메이션
 
 `tools/sleeve_anim.html`(three.js) 로 그린 3D 애니메이션 `h06_sleeve.mp4`(원통은 앞쪽 절반을 잘라 보임). 장착 순서는 로봇 저장소 `artifacts/cad/motor-shaft-magnet-adapter/` README · `install_guide.html`(git 미추적): 마운트를 끼우고 판으로 눌러 높이 맞춤, 자석과 같은 지름의 중심 맞춤 관을 마운트에 걸쳐 씌움, 자석을 넣어 가운데만 접착, 굳으면 관을 위로 뺌. 치수는 축 Ø3, 마운트 외경 6 · 구멍 3.25 · 높이 1.6, 모터 면 틈 0.4, 자석 Ø6; 자석 두께 · 관 벽 두께는 그림용 값, 관 걸침 1.2 mm 는 1차 설계값.
 
-## 8쪽 보드 제작 비용
+## 05 장 보드 부품값
 
-로봇 저장소 `docs/references/team-hardware/2026-10-28/pcb-cost-comparison.md`(팀 문서, 로컬 전용): 설계별 5장, JLCPCB 견적 전 추정, 1 USD = 1,400원. 메인보드 합계 $558.91 + PCB(100 × 100 mm 초과라 견적 필요), MT_DS $75.53, KTH7801 $89.72, STDS $112.89, 4종 약 $837 + 메인보드 PCB. 작은 보드 3종 따로(양면) 약 $278 → 앞면 배치 약 $170. 메인보드 부품값은 5장 조립 기준 $402.11(1장만 $110.42).
+로봇 저장소 `docs/references/team-hardware/2026-10-28/pcb-cost-comparison.md`(팀 문서, 로컬 전용) 2.1절의 부품값 열: LCSC 실시간 가격(MOQ · 주문 단위 · 수량 구간 반영), 5장 Motor $402.11 · MT_DS $13.08 · KTH7801 $25.83 · STDS $46.32(합 $487.34, × 1,400 = 약 68.2만 원), 1장만 $110.42 · $4.93 · $7.62 · $11.73(합 $134.70). 조립비 · PCB 제작비는 넣지 않았다(사용자 2026-10-28).
 
-## 콘솔 캡처 (10쪽)
+## 콘솔 캡처 (09 장)
 
 가짜 차량 `console.mock_vehicle`(콘솔 코드 = main f60da30a, `git archive` 사본), 헤드리스 Chromium 3200 × 1800 · 페이지 zoom 2(1600 × 900 배치를 두 배 해상도로), 2026-10-28. 조종 권한 → 「남은 팔레트 전부 옮기기」 → 대기열 재개(2단계 확인) → P-01 → D-A, P-02 → D-B 완료. 대기열 진행(`c07_queue.png`), 상태·경보 위쪽 열 줄(`c07_health.png`), 요약의 결과 줄과 팔레트별 표(`c07_summary.png`)만 잘라 냈다.
 
