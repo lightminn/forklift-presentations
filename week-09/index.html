@@ -3,7 +3,7 @@
 <link rel="icon" href="data:,">
 <script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>9주차 자율 지게차 개발</title>
-<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=4c8024b216c1"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=be15c4069001"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 <section class="title-section" data-label="개발 진행 보고" data-screen-label="01" data-duration="20" data-speaker-notes="권장 20초
 
@@ -201,9 +201,31 @@ console/README.md「SLAM 지도」: 조사 에폭(slam_survey.sbatch, live 미�
 </div></x-import>
 </section>
 
-<section data-label="결론과 다음 주 계획" data-screen-label="11" data-duration="55" data-speaker-notes="권장 55초
+<section data-label="리보틱스 시연 장면 출발 막힘" data-screen-label="11" data-duration="50" data-speaker-notes="권장 50초
 
-결론과 다음 주 계획입니다. 이번 주에는 피드백대로 하드웨어를 앞으로 당겨, H743 코어 보드와 Jetson 전원까지 들어간 메인보드의 회로도와 PCB 배치를 마쳤고 엔코더 자석 마운트의 축 끼워맞춤을 확인했습니다. 소프트웨어에서는 미리 만든 지도 위에서 위치를 추정해 오차를 3에서 4센티미터로 줄였고, 콘솔에 대기열과 상태, 경보, 실적 요약을 넣었습니다. 다음 주에는 메인보드를 제작하고, 마운트를 6밀리미터 자석에 맞춰 다시 출력해 모터에 단 뒤 엔코더 신호가 제대로 나오는지 확인하겠습니다. 소프트웨어에서는 리보틱스 시연 장면 문제를 먼저 풉니다. 좁은 통로에서 팔레트를 꺼낸 직후 지게차가 랙 기둥 옆에 서서 움직이지 못하고, 트레일러 장면에서도 벽 옆에서 같은 일이 생깁니다. 실제 간격은 18에서 21센티미터인데, LiDAR로 기둥과 벽을 장애물로 표시할 때 붙이는 여유 범위가 그 간격을 거의 덮어서 움직일 길이 없다고 판단하기 때문입니다. 출발 직후 이미 표시된 범위를 풀어 주고 출발 전에 조향을 0으로 맞추는 수정으로, CPU에서 재현한 16번 중 13번이 풀렸고 Isaac에서 확인할 차례입니다. 또 지금 방식은 위치를 크게 잃으면 지도 위에서 스스로 다시 찾지 못해서, 다시 찾는 전역 재위치를 만들겠습니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.
+다음 주에 풀 문제입니다. 리보틱스 시연 장면 가운데 트레일러와 좁은 통로에서, 팔레트를 꺼낸 직후 지게차가 출발하지 못하고 그 자리에 멈춥니다. 영상은 Isaac의 트레일러 장면입니다. 지게차가 트레일러 입구로 들어가 팔레트를 꺼냈고, 노란 선처럼 나갈 경로도 계획되어 있는데 입구에 선 채 움직이지 않습니다. 원인은 장애물 판단에 있습니다. LiDAR로 본 벽과 기둥을 지도에 장애물로 칠할 때, 위치 오차를 생각해 둘레에 여유 범위를 붙입니다. 그런데 꺼낸 자리에서 실제로 벽이나 기둥까지는 18에서 21센티미터밖에 없어서, 이 여유 범위가 그 간격을 거의 덮고 차가 움직일 길이 없다고 판단합니다. 그래서 출발 직후에는 이미 칠해져 있던 범위를 풀어 주고, 출발하기 전에 조향을 0으로 맞춰 차가 벽 쪽으로 돌지 않게 하는 수정을 하고 있습니다. (전환)
+
+[Sources]
+영상: Isaac Sim 리보틱스 트레일러 장면 탑뷰 (3배속)
+대상 T2 aisle_rack 운반 시간 초과 6건 · trailer 5건: 꺼내기가 끝나고 운반이 시작되면 3 s 뒤 허가 occupied, 막는 칸은 트레일러 벽 · 랙 기둥의 LiDAR 표시 반경 안, 실제 간격(truth 후축) 벽 0.205–0.208 m · 기둥 0.181–0.215 m: lightminn/forklift diag/transport-start-stall docs/validation/2026-10-27-transport-start-stall.md
+수정 방향: 출발 띠 해제(0.03 m) + 출발 전 조향 0: lightminn/forklift feat/escape-presteer docs/plans/2026-10-27-escape-presteer.md (2판, b38048da)
+ws1 test_runs/riibotics/trx_b35d7f53/trx_off_trailer_s1/run/transport.mp4 0–75 s 를 760 × 600 at x 330 으로 잘라 3배속 (운반 추종 시간 초과로 끝난 실행): 영상
+[/Sources]" style="background:#fff">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="10  리보틱스 시연 장면 출발 막힘"><div class="slide-body">
+<h2 class="headline">트레일러에서 팔레트를 꺼낸 직후 벽 옆에서 출발이 막히는 원인을 확인하고 수정 중</h2>
+<div class="stall9 grow">
+<figure class="shot"><video class="media" src="assets/n11_trailer_stall.mp4" poster="assets/n11_trailer_stall_poster.jpg" autoplay loop muted playsinline aria-label="위에서 본 Isaac 트레일러 장면. 지게차가 트레일러 입구로 들어가 팔레트를 꺼낸 뒤, 노란색 운반 경로가 그려져 있는데도 입구에 선 채 움직이지 않음"></video><figcaption>트레일러 입구에서 멈춘 지게차</figcaption></figure>
+<div class="stack stall9r">
+<table class="comparison h7 stallt9"><tr><th>구분</th><th>내용</th></tr><tr><td>상황</td><td>트레일러·좁은 통로에서 팔레트를 꺼낸 직후<br>출발하지 못하고 그 자리에 멈춤</td></tr><tr><td>원인</td><td>벽·기둥에 붙인 장애물 여유 범위가<br>실제 간격(0.18–0.21 m)을 거의 덮음</td></tr><tr><td>수정</td><td>출발 직후에는 이미 표시된 범위를 풀고<br>출발 전에 조향을 0으로 맞춤</td></tr></table>
+<div class="lgd7"><span class="lg"><span class="sw ln" style="background:#e8dc78"></span>나갈 경로</span><span class="lg"><span class="sw" style="background:#33ef63"></span>하역 위치</span></div>
+</div>
+</div>
+</div></x-import>
+</section>
+
+<section data-label="결론과 다음 주 계획" data-screen-label="12" data-duration="55" data-speaker-notes="권장 55초
+
+결론과 다음 주 계획입니다. 이번 주에는 피드백대로 하드웨어를 앞으로 당겨, H743 코어 보드와 Jetson 전원까지 들어간 메인보드의 회로도와 PCB 배치를 마쳤고 엔코더 자석 마운트의 축 끼워맞춤을 확인했습니다. 소프트웨어에서는 미리 만든 지도 위에서 위치를 추정해 오차를 3에서 4센티미터로 줄였고, 콘솔에 대기열과 상태, 경보, 실적 요약을 넣었습니다. 다음 주에는 메인보드를 제작하고, 마운트를 6밀리미터 자석에 맞춰 다시 출력해 모터에 단 뒤 엔코더 신호가 제대로 나오는지 확인하겠습니다. 소프트웨어에서는 앞 장의 출발 막힘 수정을 Isaac에서 확인하겠습니다. 또 지금 방식은 위치를 크게 잃으면 지도 위에서 스스로 다시 찾지 못해서, 다시 찾는 전역 재위치를 만들겠습니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.
 
 [Sources]
 표: 하드웨어 · 소프트웨어 다음 단계
@@ -211,7 +233,7 @@ console/README.md「SLAM 지도」: 조사 에폭(slam_survey.sbatch, live 미�
 전체 escape_plan 대입: 띠 0.03 + 조향 정확히 0 에서 16 실행 중 13 설치(aisle 3/6, trailer 10/10), 둘 중 하나만으로는 0/16; Isaac 비교는 계획 단계: lightminn/forklift feat/escape-presteer docs/plans/2026-10-27-escape-presteer.md (2판, b38048da)
 D7: slam_toolbox 위치 추정에는 전역 재위치가 없다: lightminn/forklift main f60da30a docs/plans/2026-10-26-slam-localization-default.md
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="10  결론과 다음 주 계획"><div class="slide-body">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="11  결론과 다음 주 계획"><div class="slide-body">
 <h2 class="headline">다음 주는 메인보드·마운트를 제작하고 리보틱스 시연 장면 출발 막힘과 재위치를 해결</h2>
 <table class="comparison h7 endt9 grow"><tr><th>구분</th><th>대상</th><th>현재 → 다음 단계</th></tr><tr><td class="lead" rowspan="2">하드웨어</td><td><b>메인보드</b></td><td>회로도와 PCB 배치 완료 → 메인보드 제작</td></tr><tr><td><b>엔코더 마운트</b></td><td>축 구멍 3.25 mm 맞춤 확인 → 외경 6 mm 출력·장착 뒤 신호 확인</td></tr><tr><td class="lead" rowspan="2">소프트웨어</td><td><b>리보틱스 시연 장면</b></td><td>꺼낸 직후 출발 막힘 원인 확인 → 수정안 Isaac 검증</td></tr><tr><td><b>위치 추정</b></td><td>사전 지도 위 오차 3–4 cm → 전역 재위치 추가</td></tr></table>
 </div></x-import>

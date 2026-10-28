@@ -776,3 +776,11 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .caps9 > .shot:nth-child(3) { grid-column:2; grid-row:2; }
 .caps9 .shot figcaption { font-size:17px; }
 .caps9 .shot figcaption b { font-size:19px; }
+.stall9 { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.05fr); gap:28px; min-height:0; align-items:center; }
+.stall9 > .shot { height:100%; min-height:0; }
+.stall9 .shot .media { border:1px solid var(--uos-rule); }
+.stall9r { gap:16px; justify-content:center; }
+.comparison.h7.stallt9 { font-size:21px; }
+.comparison.h7.stallt9 td { padding:16px 12px; vertical-align:middle; white-space:nowrap; }
+.comparison.h7.stallt9 td:first-child { color:var(--uos-blue); font-weight:700; }
+.stall9r .lgd7 { justify-content:flex-start; font-size:19px; }
