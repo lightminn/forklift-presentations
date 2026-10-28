@@ -25,7 +25,7 @@ MCU 코어 보드는 사용자가 준 AliExpress 링크(1005006632336183)를 열
 | `artifacts/cad/motor-shaft-magnet-adapter/` (git 미추적) README · `build_adapter.py` · `shaft3mm/` | 5쪽: 축 3 mm 판 칼라(외경 5, 높이 1.6 = 축 돌출 2.0 − 틈 0.4), 구멍 3.00–3.25 mm 0.05 간격 6종과 맞춤 시험 막대; 사용자 실측(2026-10-28) 3.25 mm 가 맞음, 자석 6 mm 에 맞춰 외경 6.00 mm 로 다시 출력 예정 |
 | `docs/plans/2026-10-26-slam-localization-default.md` 5b · 5d | 6쪽 표 위치 오차 중앙값(1차 확인 L 0.029–0.038 m, R 0.089–0.119 m), SLAM 끊김(2차 확인 R line_m 두 실행 slam_link_failed, 응답 1.149 · 1.096 s), 띠의 1 s 기한; 사용자 결정(2026-10-27)으로 기준 미충족 셋을 받아들인 예외 채택 |
 | `docs/plans/2026-10-27-slam-a-return-start-remeasure.md` (PR #179) | 6쪽 하역 도킹 옆 치우침 최대 0.012 대 0.219 m (seed · 스냅숏 · 목적지 구성이 다른 기술 비교) |
-| `docs/design/2026-10-22-fms-case-survey.md` (PR #87) | 7쪽 비교표 |
+| `docs/design/2026-10-22-fms-case-survey.md` (PR #87) | 7쪽 캡처 설명의 참고 제품, 띠(1대 구성에서 뺀 기능, 아직 없는 금지 구역 · 배터리 표시) |
 | `console/README.md` (PR #90 · #93 · #95) | 7쪽 콘솔 세 기능 |
 | branch `diag/transport-start-stall` `docs/validation/2026-10-27-transport-start-stall.md` | 8쪽 출발 정지 원인, 실제 간격 기둥 0.181–0.215 m · 벽 0.205–0.208 m |
 | branch `feat/escape-presteer` `docs/plans/2026-10-27-escape-presteer.md` 2판 (b38048da) | 8쪽 띠 16번 중 13번 (띠 0.03 + 조향 0, 전체 escape_plan 대입) |
@@ -51,10 +51,6 @@ ws1 `test_runs/live/dk9a_36b9b7de/dk9a_random_m_s0` (잡 12032, 2026-10-28) — 
 |---|---|---|
 | `d02_jetson.jpg` | Wikimedia Commons, File:NVIDIA Jetson Nano Developer Kit (47616885631) (cropped).jpg — SparkFun Electronics (Flickr). 우리가 쓸 Orin Nano 와 모양이 비슷한 다른 모델 | CC BY 2.0 |
 | `d02_truck.jpg` | 5주차 `30_chassis_pallet.jpg` (2026-09-30 실물 사진, EXIF 제거)를 잘라 씀 | 팀 촬영 |
-
-## 8쪽 영상
-
-ws1 `test_runs/riibotics/t2d_1b60df21/t2d_c3_aisle_rack_s4` (T2 aisle_rack, seed 4) — 꺼낸 뒤 운반 추종 시간 초과로 끝난 실행의 `view_quarter.mp4` 55–135 s, 2배속.
 
 ## 화면에 쓰지 않은 사실
 
