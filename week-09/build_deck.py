@@ -242,7 +242,7 @@ PIN_ROWS = [
     ('보조 센서와 표시', 'IMU용 SPI CS·인터럽트 자리, 보드 LED'),
 ]
 add('MCU 보드와 핀 배정', '03  MCU 보드와 핀 배정', 50, f"""
-<h2 class="headline">480 MHz STM32H743 코어 보드를 33.0 mm 간격 2×22 헤더로 장착</h2>
+<h2 class="headline">480 MHz STM32H743에 모터 드라이버 4개와 엔코더 4개, 통신·센서 핀을 모두 배정</h2>
 <div class="hw7 pin9 grow">
 {img('h03_layout_top.jpg', '메인보드 PCB 배치도 앞면. 외곽 치수 114.173 mm와 91.567 mm, 2열 22핀 헤더 두 줄 U2와 U4 사이 간격 33.0 mm 치수선, 빨간 구리면 위 배선', '메인보드 PCB 배치도 앞면', 'shot r3d')}
 {table(['연결 대상', '배정한 신호'], PIN_ROWS, 'comparison h7 pins9')}
