@@ -27,8 +27,6 @@ MCU 코어 보드는 사용자가 준 AliExpress 링크(1005006632336183)를 열
 | `docs/plans/2026-10-27-slam-a-return-start-remeasure.md` (PR #179) | 08 장 하역 도킹 옆 치우침 최대 0.012 대 0.219 m (seed · 스냅숏 · 목적지 구성이 다른 기술 비교) |
 | `docs/design/2026-10-22-fms-case-survey.md` (PR #87) | 09 장 캡처 설명의 참고 제품, 띠(1대 구성에서 뺀 기능, 아직 없는 금지 구역 · 배터리 표시) |
 | `console/README.md` (PR #90 · #93 · #95) | 09 장 콘솔 세 기능 |
-| branch `diag/transport-start-stall` `docs/validation/2026-10-27-transport-start-stall.md` | 10 장 출발 정지 원인, 실제 간격 기둥 0.181–0.215 m · 벽 0.205–0.208 m |
-| branch `feat/escape-presteer` `docs/plans/2026-10-27-escape-presteer.md` 2판 (b38048da) | 10 장 수정 방향(출발 띠 해제 + 출발 전 조향 0) |
 
 ## 08 장 위치 오차 그래프
 
