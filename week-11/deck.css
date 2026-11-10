@@ -889,3 +889,28 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .comparison.h7.flp11 td, .comparison.h7.flp11 th { padding:10px 10px; vertical-align:middle; }
 .comparison.h7.flp11 td:first-child { color:var(--uos-blue); white-space:nowrap; }
 .comparison.h7.flp11 td:last-child { width:24%; white-space:nowrap; }
+/* 11주차 07 기존 연구 방식과 비교 · 08 시험 환경과 계획 (2026-11-11) */
+.cmp11 { display:grid; grid-template-columns:minmax(0,1.42fr) minmax(0,1fr); gap:28px; min-height:0; align-items:center; }
+.cmp11 .stack { gap:6px; justify-content:center; }
+.cmp11 .panel-h { font-size:18px; }
+.comparison.h7.cmpt11 { font-size:18px; line-height:1.35; }
+.comparison.h7.cmpt11 td, .comparison.h7.cmpt11 th { padding:11px 10px; vertical-align:middle; }
+.comparison.h7.cmpt11 td:first-child { color:var(--uos-blue); white-space:nowrap; }
+.comparison.h7.cmpt11 th:nth-child(2), .comparison.h7.cmpt11 td:nth-child(2) { width:34%; }
+.cmp11 .comparison.h7.flres11 td, .cmp11 .comparison.h7.flres11 th { padding:11px 10px; }
+.cite11 { flex-shrink:0; margin:0; font-size:16px; line-height:1.45; color:#44505c; }
+.cite11 b { color:var(--uos-blue); }
+.flenv11 { flex-shrink:0; display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); gap:28px; align-items:center; }
+.flenv11 .stack { gap:6px; justify-content:flex-start; }
+.flenv11 .panel-h { font-size:18px; }
+.flenv11 .flimg11 { height:168px; }
+.comparison.h7.cond11 { font-size:17px; line-height:1.3; }
+.comparison.h7.cond11 td, .comparison.h7.cond11 th { padding:4px 10px; vertical-align:middle; white-space:nowrap; }
+.comparison.h7.cond11 td:first-child { color:var(--uos-blue); }
+/* 07 결과는 막대 그래프 둘, 08 은 그림 셋 + 띠 한 줄 + 계획 표 (사용자 2026-11-11: 내용을 줄이고 그림 자료로) */
+.cmp11 { align-items:start; }
+.res11 .diagram { width:100%; height:auto; }
+.res11 .panel-h .muted { font-size:15px; font-weight:500; margin-left:6px; }
+.note11 { margin:2px 0 0; font-size:17px; color:#44505c; }
+.flimg11.wide11 { flex-shrink:0; height:176px; max-width:1040px; width:100%; margin:0 auto; gap:22px; }
+.phase-flow.env11 { flex-shrink:0; justify-content:center; padding:8px 18px; font-size:19px; gap:14px; }
