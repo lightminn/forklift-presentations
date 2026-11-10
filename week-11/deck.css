@@ -868,3 +868,24 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .comparison.h7.endt11b td:first-child { color:var(--uos-blue); white-space:nowrap; width:16%; }
 .pcb11 > .shot.pcbf { height:auto; max-height:100%; }
 .pcb11 .shot.pcbf .media { border:1px solid var(--uos-rule); }
+/* 11주차 06 · 07 군집 제어 (2026-11-11): 영상 720 x 540 + 표, 결과 표 + 공장 그림 셋 + 계획 표 */
+.fl11 { display:grid; grid-template-columns:minmax(0,1.08fr) minmax(0,1fr); gap:24px; min-height:0; align-items:center; }
+.fl11 > .m7-media { height:100%; }
+.comparison.h7.flt11 { font-size:19px; }
+.comparison.h7.flt11 td { padding:13px 10px; vertical-align:middle; }
+.comparison.h7.flt11 td:first-child { color:var(--uos-blue); white-space:nowrap; }
+.flr11 { flex-shrink:0; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.12fr); gap:28px; align-items:start; }
+.flr11 .stack { gap:6px; justify-content:flex-start; }
+.flr11 .panel-h, .panel-h.pl11 { font-size:18px; }
+.panel-h.pl11 { flex-shrink:0; margin-top:4px; }
+.comparison.h7.flres11 { font-size:19px; }
+.comparison.h7.flres11 td, .comparison.h7.flres11 th { padding:7px 10px; vertical-align:middle; white-space:nowrap; }
+.comparison.h7.flres11 b { color:var(--uos-blue); }
+.flimg11 { display:grid; grid-template-columns:1.4fr 1.01fr 1.78fr; gap:10px; height:150px; }
+.flimg11 > .shot { height:100%; min-height:0; }
+.flimg11 .shot figcaption { font-size:16px; }
+.flimg11 .shot .media { border:1px solid var(--uos-rule); }
+.comparison.h7.flp11 { font-size:18px; line-height:1.35; }
+.comparison.h7.flp11 td, .comparison.h7.flp11 th { padding:10px 10px; vertical-align:middle; }
+.comparison.h7.flp11 td:first-child { color:var(--uos-blue); white-space:nowrap; }
+.comparison.h7.flp11 td:last-child { width:24%; white-space:nowrap; }

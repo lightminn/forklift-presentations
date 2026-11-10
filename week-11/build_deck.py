@@ -7,7 +7,8 @@ prior map from a LiDAR scan, moves three pallets in a row with camera recognitio
 Riibotics trailer scene, and replans where it stands when a direction change goes wrong; the hardware part is the
 truck's power and control system on one slide (user, 2026-11-11: STM32H743 below, Jetson above -- the week 7
 system diagram redrawn for the boards as ordered, without repeating week 9's power-protection slide) and the
-order status. Simulated demos are Isaac renders (user,
+order status; before it, two slides on multi-truck traffic control (user, 2026-11-11: the fleet work and its
+plans go in). Simulated demos are Isaac renders (user,
 2026-10-28). Screen text and narration were written directly (project memory script-md-no-agy).
 
 DRAFT: the Isaac clips are not in assets/ yet. Each one is a labelled placeholder (placeholder()) carrying its
@@ -33,6 +34,8 @@ CUSP_RC = f'{ROBOT} docs/validation/2026-11-02-return-cusp-replan-batch.md'
 TEAM_PCB = '팀 메인보드 자료 (9주차 SOURCES.md: PCB 배치도 앞면, 외곽 114.173 × 91.567 mm)'
 TEAM_EDA = '팀 EasyEDA 프로젝트 Forklift 의 Motor Board 회로도 (온라인 프로젝트 백업 2026-10-27 06:03 판)'
 MCU_LINK = f'{ROBOT} docs/interfaces/2026-10-22-mcu-link-contract.md'
+FLEET = 'lightminn/forklift feat/fleet-five 7d48c6f6'
+FLEET_WT = '로봇 저장소 feat/fleet-five 작업 트리 (미커밋)'
 FW_CORE = f'{ROBOT} docs/design/2026-10-22-mcu-firmware-core.md'
 
 # line colours of the system diagrams: week 7's 12 V / 5 V / signal colours, 19 V added
@@ -82,6 +85,31 @@ def lgd(*items):
     return f'<div class="lgd7">{"".join(out)}</div>'
 
 
+def clip(src, alt):
+    """A bare looping clip for an m7-media box (the box draws the frame and carries the legend strip)."""
+    poster = src.rsplit('.', 1)[0] + '_poster.jpg'
+    pa = f' poster="assets/{poster}"' if (ROOT / 'assets' / poster).exists() else ''
+    return (f'<video class="media" src="assets/{src}"{pa} autoplay loop muted playsinline '
+            f'aria-label="{escape(alt, quote=True)}"></video>')
+
+
+def legend(*items):
+    """Legend strip under a clip, swatches in the clip's own colours: (kind, colour, text),
+    kind line / dots / band / ring / diamond / dot (the week 7 draft's helper)."""
+    out = []
+    for kind, colour, text in items:
+        if kind == 'band':
+            sw = f'<span class="sw band" style="background:{colour}73;border-color:{colour}"></span>'
+        elif kind in ('ring', 'diamond'):
+            sw = f'<span class="sw {kind}" style="border-color:{colour}"></span>'
+        elif kind == 'dots':
+            sw = f'<span class="sw dots" style="color:{colour}"></span>'
+        else:
+            sw = f'<span class="sw {kind}" style="background:{colour}"></span>'
+        out.append(f'<span class="lg">{sw}{text}</span>')
+    return f'<div class="legend">{"".join(out)}</div>'
+
+
 PATHS = (('line', '#8fd0dc', '접근 경로'), ('line', '#e8dc78', '운반 경로'), ('line', '#cdb6dd', '복귀 경로'),
          ('ring', '#33ef63', '하역 위치'))
 
@@ -94,7 +122,7 @@ def table(head, rows, cls='comparison h7'):
 
 # ----------------------------------------------------------------- cover
 add('개발 진행 보고', '11주차\n자율 지게차 개발', 20, '',
-    """안녕하십니까. 11주차 자율 지게차 개발 진행 상황을 발표할 김광민이라고 합니다. 이번 발표는 지게차가 시뮬레이션에서 스스로 해내게 된 일을 중심으로 말씀드리겠습니다. 시작 위치를 스스로 찾는 기능, 카메라 인식과 SLAM을 켠 연속 이송, 리보틱스 트레일러 장면, 그리고 계획대로 되지 않았을 때 다시 계획하는 동작을 Isaac 영상으로 보여 드리고, 지게차의 전력·제어 계통과 하드웨어 발주 현황, 다음 주 계획으로 마치겠습니다. (전환)""",
+    """안녕하십니까. 11주차 자율 지게차 개발 진행 상황을 발표할 김광민이라고 합니다. 이번 발표는 지게차가 시뮬레이션에서 스스로 해내게 된 일을 중심으로 말씀드리겠습니다. 시작 위치를 스스로 찾는 기능, 카메라 인식과 SLAM을 켠 연속 이송, 리보틱스 트레일러 장면, 그리고 계획대로 되지 않았을 때 다시 계획하는 동작을 Isaac 영상으로 보여 드리고, 여러 대를 함께 움직이는 군집 제어, 지게차의 전력·제어 계통과 하드웨어 발주 현황, 다음 주 계획으로 마치겠습니다. (전환)""",
     [(RELOC, '시작 위치 찾기'), (CT, '연속 이송'), (TRAILER, '트레일러 장면')], '진행 보고')
 
 # ----------------------------------------------------------------- 1
@@ -227,7 +255,74 @@ add('막혀도 다시 계획함', '05  막혀도 다시 계획함', 50, f"""
      ('영상 · 그림', 'rc_95e61a74/rc_G_aisle_rack_s11/run/transport.mp4 (md5 6bba6542…) 와 plan_history.json (gdrive ws1-cleanup-20261110-n/n_rc.tar.zst 에서 꺼냄) — Isaac 겹침선은 복귀 경로를 모두 한 색으로 그리므로, 204.7 s 계획(앞 전환점부터)을 주황, 221.1 s 새 계획을 하늘색으로 다시 그림(make_replan.py, 화면 좌표는 Isaac 경로 픽셀에 맞춘 값). 확대 영상은 200–236 s, 219–224 s 는 실제 속도 · 나머지 4배속; 핵심 장면은 218.6 · 221.0 · 221.45 · 223.0 s')],
     '영상: Isaac Sim 탑뷰 확대 (경로 색을 다시 그림), 그림: 장면 전체와 핵심 장면 네 개')
 
-# ----------------------------------------------------------------- 6 power and control system (user, 2026-11-11)
+# ----------------------------------------------------------------- 6 · 7 fleet traffic (user, 2026-11-11)
+# Colours of the fleet clip's overlay (tools/compose_world_video.py on feat/fleet-five): truck 1 stands for
+# "each truck's colour"; people are drawn as pink dots; a held truck gets an orange ring.
+F_TRUCK, F_PERSON, F_WAIT = '#3c8ce6', '#ff508c', '#ffb928'
+FLEET_ROWS = [
+    ('필요한 이유', '최소 회전 반경 3.45 m로 좁은 통로에서 마주치면 비켜설 수 없어, 만나기 전에 순서 결정'),
+    ('① 앞길 예약', '중앙 서버가 허가한 구간 안에서만 주행'),
+    ('② 교차마다 줄 서기', '경로가 만나는 곳마다 통과 순서와 시각 지정, 늦으면 줄을 다시 섬'),
+    ('③ 전체 순서 재계산', '5초마다 모든 교차의 순서를 함께 다시 계산해 긴 대기 축소'),
+    ('영상의 운반', '지게차 8대 · 사람 8명 · 1시간: 작업 51건, 지게차끼리 접촉 0, 1분 넘는 대기 0'),
+]
+add('군집 제어', '06  군집 제어: 여러 대 교통 관리', 80, f"""
+<h2 class="headline">경로가 만나는 곳마다 통과 순서를 정해 여러 대가 접촉·교착 없이 운반</h2>
+<div class="fl11 grow">
+<div class="m7-media">{clip('f06_fleet8.mp4', '무작위로 만든 랙 창고를 위에서 본 지게차 8대와 사람 8명. 지게차마다 색 띠로 앞길을 예약하고, 경로가 만나는 곳의 마름모가 먼저 지나갈 지게차를 표시하며, 점선은 앞으로 갈 계획 경로')}
+{legend(('band', F_TRUCK, '예약 구간'), ('diamond', F_TRUCK, '교차 지점'), ('dots', F_TRUCK, '계획 경로'), ('ring', F_WAIT, '대기'), ('dot', F_PERSON, '사람'))}</div>
+{table(['구분', '내용'], FLEET_ROWS, 'comparison h7 flt11')}
+</div>
+<div class="takeaway">시뮬레이션 조건: 위치는 시뮬레이터 정답 사용, 공장은 생성기가 만든 가상 배치 (Isaac Sim, 60배속)</div>
+""",
+    """다음은 지게차 여러 대를 함께 움직이는 군집 제어입니다. 지금까지는 한 대가 팔레트를 옮기는 것을 보여 드렸는데, 현장에서는 여러 대가 같은 통로를 씁니다. 우리 지게차는 최소 회전 반경이 3.45미터라 좁은 통로에서 마주치면 돌아서거나 비켜설 수 없습니다. 그래서 마주친 뒤에 피하는 것이 아니라, 중앙 서버가 마주치기 전에 순서를 정해 줍니다. 규칙은 세 가지입니다. 첫째, 지게차는 서버가 허가한 앞길 구간 안에서만 달립니다. 영상의 색 띠가 그 구간입니다. 둘째, 경로가 서로 만나는 곳마다 줄을 세워 누가 먼저, 언제 지나갈지를 정하고, 제시간에 오지 못한 지게차는 줄을 다시 섭니다. 마름모가 그런 교차 지점이고, 색이 먼저 지나갈 지게차입니다. 셋째, 5초마다 모든 교차 지점의 순서를 한꺼번에 다시 계산해 긴 대기를 줄입니다. 영상은 무작위로 만든 랙 창고에서 지게차 8대가 사람 8명 사이로 1시간 동안 운반하는 Isaac 시뮬레이션을 60배속으로 본 것입니다. 작업 51건을 마치는 동안 지게차끼리 닿은 적이 없었고, 1분 넘게 기다린 경우도 없었습니다. 다만 위치는 시뮬레이터의 정답 위치를 썼고, 공장은 생성기가 만든 가상 배치입니다. (전환)""",
+    [(f'{FLEET} docs/plans/2026-10-08-fleet-five-forklifts.md', '실측 차체 계획 곡률 0.29 1/m (최소 회전 반경 3.45 m), NVIDIA 창고 랙 통로 폭 2.85–3.74 m, 교통 관리 구간 점유(여유 0.3 m)'),
+     (f'{FLEET} docs/plans/2026-10-16-fleet-crossing-queues.md', '교차 큐: 경로 구간이 닿는 곳마다 줄, 창을 놓친 트럭은 새 도착 예정 순서로 다시 줄 섬; 전역 최적화: 열린 큐들의 순서를 한 번에 푸는 혼합 정수 계획, 주기 기본 5 s'),
+     (f'{FLEET_WT} docs/plans/2026-10-25-fleet-dynamic-windows.md', 'Isaac 3,600 s 실행 dwi_rack700_3600 (ws1 11389): 랙 창고 seed 700 (82 × 61 m) · 트럭 8 · 사람 8 · 고장 포함, 교차 큐 + 전역 순서(속도 맞춤과 순서 늦게 고정을 켠 판); 작업 51, 60 s 넘는 대기 0, 최장 대기 34 s, 서로 기다림 0, 트럭 접촉 0; 실행 판정 success 는 false — 운반 중 팔레트 1개가 포크에서 떨어져 다른 트럭이 닿음, 움직이는 트럭-사람 접촉 8 표본(0.7 s). 이 두 가지는 07 장 계획 표의 물리 · 실차 줄에 적음'),
+     ('영상', '로봇 저장소 artifacts/20261026_dynamic_windows/dwi_rack700_3600_x60.mp4 (md5 8f952243…, 1080p 60 s = 시뮬 3,600 s) 의 지도 칸만 crop=992:744:224:101 → 540 px, crf 29; 범례 색은 tools/compose_world_video.py 의 색')],
+    '영상: Isaac Sim 합성 장면 탑뷰 (60배속), 지도 칸만 자름')
+
+RES_ROWS = [
+    ('처리한 작업', '3,086건', '<b>3,150건 (+2.1 %)</b>'),
+    ('1분 넘는 대기', '288회', '<b>137회 (−52 %)</b>'),
+    ('가장 긴 대기', '432초', '604초'),
+    ('지게차 겹침 · 교착', '0', '0'),
+]
+PLAN_ROWS = [
+    ('큰 공장 (20대)', '순서 계산이 5초 주기를 넘고, 동시 경로 변경 뒤 순서가 잠겨 멈춘 사례 2건', '공장 36곳 재평가 계산 중'),
+    ('계산 시간', '계산의 64 %가 경로 계획 → 계획기 수정으로 시험 4곳 계획 실패 99 → 0건, 계산 약 1/5', '전체 재실행 필요'),
+    ('계산 분담', '경로 계획을 지게차에서 하면 서버 계산 61–69 % 감소, 계산기가 느리면 작업 4–12 % 감소', '보류 (Jetson 속도 미측정)'),
+    ('물리 · 실차', 'Isaac에서 운반 중 팔레트 낙하와 사람 접촉 1회, 위치는 시뮬레이터 정답', '원인 조사, 실차 연결 전'),
+]
+add('군집 제어 결과와 계획', '07  군집 제어 결과와 계획', 90, f"""
+<h2 class="headline">새 공장 119곳에서 기존 연구 방식보다 작업 +2.1 %, 1분 넘는 대기 절반 이하</h2>
+<div class="flr11">
+<div class="stack">
+<p class="panel-h">결과: 새 공장 119곳, 30분씩 연속 운반 (CPU 시뮬레이션)</p>
+{table(['항목', '기존 연구 방식', '우리 방식'], RES_ROWS, 'comparison h7 flres11')}
+</div>
+<div class="stack">
+<p class="panel-h">시험: 무작위 공장 3종 × 지게차 5–20대 × 상황 6가지</p>
+<div class="flimg11">
+{img('f07_rack.jpg', '랙이 늘어선 창고를 위에서 본 그림. 지게차 여덟 대의 예약 구간과 계획 경로', '랙 창고')}
+{img('f07_shop.jpg', '기계가 흩어진 공정 공장을 위에서 본 그림', '공정 공장')}
+{img('f07_multi.jpg', '두 홀을 문으로 이은 복합동을 위에서 본 그림', '복합동')}
+</div>
+</div>
+</div>
+<p class="panel-h pl11">지금까지 확인한 것과 계획</p>
+{table(['구분', '확인한 것', '계획 · 상태'], PLAN_ROWS, 'comparison h7 flp11')}
+""",
+    """군집 제어의 시험 결과와 지금까지 세운 계획입니다. 시험은 랙 창고, 공정 공장, 여러 홀을 이은 복합동 세 가지를 무작위로 만들고, 지게차를 5대에서 20대까지 바꿔 가며, 고장과 쏟아진 짐, 통신 지연, 위치 오차, 돌아다니는 사람 같은 상황을 넣어 30분씩 돌렸습니다. 처음 써 보는 공장 119곳에서, 기존 연구에 나온 교통 조정 방식을 같은 조건으로 구현한 것과 견주었습니다. 우리 방식은 작업을 2.1퍼센트 더 처리했고, 1분 넘게 기다린 횟수는 288번에서 137번으로 절반 아래였습니다. 두 방식 모두 지게차끼리 겹치거나 서로 막혀 멈춘 적은 없었습니다. 다만 가장 길었던 대기 하나는 우리 쪽이 더 길었습니다. 아래는 지금까지 확인한 것과 계획입니다. 첫째, 지게차 20대가 다니는 더 큰 공장에서는 순서 계산이 5초 주기를 넘고, 여러 대가 동시에 경로를 바꾼 뒤 순서가 잠겨 멈춘 경우가 있었습니다. 그래서 큰 공장 36곳에서 같은 비교를 다시 계산하고 있습니다. 둘째, 계산의 대부분이 실패하는 경로 계획에 쓰이고 있어서 계획기를 고쳤고, 시험한 네 곳에서 계획 실패가 없어지고 계산 시간이 5분의 1로 줄었습니다. 셋째, 경로 계획을 각 지게차에서 하고 서버는 승인과 조정만 하는 구조를 따져 봤는데, 서버 계산은 60퍼센트 넘게 줄지만 지게차 계산기가 느리면 작업량이 줄어서 보류했습니다. 실제 Jetson의 계산 속도는 아직 재지 않았습니다. 넷째, 물리 시뮬레이션에서는 운반 중 팔레트가 포크에서 떨어지는 경우가 있어 원인을 찾고 있고, 실차의 위치 추정이나 운용 콘솔과는 아직 연결하지 않았습니다. (전환)""",
+    [(f'{FLEET_WT} docs/plans/2026-11-01-fleet-beat-l2.md', '새 seed 평가(2026-11-11 00:48 끝): seed 900–904 120 칸에서 창고 생성 실패 1 칸을 뺀 119 칸, 칸마다 1,800 s. 채택 판(교차 큐 + 전역 순서, 속도 맞춤 없음) 작업 3,150 · 60 s 넘는 대기 137 · 300 s 넘는 대기 2 · 최장 604 s; 기존 연구의 임계 구간 조정 방식을 같은 안전 층에 옮겨 구현한 판 3,086 · 288 · 2 · 432 s; 모든 판 gridlock 0 · 60 s 넘는 서로 기다림 0 · 트럭 겹침 0; 칸 짝 bootstrap 작업 +2.1 % [+0.7, +3.5], 60 s 넘는 대기 −52.4 % [−61.1, −42.8]. 큰 창고 36 칸 평가(트럭 20, 배율 1.5)는 2026-11-10 16:56 제출해 도는 중. 계산 나눔: 경로 계획 64 % · 교통 관리자 35 %, 실패한 계획이 작업 계획 시간의 87 %. 계획기 고침 시험(같은 판, 4 칸): 작업 계획 실패 99 → 0, 칸 계산 합 6,680 → 1,227 s; 고친 코드의 결과는 이전 결과와 섞어 비교할 수 없어 모든 판을 다시 돌려야 함'),
+     (f'{FLEET} docs/plans/2026-10-17-fleet-large-random-chained.md', '큰 창고(--world-scale 1.5, 넓이 2.25 배, 트럭 20): 순서 풀이 한 번 평균 shop 1.2 · rack 8.8 · multi 27.6 s 로 rack · multi 에서 주기 5 s 보다 김; 순서가 잠긴 뒤 무너진 2 칸(multi_802_C5_20 gridlock · 작업 0, multi_805_C5_20 작업 4)'),
+     (f'{FLEET_WT} docs/plans/2026-10-31-fleet-local-planning.md', '경로 계획을 트럭에서 · 서버는 승인과 조정: 서버 계산 61–69 % 감소(서버 4 코어 대비), 작업은 트럭 코어가 같은 속도면 −0.8 % [−2.4, +0.7], 2 배 느리면 −4.4 %, 4 배 느리면 −11.6 %; 같은 속도 · 4 배 느린 판은 한 칸씩 판정 실패; 실제 트럭 계산기(예: Jetson) 속도는 재지 않음; 채택하지 않음'),
+     (f'{FLEET} docs/plans/2026-10-09-fleet-random-worlds.md', '공장 구조 3 종(랙 · 공정 · 복합동)과 상황 행렬: 기본(트럭 5 · 10 · 20), 장애(고장 · 통로 막힘), 통신(지연 0.5 s · 손실 20 %), 위치 오차(최대 0.17 m), 보행자 10 명, 전부; 상황별 트럭 10 대'),
+     (f'{FLEET_WT} docs/plans/2026-10-25-fleet-dynamic-windows.md', 'Isaac 3,600 s 실행: 운반 중 팔레트 낙하 1 건(원인 미정), 움직이는 트럭-사람 접촉 8 표본(0.7 s)'),
+     ('그림', '7주차 초안(발표하지 않음, 이 저장소 99fc8b1)의 assets/73_rack · 73_shop · 73_multi.jpg — seed 600 배치의 조감 프레임(교차 시간 창 판 실행), 공장 구조 예시로만 씀')],
+    '표: 새 seed 평가 119 칸 합계와 계획 문서의 확인 사항, 그림: 공장 구조 3종 예시')
+
+# ----------------------------------------------------------------- 8 power and control system (user, 2026-11-11)
 def _markers(prefix, *colours):
     return '<defs>' + ''.join(
         f'<marker id="{prefix}{c[1:]}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">'
@@ -319,7 +414,7 @@ def system_diagram():
             f'<g font-family="var(--uos-font)">{"".join(p)}</g></svg>')
 
 
-add('전력·제어 계통', '06  전력·제어 계통', 85, f"""
+add('전력·제어 계통', '08  전력·제어 계통', 85, f"""
 <h2 class="headline">전원은 12 V 배터리 하나, 제어는 Jetson과 STM32H743 두 층 구성</h2>
 <div class="chart7 sys7 grow">
 {system_diagram()}
@@ -339,14 +434,14 @@ add('전력·제어 계통', '06  전력·제어 계통', 85, f"""
      ('사용자 (2026-11-11)', '전력 · 제어 계통을 11주차에 추가, 하위 제어 MCU 는 STM32H743, 상위 제어기는 Jetson; 9주차 발표와 겹치지 않게')],
     '그림: 7주차 전원 · 제어 계통도를 발주한 보드 기준으로 다시 그림')
 
-# ----------------------------------------------------------------- 7
+# ----------------------------------------------------------------- 9
 HW_ROWS = [
     ('메인보드', 'STM32H743 코어 보드 장착, 모터 드라이버 4개, 12 V · 5 V · Jetson 19 V 전원', '114.2 × 91.6'),
     ('바퀴 엔코더 (MT6701)', '뒤 바퀴 좌우의 회전 측정', '22.8 × 10.4'),
     ('절대 엔코더 (KTH7801)', '조향 · 승강 각도 측정', '22.8 × 10.4'),
     ('STDS 변환 보드', '절대 엔코더의 SPI 신호를 차동(LVDS)으로 바꿔 메인보드까지 전송', '32.6 × 18.4'),
 ]
-add('부품·PCB 발주 완료', '07  부품·PCB 발주 완료', 45, f"""
+add('부품·PCB 발주 완료', '09  부품·PCB 발주 완료', 45, f"""
 <h2 class="headline">9주차에 설계한 메인보드와 엔코더 보드 등 4종의 PCB · 부품 발주 완료</h2>
 <div class="hw11b grow">
 <div class="pcb11">
@@ -367,14 +462,14 @@ add('부품·PCB 발주 완료', '07  부품·PCB 발주 완료', 45, f"""
      ('사용자 (2026-11-10)', '9주차에 설계한 보드 4종 모두 발주, 수량은 적지 않음; PCB · 부품 11월 20일 발송 예정')],
     '그림: 팀 메인보드 3D 렌더와 PCB 배치도 앞면 (9주차와 같은 그림)')
 
-# ----------------------------------------------------------------- 8
+# ----------------------------------------------------------------- 10
 END_ROWS = [
     ('펌웨어', '보드와 무관하게 짜 둔 통신 코어(mcu-link)를 H743 코어 보드에 올려 PC와 명령 · 상태를 주고받는지 확인, 모터 드라이버(DRV8244) · 엔코더 입력 코드 준비'),
     ('보드 도착 뒤', '조립 → 전원 투입 점검 → 모터 · 엔코더 연결 확인'),
     ('리보틱스 장면', '남은 장면(좁은 통로 rack 에서 꺼내 다른 칸에 넣기, 컨베이어 사이 이송)을 Isaac 에서 진행'),
     ('연속 이송', '랜덤 배치의 남은 실패(두 번째 팔레트 앞 삽입 직전 재관측 정지) 원인 정리'),
 ]
-add('다음 주 계획', '08  다음 주 계획', 45, f"""
+add('다음 주 계획', '10  다음 주 계획', 45, f"""
 <h2 class="headline">보드가 오기 전에 H743 코어 보드로 펌웨어를 먼저 올리고 리보틱스 남은 장면 진행</h2>
 {table(['구분', '할 일'], END_ROWS, 'comparison h7 endt11b')}
 """,
@@ -387,16 +482,16 @@ add('다음 주 계획', '08  다음 주 계획', 45, f"""
 
 
 TITLE = '11주차 자율 지게차 개발'
-TOTAL = 465
+TOTAL = 635
 
 
 def build():
-    assert len(slides) == 9, len(slides)
+    assert len(slides) == 11, len(slides)
     assert sum(s['seconds'] for s in slides) == TOTAL, sum(s['seconds'] for s in slides)
     sections = []
     script = [f'# {TITLE} · 발표 원고', '',
               f'{len(slides)}장 · 시간 배분 합계 {TOTAL//60}분 {TOTAL%60}초. 쪽별 배정 시간은 발표 연습 후 조정한다.', '',
-              '기준일: 2026-11-10 (초안), 전력 · 제어 계통 장 추가 2026-11-11. 시뮬레이션 결과는 모두 Isaac 값이다(SOURCES.md). '
+              '기준일: 2026-11-10 (초안), 군집 제어 두 장과 전력 · 제어 계통 장 추가 2026-11-11. 한 대 주행 결과는 모두 Isaac 값이고, 군집 제어 수치는 CPU 시뮬레이션(영상만 Isaac)이며 위치는 시뮬레이터 정답이다(SOURCES.md). '
               '하드웨어는 발주까지이고 PCB·부품은 11월 20일 발송 예정이다. 전력 · 제어 계통은 설계 내용이고 실제 보드에서 확인한 값이 아니다. '
               '원고는 발표자 문체(합니다체)로 썼고, (전환)은 다음 쪽으로 넘기는 자리다.', '']
     elapsed = 0
