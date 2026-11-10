@@ -1,10 +1,11 @@
 # 11주차 발표자료 초안 (수업 주간 발표)
 
-11주차 수업 발표 초안(2026-11-10, 10주차 발표 없음). 9주차를 복사해(`tools/new_week.py 11`) 새로 썼다. 구성은 사용자 승인 개요: 이번 주에 달라진 것(썸네일 셋) → 시작 위치를 스스로 찾음 → 인식·SLAM 켠 연속 이송 → 리보틱스 트레일러 장면 완주 → 막혀도 다시 계획함 → 부품·PCB 발주 완료 → 다음 주. 표지 + 7장 · 380초. 상태 `published`. 출처는 [SOURCES.md](SOURCES.md), 확인 기록은 [VALIDATION.md](VALIDATION.md).
+11주차 수업 발표 초안(2026-11-10, 10주차 발표 없음). 9주차를 복사해(`tools/new_week.py 11`) 새로 썼다. 구성은 사용자 승인 개요: 이번 주에 달라진 것(썸네일 셋) → 시작 위치를 스스로 찾음 → 인식·SLAM 켠 연속 이송 → 리보틱스 트레일러 장면 완주 → 막혀도 다시 계획함 → 전력·제어 계통(2026-11-11 사용자 요청으로 추가) → 부품·PCB 발주 완료 → 다음 주. 표지 + 8장 · 465초. 상태 `published`. 출처는 [SOURCES.md](SOURCES.md), 확인 기록은 [VALIDATION.md](VALIDATION.md).
 
 - `build_deck.py`: 본문 · 원고 · 출처. 화면 문구와 원고는 직접 썼다(프로젝트 메모리 script-md-no-agy). 아직 없는 Isaac 영상은 `placeholder()` 상자(주황 점선, "영상 자리")로 두었다. 영상을 자르면 `placeholder(...)` 를 `video(...)` 로 바꾸고 1쪽 `thumb()` 도 포스터 그림으로 바꾼다.
 - `assets/t04_trailer.mp4` · `t05_replan.mp4`(+ `_poster.jpg`, `t04_trailer_thumb.jpg`): 보관본에서 꺼낸 Isaac 탑뷰(1280 × 720, 60 fps)를 로컬 ffmpeg 로 잘라 다시 인코딩했다. 트레일러는 `rx_6e6d8e1c/rx_B_trailer_s0/run/transport.mp4`(md5 be3f7bb0…) 전체를 `crop=520:640:420:0,setpts=PTS/4,fps=30,scale=-2:540 -crf 27`(26.8 s), 통로 재계획은 `rc_95e61a74/rc_G_aisle_rack_s11/run/transport.mp4`(md5 6bba6542…) 의 198–242 s(복귀 재계획 221 s)를 `crop=720:420:560:170,setpts=PTS/3,…`(14.7 s). 포스터는 18 s · 8 s 프레임, 1쪽 썸네일은 트레일러 72 s 프레임을 `crop=1060:603:220:0` 으로 가로로 자름.
 - `assets/h03_layout_top.jpg`: 9주차 자산 그대로(팀 메인보드 PCB 배치도 앞면).
+- 06 장 계통도: 그림 파일이 아니라 `build_deck.py` 의 `system_diagram()` 이 그리는 SVG 다. 7주차 01 장 「전원과 제어 구성」 계통도의 문법(전압별 색, 점선 = 측정값)을 따랐고, MCU 는 STM32H743, 상위 제어기는 Jetson 으로 바꿔 발주한 보드 기준으로 다시 그렸다. 9주차 04 장(전원 경로와 보호 회로)과 겹치지 않게 전원은 아래 띠에 세 갈래 분배만 두고, 상자 위 배지로 어느 전압을 받는지 표시했다. 근거는 SOURCES.md 「06 장 전력 · 제어 계통」.
 
 ## 영상 (모두 넣음)
 
