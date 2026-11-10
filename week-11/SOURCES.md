@@ -23,7 +23,8 @@
 ## 사용자 · 총괄 전달
 
 - 2026-11-10 승인 개요(쪽 구성, HW 는 "부품·PCB 발주 완료"만).
-- 2026-11-10: 05 장은 넣는다, 06 장은 "PCB·부품 발주 완료"와 "11월 20일 발송 예정"(도착일 아님)만 둔다(목록 · 수량 없음).
+- 2026-11-10: 05 장은 넣는다, 06 장 일정은 "11월 20일 발송 예정"(도착일 아님).
+- 2026-11-10 사용자 요청(게시 뒤): 06 장은 9주차에 설계한 보드 4종을 모두 발주(수량은 적지 않음) — 3D 렌더 · PCB 배치도와 보드별 하는 일 · 크기 표; 07 장은 보드가 다음 발표 전에 오지 않으므로 코어 보드로 펌웨어 먼저; 05 장은 재계획이 어디에서 어떻게 작동하는지 보이게.
 - 2026-11-10 총괄: 02 장 시연 렌더는 F1 차단을 개발 설정으로 끈 실행(`F1_AUTONOMY=allow`, 시뮬 개발 실행 한정)이다. 화면 문구 "시작 위치를 스스로 찾고 출발"은 그대로 둔다. 스캔 겹침은 새 합성 없이 콘솔 화면 녹화(지도 위 LiDAR 점)로 대신하고, 후보 화면은 다시 찍는다.
 
 ## 영상
@@ -31,7 +32,7 @@
 | 파일 | 원본 |
 |---|---|
 | `t04_trailer.mp4` | ws1 riib 배치 `rx_6e6d8e1c` 의 `rx_B_trailer_s0`(완주) `transport.mp4`, 보관본 `gdrive:forklift-archive/ws1-cleanup-20261031-a/t_mp4.tar.zst` 에서 꺼냄(md5 be3f7bb08a7826c04490d87581132191), 4배속 |
-| `t05_replan.mp4` | ws1 riib 배치 `rc_95e61a74` 의 `rc_G_aisle_rack_s11`(완주, 운반 재계획 124 s · 복귀 재계획 221 s) `transport.mp4`, 보관본 `gdrive:forklift-archive/ws1-cleanup-20261110-n/n_rc.tar.zst` 에서 꺼냄(md5 6bba6542ebf3b1039c3659f54de93f8a), 198–242 s 3배속 |
+| `t05_replan.mp4` · `t05_overview.jpg` · `t05_key1–4.jpg` | ws1 riib 배치 `rc_95e61a74` 의 `rc_G_aisle_rack_s11`(완주; 복귀 cusp 대기 220.82 s, 위치 오차 0.020 m · 방향 오차 0.099 rad; 재계획 221.11 s, 계획 0.57 s) `transport.mp4`(md5 6bba6542ebf3b1039c3659f54de93f8a)와 `plan_history.json` · `result.json`, 보관본 `gdrive:forklift-archive/ws1-cleanup-20261110-n/n_rc.tar.zst` 에서 꺼냄. 기존 경로(204.7 s 계획, 주황)와 새 경로(221.1 s 계획, 하늘색)는 `make_replan.py` 가 다시 그린 선이다 |
 | `r02_reloc.mp4` · `r02_console.mp4` | ws1 렌더 잡 17491 `d11_reloc_auto`: B-P2d seed 5 시작 val4_008 에서 사람 없이 위치 확정 뒤 P-1:D-1 done(시뮬 247 s). F1 차단을 개발 설정으로 끈 실행(`F1_AUTONOMY=allow`). 원본 md5 c903495b… · de4b0265… |
 | `r02_candidates.png` | ws1 잡 17526 `d11_reloc_pick2`: val4_077(B-P2d 에서 운용자 요청), 후보 4개 화면(md5 266ff57d…) |
 | `t03_queue.mp4` | ws1 잡 17491 `d11_queue_line`: line_m 대기열 세 임무 모두 done(시뮬 466 s), 원본 md5 43a5a03e… |
@@ -40,3 +41,14 @@
 
 - 03 장 8주차 수치는 riib 장면(line_1–3 · random_1–3)의 팔레트 하나 임무이고, 이번 수치는 line_m · random_m 세 임무 세션이다. 단위가 달라 표에 "1개씩" · "3개 연속"으로 나눠 적었다.
 - 02 장의 시작 위치 찾기 검증(84곳)은 확정 뒤 10 s 정지까지이고, 출발 장면은 따로 찍는 시연 렌더다.
+
+## 06 · 07 장 (2026-11-10 사용자 요청 수정)
+
+| 자료 | 쓴 곳 |
+|---|---|
+| `week-09/build_deck.py` 02–05 장 | 06 장 표: 메인보드 구성(H743 코어 보드, DRV8244 4채널, 12 V · 5 V · Jetson 19 V 전원), 보드 크기(메인보드 114.2 × 91.6, MT6701 · KTH7801 22.8 × 10.4, STDS 32.6 × 18.4 mm) |
+| `week-07/build_deck.py` | 06 장: STDS 보드가 KTH7801 의 SPI 를 LVDS 로 메인보드까지 전송 |
+| 로봇 저장소 `docs/references/team-hardware/2026-10-28/` (로컬 전용) | 06 장 그림의 원본(3D 렌더 · PCB 배치도), 보드 4종 |
+| 로봇 저장소 PR #84 | 07 장 펌웨어: 보드 무관 C 코어 · mcu-link/1, 보드 HAL · 툴체인은 시작 전 |
+| `week-08/build_deck.py` 06 장 | 07 장: 남은 리보틱스 장면(① 좁은 통로 rack, ② 컨베이어) |
+| `docs/validation/2026-11-06-ct-status-survey.md` | 07 장: 랜덤 배치 남은 실패(두 번째 팔레트 앞 근접 캡처 후보 없음) |
