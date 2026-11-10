@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>11주차 자율 지게차 개발</title>
+<link rel="icon" href="data:,">
+<script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
+<body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>11주차 자율 지게차 개발</title>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=1e487ccb3c1d"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
+<section class="title-section" data-label="개발 진행 보고" data-screen-label="01" data-duration="20" data-speaker-notes="권장 20초
+
+안녕하십니까. 11주차 자율 지게차 개발 진행 상황을 발표할 김광민이라고 합니다. 이번 발표는 지게차가 시뮬레이션에서 스스로 해내게 된 일을 중심으로 말씀드리겠습니다. 시작 위치를 스스로 찾는 기능, 카메라 인식과 SLAM을 켠 연속 이송, 리보틱스 트레일러 장면, 그리고 계획대로 되지 않았을 때 다시 계획하는 동작을 Isaac 영상으로 보여 드리고, 하드웨어 발주 현황과 다음 주 계획으로 마치겠습니다. (전환)
+
+[Sources]
+진행 보고
+시작 위치 찾기: lightminn/forklift main bcb21c87 docs/validation/2026-10-29-b-p2d-start-relocalization.md
+연속 이송: lightminn/forklift main bcb21c87 docs/validation/2026-11-06-ct-status-survey.md
+트레일러 장면: lightminn/forklift main bcb21c87 docs/validation/2026-10-31-riib-default-batch2.md (PR #237)
+[/Sources]" style="background:#fff">
+<x-import component-from-global-scope="UOSSlideDS.TitleSlide" hint-size="100%,100%" title="11주차
+자율 지게차 개발" subtitle="팔레트 핸들링 경로 생성 및 제어"></x-import><img class="partner-mark" src="assets/riibotics-logo.png" alt="Riibotics">
+</section>
+
+<section data-label="이번 주에 달라진 것" data-screen-label="02" data-duration="40" data-speaker-notes="권장 40초
+
+이번 주에 달라진 것을 먼저 한 장으로 정리했습니다. 첫째, 지게차를 지도 위 아무 곳에 놓아도 LiDAR로 주변을 보고 미리 만든 지도에서 자기 위치를 스스로 찾습니다. 둘째, 카메라 인식과 SLAM을 모두 켠 채로 팔레트 세 개를 사람 손 없이 이어서 옮깁니다. 셋째, 8주차에 운반 중 멈췄던 리보틱스 트레일러 장면을 꺼내기부터 하역까지 끝까지 마칩니다. 하나씩 영상으로 보여 드리겠습니다. (전환)
+
+[Sources]
+그림: 뒤 장 영상의 대표 프레임 (초안: 자리 표시)
+4절 판정: lightminn/forklift main bcb21c87 docs/validation/2026-10-29-b-p2d-start-relocalization.md
+요약 2: lightminn/forklift main bcb21c87 docs/validation/2026-11-06-ct-status-survey.md
+① 면제 규칙 2: lightminn/forklift main bcb21c87 docs/validation/2026-10-31-riib-default-batch2.md (PR #237)
+[/Sources]" style="background:#fff">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="01  이번 주에 달라진 것"><div class="slide-body">
+<h2 class="headline">시작 위치 찾기부터 연속 이송, 트레일러 장면까지 시뮬레이션에서 스스로 수행</h2>
+<div class="thumbs11 grow">
+<figure class="shot th11"><img class="media" src="assets/r02_reloc_thumb.jpg" alt="시작 위치 찾기 영상의 한 장면"><figcaption><b>시작 위치 찾기</b><br>아무 곳에 놓아도 사전 지도에서 스스로 위치를 찾음</figcaption></figure><figure class="shot th11"><img class="media" src="assets/t03_queue_poster.jpg" alt="연속 이송 영상의 한 장면"><figcaption><b>연속 이송</b><br>팔레트 3개를 사람 손 없이 이어서 옮김</figcaption></figure><figure class="shot th11"><img class="media" src="assets/t04_trailer_thumb.jpg" alt="트레일러 장면 영상의 한 장면"><figcaption><b>트레일러 장면</b><br>벽으로 막힌 트레일러에서 꺼내 하역까지 완주</figcaption></figure>
+</div>
+</div></x-import>
+</section>
+
+<section data-label="시작 위치를 스스로 찾음" data-screen-label="03" data-duration="70" data-speaker-notes="권장 70초
+
+첫 번째는 시작 위치를 스스로 찾는 기능입니다. 지금까지는 지게차를 정해진 출발점에 두고 그 위치를 알려 준 뒤 시작했습니다. 이제는 지게차를 지도 위 아무 곳에 놓아도, LiDAR로 본 주변 모양을 미리 만든 지도와 맞춰 보고 자기 위치를 스스로 정한 다음 출발합니다. 왼쪽은 Isaac에서 위에서 본 장면이고, 오른쪽은 같은 순간의 콘솔 화면입니다. 콘솔 지도 위의 빨간 점이 LiDAR가 본 주변인데, 위치를 찾는 순간 이 점들이 지도의 벽과 선반에 겹치고 지게차가 팔레트를 향해 출발합니다. 같은 홀에서 서로 3미터 이상 떨어진 84곳에 지게차를 놓고 시험했고, 그중 68곳, 81퍼센트에서 사람 도움 없이 위치를 정했습니다. 틀린 위치를 맞다고 믿고 출발한 경우는 한 번도 없었고, 위치를 정한 시점의 오차는 중앙값 2센티미터였습니다. 나머지 16곳은 똑같은 선반이 반복되는 구역이라 후보가 여러 개 나온 경우인데, 이때는 아래 그림처럼 콘솔에 후보를 띄우고 운용자가 하나를 고르게 했습니다. (전환)
+
+[Sources]
+영상: Isaac Sim 탑뷰 (8배속)와 운용 콘솔 녹화 (같은 배속), 그림: 후보 선택 화면 (val4_077 렌더)
+3절 검증 세계(공장 배치 seed 5, 지도 3edf24b0), 4절 판정: 유효 84(시작 93 중 무효 9), 성공 68/84 = 81.0 %, 틀림 · 부정확 0/0 (시작 68), 운용자 요청 16, 시작 시점 위치 오차 중앙값 2.0 cm · p95 4.3 cm, 실패 16곳 모두 홀 남쪽 반복 선반 구역; 시작 간격 3 m: lightminn/forklift main bcb21c87 docs/validation/2026-10-29-b-p2d-start-relocalization.md
+후보 표시 · 두 번 눌러 고르기 화면 (B-P2c 첫 세션, val3_000, 후보 4개; 후보 버튼이 지도 위에 겹치던 첫 판 화면): lightminn/forklift main bcb21c87 docs/validation/2026-10-29-b-p2c-console-isaac.md (assets/b-p2c/isaac_awaiting_pick.png)
+시연 렌더는 F1 차단을 개발 설정으로 끈 실행(F1_AUTONOMY=allow, 총괄 2026-11-10 — 시뮬 개발 실행 한정); ws1 test_runs/live/deck11 (README.md 영상 목록): 영상
+[/Sources]" style="background:#fff">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="02  시작 위치를 스스로 찾음"><div class="slide-body">
+<h2 class="headline">아무 곳에 놓인 지게차가 LiDAR 스캔을 사전 지도에 맞춰 시작 위치를 스스로 찾고 출발</h2>
+<div class="reloc11 grow">
+<figure class="shot"><video class="media" src="assets/r02_reloc.mp4" poster="assets/r02_reloc_poster.jpg" autoplay loop muted playsinline aria-label="위에서 본 seed 5 홀. 홀 오른쪽 가운데 아무 곳에 놓인 지게차가 잠시 서 있다가 위쪽 팔레트로 가서 집은 뒤 아래쪽 하역 칸에 내려놓음"></video><figcaption>위에서 본 장면</figcaption></figure>
+<figure class="shot"><video class="media" src="assets/r02_console.mp4" poster="assets/r02_console_poster.jpg" autoplay loop muted playsinline aria-label="운용 콘솔 지도 화면. 처음에 사전 지도의 파란 벽과 선반 위로 빨간 LiDAR 점이 겹쳐 지게차 위치가 정해지고, 이어서 확대된 화면에서 계획 경로를 따라 팔레트로 이동함"></video><figcaption>같은 순간의 콘솔 화면, 빨간 점은 LiDAR 측정</figcaption></figure>
+</div>
+<div class="reloc11b">
+<table class="comparison h7 rt11"><tr><th></th><th>결과</th></tr><tr><td>시험한 시작 위치</td><td>홀 안 84곳</td></tr><tr><td>사람 개입 없이 위치 확정</td><td><b>68곳 (81 %)</b></td></tr><tr><td>틀린 위치로 출발</td><td><b>0곳</b></td></tr></table>
+<figure class="shot cand11"><img class="media" src="assets/r02_candidates.png" alt="운용 콘솔 지도 화면. 위쪽 창에 출발 위치 후보 네 개와 지도에 놓기 · 다시 시도 버튼, 지도 위에 후보 1–4 표시"><figcaption>후보가 여럿이면 운용자가 고름</figcaption></figure>
+</div>
+</div></x-import>
+</section>
+
+<section data-label="인식·SLAM 켠 연속 이송" data-screen-label="04" data-duration="60" data-speaker-notes="권장 60초
+
+두 번째는 연속 이송입니다. 8주차에는 카메라 인식과 SLAM을 켜면 팔레트 하나를 옮기는 것도 일자 배치에서 다섯 번 중 두 번, 랜덤 배치에서 네 번 중 한 번만 끝까지 갔고, 연속 이송은 앞 팔레트를 옮겨 둔 장면을 따로 만들어 한 번씩 돌린 것이었습니다. 이번에는 콘솔 작업 대기열에 팔레트 세 개를 넣어 두고, 사람이 손대지 않은 채 인식부터 하역, 복귀까지 세 번을 이어서 하게 했습니다. 일자 배치는 네 번 모두, 랜덤 배치는 네 번 중 세 번 세 개를 다 옮겼습니다. 남은 한 번은 랜덤 배치의 두 번째 팔레트 앞에서 삽입 직전 재관측이 멈춘 경우입니다. 왼쪽 영상은 일자 배치에서 세 개를 차례로 옮기는 장면입니다. (전환)
+
+[Sources]
+영상: Isaac Sim 탑뷰 (12배속)
+요약 2: 운영 팔 O6(학습 인식 + 운영 기본 여섯) 4 세션 중 3, O0(라이브 현재 기본) 4 세션 중 4 가 세 임무 완주; 장면 line_m · random_m × seed 0 · 1, 등록 지도 위치 추정, 콘솔 대기열(ct1_queue.sbatch SCENARIO=queue); 막은 실패 O6 random_m s0 P-5:D-2 근접 캡처 후보 없음. 결정 모드 D · D′ 20 세션은 표에 넣지 않음: lightminn/forklift main bcb21c87 docs/validation/2026-11-06-ct-status-survey.md
+8주차 수치는 riib 장면(line_1–3 · random_1–3)의 팔레트 하나 임무; 이번은 line_m · random_m 세 임무 세션이라 단위가 다름(표의 1개씩 · 3개 연속으로 구분): week-08/build_deck.py 07 · 09 장 (ISAAC_ROWS: ③ 일자 배치 5회 중 2회 완주, ④ 랜덤 배치 4회 중 1회 완주, ⑤ 트레일러 꺼낸 뒤 운반 중 정지)
+ws1 test_runs/live/deck11/r_bcb21c87/s/d11_queue_line/live/epoch_1/run/transport.mp4 (잡 17491, 스냅숏 deck11_bcb21c87, 세 임무 done) 를 1000 × 720 at x 180 으로 잘라 12배속: 영상
+[/Sources]" style="background:#fff">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="03  인식·SLAM 켠 연속 이송"><div class="slide-body">
+<h2 class="headline">카메라 인식과 SLAM을 켠 채 팔레트 3개 연속 이송, 8회 중 7회 사람 개입 없이 완주</h2>
+<div class="ct11 grow">
+<figure class="shot"><video class="media" src="assets/t03_queue.mp4" poster="assets/t03_queue_poster.jpg" autoplay loop muted playsinline aria-label="위에서 본 일자 배치 장면. 왼쪽 흰 구역에 놓인 팔레트 세 개를 하나씩 집어 오른쪽 하역 칸의 초록 원 자리에 차례로 내려놓고 매번 출발 위치로 돌아옴"></video></figure>
+<div class="stack tr11r">
+<table class="comparison h7 ctt11"><tr><th></th><th>8주차</th><th>지금</th></tr><tr><td>일자 배치</td><td>1개씩, 5회 중 2회 완주</td><td><b>3개 연속, 4회 중 4회</b></td></tr><tr><td>랜덤 배치</td><td>1개씩, 4회 중 1회 완주</td><td><b>3개 연속, 4회 중 3회</b></td></tr><tr><td>사람 개입</td><td>앞 팔레트를 옮겨 둔 장면을 따로 준비</td><td><b>없음</b></td></tr></table>
+<div class="lgd7"><span class="lg"><span class="sw ln" style="background:#8fd0dc"></span>접근 경로</span><span class="lg"><span class="sw ln" style="background:#e8dc78"></span>운반 경로</span><span class="lg"><span class="sw ln" style="background:#cdb6dd"></span>복귀 경로</span><span class="lg"><span class="sw ring" style="border-color:#33ef63"></span>하역 위치</span></div>
+</div>
+</div>
+</div></x-import>
+</section>
+
+<section data-label="리보틱스 트레일러 장면 완주" data-screen-label="05" data-duration="50" data-speaker-notes="권장 50초
+
+세 번째는 리보틱스가 보낸 시연 시나리오 가운데 트레일러 장면입니다. 좌우가 벽으로 막힌 트레일러 안에 팔레트가 한 줄로 실려 있고, 지게차가 들어가 팔레트를 집은 뒤 좁은 입구를 빠져나와 하역 칸까지 옮겨야 합니다. 8주차에는 팔레트를 꺼낸 뒤 입구를 나오는 단계에서 멈췄습니다. 지금은 같은 장면을 다섯 번 돌려 다섯 번 모두 하역과 복귀까지 마쳤습니다. 영상은 팔레트를 싣고 입구를 빠져나와 하역하는 장면입니다. (전환)
+
+[Sources]
+영상: Isaac Sim 탑뷰 (4배속)
+① 면제(B) 규칙 2: 완주 trailer B 5 · A 0 (seed 0–4), 안전 지표 0; riib 런처 기본에 --exit-prefix-exempt on: lightminn/forklift main bcb21c87 docs/validation/2026-10-31-riib-default-batch2.md (PR #237)
+같은 설정의 앞 배치 rx_6e6d8e1c: trailer B 5/5 완주(tss_diag/rx_sum.json success), 영상은 이 배치의 rx_B_trailer_s0: lightminn/forklift main bcb21c87 docs/validation/2026-10-31-riib-exit-prefix-default-batch.md
+⑤ 트레일러: 꺼낸 뒤 운반 중 정지: week-08/build_deck.py 07 · 09 장 (ISAAC_ROWS: ③ 일자 배치 5회 중 2회 완주, ④ 랜덤 배치 4회 중 1회 완주, ⑤ 트레일러 꺼낸 뒤 운반 중 정지)
+rx_6e6d8e1c/rx_B_trailer_s0/run/transport.mp4 (gdrive ws1-cleanup-20261031-a/t_mp4.tar.zst 에서 꺼냄, md5 be3f7bb0…) 를 520 × 640 at x 420 으로 잘라 4배속: 영상
+[/Sources]" style="background:#fff">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="04  리보틱스 트레일러 장면 완주"><div class="slide-body">
+<h2 class="headline">트레일러 안 팔레트를 꺼내 입구를 빠져나와 하역까지 5회 모두 완주</h2>
+<div class="tr11 grow">
+<figure class="shot"><video class="media" src="assets/t04_trailer.mp4" poster="assets/t04_trailer_poster.jpg" autoplay loop muted playsinline aria-label="위에서 본 트레일러 장면. 위쪽 트레일러 안의 팔레트를 집어 후진으로 입구를 빠져나온 뒤 오른쪽 아래 하역 칸에 내려놓고 출발 위치로 돌아옴"></video></figure>
+<div class="stack tr11r">
+<table class="comparison h7 trt11"><tr><th></th><th>내용</th></tr><tr><td>장면</td><td>좌우가 벽으로 막힌 트레일러 안 팔레트 한 줄</td></tr><tr><td>8주차</td><td>팔레트를 꺼낸 뒤 운반 중 정지</td></tr><tr><td>지금</td><td><b>5회 중 5회 하역까지 완주</b></td></tr></table>
+<div class="lgd7"><span class="lg"><span class="sw ln" style="background:#8fd0dc"></span>접근 경로</span><span class="lg"><span class="sw ln" style="background:#e8dc78"></span>운반 경로</span><span class="lg"><span class="sw ln" style="background:#cdb6dd"></span>복귀 경로</span><span class="lg"><span class="sw ring" style="border-color:#33ef63"></span>하역 위치</span></div>
+</div>
+</div>
+</div></x-import>
+</section>
+
+<section data-label="막혀도 다시 계획함" data-screen-label="06" data-duration="40" data-speaker-notes="권장 40초
+
+네 번째는 계획대로 되지 않았을 때의 동작입니다. 좁은 통로에서는 팔레트를 꺼낸 뒤 전진과 후진을 바꾸며 방향을 돌려야 하는데, 전환 지점에 자세가 조금 어긋난 채 도착할 때가 있습니다. 이때 임무를 끝내지 않고, 그 자리에 멈춘 채 새 경로를 다시 계획해서 이어 갑니다. 영상에서 지게차가 멈춘 뒤 새 경로가 그려지고 다시 출발하는 것을 보실 수 있습니다. (전환)
+
+[Sources]
+영상: Isaac Sim 탑뷰 (3배속)
+판정 PASS: 복귀 cusp 재계획(--return-cusp-replans 2) 작동 6 실행 모두 설치 뒤 완주, 복귀 cusp 실패 A 4/59 → G 0/64; riib 런처 기본 RETURN_CUSP_REPLANS=2: lightminn/forklift main bcb21c87 docs/validation/2026-11-04-return-cusp-replan-reregistration-results.md
+rc_G_aisle_rack_s11: 운반 cusp 재계획 124 s, 복귀 cusp 재계획 221 s, 완주 (ws1 test_runs/riibotics/tss_diag/rc_sum.json): lightminn/forklift main bcb21c87 docs/validation/2026-11-02-return-cusp-replan-batch.md
+rc_95e61a74/rc_G_aisle_rack_s11/run/transport.mp4 (gdrive ws1-cleanup-20261110-n/n_rc.tar.zst 에서 꺼냄, md5 6bba6542…) 의 198–242 s(복귀 재계획 221 s)를 720 × 420 at (560, 170) 으로 잘라 3배속: 영상
+[/Sources]" style="background:#fff">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="05  막혀도 다시 계획함"><div class="slide-body">
+<h2 class="headline">방향 전환 지점에서 자세가 어긋나면 그 자리에서 경로를 다시 계획해 임무 계속</h2>
+<div class="cu11 grow">
+<figure class="shot"><video class="media" src="assets/t05_replan.mp4" poster="assets/t05_replan_poster.jpg" autoplay loop muted playsinline aria-label="위에서 본 좁은 통로 장면. 위쪽 칸에 팔레트를 내려놓은 지게차가 후진해 나오다 방향 전환 지점에서 멈추고, 새 복귀 경로가 그려진 뒤 왼쪽으로 출발함"></video></figure>
+<div class="stack tr11r">
+<table class="comparison h7 cut11"><tr><th></th><th>내용</th></tr><tr><td>상황</td><td>좁은 통로에서 전진·후진이 바뀌는 지점에 자세가 어긋난 채 도착</td></tr><tr><td>동작</td><td>멈춘 자리에서 새 경로를 계획해 이어서 주행</td></tr></table>
+<div class="lgd7"><span class="lg"><span class="sw ln" style="background:#cdb6dd"></span>복귀 경로</span><span class="lg"><span class="sw ring" style="border-color:#33ef63"></span>하역 위치</span></div>
+</div>
+</div>
+</div></x-import>
+</section>
+
+<section data-label="부품·PCB 발주 완료" data-screen-label="07" data-duration="35" data-speaker-notes="권장 35초
+
+하드웨어입니다. PCB와 부품 발주를 마쳤고, 그림은 9주차에 보여 드린 메인보드 배치도입니다. PCB와 부품은 11월 20일에 발송될 예정입니다. 도착일이 아니라 발송 예정일이라, 받는 날짜는 배송을 보고 다시 말씀드리겠습니다. (전환)
+
+[Sources]
+그림: 팀 메인보드 PCB 배치도 앞면 (9주차와 같은 그림)
+그림 h03_layout_top.jpg (9주차 자산 그대로): 팀 메인보드 자료 (9주차 SOURCES.md: PCB 배치도 앞면, 외곽 114.173 × 91.567 mm)
+PCB·부품 11월 20일 발송 예정 (도착일 아님): 사용자 (2026-11-10, 총괄 전달)
+발주한 보드 목록 · 수량 (초안: PCB · 부품 두 줄로만 적음): 미확인
+[/Sources]" style="background:#fff">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="06  부품·PCB 발주 완료"><div class="slide-body">
+<h2 class="headline">PCB와 부품 발주 완료, 11월 20일 발송 예정</h2>
+<div class="hw11 grow">
+<figure class="shot r3d"><img class="media" src="assets/h03_layout_top.jpg" alt="메인보드 PCB 배치도 앞면. 외곽 치수 114.173 mm와 91.567 mm, 2열 22핀 헤더 두 줄, 빨간 구리면 위 배선"><figcaption>메인보드 PCB 배치도 (9주차)</figcaption></figure>
+<table class="comparison h7 hwt11"><tr><th>항목</th><th>상태</th></tr><tr><td>PCB</td><td><b>발주 완료</b></td></tr><tr><td>부품</td><td><b>발주 완료</b></td></tr><tr><td>일정</td><td>PCB·부품 11월 20일 발송 예정</td></tr></table>
+</div>
+</div></x-import>
+</section>
+
+<section data-label="다음 주 계획" data-screen-label="08" data-duration="35" data-speaker-notes="권장 35초
+
+다음 주 계획입니다. 하드웨어는 보드가 도착하는 대로 조립하고 전원과 통신부터 점검하겠습니다. 소프트웨어는 리보틱스가 제안한 시연 장면 가운데 남은 장면을 Isaac에서 계속 진행하겠습니다. 이상으로 제가 준비한 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.
+
+[Sources]
+표: 하드웨어 · 소프트웨어 다음 단계
+다음 주: 보드 도착 뒤 조립 · 점검, 시뮬은 남은 리보틱스 장면: 사용자 승인 구성 (2026-11-10)
+[/Sources]" style="background:#fff">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="07  다음 주 계획"><div class="slide-body">
+<h2 class="headline">다음 주는 보드 도착에 맞춰 조립을 준비하고 남은 리보틱스 장면 진행</h2>
+<table class="comparison h7 endt11"><tr><th>구분</th><th>다음 주</th></tr><tr><td>하드웨어</td><td>보드가 도착하면 조립하고 전원·통신 점검</td></tr><tr><td>소프트웨어</td><td>남은 리보틱스 시연 장면을 Isaac에서 계속 진행</td></tr></table>
+</div></x-import>
+</section>
+</x-import></x-dc></body></html>
