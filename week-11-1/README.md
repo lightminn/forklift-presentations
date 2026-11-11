@@ -4,6 +4,7 @@
 
 - `build_deck.py`: 본문 · 원고 · 출처. 화면 문구와 원고는 직접 썼다(프로젝트 메모리 script-md-no-agy).
 - `prepare_photos.py`: 팀이 찍은 부스 사진(로봇 저장소 `docs/roboworld/`, 로컬 전용)을 잘라 `assets/v02_multiway.jpg` · `v03_h3r.jpg` · `v04_ezipos.jpg` 로 저장한다. 저장할 때 EXIF(촬영 기기 · 시각)는 넘기지 않는다. `/home/light/anaconda3/bin/python prepare_photos.py <사진 폴더>`.
+- 표지에는 리보틱스 로고를 넣지 않는다(사용자 요청 2026-11-11).
 - `assets/d02_truck.jpg` · `h05_mounted.jpg`: 9주차 자산 그대로(팀 차체 사진, 바퀴 모터 축에 끼운 자석 링).
 
 전체 생성 및 배포 절차는 [레포 안내](../README.md)를 따른다.

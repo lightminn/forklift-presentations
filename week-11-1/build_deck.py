@@ -150,9 +150,7 @@ def build():
         if i == 1:
             component = (f'<x-import component-from-global-scope="UOSSlideDS.TitleSlide" '
                          f'hint-size="100%,100%" title="{escape(s["title"], quote=True)}" '
-                         f'subtitle="{escape(SUBTITLE, quote=True)}"></x-import>'
-                         f'<img class="partner-mark" src="assets/riibotics-logo.png" '
-                         f'alt="Riibotics">')
+                         f'subtitle="{escape(SUBTITLE, quote=True)}"></x-import>')
         else:
             component = (f'<x-import component-from-global-scope="UOSSlideDS.ContentSlide" '
                          f'hint-size="100%,100%" title="{escape(s["title"], quote=True)}">'
