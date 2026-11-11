@@ -936,3 +936,4 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .comparison.h7.bt111 td { padding:16px 10px; vertical-align:middle; }
 .comparison.h7.bt111 td:first-child { width:auto; white-space:nowrap; color:var(--uos-blue); }
 .comparison.h7.bt111 td:nth-child(2) { width:24%; }
+.comparison.h7.fl111 td:nth-child(2) { width:37%; }
