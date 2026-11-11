@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>2026 로보월드 견학 보고</title>
+<link rel="icon" href="data:,">
+<script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
+<body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>2026 로보월드 견학 보고</title>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=264b34bd38f3"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
+<section class="title-section" data-label="견학 보고" data-screen-label="01" data-duration="20" data-speaker-notes="권장 20초
+
+안녕하십니까. 2026 로보월드 견학 내용을 보고드릴 김광민이라고 합니다. 저희 팀은 지게차 하드웨어를 만들고 있어서, 무인 지게차와 모터, 모터 드라이버를 다루는 부스를 중심으로 둘러보고 저희 설계와 관련된 질문을 했습니다. 본 것과 들은 답을 저희 지게차와 비교해서 말씀드리겠습니다. (전환)
+
+[Sources]
+견학 보고
+행사: inews24 「개막 22일 앞둔 &#x27;2026 로보월드&#x27;」 https://inews24.com/view/2014979 · kidd.co.kr 보도 (일정 11-04–07, 킨텍스 1전시장 3–5홀, 402개 기업 1,198개 부스)
+부스 질의: 팀 인터뷰 메모 (로봇 저장소 docs/roboworld/인터뷰 생각나는대로.txt, 로컬 전용)
+[/Sources]" style="background:#fff">
+<x-import component-from-global-scope="UOSSlideDS.TitleSlide" hint-size="100%,100%" title="2026 로보월드
+견학 보고" subtitle="고양 킨텍스 · 2026년 11월 6–7일 견학"></x-import><img class="partner-mark" src="assets/riibotics-logo.png" alt="Riibotics">
+</section>
+
+<section data-label="견학 개요" data-screen-label="02" data-duration="40" data-speaker-notes="권장 40초
+
+로보월드는 11월 4일부터 7일까지 킨텍스에서 열렸고 402개 기업이 참가했습니다. 저희는 6일과 7일에 다녀왔습니다. 로봇 전체를 보기보다 저희 지게차를 만드는 데 직접 관련된 부스를 골라 네 곳을 자세히 봤습니다. 무인 지게차를 만드는 Multiway Robotics, 드론 모터를 만드는 H3R, 로봇 관절 모터인 AK 시리즈를 파는 CubeMars, 그리고 maxon 모터와 함께 쓰는 서보 드라이버를 파는 FASTECH입니다. 차례로 말씀드리겠습니다. (전환)
+
+[Sources]
+표: 견학한 부스
+일정 · 장소 · 규모: inews24 「개막 22일 앞둔 &#x27;2026 로보월드&#x27;」 https://inews24.com/view/2014979 · kidd.co.kr 보도 (일정 11-04–07, 킨텍스 1전시장 3–5홀, 402개 기업 1,198개 부스)
+견학일 (사진 촬영일 11-06 · 11-07): 팀 촬영 사진 (로봇 저장소 docs/roboworld/, Galaxy, 2026-11-06 · 07 촬영 — prepare_photos.py 로 자르고 EXIF 제거)
+부스별 질의 내용: 팀 인터뷰 메모 (로봇 저장소 docs/roboworld/인터뷰 생각나는대로.txt, 로컬 전용)
+[/Sources]" style="background:#fff">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="01  견학 개요"><div class="slide-body">
+<h2 class="headline">2026 로보월드에서 무인 지게차 · 모터 · 모터 드라이버 4개 업체 부스 조사</h2>
+<table class="comparison h7 vt111"><tr><th>업체</th><th>분야</th><th>살펴본 것</th></tr><tr><td>Multiway Robotics</td><td>무인 지게차</td><td>작업 통로 폭 · 최대 하중별 지게차 8종</td></tr><tr><td>H3R</td><td>드론 모터 · ESC</td><td>6상 모터와 3상 ESC 두 개를 묶은 구동계</td></tr><tr><td>CubeMars</td><td>로봇 관절 모터 (AK 시리즈)</td><td>CAN 연결 문제와 CAN FD 출시 계획</td></tr><tr><td>FASTECH (Ezi-Pos)</td><td>서보 모터 드라이버</td><td>maxon 모터 겸용 EtherCAT · Ethernet 드라이버</td></tr></table>
+<p class="ev111">2026 로보월드 · 고양 킨텍스 1전시장 · 11월 4–7일 · 402개 기업 참가 (견학 11월 6–7일)</p>
+</div></x-import>
+</section>
+
+<section data-label="무인 지게차 제품군" data-screen-label="03" data-duration="60" data-speaker-notes="권장 60초
+
+첫 번째는 무인 지게차 업체 Multiway Robotics입니다. 부스 벽면에 제품 여덟 종을 랙 높이와 함께 늘어놓았는데, 종류마다 맨 먼저 적은 것이 작업 통로 폭과 최대 하중이었습니다. 통로 폭은 1.75미터에서 4.1미터, 하중은 1.5톤에서 8톤까지입니다. 눈에 띈 점은 카운터밸런스형이 3.15미터와 4.1미터로 통로를 가장 넓게 쓴다는 것입니다. 포크만 옆으로 돌리는 3방향 지게차는 1.75미터면 되지만, 카운터밸런스형은 차체 전체를 돌려 팔레트를 마주해야 하기 때문입니다. 저희 차체도 카운터밸런스 형태라서 같은 제약이 있고, 리보틱스의 좁은 통로 장면에서 전진과 후진을 바꿔 가며 방향을 맞추는 것도 이 때문입니다. 크기는 하중 10킬로그램, 들어 올리는 높이 0.28미터로 상용 제품과 비교할 수 없이 작지만, 형태가 정하는 움직임의 제약은 같습니다. (전환)
+
+[Sources]
+사진: Multiway Robotics 부스 (팀 촬영)와 팀 차체
+v02_multiway.jpg: 부스 벽면 (11-06 촬영), 작업공간 Ast 1,750–4,100 mm, 최대 하중 1,500–8,000 kg, 카운터 밸런스 타입 SE 3,150 mm · E 4,100 mm, 3방향 K 1,750 mm; 고객사 로고 아래쪽은 잘라 냄: 팀 촬영 사진 (로봇 저장소 docs/roboworld/, Galaxy, 2026-11-06 · 07 촬영 — prepare_photos.py 로 자르고 EXIF 제거)
+우리 차체 하중 · 승강 범위: 로봇 저장소 sim/models/dls08_measured/README.md (승강 범위 0.28 m 실측), week-07-1/build_deck.py (최대 적재 하중 10 kg, 카탈로그)
+팀 차체 사진 (5주차): week-09/assets/d02_truck.jpg
+리보틱스 좁은 통로 장면, 방향 전환 지점: week-08/build_deck.py 06 장 · week-11/build_deck.py 05 장
+[/Sources]" style="background:#fff">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="02  무인 지게차 제품군 (Multiway Robotics)"><div class="slide-body">
+<h2 class="headline">상용 무인 지게차, 작업 통로 폭 1.75–4.1 m · 최대 하중 1.5–8 t 에 따라 8종으로 구분</h2>
+<div class="vis111 grow">
+<figure class="shot"><img class="media" src="assets/v02_multiway.jpg" alt="Multiway Robotics 부스 벽면. 16.5 m 하이랙 · 8톤 장척물 이송이라는 제목 아래 높이 눈금과 함께 랙 옆에 선 지게차 8종, 아래에 종류마다 작업공간 폭과 최대 하중, 시리즈 이름"><figcaption>Multiway Robotics 부스의 제품군 안내</figcaption></figure>
+<div class="stack vr111">
+<figure class="shot truck111"><img class="media" src="assets/d02_truck.jpg" alt="팀 지게차 차체. 빨간 좌석과 지붕이 있는 어린이용 전동 지게차, 앞에 검은 포크 두 개"><figcaption>우리 차체</figcaption></figure>
+<table class="comparison h7 ft111"><tr><th></th><th>Multiway 제품군</th><th>우리 차체</th></tr><tr><td>형태</td><td>카운터밸런스 · 리치 · 3방향 등 8종</td><td>카운터밸런스 형태</td></tr><tr><td>최대 하중</td><td>1,500–8,000 kg</td><td>10 kg</td></tr><tr><td>들어 올리는 높이</td><td>최대 16.5 m 랙</td><td>0.28 m</td></tr></table>
+</div>
+</div>
+</div></x-import>
+</section>
+
+<section data-label="6상 드론 모터" data-screen-label="04" data-duration="60" data-speaker-notes="권장 60초
+
+두 번째는 드론 모터 업체 H3R입니다. 지금은 3상 드론 모터를 만들고 있고, 포스터처럼 6상 모터를 개발하고 있었습니다. 요즘 6상 모터가 많이 보이는 이유를 물었더니, 모터가 작아지면서 엔코더를 넣기 어려워져 엔코더 없이 홀 센서만 쓰고 대신 상을 늘리는 방식으로 대응한다는 답을 들었습니다. 포스터에는 6상을 3상 ESC 두 개로 나눠 구동해 한쪽이 고장 나도 돌 수 있고 토크와 진동이 안정된다는 장점도 적혀 있었습니다. 저희도 비슷한 문제를 겪었습니다. 바퀴 모터는 축 지름이 3밀리미터인 작은 브러시 DC 모터라 엔코더를 달 자리가 없어서, 축에 끼우는 링을 3D 프린터로 뽑아 그 위에 자석을 붙이고 MT6701 자기 엔코더로 회전을 읽습니다. 작은 모터에서는 회전을 어떻게 잴지가 설계의 큰 부분이라는 점을 업체에서도 확인했습니다. (전환)
+
+[Sources]
+사진: H3R 부스 포스터 (팀 촬영)와 팀 바퀴 모터 (9주차)
+드론 모터 회사: 6상이 많은 이유 → 모터가 작아지면서 엔코더를 넣기 힘들어 상을 늘리는 방식으로 대응; 3상 드론 모터 회사, 홀 센서만 쓰려고 6상 개발 중: 팀 인터뷰 메모 (로봇 저장소 docs/roboworld/인터뷰 생각나는대로.txt, 로컬 전용)
+v03_h3r.jpg: H3R 포스터 (11-06 촬영) — Electric Propulsion System with Built-in Redundancy, FAULT-TOLERANT · STABLE TORQUE · REDUCED VIBRATION · DUAL-CHANNEL POWER HANDLING · THERMAL LOAD SHARING, ESC A (A1 B1 C1) · ESC B (A2 B2 C2) + Synchronization: 팀 촬영 사진 (로봇 저장소 docs/roboworld/, Galaxy, 2026-11-06 · 07 촬영 — prepare_photos.py 로 자르고 EXIF 제거)
+우리 바퀴 모터와 자석 링: week-09/build_deck.py 06 장 · assets/h05_mounted.jpg (바퀴 모터 축 지름 3 mm, 축에 끼우는 PLA 링 위에 자석)
+MT6701 은 뒤 좌우 바퀴 엔코더; DRV8244 는 브러시 DC 모터 드라이버: 메모리: 하드웨어 사실 (2026-10-12)
+[/Sources]" style="background:#fff">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="03  6상 드론 모터 (H3R)"><div class="slide-body">
+<h2 class="headline">소형 모터는 엔코더 넣을 자리가 부족해 홀 센서만 쓰는 6상 모터로 대응</h2>
+<div class="vis111 grow">
+<figure class="shot"><img class="media" src="assets/v03_h3r.jpg" alt="H3R 부스 포스터. 6-PHASE MOTOR &amp; DUAL 3-PHASE ESC 제목 아래 하늘색 모터와 ESC, 오른쪽에 고장 허용 · 토크 안정 · 진동 감소 · 이중 채널 · 열 분산 항목, 아래에 6상 단면도와 ESC A · ESC B 두 개가 모터의 A1 B1 C1, A2 B2 C2 를 나눠 구동하는 도식"><figcaption>H3R 부스 포스터</figcaption></figure>
+<div class="stack vr111">
+<figure class="shot truck111"><img class="media" src="assets/h05_mounted.jpg" alt="우리 바퀴 모터 뒷면. 가운데 축에 회색 링이 끼워져 있고 양옆으로 노란색, 초록색 전원선"><figcaption>우리 바퀴 모터 축에 끼운 자석 링</figcaption></figure>
+<table class="comparison h7 ft111"><tr><th></th><th>H3R 드론 모터</th><th>우리 바퀴 모터</th></tr><tr><td>모터</td><td>3상 BLDC (6상 개발 중)</td><td>브러시 DC, 축 지름 3&nbsp;mm</td></tr><tr><td>회전 감지</td><td>엔코더 없이 홀 센서만 사용</td><td>축 끝 자석 + MT6701 자기 엔코더</td></tr><tr><td>센서 장착</td><td>작은 모터라 엔코더 자리 부족</td><td>축에 끼운 출력 링에 자석 부착</td></tr></table>
+</div>
+</div>
+</div></x-import>
+</section>
+
+<section data-label="여러 모터를 묶는 통신" data-screen-label="05" data-duration="60" data-speaker-notes="권장 60초
+
+세 번째와 네 번째는 모터 여러 개를 묶는 통신입니다. CubeMars의 AK 모터는 CAN으로 명령을 받는데, 여러 대를 한 버스에 동시에 물리면 잘 동작하지 않는 경우가 있어서 몇 대까지 가능한지 물었습니다. 동시에 많이 쓰는 것은 어렵다는 답이었고, 내년 초에 하드웨어를 바꾼 제품이 나오고 내년 중에 CAN FD를 지원하는 제품이 나와 연결 문제가 나아질 것이라고 했습니다. FASTECH은 Ezi-Pos라는 서보 드라이버에 maxon 모터를 묶어 파는 업체인데, 사진처럼 EtherCAT과 Ethernet 등 산업용 네트워크로 여러 축을 묶는 드라이버를 내세웠습니다. 저희 지게차는 지금 모터 버스가 없습니다. 메인보드의 H743이 모터 드라이버 네 개를 직접 구동하고, Jetson과는 한 줄로만 연결합니다. 그래서 CAN 동시 연결 문제는 지금 구조와는 관계가 없지만, 나중에 모터를 지능형 액추에이터로 바꾸거나 축을 늘린다면 이 부분을 먼저 따져야 한다는 것을 알게 되었습니다. 이상으로 로보월드 견학 보고를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.
+
+[Sources]
+사진: FASTECH Ezi-Pos 부스 (팀 촬영)
+AK 모터: CAN 동시에 여러 개 쓰면 잘 안 됨 → 동시에 많이 사용하면 안 될 것, 내년 초 하드웨어 변경, 내년 CAN FD; 큐브마스: CAN FD 내년 중 출시 예정, 기존 CAN 연결 불량 해결 기대; maxon 모터 합본 판매 회사: 이더넷 · 이더캣 기반 모터 드라이버: 팀 인터뷰 메모 (로봇 저장소 docs/roboworld/인터뷰 생각나는대로.txt, 로컬 전용)
+v04_ezipos.jpg: FASTECH Ezi-Pos 부스 (11-07 촬영) — 선반 표기 CC-Link IE TSN · Profinet · EtherCAT · Ethernet, maxon 모터 진열, 안내판의 FASTECH 표기: 팀 촬영 사진 (로봇 저장소 docs/roboworld/, Galaxy, 2026-11-06 · 07 촬영 — prepare_photos.py 로 자르고 EXIF 제거)
+우리 지게차 구조: 로봇 저장소 main docs/interfaces/2026-10-22-mcu-link-contract.md (Jetson ↔ MCU 전송로 USB CDC 또는 UART, 미정), week-11/build_deck.py 09 장 (H743 이 DRV8244 4개를 직접 구동)
+[/Sources]" style="background:#fff">
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="04  여러 모터를 묶는 통신 (CubeMars · FASTECH)"><div class="slide-body">
+<h2 class="headline">CAN 동시 연결 한계, CubeMars 는 CAN FD · FASTECH 은 EtherCAT 으로 대응</h2>
+<div class="vis111 bus111 grow">
+<figure class="shot"><img class="media" src="assets/v04_ezipos.jpg" alt="FASTECH Ezi-Pos 부스 진열대. 왼쪽에 AGV/AMR 구동부, 가운데에 노란 서보 드라이버 여러 대와 maxon 모터 여덟 개, 오른쪽 선반에 CC-Link IE TSN · Profinet · EtherCAT · Ethernet 드라이버와 여러 모터"><figcaption>FASTECH Ezi-Pos 부스</figcaption></figure>
+<table class="comparison h7 bt111"><tr><th></th><th>통신</th><th>확인한 내용</th></tr><tr><td>CubeMars AK 모터</td><td>CAN</td><td>여러 대 동시 연결 시 통신 불량, 내년 CAN FD 제품 출시 예정</td></tr><tr><td>FASTECH Ezi-Pos</td><td>EtherCAT · Ethernet 등</td><td>maxon 등 여러 모터를 한 드라이버 계열로 제어</td></tr><tr><td>우리 지게차</td><td>모터 버스 없음</td><td>H743 이 모터 드라이버 4개를 직접 구동</td></tr></table>
+</div>
+</div></x-import>
+</section>
+</x-import></x-dc></body></html>
