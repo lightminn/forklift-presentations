@@ -4,8 +4,10 @@
 |---|---|---|
 | 표지 · 01 | 행사 일정 · 장소 · 규모 (11월 4–7일, 고양 킨텍스 1전시장 3–5홀, 402개 기업 1,198개 부스) | inews24 「개막 22일 앞둔 '2026 로보월드'」 https://inews24.com/view/2014979 , kidd.co.kr 보도 |
 | 표지 · 01 | 견학일 11월 6–7일 | 팀 사진 촬영일(EXIF, 2026-11-06 14:16 · 14:21, 2026-11-07 14:05) |
-| 02 | 제품군 8종의 작업공간 Ast(1,750–4,100 mm) · 최대 하중(1,500–8,000 kg), 카운터 밸런스 타입 SE 3,150 mm · E 4,100 mm, 3방향 K 1,750 mm | Multiway Robotics 부스 벽면 사진(팀 촬영 11-06) |
-| 02 | 우리 차체 최대 적재 하중 10 kg(카탈로그), 승강 범위 0.28 m(실측), 차체 사진 | week-07-1 `build_deck.py`, 로봇 저장소 `sim/models/dls08_measured/README.md`, week-09 `assets/d02_truck.jpg` |
+| 02 | 형태별 작업공간 Ast: 카운터 밸런스 타입 SE 3,150 mm · E 4,100 mm, 3방향 K 1,750 mm | Multiway Robotics 부스 벽면 사진(팀 촬영 11-06) |
+| 02 | 로보월드 출품 O20(360도 회전 · 횡행 · 사행, 협소한 작업장용), K16(3방향, 랙 사이 1,750 mm) | kidd.co.kr 「[2026 로보월드] 멀티웨이 로보틱스, 무인지게차로 물류 현장의 안전·인력난 해소 지원」 2026-11-07 https://kidd.co.kr/news/248067 |
+| 02 | 레이저 SLAM + 비전 위치 추정, 팔레트 크기에 맞춘 포크 간격 자동 조절 (MW-Q20) | Forkliftaction 「Multiway Robotics: A Smarter Alternative to Manual Forklifts」 2026-05-21 https://www.forkliftaction.com/news/newsdisplay.aspx?nwid=31563 — **광고 기사(업체 제공 문구)** |
+| 02 | 우리 지게차 최대 조향각 15° · 최소 회전 반경 약 2.5 m · 포크 간격 5.5–38 cm 수동 조절, 한 간격으로 EPAL 6 · T11 동시 대응 불가 | week-07-1 `build_deck.py` 차체 실측 표 · 원고, 로봇 저장소 T11 Isaac 결과(PR #82 · #85) |
 | 03 | 6상 모터를 쓰는 이유(작은 모터에 엔코더를 넣기 어려워 홀 센서만 쓰고 상을 늘림), 3상 드론 모터 업체가 6상 개발 중 | 팀 인터뷰 메모(로봇 저장소 `docs/roboworld/인터뷰 생각나는대로.txt`, 로컬 전용) |
 | 03 | 포스터 항목(고장 허용 · 토크 안정 · 진동 감소 · 이중 채널 · 열 분산, ESC A · B 가 A1 B1 C1 · A2 B2 C2 를 나눠 구동) | H3R 부스 포스터 사진(팀 촬영 11-06) |
 | 03 | 바퀴 모터 축 지름 3 mm, 축에 끼운 PLA 링 위 자석 + MT6701 | week-09 `build_deck.py` 06 장 · `assets/h05_mounted.jpg` |

@@ -937,3 +937,5 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .comparison.h7.bt111 td:first-child { width:auto; white-space:nowrap; color:var(--uos-blue); }
 .comparison.h7.bt111 td:nth-child(2) { width:24%; }
 .comparison.h7.fl111 td:nth-child(2) { width:37%; }
+.mw111 { grid-template-columns:minmax(0,1.05fr) minmax(0,1fr); }
+.comparison.h7.mwt111 td:nth-child(2) { width:38%; }
