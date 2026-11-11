@@ -3,7 +3,6 @@
 | 장 | 내용 | 출처 |
 |---|---|---|
 | 표지 · 01 | 행사 일정 · 장소 · 규모 (11월 4–7일, 고양 킨텍스 1전시장 3–5홀, 402개 기업 1,198개 부스) | inews24 「개막 22일 앞둔 '2026 로보월드'」 https://inews24.com/view/2014979 , kidd.co.kr 보도 |
-| 표지 · 01 | 견학일 11월 6–7일 | 팀 사진 촬영일(EXIF, 2026-11-06 14:16 · 14:21, 2026-11-07 14:05) |
 | 02 | 형태별 작업공간 Ast: 카운터 밸런스 타입 SE 3,150 mm · E 4,100 mm, 3방향 K 1,750 mm | Multiway Robotics 부스 벽면 사진(팀 촬영 11-06) |
 | 02 | 로보월드 출품 O20(360도 회전 · 횡행 · 사행, 협소한 작업장용), K16(3방향, 랙 사이 1,750 mm) | kidd.co.kr 「[2026 로보월드] 멀티웨이 로보틱스, 무인지게차로 물류 현장의 안전·인력난 해소 지원」 2026-11-07 https://kidd.co.kr/news/248067 |
 | 02 | 레이저 SLAM + 비전 위치 추정, 팔레트 크기에 맞춘 포크 간격 자동 조절 (MW-Q20) | Forkliftaction 「Multiway Robotics: A Smarter Alternative to Manual Forklifts」 2026-05-21 https://www.forkliftaction.com/news/newsdisplay.aspx?nwid=31563 — **광고 기사(업체 제공 문구)** |
