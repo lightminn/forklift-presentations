@@ -963,3 +963,12 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .comparison.h7.endt12 { font-size:22px; line-height:1.45; }
 .comparison.h7.endt12 td, .comparison.h7.endt12 th { padding:20px 16px; vertical-align:middle; }
 .dev12.off12 > figure.shot .media { object-fit:contain; background:#fff; }
+.comparison.h7.fx12 { font-size:20px; line-height:1.4; }
+.comparison.h7.fx12 { margin-top:14px; }
+.comparison.h7.fx12 th, .comparison.h7.fx12 td { padding:30px 12px; vertical-align:middle; }
+.comparison.h7.fx12 .nw { white-space:nowrap; }
+.comparison.h7.fx12 td:first-child { white-space:normal; width:22%; font-weight:700; }
+.comparison.h7.fx12 td:nth-child(2) { width:30%; }
+.comparison.h7.fx12 td:nth-child(3) { width:22%; }
+.comparison.h7.fx12 td:last-child { white-space:nowrap; }
+.comparison.h7.fx12 b { color:var(--uos-blue); }
