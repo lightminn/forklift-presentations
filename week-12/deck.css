@@ -1016,3 +1016,10 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .comparison.h7.rl12 td:first-child, .comparison.h7.rl12 th { white-space:normal; }
 .comparison.h7.rl12 th:nth-child(1) { width:34%; } .comparison.h7.rl12 th:nth-child(2) { width:27%; }
 .comparison.h7.rl12 th:nth-child(3) { width:12%; } .comparison.h7.rl12 th:nth-child(4) { width:27%; }
+.cam12 { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:26px; min-height:0; align-items:center; }
+.cam12 > .camf12 { height:100%; min-height:0; }
+.cam12 > .camf12 .media { border:1px solid var(--uos-rule); }
+.cam12 .camf12 figcaption { font-size:20px; font-weight:700; margin-top:10px; }
+.stall12 { display:flex; flex-direction:column; align-items:center; gap:8px; min-height:0; }
+.stall12 > .vw12b { flex:1 1 0; min-height:0; width:100%; }
+.stcap12 { flex-shrink:0; display:grid; grid-template-columns:1fr 1fr; width:100%; max-width:1130px; text-align:center; font-size:20px; font-weight:700; }

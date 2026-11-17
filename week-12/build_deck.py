@@ -31,6 +31,7 @@ ACS_PLAN = f'{ROBOT} docs/plans/2026-11-16-aisle-short-cusp-arc.md'
 
 # overlay colours of the Isaac render (sim/isaac/run_transport.py add_path_display) and the drop ring
 C_APPROACH, C_TRANSPORT, C_RETURN, C_DROP = '#0d73ff', '#ffa60a', '#8c33d9', '#22e022'
+C_OBSERVE = '#33cccc'   # observe path (0.2, 0.8, 0.8)
 
 
 def add(label, title, seconds, body, notes, sources, foot):
@@ -75,7 +76,7 @@ add('개발 진행 보고', '12주차\n자율 지게차 개발', 20, '',
 FB_ROWS = [
     ('장비를 실제로 사서 써 볼 것', 'MCU 보드, Jetson, 카메라를 실제로 연결해 통신과 성능 확인', '02 · 03'),
     ('SLAM 자기 위치를 다양하게, 더 정확하게 시험', '짐 배치 2가지에서 시작 위치 84곳씩, 앞뒤 이동까지 추가해 시험', '04'),
-    ('논문 더 찾아보기', '이번 주에는 하지 못함, 다음 주 조사 항목으로 계획', '07'),
+    ('논문 더 찾아보기', '이번 주에는 하지 못함, 다음 주 조사 항목으로 계획', '09'),
 ]
 add('지난주 피드백과 이번 주 진행', '01  지난주 피드백과 이번 주 진행', 35, f"""
 <h2 class="headline">지난주 피드백 세 가지에 맞춘 이번 주 진행</h2>
@@ -214,13 +215,46 @@ add('지난 발표 이후 고친 실패', '05  지난 발표 이후 고친 실�
      (GBC, '결정 모드 짝: s24 끔 = 시간 초과(기준선 재현), --goal-creep-band on = 완주(띠 고정 → 정체 재계획 0.89 m); 총괄 결정 riib 런처 기본 켬(#571), 근거 seed 1 개; Isaac smoke 3 실행 완주')],
     '표: 수정 전후 같은 장면 · seed 짝 비교 (Isaac 시뮬레이션)')
 
-# ----------------------------------------------------------------- 6
+# ----------------------------------------------------------------- 6 · 7 before/after screens of two slide-05 cases (user, 2026-11-17 via the lead)
+# screen text written by agy (Gemini 4 Hydrogen High, 2026-11-17) from the raw material; facts checked
+R12 = 'ws1 /home/projects/forklift/test_runs/render12_f7566ed4/ (isaac_array 19683, 스냅숏 r12_f7566ed4 = main f7566ed4, 결정 모드, 시뮬-물성 세션 렌더)'
+RING = '#d64541'
+add('표시선 누출 전후 화면', '06  표시선 누출 전후 화면', 40, f"""
+<h2 class="headline">인식 카메라에도 찍히던 계획 경로 표시선을 운용 화면에만 그려 없앰</h2>
+<div class="cam12 grow">
+{img('s06_before.png', '고치기 전 인식 카메라 화면. 노란 벽 앞 바닥에 팔레트 세 개, 화면 아래 가운데에 파란 짧은 선이 찍혀 있고 빨간 동그라미로 표시됨', '고치기 전, 표시선이 찍힌 화면', 'shot camf12')}
+{img('s06_after.png', '고친 뒤 인식 카메라 화면. 같은 장면, 노란 벽 앞 팔레트 세 개, 파란 선이 없음', '고친 뒤, 표시선을 뺀 화면', 'shot camf12')}
+</div>
+{lgd(('ring', RING, '카메라에 찍힌 표시선'))}
+""",
+    """먼저 첫 번째 사례를 화면으로 보겠습니다. 왼쪽이 고치기 전, 오른쪽이 고친 뒤의 인식 카메라 화면입니다. 좁은 통로에서 지게차가 팔레트 바로 앞까지 와서 가까이 다시 볼 때 찍은 화면인데, 고치기 전에는 빨간 동그라미 안에 파란 선이 보입니다. 운용 화면에 계획 경로를 보여 주려고 그린 선이 시뮬레이션 안의 물체로 그려져 카메라에도 찍힌 것입니다. 이 선이 팔레트 앞에 걸리면 팔레트 입구 폭을 잘못 읽어 인식을 거부하는 경우가 있었습니다. 고친 뒤에는 선을 운용 화면에만 그려서, 같은 장면을 다시 돌린 오른쪽 화면에는 선이 없습니다. (전환)""",
+    [(R12, 'pdBefore_aisle_rack_s2(진단 stage: 표시 prim 이 인식 카메라에 보임) · pdAfter_aisle_rack_s2(overlay 기본)의 run/perception_capture_2_rgb.png(근접 캡처, 640 × 480) — 두 팔이 다른 픽셀 187 개, (60,18)–(355,319) 범위; 원거리 캡처는 두 팔 모두 선 없음; 두 실행 모두 완주(이 그림은 선이 찍히는 모양을 보이는 것이고, 이 실행의 실패를 보이는 것이 아님)'),
+     (f'{ROBOT} docs/validation/2026-11-14-path-display-impact.md', '1 절: 표시가 있을 때 R 팔 근접 캡처가 opening_width_mismatch 로 거부, 표시를 끄니 채택(2/2) — 원고의 「입구 폭을 잘못 읽어 인식을 거부」'),
+     ('편집', '두 PNG 의 (160, 140)–(560, 330) 범위를 잘라 2배 확대(800 × 380), 고치기 전 그림의 선 자리(350, 300)에 빨간 동그라미를 그림(겹침 표시, 원본에는 없음)')],
+    '그림: Isaac Sim 인식 카메라 근접 캡처, 왼쪽 고치기 전 · 오른쪽 고친 뒤')
+
+add('복귀 끝 정지 전후 화면', '07  복귀 끝 정지 전후 화면', 45, f"""
+<h2 class="headline">허용치 8 mm를 0.1 mm 넘어 멈추던 곳에서 물러섰다가 다시 들어가 완주</h2>
+<div class="stall12 grow">
+<figure class="shot vw12b"><video class="media" src="assets/s07_stall.mp4" poster="assets/s07_stall_poster.jpg" autoplay loop muted playsinline aria-label="복귀 마지막 구간을 위에서 비스듬히 본 두 영상. 왼쪽은 지게차가 목표 옆에서 멈춘 채 234초에 시간 초과 실패, 오른쪽은 같은 자리에서 조금 물러섰다가 다시 들어가 217초에 도착"></video></figure>
+<div class="stcap12"><span>고치기 전, 34초 넘게 멈춰 실패</span><span>고친 뒤, 멈춤 감지해 다시 들어감</span></div>
+</div>
+{lgd(('line', C_RETURN, '복귀 경로'), ('line', C_APPROACH, '접근 경로'), ('line', C_OBSERVE, '관측 경로'))}
+""",
+    """두 번째 사례입니다. 팔레트를 내려놓고 출발점으로 돌아오는 마지막 구간을 확대한 영상이고, 왼쪽이 고치기 전, 오른쪽이 고친 뒤입니다. 두 영상은 같은 시각에 맞춰 재생하고, 왼쪽 위 숫자가 시뮬레이션 시각입니다. 고치기 전에는 목표 바로 옆에서 멈춘 뒤 더 움직이지 않고 34초 넘게 서 있다가, 234초에 시간 초과로 실패합니다. 앞뒤로는 목표에 닿았지만 옆으로 8.1밀리미터 떨어져 허용치를 0.1밀리미터 넘었기 때문입니다. 고친 뒤에는 이렇게 멈춘 것을 감지해 경로를 다시 계획하고, 조금 물러섰다가 다시 들어가 217초에 도착합니다. 이 결과는 장면 하나에서 확인한 것이라, 다른 장면에서도 계속 확인하겠습니다. (전환)""",
+    [(R12, 'random_1 s24, quarter 보기(eye −2.1, −1.2, 5.8 → target −2.1, 0, 0, 화면 폭 약 5 m), overlay 경로 표시; 끔 gcbOff_random_1_s24/run/view_quarter.mp4 (234.48 s, sha256 b50b428d…, Tracking timeout in return_home), 켬 gcbOn_random_1_s24/run/view_quarter.mp4 (217.17 s, sha256 2d214273…, 206.74 s 띠 발동 · 207.93 s 정체 재계획 성공 · 완주); 받은 뒤 sha256 대조 일치'),
+     (f'{ROBOT} docs/validation/2026-11-17-return-home-timeout.md', '복귀 끝 옆 8.100 mm(허용 8 mm), 199.95 s 부터 시간 초과까지 약 34.5 s 정지'),
+     ('편집', '두 영상의 시뮬 195 s 부터 crop=700:420:300:40, 끔은 234.48 s 까지 · 켬은 217.17 s 뒤 마지막 프레임 유지, 좌우로 붙여 2배속; 각 칸 왼쪽 위 시뮬 시각(끝에서 멈춤)과 끝 모서리 라벨(끔 39.3 s 뒤, 켬 22.1 s 뒤)을 ffmpeg drawtext 로 넣음 — 라벨 문구는 agy'),
+     ('겹침선 색', 'src/forklift_core/mission/core.py show_path: 복귀 (0.55, 0.2, 0.85), 접근 (0.05, 0.45, 1.0), 관측 (0.2, 0.8, 0.8)')],
+    '영상: Isaac Sim 확대 시점, 왼쪽 고치기 전 · 오른쪽 고친 뒤 (같은 시각 맞춤)')
+
+# ----------------------------------------------------------------- 8
 CU_ROWS = [
     ('전환점 앞 짧은 곡선 (운반)', '90개', '<b>18개</b>'),
     ('운반 중 재계획', '16회', '<b>8회</b>'),
     ('완주', '10회 중 9회', '10회 중 9회'),
 ]
-add('좁은 통로 방향 전환 경로 개선', '06  좁은 통로 방향 전환 경로 개선', 65, f"""
+add('좁은 통로 방향 전환 경로 개선', '08  좁은 통로 방향 전환 경로 개선', 65, f"""
 <h2 class="headline">방향 전환점 앞 짧은 곡선을 줄여 좁은 통로 운반 중 재계획 16 → 8회, 완주는 유지</h2>
 <div class="cu12 grow">
 <figure class="shot vw12"><div class="vbox12"><video class="media" src="assets/s05_cusp.mp4" poster="assets/s05_cusp_poster.jpg" autoplay loop muted playsinline aria-label="좁은 통로 장면을 위에서 본 두 영상. 위는 기존 계획으로, 팔레트를 꺼낸 직후 전환점 앞 짧은 곡선에서 앞뒤로 여러 번 움직이며 다시 계획함. 아래는 개선한 계획으로, 더 긴 곡선으로 빠져나와 한 번에 운반함"></video>
@@ -240,14 +274,14 @@ add('좁은 통로 방향 전환 경로 개선', '06  좁은 통로 방향 전�
      ('겹침선 색', 'sim/isaac/run_transport.py add_path_display: 접근 (0.05, 0.45, 1.0), 운반 (1.0, 0.65, 0.04), 복귀 (0.55, 0.2, 0.85); 초록 원은 하역 칸')],
     '영상: Isaac Sim 탑뷰 (8배속), 위 기존 · 아래 개선')
 
-# ----------------------------------------------------------------- 7
+# ----------------------------------------------------------------- 9
 END_ROWS = [
     ('실차 측정 (11월 20일)', '직진 중 방향 틀어짐, 조향 명령 대비 실제 회전, 재출발 반응을 차의 센서와 줄자로 측정'),
     ('LiDAR 연결', 'RPLIDAR A2M12가 도착하면 노트북과 Jetson에 연결해 스캔 확인'),
     ('측정값 반영', '실측값을 시뮬레이션에 넣어 운반 경로 이탈과 팔레트 앞 접근 개선'),
     ('논문 조사', '사전 지도에서 시작 위치 찾기, 좁은 통로 방향 전환 경로 계획 관련 논문'),
 ]
-add('다음 주 계획', '07  다음 주 계획', 45, f"""
+add('다음 주 계획', '09  다음 주 계획', 45, f"""
 <h2 class="headline">11월 20일 실차 측정과 LiDAR 연결, 측정값으로 시뮬레이션 보정</h2>
 {table(['구분', '할 일'], END_ROWS, 'comparison h7 endt12')}
 """,
@@ -259,16 +293,16 @@ add('다음 주 계획', '07  다음 주 계획', 45, f"""
 
 
 TITLE = '12주차 자율 지게차 개발'
-TOTAL = 450
+TOTAL = 535
 
 
 def build():
-    assert len(slides) == 8, len(slides)
+    assert len(slides) == 10, len(slides)
     assert sum(s['seconds'] for s in slides) == TOTAL, sum(s['seconds'] for s in slides)
     sections = []
     script = [f'# {TITLE} · 발표 원고', '',
               f'{len(slides)}장 · 시간 배분 합계 {TOTAL//60}분 {TOTAL%60}초. 쪽별 배정 시간은 발표 연습 후 조정한다.', '',
-              '기준일: 2026-11-17. 2–3쪽은 2026-11-17 실제 장비 측정이고 모터 · 엔코더는 아직 연결하지 않았다. 4–6쪽은 Isaac 시뮬레이션 결과이고, 5–6쪽의 전후 비교는 같은 장면 · seed 짝 비교만 썼다(SOURCES.md). '
+              '기준일: 2026-11-17. 2–3쪽은 2026-11-17 실제 장비 측정이고 모터 · 엔코더는 아직 연결하지 않았다. 4–8쪽은 Isaac 시뮬레이션 결과이고, 5–7쪽의 전후 비교는 같은 장면 · seed 짝 비교만 썼다(SOURCES.md). '
               '원고는 발표자 문체(합니다체)로 썼고, (전환)은 다음 쪽으로 넘기는 자리다.', '']
     elapsed = 0
     for i, s in enumerate(slides, 1):
