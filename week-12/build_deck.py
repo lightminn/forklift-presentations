@@ -212,7 +212,8 @@ add(TXT['S05_TITLE'], '06  ' + TXT['S05_TITLE'], 80, f"""
      (K1R, '등록 판정 「K1 이 나음」: 결정 모드 riib 40 짝, B0(NEAR_OBSERVE_ARRIVAL=off) 대 K1(--near-observe-arrival 0.05,0.05); 완주 36 · 36, |횡 오프셋| > 0.08 m 실행 B0 4 · K1 0, 새 악화 0; 노출 4 는 기준을 겨우 채운 약한 근거(s19 는 −80.099 mm); riib 런처 기본 유지(#499)'),
      (FRAG, '② 근접 문턱 근처 거부: random_1 두 건은 느슨한 도착(5.6 · 6.2 cm)을 받아들인 뒤 횡 한도 0.10 m 를 5 · 7 mm 넘음'),
      (RHT, 'random_1 seed 24: 복귀 경로 끝 옆 8.100 mm(허용 8 mm), 앞뒤 −0.15 mm 에서 34.5 s 정지 → Tracking timeout in return_home; #117 크리프 규칙 R1 · R2 와 정체 재계획 조건이 모두 받지 못한 사각 띠(소프트웨어 쪽); 옆 오차의 출처(plant)는 실측 없이 정하지 않음'),
-     (GBC, '결정 모드 짝: s24 끔 = 시간 초과(기준선 재현), --goal-creep-band on = 완주(띠 고정 → 정체 재계획 0.89 m); 총괄 결정 riib 런처 기본 켬(#571), 근거 seed 1 개; Isaac smoke 3 실행 완주')],
+     (GBC, '결정 모드 짝: s24 끔 = 시간 초과(기준선 재현), --goal-creep-band on = 완주(띠 고정 → 정체 재계획 0.89 m); 총괄 결정 riib 런처 기본 켬(#571), 근거 seed 1 개; Isaac smoke 3 실행 완주'),
+     (f'{ROBOT} docs/validation/2026-11-18-f2-i-reregistration.md 3.3 절 (PR #575)', '11주차 연속 이송 랜덤 배치 1 회 실패(random_m s0 두 번째 임무 근접 캡처 예상 후보 없음)는 지금 main · 같은 설정 라이브 1 세션에서 세 임무 완료(하역 26.7 · 12.8 · 34.2 mm) — 비결정 1 회, 「지금 main 에서 재현 안 됨(1 회)」, 고친 사례로 쓰지 않음')],
     '표: 수정 전후 같은 장면 · seed 짝 비교 (Isaac 시뮬레이션)')
 
 # ----------------------------------------------------------------- 6 · 7 before/after screens of two slide-05 cases (user, 2026-11-17 via the lead)

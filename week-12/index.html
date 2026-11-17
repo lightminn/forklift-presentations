@@ -140,6 +140,7 @@ B-P2d 조사 지도 hall_s5b_G0 (map 3edf24b0, grid.npz 843 × 639 · 0.05 m, Dr
 ② 근접 문턱 근처 거부: random_1 두 건은 느슨한 도착(5.6 · 6.2 cm)을 받아들인 뒤 횡 한도 0.10 m 를 5 · 7 mm 넘음: lightminn/forklift main f7566ed4 docs/validation/2026-11-15-baseline-fragility-summary.md
 random_1 seed 24: 복귀 경로 끝 옆 8.100 mm(허용 8 mm), 앞뒤 −0.15 mm 에서 34.5 s 정지 → Tracking timeout in return_home; #117 크리프 규칙 R1 · R2 와 정체 재계획 조건이 모두 받지 못한 사각 띠(소프트웨어 쪽); 옆 오차의 출처(plant)는 실측 없이 정하지 않음: lightminn/forklift main f7566ed4 docs/validation/2026-11-17-return-home-timeout.md
 결정 모드 짝: s24 끔 = 시간 초과(기준선 재현), --goal-creep-band on = 완주(띠 고정 → 정체 재계획 0.89 m); 총괄 결정 riib 런처 기본 켬(#571), 근거 seed 1 개; Isaac smoke 3 실행 완주: lightminn/forklift main f7566ed4 docs/validation/2026-11-17-goal-band-cusp-retry.md
+11주차 연속 이송 랜덤 배치 1 회 실패(random_m s0 두 번째 임무 근접 캡처 예상 후보 없음)는 지금 main · 같은 설정 라이브 1 세션에서 세 임무 완료(하역 26.7 · 12.8 · 34.2 mm) — 비결정 1 회, 「지금 main 에서 재현 안 됨(1 회)」, 고친 사례로 쓰지 않음: lightminn/forklift main f7566ed4 docs/validation/2026-11-18-f2-i-reregistration.md 3.3 절 (PR #575)
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="06  시뮬레이션 실패 수정"><div class="slide-body">
 <h2 class="headline">시뮬레이션 임무 실패 세 건을 고쳐 같은 장면과 조건 비교로 해결을 확인</h2>

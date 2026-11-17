@@ -170,6 +170,10 @@
       [
         "lightminn/forklift main f7566ed4 docs/validation/2026-11-17-goal-band-cusp-retry.md",
         "결정 모드 짝: s24 끔 = 시간 초과(기준선 재현), --goal-creep-band on = 완주(띠 고정 → 정체 재계획 0.89 m); 총괄 결정 riib 런처 기본 켬(#571), 근거 seed 1 개; Isaac smoke 3 실행 완주"
+      ],
+      [
+        "lightminn/forklift main f7566ed4 docs/validation/2026-11-18-f2-i-reregistration.md 3.3 절 (PR #575)",
+        "11주차 연속 이송 랜덤 배치 1 회 실패(random_m s0 두 번째 임무 근접 캡처 예상 후보 없음)는 지금 main · 같은 설정 라이브 1 세션에서 세 임무 완료(하역 26.7 · 12.8 · 34.2 mm) — 비결정 1 회, 「지금 main 에서 재현 안 됨(1 회)」, 고친 사례로 쓰지 않음"
       ]
     ],
     "foot": "표: 수정 전후 같은 장면 · seed 짝 비교 (Isaac 시뮬레이션)"
