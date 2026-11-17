@@ -1035,3 +1035,9 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .comparison.h7.fx12 td:first-child { width:25%; }
 .comparison.h7.rlw12 { margin-top:18px; font-size:23px; line-height:1.45; }
 .comparison.h7.rlw12 td, .comparison.h7.rlw12 th { padding:26px 12px; }
+.ty12 { display:grid; grid-template-columns:minmax(0,0.9fr) minmax(0,1.1fr); gap:30px; min-height:0; align-items:center; }
+.ty12 .ldc12 { height:auto; }
+.comparison.h7.tyt12 { font-size:20px; }
+.comparison.h7.tyt12 td, .comparison.h7.tyt12 th { padding:14px 10px; vertical-align:middle; }
+.comparison.h7.tyt12 td:not(:first-child), .comparison.h7.tyt12 th:not(:first-child) { text-align:center; }
+.tyc12 { max-width:1200px; }
