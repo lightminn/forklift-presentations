@@ -3,15 +3,15 @@
 <link rel="icon" href="data:,">
 <script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>12주차 자율 지게차 개발</title>
-<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=6286728d8f92"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=2bf4351a70c5"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
-<section class="title-section" data-label="개발 진행 보고" data-screen-label="01" data-duration="20" data-speaker-notes="권장 20초
+<section class="title-section" data-label="개발 진행 보고" data-screen-label="01" data-duration="15" data-speaker-notes="권장 15초
 
-안녕하십니까. 12주차 자율 지게차 개발 진행 상황을 발표할 김광민이라고 합니다. 이번 발표는 지난주에 주신 피드백 세 가지에 답하는 순서로 준비했습니다. 실제 장비를 처음 연결해 본 결과와 시작 위치 찾기를 조건을 넓혀 다시 시험한 결과를 먼저 말씀드리고, 이어서 지난 발표 이후 시뮬레이션에서 실패했던 사례를 어떻게 고쳐 성공률을 높였는지 같은 조건 비교 결과로 말씀드린 뒤 다음 주 계획으로 마치겠습니다. (전환)
+안녕하십니까. 12주차 자율 지게차 개발 진행 상황을 발표할 김광민이라고 합니다. 지난주 피드백에 대한 답으로 실제 장비를 처음 연결한 결과와 시작 위치 찾기 시험을 말씀드리고, 그사이 시뮬레이션에서 실패한 사례를 어떻게 고쳤는지 말씀드리겠습니다. (전환)
 
 [Sources]
 진행 보고
-11주차 피드백 원문: lightminn/forklift main f7566ed4 docs/references/week11_feedback.md (로컬 전용, 저장소 밖 미추적 파일)
+11주차 피드백 원문: lightminn/forklift main docs/references/week11_feedback.md (로컬 전용, 저장소 밖 미추적 파일)
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.TitleSlide" hint-size="100%,100%" title="12주차
 자율 지게차 개발" subtitle="팔레트 핸들링 경로 생성 및 제어"></x-import><img class="partner-mark" src="assets/riibotics-logo.png" alt="Riibotics">
@@ -19,261 +19,180 @@
 
 <section data-label="지난주 피드백과 진행" data-screen-label="02" data-duration="35" data-speaker-notes="권장 35초
 
-지난주 발표 뒤에 세 가지 피드백을 받았습니다. 첫째, 모터 같은 장비를 실제로 사서 직접 써 보라는 것, 둘째, SLAM으로 자기 위치를 판정하는 기능을 더 다양하게, 더 정확하게 시험하라는 것, 셋째, 논문을 더 찾아보라는 것이었습니다. 첫째는 이번 주에 MCU 보드와 Jetson, 카메라를 실제로 연결해 본 결과로 2쪽과 3쪽에서 말씀드립니다. 둘째는 시작 위치 찾기를 공장 배치와 시험 방식을 바꿔 다시 확인한 결과로 4쪽에서 말씀드립니다. 셋째는 이번 주에 새로 찾은 논문이 없어서, 다음 주 계획에 조사 항목으로 넣었습니다. 그리고 6쪽부터 11쪽까지는 피드백과 별도로, 지난 발표 이후 시뮬레이션에서 임무가 실패한 사례를 원인부터 찾아 고친 결과를 말씀드리겠습니다. (전환)
+지난주 발표 뒤 세 가지 피드백을 받았습니다. 장비를 실제로 사서 써 볼 것, SLAM으로 자기 위치를 찾는 기능을 더 다양하게 시험할 것, 논문을 더 찾아볼 것입니다. 첫째는 하위 제어 보드와 Jetson, 카메라를 실제로 연결한 결과로 2쪽에서, 둘째는 시작 위치 찾기를 조건을 바꿔 시험한 결과로 6쪽에서 말씀드립니다. 논문은 이번 주에 새로 찾지 못해 다음 주 계획에 넣었습니다. 그 사이 3쪽부터 5쪽은 시뮬레이션에서 실패한 사례를 고친 내용입니다. (전환)
 
 [Sources]
-표: 피드백별 이번 주 진행과 해당 쪽
-「각종 장비들(ex, 모터) 실제로 사서 뚜다해보고 써볼것 / SLAM을 통한 자기 위치 판정 정확하게등등 다양하게 더 정확하게 테스트 하기 / 논문 더 찾아보기」: lightminn/forklift main f7566ed4 docs/references/week11_feedback.md (로컬 전용, 저장소 밖 미추적 파일)
-이번 주 새로 찾은 논문 없음 — 지어내지 않고 다음 주 계획으로 돌림: 총괄 (2026-11-17)
+표: 피드백별 이번 주 진행과 해당 장
+「각종 장비들(ex, 모터) 실제로 사서 뚜다해보고 써볼것 / SLAM을 통한 자기 위치 판정 정확하게등등 다양하게 더 정확하게 테스트 하기 / 논문 더 찾아보기」: lightminn/forklift main docs/references/week11_feedback.md (로컬 전용, 저장소 밖 미추적 파일)
+이번 주 새로 찾은 논문 없음 — 다음 주 계획으로 돌림: 총괄 (2026-11-17)
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="01  지난주 피드백과 진행"><div class="slide-body">
-<h2 class="headline">지난주 교수님 피드백에 맞춰 장비 연결과 시작 위치 찾기 시험을 진행</h2>
-<table class="comparison h7 fb12"><tr><th>피드백</th><th>이번 주 진행</th><th>쪽</th></tr><tr><td>모터 등 실제 장비를<br>직접 연결해 써 보기</td><td>제어 보드, 컴퓨터, 카메라 연결 확인<br>모터는 부품 20일 발송 뒤, LiDAR 없음</td><td>02 · 03</td></tr><tr><td>SLAM 기반 자기 위치 판정을<br>더 다양하고 정확하게 시험</td><td>지도에서 시작 위치 찾기 기능을<br>두 공장 배치와 세 방식으로 시험</td><td>04 · 05</td></tr><tr><td>관련 논문 더 찾아보기</td><td>이번 주는 새 논문 조사 못 함<br>다음 주 조사 항목에 반영</td><td>12</td></tr></table>
-<p class="note12 fbn12">06–11장은 시뮬레이션에서 생긴 임무 실패 원인을 찾아 고친 결과입니다</p>
+<h2 class="headline">장비 첫 연결과 시작 위치 찾기를 시험하고 논문 조사는 다음 주에 진행</h2>
+<table class="comparison h7 fb12"><tr><th>피드백</th><th>이번 주 진행</th><th>쪽</th></tr><tr><td>모터 등 실제 장비를 사서<br>직접 연결해 볼 것</td><td>하위 제어 보드, 컴퓨터, 카메라 연결<br>모터와 2D LiDAR는 도착 뒤 연결</td><td>02</td></tr><tr><td>SLAM 자기 위치 찾기를<br>다양한 조건으로 정확히 시험</td><td>물건 배치가 다른 두 공장 장면에서<br>세 방식으로 시작 위치 찾기 시험</td><td>06</td></tr><tr><td>관련 논문을 더 찾아볼 것</td><td>이번 주는 찾지 못해<br>다음 주 조사 계획에 포함</td><td>08</td></tr></table>
+<p class="note12 fbn12">피드백 외에 03–05쪽은 시뮬레이션 실패 해결, 07쪽은 좁은 통로 개선입니다</p>
 </div></x-import>
 </section>
 
-<section data-label="MCU 보드 첫 연결" data-screen-label="03" data-duration="65" data-speaker-notes="권장 65초
+<section data-label="실제 장비 첫 연결" data-screen-label="03" data-duration="70" data-speaker-notes="권장 70초
 
-첫 번째 피드백에 대한 답입니다. 지금까지 PC에서만 시험하던 MCU 펌웨어를 실제 STM32H743 보드에 처음 올렸습니다. 사진이 이번에 연결한 코어 보드입니다. 모터 출력을 잠근 시험용 펌웨어를 굽고, 노트북과 Jetson에 각각 USB로 연결해 10분씩 명령과 상태를 주고받았습니다. MCU는 10밀리초마다 상태를 보내는데, 10분 동안 노트북은 6만 개, Jetson은 5만 9천 999개를 받았고 중간에 빠진 메시지는 하나도 없었습니다. 명령을 보내고 그 명령이 반영된 상태가 돌아오기까지의 왕복 시간은 노트북이 중앙값 9.3밀리초, Jetson이 4.0밀리초였고, 둘 다 최대 10밀리초 남짓이었습니다. 상태를 받는 간격도 Jetson에서는 최대 10.7밀리초로, MCU가 보내는 주기를 거의 그대로 따라갔습니다. 다만 이번에 확인한 것은 통신까지입니다. 모터와 엔코더는 메인보드와 부품이 도착해야 연결할 수 있고, 11월 20일에 발송될 예정입니다. (전환)
+첫 번째 피드백인 실제 장비입니다. 왼쪽부터 하위 제어 보드, 상위 제어 컴퓨터, 카메라, LiDAR입니다. 하위 제어 보드 STM32H743은 상위 컴퓨터가 보낸 목표값을 받아 바퀴와 조향, 포크 승강 모터 네 개를 직접 돌릴 보드입니다. 사진은 팀이 이번에 연결한 보드이고, 우리가 짠 펌웨어를 모터 출력을 잠근 상태로 처음 올렸습니다. 노트북과 Jetson에 각각 10분씩 연결했더니, 10밀리초마다 보내는 상태 메시지를 6만 개 가까이 받는 동안 빠진 것이 하나도 없었고, 명령을 보내고 결과가 돌아오기까지 가장 길어도 10밀리초 남짓이었습니다. 상위 제어 컴퓨터 Jetson은 20밀리초마다 하위 보드로 명령을 보내야 하는데, CPU 여섯 코어 모두에 부하를 걸어도 명령 간격이 가장 길 때 29.6밀리초로, 미리 정한 기준 80밀리초보다 짧았습니다. 카메라 RealSense D435i는 Jetson에 연결해 안에 든 관성 센서를 2분 동안 기록했고 측정이 빠짐없이 들어왔습니다. 2D LiDAR는 아직 장비가 없어 연결하지 못했습니다. 모터와 엔코더는 메인보드와 부품이 11월 20일에 발송되면 연결합니다. (전환)
 
 [Sources]
-사진: 이번에 연결한 STM32H743 코어 보드 (팀 촬영), 표: 2026-11-17 측정
-「H743 링크」 표: HIL 이미지 forklift-mcu hil locked 65f252a5c4b6, DFU 굽기 검증; 노트북 600 s · STATE 60,000 · seq 틈 0 · 프레임 오류 0 · MCU 주기 10.0 ms · 호스트 간격 최대 20.917 ms · 왕복 p50 9.3 / 최대 10.15 ms · 리셋 0; Jetson 600 s · STATE 59,999 · seq 틈 0 · 호스트 간격 최대 10.661 ms · 왕복 3.97 / 10.26 ms · 리셋 0; 둘 다 PASS: lightminn/forklift main f7566ed4 docs/validation/2026-11-17-hw-day.md
-Jetson 판정 줄과 굽힌 이미지 식별(위 값과 같음, 2026-11-17 확인): lightminn/forklift main f7566ed4 docs/validation/assets/hw-day-2026-11-17/jetson/h743_link.txt · laptop_h743/BUILD.txt
-사용자 촬영(2026-11-17, WeAct STM32H743VIT6 코어 보드 윗면) — 보드 주변만 잘라 180° 돌리고 EXIF 를 지움: 사진
-연결: H743 은 노트북 USB(USB CDC), 그 뒤 Jetson USB; 모터 · 엔코더 미연결 — 메인보드 · 부품 11월 20일 발송 예정(11주차 10 장): lightminn/forklift main f7566ed4 docs/validation/2026-11-17-hw-day.md
+사진: 팀 촬영(MCU) · 제품 사진, 값: 2026-11-17 실제 장비 측정
+「H743 링크」: HIL 이미지(출력 잠금), 노트북 600 s · STATE 60,000 · seq 틈 0 · 왕복 p50 9.3 / 최대 10.15 ms · 리셋 0, Jetson 600 s · STATE 59,999 · seq 틈 0 · 왕복 3.97 / 10.26 ms · 리셋 0; 「다리 정체」 MAXN_SUPER 각 300 s: 정지 최대 21.9 ms, 부하(모든 코어) 최대 29.6 ms, 기준 80 ms 미만; 「D435i IMU」 120.2 s 자이로 399.8 Hz · 가속도 200.1 Hz · dropped 0; A2M12 미실시: lightminn/forklift main docs/validation/2026-11-17-hw-day.md
+판정 줄로 위 값 확인(2026-11-17): lightminn/forklift main docs/validation/assets/hw-day-2026-11-17/jetson/h743_link.txt · jetson/stall/{idle,load}/verdict.txt · jetson/imu.txt
+hw_h743.jpg 사용자 촬영(EXIF 지움), hw_jetson.jpg NVIDIA 제품 페이지 이미지(© NVIDIA), hw_d435.jpg Wikimedia Commons Marc Auledas CC BY-SA 4.0(D435, 겉모양 D435i 와 같음), hw_lidar.jpg 과제 브리프 3쪽 — SOURCES.md: 사진
+메인보드 · 부품 11월 20일 발송 예정: 사용자 (2026-11-10)
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="02  MCU 보드 첫 연결"><div class="slide-body">
-<h2 class="headline">바퀴와 포크를 돌릴 하위 제어 보드(MCU)에 첫 펌웨어를 올려 10분 통신을 확인</h2>
-<div class="hw12 grow">
-<figure class="shot ph12"><img class="media" src="assets/hw_h743.jpg" alt="WeAct STM32H743 코어 보드 윗면. 가운데 STM32H743 칩, 아래쪽에 USB-C 단자와 microSD 슬롯, 양옆에 핀 헤더 두 줄"><figcaption>모터 제어용 MCU(STM32H743)</figcaption></figure>
-<div class="stack hw12r">
-<div class="phase-flow link12"><span>노트북과 Jetson에 USB로 각각 연결해 10분씩 명령을 보내고 10 ms 간격 상태를 수신</span></div>
-<table class="comparison h7 lk12"><tr><th>항목</th><th>노트북</th><th>Jetson</th></tr><tr><td>받은 상태 메시지<br>(10 ms 간격)</td><td>60,000개 (누락 0)</td><td>59,999개 (누락 0)</td></tr><tr><td>명령 왕복 시간<br>(중앙, 최대)</td><td>9.3, 10.2 ms</td><td>4.0, 10.3 ms</td></tr><tr><td>상태를 받는<br>최대 간격</td><td>20.9 ms</td><td>10.7 ms</td></tr></table>
-<p class="note12">모터 출력은 잠갔고 11월 20일 부품 발송 뒤 연결 예정</p>
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="02  실제 장비 첫 연결"><div class="slide-body">
+<h2 class="headline">하위 제어 보드, Jetson, 카메라를 처음 연결해 통신과 응답 기준 통과</h2>
+<div class="devs12 dev4 grow">
+<div class="dev12"><figure class="shot"><img class="media" src="assets/hw_h743.jpg" alt="WeAct STM32H743 코어 보드 윗면. 가운데 STM32H743 칩, 아래쪽에 USB-C 단자, 양옆에 핀 헤더"></figure><h3>하위 MCU STM32H743</h3><p>모터 제어 펌웨어 첫 탑재 (잠금)</p><p>노트북, Jetson 10분 연결 누락 0</p><p>명령 왕복 시간 최대 약 10 ms</p></div>
+<div class="dev12"><figure class="shot"><img class="media" src="assets/hw_jetson.jpg" alt="NVIDIA Jetson Orin Nano 개발 키트 보드. 검은 방열판과 팬"></figure><h3>Jetson Orin Nano Super</h3><p>팔레트 인식과 경로 계획용 컴퓨터</p><p>CPU 최대 부하 5분 명령 간격</p><p>최대 29.6 ms (기준 80 ms 미만)</p></div>
+<div class="dev12"><figure class="shot"><img class="media" src="assets/hw_d435.jpg" alt="Intel RealSense 깊이 카메라를 작은 삼각대에 올린 사진"></figure><h3>RealSense D435i</h3><p>팔레트 찾는 카메라와 관성 센서</p><p>Jetson에 연결해 2분간 기록</p><p>자이로 400, 가속도 200 Hz 수신</p></div>
+<div class="dev12 off12"><figure class="shot"><img class="media" src="assets/hw_lidar.jpg" alt="SLAMTEC RPLIDAR A2 2D 라이다"></figure><h3>RPLIDAR A2M12</h3><p>주변 모양 읽는 2D LiDAR 센서</p><p>장비 미도착으로 아직 연결 못 함</p><p>도착하면 노트북과 Jetson에 연결</p></div>
 </div>
-</div>
-<div class="takeaway">10분 동안 두 연결 모두 보드가 한 번도 리셋되지 않아 통신 기반을 확인했습니다.</div>
+<div class="takeaway">모터와 엔코더 연결은 메인보드와 부품이 11월 20일에 발송된 뒤 진행합니다.</div>
 </div></x-import>
 </section>
 
-<section data-label="컴퓨터와 센서 첫 연결" data-screen-label="04" data-duration="65" data-speaker-notes="권장 65초
+<section data-label="시뮬레이션 실패 해결" data-screen-label="04" data-duration="80" data-speaker-notes="권장 80초
 
-두 번째로 상위 제어기인 Jetson과 센서입니다. 이번에 쓴 Jetson은 새로 받은 Orin Nano Super이고, 최대 성능 모드로 설정했습니다. Jetson은 주행 중에 20밀리초마다 MCU로 명령을 보내야 합니다. 그래서 아무 일도 시키지 않았을 때와 CPU 여섯 코어 모두에 부하를 걸었을 때 각각 5분 동안, 명령을 보내는 간격이 얼마까지 벌어지는지 쟀습니다. 정지 상태에서는 최대 21.9밀리초, 부하를 건 상태에서도 최대 29.6밀리초로, 미리 정해 둔 기준인 80밀리초보다 훨씬 짧았습니다. 인식과 SLAM이 함께 돌아도 명령이 끊기지 않을 여유가 있다는 뜻입니다. 가운데는 RealSense D435i 카메라입니다. Jetson에 연결해 카메라 안의 IMU를 2분 동안 기록했고, 자이로는 초당 400번, 가속도는 초당 200번 측정이 빠짐없이 들어왔습니다. 오른쪽 2D LiDAR인 RPLIDAR A2M12는 이번에는 장비가 없어 연결하지 못했고, 도착하면 같은 방식으로 확인하겠습니다. (전환)
+다음은 시뮬레이션에서 임무가 실패한 사례를 어떻게 고쳤는지입니다. 네 가지 모두 고치기 전과 후를 같은 장면, 같은 조건으로 다시 돌려 비교했습니다. 첫째, 좁은 통로에서 팔레트 바로 앞까지 가서 카메라가 팔레트를 인식하지 못한 실패는, 운용 화면에 보여 주려고 그린 경로 표시선이 카메라 영상에도 찍혀서였습니다. 표시선을 카메라에서 빼자 40번 중 완주가 34번에서 36번으로 늘고 인식 실패가 없어졌습니다. 둘째, 포크를 넣기 전에 가까이 다시 보는 자리에 옆으로 5에서 6센티미터 어긋나도 도착으로 인정하던 것을 5센티미터로 좁혀, 8센티미터 넘게 어긋난 경우를 4번에서 0번으로 줄였습니다. 셋째, 출발점으로 돌아오는 마지막에 목표에서 8.1밀리미터 떨어져 멈춘 채 시간이 초과되던 것은, 이런 정지를 감지해 다시 계획하게 해서 완주로 바뀌었습니다. 넷째는 시뮬레이터 자체의 문제였습니다. 차체가 네 바퀴의 한 점씩으로만 바닥에 닿는 모형이라 무게가 한쪽 대각선으로 쏠려 조향이 덜 됐고, 순응 타이어 모형으로 바꿔 같은 조건 13가지의 완주가 10가지에서 13가지가 되었습니다. 둘째는 어긋난 사례가 네 번뿐이고 셋째는 장면 하나에서 확인한 것이라 근거가 강하지는 않습니다. (전환)
 
 [Sources]
-사진: 제품 사진 (출처는 SOURCES.md), 그래프: 2026-11-17 Jetson 측정
-「Jetson 기록」: Orin Nano Super Developer Kit, JetPack R39.2.1, Ubuntu 24.04, 6 코어 · 7.4 GiB, MAXN_SUPER + jetson_clocks; 「다리 정체」 각 300 s: 정지 14,954 주기 p50 20.1 · 최대 21.9 ms, 부하(모든 코어) 14,678 주기 p50 20.1 · p99 23.8 · 최대 29.6 ms, 80 ms 이상 0, 기준은 정지 40 ms 넘는 간격 0 · 부하 80 ms 이상 간격 0 (리허설 다리, 모형 MCU): lightminn/forklift main f7566ed4 docs/validation/2026-11-17-hw-day.md
-두 판정 ALL PASS, 값은 위와 같음(2026-11-17 확인): lightminn/forklift main f7566ed4 docs/validation/assets/hw-day-2026-11-17/jetson/stall/{idle,load}/verdict.txt
-「D435i IMU」 정지 120.2 s: 자이로 48,071 표본 399.8 Hz, 가속도 24,060 표본 200.1 Hz, dropped 0 (Jetson 에서 librealsense v2.59.2 소스 빌드 뒤); 「A2M12」 장비가 없어 미실시: lightminn/forklift main f7566ed4 docs/validation/2026-11-17-hw-day.md
-NVIDIA Jetson Orin Nano Super Developer Kit 제품 페이지 이미지 jetson-orin-nano-super-developer-kit-bbm-d@2x.jpg 를 보드 부분만 자름 (© NVIDIA, 제품 소개용 이미지): 사진 hw_jetson.jpg
-Wikimedia Commons, File:Intel Realsense depth camera D435.jpg — Marc Auledas, CC BY-SA 4.0; 같은 계열의 D435(IMU 없는 모델)이며 겉모양은 D435i 와 같음: 사진 hw_d435.jpg
-과제 브리프 3쪽의 RPLIDAR A2 이미지(이 저장소 week-02/assets/rplidar-a2.jpeg): 사진 hw_lidar.jpg
+표: 고치기 전후를 같은 장면 · 같은 조건으로 다시 돌린 비교 (Isaac 시뮬레이션)
+3.3 R vs S: 같은 스냅숏에서 표시 prim 이 인식 카메라에 안 보임 / 보임, 같은 장면 · seed 40 짝, 결정 모드: 완주 36/40 대 34/40, perception 실패 0 대 1(aisle_rack s2): lightminn/forklift main docs/validation/2026-11-15-post-fix-baseline.md
+표시선 · 목적지 고리가 렌더되는 장면 prim 이라 인식 카메라에 찍힘(#509), 수정 #512; 표시만 끈 진단에서 근접 캡처 거부 → 채택 2/2: lightminn/forklift main docs/validation/2026-11-14-path-display-impact.md
+등록 판정 「나음」: B0 대 K1(근거리 관측 도착 0.05 m · 0.05 rad) 40 짝, 완주 36 · 36, |횡 오프셋| &gt; 0.08 m 4 · 0, 노출 4 는 약한 근거: lightminn/forklift main docs/validation/2026-11-15-k1-recheck.md
+② 느슨한 도착 5.6 · 6.2 cm 를 받아들인 뒤 횡 한도 0.10 m 를 5 · 7 mm 넘음: lightminn/forklift main docs/validation/2026-11-15-baseline-fragility-summary.md
+random_1 s24 복귀 끝 옆 8.100 mm(허용 8 mm)에서 약 34.5 s 정지 → 시간 초과: lightminn/forklift main docs/validation/2026-11-17-return-home-timeout.md
+결정 모드 짝 s24: 끔 시간 초과, --goal-creep-band on 완주; riib 런처 기본 켬(#571), 근거 seed 1: lightminn/forklift main docs/validation/2026-11-17-goal-band-cusp-retry.md
+덱 목록 13 짝(random_1 s0 · 5 · 7 · 8 · 9 · 12 · 19 · 23, aisle_rack s1 · 2 · 4 · 17 · 18): 완주 10/13 → 13/13, 하역 오차 중앙(두 팔 완주 10 짝) 16.0 → 4.5 mm; 끔 실패 s8(운반 경로 이탈) · s4(좁은 통로 전환점) · s12(관측 시간 초과, 원인 미확인); 나머지 10 짝은 끔에서도 완주(지금 main 에서 재현 안 됨): lightminn/forklift main docs/validation/2026-11-18-f2-i-reregistration.md (#575, main 460b3578, 문서 커밋 ec888ef1)
+사용자 결정: 순응 타이어를 시뮬 전체(riib · 라이브 런처) 기본 켬 — 런처 PR · Isaac smoke 는 시뮬-물성 진행 중이라 화면에는 「기본 적용 결정」까지만: 총괄 (2026-11-18)
+06 장 세 사례(표시선 aisle_rack s2, K1 random_1 s13 · s19 · s22 · s28, 복귀 정체 s24)는 지금 main 에서 모두 완주(F2I 3.3 절); 11주차 연속 이송 랜덤 배치 1 회 실패는 지금 main 라이브 1 회에서 재현 안 됨(고친 사례로 쓰지 않음): 재확인
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="03  컴퓨터와 센서 첫 연결"><div class="slide-body">
-<h2 class="headline">Jetson은 6코어 부하에도 29.6 ms로 80 ms 기준 통과, 카메라 수신 확인</h2>
-<div class="devs12 grow">
-<div class="dev12"><figure class="shot"><img class="media" src="assets/hw_jetson.jpg" alt="NVIDIA Jetson Orin Nano Developer Kit 보드. 검은 방열판과 팬, 왼쪽에 USB와 이더넷 단자"></figure><h3>Jetson Orin Nano Super (상위 제어 컴퓨터)</h3><p>인식과 경로 계획 후 20 ms마다 명령</p><p>최대 성능 5분 측정 (명령 끊기면 정지)</p><svg class="diagram cyc12" viewBox="0 0 500 124" role="img" aria-label="Jetson에서 MCU로 명령을 보내는 주기의 최대 간격. 정지 21.9 ms, 모든 코어 부하 29.6 ms, 기준 80 ms 미만"><g font-family="var(--uos-font)"><text x="118" y="33" text-anchor="end" font-size="19" fill="#1b1f24">부하 없음</text><rect x="130" y="10" width="74.5" height="32" rx="3" fill="#2f74c0"/><text x="214.5" y="34" font-size="21" font-weight="700" fill="#1b1f24">21.9 ms</text><text x="118" y="83" text-anchor="end" font-size="19" fill="#1b1f24">6코어 부하</text><rect x="130" y="60" width="100.6" height="32" rx="3" fill="#2f74c0"/><text x="240.6" y="84" font-size="21" font-weight="700" fill="#1b1f24">29.6 ms</text><line x1="402.0" y1="0" x2="402.0" y2="98" stroke="#d64541" stroke-width="3" stroke-dasharray="7 5"/><text x="402.0" y="118" text-anchor="middle" font-size="16" fill="#d64541" font-weight="700">합격 기준 80 ms</text></g></svg></div>
-<div class="dev12"><figure class="shot"><img class="media" src="assets/hw_d435.jpg" alt="Intel RealSense D435 깊이 카메라를 작은 삼각대에 올린 사진"></figure><h3>RealSense D435i (RGB-D 카메라)</h3><p>팔레트를 찾는 카메라 (IMU 센서 내장)</p><p>Jetson에 연결해 IMU를 2분간 기록</p><p>자이로 400회, 가속도 200회/초 누락 0</p></div>
-<div class="dev12 off12"><figure class="shot"><img class="media" src="assets/hw_lidar.jpg" alt="SLAMTEC RPLIDAR A2 2D 라이다"></figure><h3>RPLIDAR A2M12 (2D LiDAR)</h3><p>주변 모양으로 위치를 찾는 센서 (미도착)</p><p>도착 후 노트북과 Jetson에 연결 예정</p></div>
-</div>
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="03  시뮬레이션 실패 해결"><div class="slide-body">
+<h2 class="headline">시뮬레이션 실패 네 가지의 원인을 찾아 고치고 같은 조건에서 개선 확인</h2>
+<p class="panel-h">네 사례 모두 수정 전후를 같은 장면과 조건으로 다시 돌려 비교</p>
+<table class="comparison h7 fx12 fx4"><tr><th>지난번 실패</th><th>원인</th><th>고친 것</th><th>같은 조건 전후</th></tr><tr><td>팔레트 바로 앞에서<br>다시 볼 때 인식 실패</td><td>계획 경로 표시선이<br>카메라 영상에 찍힘</td><td>표시선을 운용 화면에만<br>그려 카메라에서 제외</td><td>40회 중 완주 34→36회<br>인식 실패 1→0회</td></tr><tr><td>포크 넣기 직전 팔레트와<br>옆 어긋남 허용치 초과</td><td>다시 보는 자리 5~6 cm<br>옆 어긋남을 도착 인정</td><td>그 자리 도착 허용치를<br>5 cm·0.05 rad로 좁힘</td><td>40회 중 8 cm 초과 4→0<br>완주는 36회 유지</td></tr><tr><td>복귀 목표 8.1 mm 옆에서<br>34초 넘게 서다 시간 초과</td><td>허용치 8 mm를 0.1 mm 넘어<br>멈췄는데 대처 규칙 없음</td><td>이런 정지를 감지해<br>그 자리서 경로 다시 계획</td><td>같은 조건에서 시간 초과<br>실패에서 완주로 바뀜</td></tr><tr><td>S자 운반 중 경로 이탈<br>방향 전환 시 각도 어긋남</td><td>네 바퀴 한 점 접촉 모형이라<br>무게 쏠리고 덜 돎</td><td>무게에 눌리는 순응 타이어<br>모형으로 바꿔 기본 적용 결정</td><td>13가지 중 완주 10→13<br>하역 오차 16.0→4.5 mm</td></tr></table>
 </div></x-import>
 </section>
 
-<section data-label="시작 위치 찾기 시험" data-screen-label="05" data-duration="55" data-speaker-notes="권장 55초
+<section data-label="인식 카메라 전후 비교" data-screen-label="05" data-duration="30" data-speaker-notes="권장 30초
 
-두 번째 피드백인 SLAM 자기 위치 판정입니다. 지게차는 SLAM으로 미리 만든 지도 위에서, LiDAR로 본 주변 모양을 지도와 맞춰 자기 위치를 찾습니다. 지난주에는 한 장면에서만 결과를 보여 드렸는데, 이번에는 조건을 넓혀 세 가지로 정리했습니다. 공장 배치 A와 B는 같은 공장 건물에 팔레트 더미와 짐, 벽 쪽 물건을 다르게 놓은 두 장면이고, 둘 다 그 전에 개발에 쓰지 않은 새 배치입니다. 첫째, 공장 배치 A에서는 시작 위치 84곳에서 지게차의 LiDAR가 볼 스캔을 미리 찍어 저장해 두고, 그 스캔만 위치를 찾는 대조 프로그램에 넣어 계산했습니다. 차는 움직이지 않고 대조 프로그램만 따로 본 시험이고, 69곳, 82퍼센트를 스스로 확정했으며 계산은 가장 길어도 10.5초였습니다. 둘째, 공장 배치 B에서는 위치를 알려 주지 않은 채 지게차 시스템 전체를 켜서, 스스로 위치를 찾고 출발 전 확인을 거쳐 출발하는 데까지, 실제 차를 켤 때와 같은 순서를 통째로 봤습니다. 84곳 중 68곳을 확정했고 확정한 위치의 오차는 중앙값 2센티미터였습니다. 셋째는 이번 주에 새로 한 시험으로, 둘째와 같은 순서에 제자리에서 위치를 못 찾으면 앞뒤로 0.3미터씩 움직여 다시 보는 동작을 더했습니다. 제자리에서 확정한 67곳이 69곳으로 두 곳 늘었습니다. 둘째와 셋째는 출발 위치는 같지만 그 사이 다른 설정이 바뀌어서 68과 67을 서로 비교하지는 않습니다. 세 시험 모두 틀린 위치를 맞다고 확정한 경우는 한 번도 없었습니다. (전환)
-
-[Sources]
-표: 시작 위치 찾기 세 시험
-결론: 새 세계(공장 배치 seed 4) 새 조사 지도, 유효 시작 84 곳, 성공 69 (82 %), 틀린 확정 0 · 부정확 0, 요청 15(경쟁 후보 8, 반복 구조 5, 탐색 상한 2); 기록 스캔으로 정합기 평가(tools/global_match_eval.py); 범위는 같은 홀 조건부: lightminn/forklift main f7566ed4 docs/validation/2026-10-29-b-p1b-search-budget.md
-seed 5 홀, Isaac 출발 재위치: 유효 84(시작 93 중), 성공 68 (81.0 %), 틀림 0, 시작 시점 위치 오차 중앙값 2.0 cm; 실패 16 곳 모두 홀 남쪽 반복 선반 구역 (11주차 02 장 수치): lightminn/forklift main f7566ed4 docs/validation/2026-10-29-b-p2d-start-relocalization.md
-같은 지도 · 출발 목록(93 개), 유효 84: 제자리 A 67 (79.8 %) → 이동 B 69 (82.1 %), 틀린 확정 0, 구제 2 · 악화 0, 이동 비용 중앙값 20.9 s; 남은 실패는 남쪽 반복 선반 칸; 총괄 결정 승격 안 함, 실차는 정해 둔 시작 자리(known start) 운용: lightminn/forklift main f7566ed4 docs/validation/2026-11-16-reloc-observe-move.md
-「정해 둔 시작 자리」 = 바닥에 시작 자리를 표시하고 그 좌표 · 방향을 지도에 등록, 그 자리에서 재위치 탐색 없이 시작(런처 START_POSE_KNOWN, 러너 --start-known): 총괄 (2026-11-17)
-B-P2d 조사 지도 hall_s5b_G0 (map 3edf24b0, grid.npz 843 × 639 · 0.05 m, Drive ws1-cleanup-20261110-an/an_f1.tar.zst 에서 grid.npz · manifest.json 만 꺼냄) 위에 docs/validation/assets/b-p2d/val_s5.json 의 출발 자세와 reloc-observe-move/compare.json 의 세션별 결과를 찍음(make_map.py): 제자리 확정 67, 이동 뒤 확정 2, 미확정 14; val4_092 는 위치 추정 기록이 없어(Isaac 기동 정지) 뺌; 미확정 14 곳 모두 y −22.2…−0.6 m (지도 아래쪽 절반): 지도 그림
-세 시험 모두 같은 공장 건물(홀) 시뮬레이션이고 물건 배치만 다름 — 공장 배치 A = factory layout seed 4, B = seed 5; 둘째와 셋째는 같은 출발 목록이지만 설정이 달라 성공 수를 직접 비교하지 않음 (ROM 1 절): 범위
-[/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="04  시작 위치 찾기 시험"><div class="slide-body">
-<h2 class="headline">새 공장 배치 두 곳을 시험해 시작 위치를 81~82 % 확정</h2>
-<p class="panel-h">32×42 m 시뮬레이션 공장의 새 공장 배치 A와 공장 배치 B 각 84곳 시험</p>
-<table class="comparison h7 rl12 rlw12"><tr><th>배치</th><th>시험 방식</th><th>확정 (잘못 확정)</th><th>시간과 오차</th></tr><tr><td>공장 배치 A</td><td>미리 찍은 LiDAR 스캔만으로<br>대조 프로그램만 따로 계산</td><td>69곳 (82 %)<br>잘못 확정 0곳</td><td>계산 최대 10.5초</td></tr><tr><td>공장 배치 B</td><td>위치 입력 없이 전체 시스템을 켜<br>주행 시작 전 확인까지 통째 시험</td><td>68곳 (81 %)<br>잘못 확정 0곳</td><td>위치 오차 중앙 2&nbsp;cm</td></tr><tr><td>공장 배치 B<br>(이번 주)</td><td>전체 시스템에 못 찾으면 앞뒤로<br>0.3 m 움직여 다시 보기 추가</td><td>67 → 69곳<br>잘못 확정 0곳</td><td>추가 약 20초 소모<br>(기본 설정 꺼 둠)</td></tr></table>
-</div></x-import>
-</section>
-
-<section data-label="시작 위치 판정 지도와 대응" data-screen-label="06" data-duration="35" data-speaker-notes="권장 35초
-
-왼쪽 지도는 셋째 시험의 결과를 출발점마다 찍은 것입니다. 초록은 제자리에서 바로 위치를 정한 곳, 파랑은 앞뒤로 움직인 뒤 정한 곳, 빨강은 끝내 정하지 못해 운용자가 후보를 고르게 한 곳입니다. 빨간 점은 모두 지도 아래쪽, 비슷한 짐 더미와 선반이 반복되는 구역에 모여 있습니다. 이런 곳에서는 지도에서 맞는 자리 후보가 여러 개 나와 하나로 정하지 못합니다. 앞뒤로 움직여도 두 곳만 풀렸고 실패한 곳마다 20초 정도가 더 들어서, 이동 기능은 기본으로 켜지 않았습니다. 실차는 바닥에 시작 자리를 표시해 두고 그 좌표와 방향을 지도에 등록한 뒤, 그 자리에 놓고 출발하도록 정했습니다. (전환)
-
-[Sources]
-그림: SLAM 지도 위 출발점별 결과 (이동 시험)
-같은 지도 · 출발 목록, 유효 84: 제자리 67 → 이동 69, 틀린 확정 0, 구제 2 · 악화 0, 이동 비용 중앙값 20.9 s; 남은 실패는 남쪽 반복 선반 칸; 총괄 결정 승격 안 함, 실차는 정해 둔 시작 자리(known start) 운용: lightminn/forklift main f7566ed4 docs/validation/2026-11-16-reloc-observe-move.md
-「정해 둔 시작 자리」 = 바닥에 시작 자리를 표시하고 그 좌표 · 방향을 지도에 등록, 그 자리에서 재위치 탐색 없이 시작(런처 START_POSE_KNOWN, 러너 --start-known): 총괄 (2026-11-17)
-B-P2d 조사 지도 hall_s5b_G0 (map 3edf24b0, grid.npz 843 × 639 · 0.05 m, Drive ws1-cleanup-20261110-an/an_f1.tar.zst 에서 grid.npz · manifest.json 만 꺼냄) 위에 val_s5.json 의 출발 자세와 reloc-observe-move/compare.json 의 세션별 결과를 찍음(make_map.py): 제자리 확정 67, 이동 뒤 확정 2, 미확정 14; val4_092 는 위치 추정 기록이 없어 뺌; 미확정 14 곳 모두 y −22.2…−0.6 m: 지도 그림
-[/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="05  시작 위치 판정 지도와 대응"><div class="slide-body">
-<h2 class="headline">반복 구역에선 위치를 못 찾아 실차는 정해 둔 시작 자리에서 출발</h2>
-<div class="rel12 relb12 grow">
-<div class="map12">
-<figure class="shot mapf12"><img class="media" src="assets/s04_map.png" alt="SLAM으로 만든 홀 지도. 검은 벽과 회색 네모 짐 더미 사이에 출발점 83곳이 색 점으로 찍혀 있음. 초록 점이 대부분이고, 파란 점 두 개, 빨간 점 14개는 모두 지도 아래쪽 절반에 있음"></figure>
-<div class="maplg12"><p>공장 배치 B 지도 위 판정 (아래쪽 반복 구역에서 미확정)</p>
-<div class="lgd7"><span class="lg"><span class="sw dt" style="background:#22a050"></span>제자리 바로 확정 (67곳)</span><span class="lg"><span class="sw dt" style="background:#2f74c0"></span>앞뒤 이동 뒤 확정 (2곳)</span><span class="lg"><span class="sw dt" style="background:#d64541"></span>후보 중 운용자 선택 (14곳)</span></div></div>
-</div>
-<div class="stack mapn12">
-<p>빨간 점은 모두 비슷한 짐과 선반이 반복되는 지도 아래쪽 절반에 있습니다.</p>
-<p>지도에서 맞는 자리 후보가 여러 개 나와 하나로 정하지 못합니다.</p>
-<p>실차는 바닥 시작 자리의 좌표와 방향을 지도에 미리 등록하고 출발합니다.</p>
-</div>
-</div>
-</div></x-import>
-</section>
-
-<section data-label="시뮬레이션 실패 수정" data-screen-label="07" data-duration="80" data-speaker-notes="권장 80초
-
-지난 발표 이후 시뮬레이션에서 실패한 사례를 원인부터 찾아 고친 것을 정리했습니다. 효과는 모두 같은 장면을 같은 조건으로 고치기 전과 후에 다시 돌려 비교한 결과만 적었습니다. 첫째, 좁은 통로에서 팔레트 바로 앞까지 가서 팔레트를 찾지 못한 실패가 있었습니다. 원인을 따라가 보니, 운용 화면에 보여 주려고 그린 계획 경로 표시선이 시뮬레이션 안의 물체로 그려져 인식 카메라 영상에도 찍히고 있었습니다. 표시선을 카메라 영상에서 빼고, 같은 코드에서 표시선만 보이게 한 경우와 40번씩 비교했더니 완주가 34번에서 36번으로 늘고 인식 실패가 없어졌습니다. 둘째, 팔레트 앞에서 가까이 다시 보는 자리에 옆으로 5에서 6센티미터 어긋난 채 도착해도 도착으로 받아 주다 보니, 포크를 넣기 직전에 옆 어긋남이 커지는 경우가 있었습니다. 그 자리의 도착 허용치를 5센티미터, 0.05라디안으로 좁혔더니 40번 중 8센티미터 넘게 어긋난 경우가 4번에서 0번이 되었고, 완주는 36번으로 같았습니다. 셋째, 출발점으로 돌아오는 마지막에 목표에서 옆으로 8.1밀리미터 떨어진 채 멈춰 시간이 초과된 실패가 있었습니다. 허용치가 8밀리미터라 0.1밀리미터 차이로 도착 판정이 나지 않았는데, 이런 정지를 받아 주는 규칙이 없었습니다. 이런 정지를 감지해 경로를 다시 계획하게 했고, 같은 장면과 조건에서 실패가 완주로 바뀌었습니다. 둘째는 어긋난 사례가 네 번뿐이고 셋째는 장면 하나에서 확인한 결과라, 실차 측정 뒤 다시 확인하겠습니다. (전환)
-
-[Sources]
-표: 수정 전후 같은 장면 · seed 짝 비교 (Isaac 시뮬레이션)
-3.3 R vs S: 같은 스냅숏 2bea23e5, 표시 prim 이 인식 카메라에 안 보임(R) / 보임(S), 같은 장면 · seed 40 짝, 결정 모드; 완주 36/40 대 34/40, 실패 분류 perception 0 대 1(aisle_rack s2 near_capture no_expected_candidate); 바뀐 짝 5(R 만 완주 3, S 만 완주 1, s24 는 둘 다 실패 · S 는 렌더 동기 실패) — 계획 3.3 대로 #512 전후 차이의 표시선 몫이 아니라 지금 코드 위의 누출 몫: lightminn/forklift main f7566ed4 docs/validation/2026-11-15-post-fix-baseline.md
-1 절: 표시만 끈 진단 4 실행(aisle_rack s0 · s1 × B0 · R)에서 R 팔 근접 캡처 거부 → 채택 2/2; 결함은 표시선과 목적지 고리가 렌더되는 장면 prim 이라 인식 카메라에 찍힌 것(#509), 수정 #512: lightminn/forklift main f7566ed4 docs/validation/2026-11-14-path-display-impact.md
-등록 판정 「K1 이 나음」: 결정 모드 riib 40 짝, B0(NEAR_OBSERVE_ARRIVAL=off) 대 K1(--near-observe-arrival 0.05,0.05); 완주 36 · 36, |횡 오프셋| &gt; 0.08 m 실행 B0 4 · K1 0, 새 악화 0; 노출 4 는 기준을 겨우 채운 약한 근거(s19 는 −80.099 mm); riib 런처 기본 유지(#499): lightminn/forklift main f7566ed4 docs/validation/2026-11-15-k1-recheck.md
-② 근접 문턱 근처 거부: random_1 두 건은 느슨한 도착(5.6 · 6.2 cm)을 받아들인 뒤 횡 한도 0.10 m 를 5 · 7 mm 넘음: lightminn/forklift main f7566ed4 docs/validation/2026-11-15-baseline-fragility-summary.md
-random_1 seed 24: 복귀 경로 끝 옆 8.100 mm(허용 8 mm), 앞뒤 −0.15 mm 에서 34.5 s 정지 → Tracking timeout in return_home; #117 크리프 규칙 R1 · R2 와 정체 재계획 조건이 모두 받지 못한 사각 띠(소프트웨어 쪽); 옆 오차의 출처(plant)는 실측 없이 정하지 않음: lightminn/forklift main f7566ed4 docs/validation/2026-11-17-return-home-timeout.md
-결정 모드 짝: s24 끔 = 시간 초과(기준선 재현), --goal-creep-band on = 완주(띠 고정 → 정체 재계획 0.89 m); 총괄 결정 riib 런처 기본 켬(#571), 근거 seed 1 개; Isaac smoke 3 실행 완주: lightminn/forklift main f7566ed4 docs/validation/2026-11-17-goal-band-cusp-retry.md
-11주차 연속 이송 랜덤 배치 1 회 실패(random_m s0 두 번째 임무 근접 캡처 예상 후보 없음)는 지금 main · 같은 설정 라이브 1 세션에서 세 임무 완료(하역 26.7 · 12.8 · 34.2 mm) — 비결정 1 회, 「지금 main 에서 재현 안 됨(1 회)」, 고친 사례로 쓰지 않음: lightminn/forklift main f7566ed4 docs/validation/2026-11-18-f2-i-reregistration.md 3.3 절 (PR #575)
-[/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="06  시뮬레이션 실패 수정"><div class="slide-body">
-<h2 class="headline">시뮬레이션 임무 실패 세 건을 고쳐 같은 장면과 조건 비교로 해결을 확인</h2>
-<p class="panel-h">고치기 전후를 같은 장면과 같은 조건으로 비교 (사례 1과 3은 뒤 장에 화면)</p>
-<table class="comparison h7 fx12"><tr><th>지난번 실패</th><th>원인</th><th>고친 것</th><th>같은 조건 전후</th></tr><tr><td>좁은 통로에서 팔레트 앞<br>가까이 보는데 인식 실패</td><td>운용 화면용 경로 표시선이<br>카메라 영상에 함께 찍힘</td><td>경로 표시선을 운용 화면에만<br>그리고 카메라에서 뺌</td><td>40회 중 완주 34 → 36회<br>인식 실패 1회 → 0회</td></tr><tr><td>포크 넣기 직전 팔레트와<br>옆 어긋남이 한도를 넘김</td><td>가까이 다시 보는 자리에<br>옆 5.6, 6.2 cm 어긋나도 통과</td><td>그 자리의 도착 허용치를<br>5 cm, 0.05 rad로 좁힘</td><td>40회 중 8 cm 초과 4 → 0회<br>(완주 36 = 36회)</td></tr><tr><td>복귀 마지막 목표 바로 옆에서<br>34초 넘게 서다 시간 초과</td><td>옆으로 8.1 mm 떨어져<br>허용 8 mm를 0.1 mm 넘고 정지</td><td>이런 정지를 감지하면 그 자리에서<br>경로를 다시 계획</td><td>같은 장면과 조건에서<br>시간 초과 실패 → 완주</td></tr></table>
-</div></x-import>
-</section>
-
-<section data-label="사례 1 전후 화면" data-screen-label="08" data-duration="40" data-speaker-notes="권장 40초
-
-먼저 첫 번째 사례를 화면으로 보겠습니다. 왼쪽이 고치기 전, 오른쪽이 고친 뒤의 인식 카메라 화면입니다. 좁은 통로에서 지게차가 팔레트 바로 앞까지 와서 가까이 다시 볼 때 찍은 화면인데, 고치기 전에는 빨간 동그라미 안에 파란 선이 보입니다. 운용 화면에 계획 경로를 보여 주려고 그린 선이 시뮬레이션 안의 물체로 그려져 카메라에도 찍힌 것입니다. 이 선이 팔레트 앞에 걸리면 팔레트 입구 폭을 잘못 읽어 인식을 거부하는 경우가 있었습니다. 고친 뒤에는 선을 운용 화면에만 그려서, 같은 장면을 다시 돌린 오른쪽 화면에는 선이 없습니다. (전환)
+첫 번째 사례를 화면으로 보면 이렇습니다. 왼쪽이 고치기 전, 오른쪽이 고친 뒤의 인식 카메라 화면입니다. 고치기 전에는 빨간 동그라미 안에 계획 경로 표시선이 찍혀 있고, 이 선이 팔레트 앞에 걸리면 팔레트 입구 폭을 잘못 읽어 인식을 거부한 경우가 있었습니다. 고친 뒤에는 선이 보이지 않습니다. (전환)
 
 [Sources]
 그림: Isaac Sim 인식 카메라 근접 캡처, 왼쪽 고치기 전 · 오른쪽 고친 뒤
-pdBefore_aisle_rack_s2(진단 stage: 표시 prim 이 인식 카메라에 보임) · pdAfter_aisle_rack_s2(overlay 기본)의 run/perception_capture_2_rgb.png(근접 캡처, 640 × 480) — 두 팔이 다른 픽셀 187 개, (60,18)–(355,319) 범위; 원거리 캡처는 두 팔 모두 선 없음; 두 실행 모두 완주(이 그림은 선이 찍히는 모양을 보이는 것이고, 이 실행의 실패를 보이는 것이 아님): ws1 /home/projects/forklift/test_runs/render12_f7566ed4/ (isaac_array 19683, 스냅숏 r12_f7566ed4 = main f7566ed4, 결정 모드, 시뮬-물성 세션 렌더)
-1 절: 표시가 있을 때 R 팔 근접 캡처가 opening_width_mismatch 로 거부, 표시를 끄니 채택(2/2) — 원고의 「입구 폭을 잘못 읽어 인식을 거부」: lightminn/forklift main f7566ed4 docs/validation/2026-11-14-path-display-impact.md
-두 PNG 의 (160, 140)–(560, 330) 범위를 잘라 2배 확대(800 × 380), 고치기 전 그림의 선 자리(350, 300)에 빨간 동그라미를 그림(겹침 표시, 원본에는 없음): 편집
+pdBefore_aisle_rack_s2(표시선이 카메라에 보이는 진단 설정) · pdAfter_aisle_rack_s2(기본)의 run/perception_capture_2_rgb.png(근접 캡처) — 두 실행 모두 완주, 그림은 선이 찍히는 모양을 보이는 것: ws1 /home/projects/forklift/test_runs/render12_f7566ed4/ (isaac_array 19683, 스냅숏 r12_f7566ed4, 결정 모드, 시뮬-물성 세션 렌더)
+표시가 있을 때 근접 캡처 opening_width_mismatch 거부 — 원고의 「입구 폭을 잘못 읽어」: lightminn/forklift main docs/validation/2026-11-14-path-display-impact.md
+(160, 140)–(560, 330) 을 잘라 2 배 확대, 고치기 전 그림에 빨간 동그라미(선 자리): 편집
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="07  사례 1 전후 화면"><div class="slide-body">
-<h2 class="headline">카메라에 찍히던 경로 표시선을 빼 팔레트 입구 폭 오인과 인식 실패를 막음</h2>
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="04  인식 카메라 전후 비교"><div class="slide-body">
+<h2 class="headline">카메라 영상에 찍히던 경로 표시선을 빼 팔레트 인식 방해를 없앰</h2>
 <div class="cam12 grow">
-<figure class="shot camf12"><img class="media" src="assets/s06_before.png" alt="고치기 전 인식 카메라 화면. 노란 벽 앞 바닥에 팔레트 세 개, 화면 아래 가운데에 파란 짧은 선이 찍혀 있고 빨간 동그라미로 표시됨"><figcaption>고치기 전, 팔레트 앞 경로선 찍힘</figcaption></figure>
-<figure class="shot camf12"><img class="media" src="assets/s06_after.png" alt="고친 뒤 인식 카메라 화면. 같은 장면, 노란 벽 앞 팔레트 세 개, 파란 선이 없음"><figcaption>고친 뒤, 경로선 없이 팔레트만 보임</figcaption></figure>
+<figure class="shot camf12"><img class="media" src="assets/s04_cam_before.png" alt="고치기 전 인식 카메라 화면. 노란 벽 앞 바닥에 팔레트, 화면 아래 가운데에 파란 짧은 선이 찍혀 있고 빨간 동그라미로 표시됨"><figcaption>고치기 전, 아래에 파란 선이 찍힘</figcaption></figure>
+<figure class="shot camf12"><img class="media" src="assets/s04_cam_after.png" alt="고친 뒤 인식 카메라 화면. 같은 장면, 파란 선이 없음"><figcaption>고친 뒤, 선이 빠져 팔레트만 보임</figcaption></figure>
 </div>
-<div class="lgd7"><span class="lg"><span class="sw ring" style="border-color:#d64541"></span>잘못 찍힌 경로 표시선</span></div>
+<div class="lgd7"><span class="lg"><span class="sw ring" style="border-color:#d64541"></span>찍힌 계획 경로 표시선</span></div>
 </div></x-import>
 </section>
 
-<section data-label="사례 3 전후 화면" data-screen-label="09" data-duration="45" data-speaker-notes="권장 45초
+<section data-label="순응 타이어 차체 모형" data-screen-label="06" data-duration="55" data-speaker-notes="권장 55초
 
-두 번째 사례입니다. 팔레트를 내려놓고 출발점으로 돌아오는 마지막 구간을 확대한 영상이고, 왼쪽이 고치기 전, 오른쪽이 고친 뒤입니다. 두 영상은 같은 시각에 맞춰 재생하고, 왼쪽 위 숫자가 시뮬레이션 시각입니다. 고치기 전에는 목표 바로 옆에서 멈춘 뒤 더 움직이지 않고 34초 넘게 서 있다가, 234초에 시간 초과로 실패합니다. 앞뒤로는 목표에 닿았지만 옆으로 8.1밀리미터 떨어져 허용치를 0.1밀리미터 넘었기 때문입니다. 고친 뒤에는 이렇게 멈춘 것을 감지해 경로를 다시 계획하고, 조금 물러섰다가 다시 들어가 217초에 도착합니다. 이 결과는 장면 하나에서 확인한 것이라, 다른 장면에서도 계속 확인하겠습니다. (전환)
+네 번째 사례인 차체 모형입니다. 위 영상은 같은 장면을 같은 조건으로 돌린 것으로, 왼쪽이 이전 모형, 오른쪽이 순응 타이어 모형입니다. 팔레트를 실은 지게차가 주황색 경로를 따라 S자로 휘어 하역 칸으로 가는데, 이전 모형은 마지막 왼쪽 굽이에서 경로 바깥으로 밀려나 111초에 실패하고, 순응 타이어 모형은 경로대로 돌아 118초쯤 하역 칸에 도착합니다. 아래 그래프가 그 이유입니다. 차를 세워 두었을 때 이전 모형은 앞왼쪽과 뒤오른쪽 바퀴에 무게가 쏠렸고, 순응 타이어 모형은 좌우가 고르게 받습니다. 조향을 끝까지 꺾었을 때 실제로 도는 정도도 비교할 수 있는 12가지 모두 명령에 더 가까워졌습니다. 다만 이 조향 비교는 초속 0.4미터보다 느린 구간에서만 확인한 것이고, 12가지 중 3가지는 여전히 명령의 0.95배에 못 미칩니다. 순응 타이어는 시뮬레이션의 기본 설정으로 쓰기로 결정했고, 지금 적용을 확인하는 중입니다. 타이어가 눌리는 정도는 추정값이라 11월 20일 실제 차량 측정으로 확인하겠습니다. 실시간으로 돌린 관찰에서도 이전 모형은 세 번 중 한 번 S자 구간에서 벗어났고 순응 타이어는 세 번 모두 완주했지만, 이것은 판정용 시험은 아닙니다. (전환)
 
 [Sources]
-영상: Isaac Sim 확대 시점, 왼쪽 고치기 전 · 오른쪽 고친 뒤 (같은 시각 맞춤)
-random_1 s24, quarter 보기(eye −2.1, −1.2, 5.8 → target −2.1, 0, 0, 화면 폭 약 5 m), overlay 경로 표시; 끔 gcbOff_random_1_s24/run/view_quarter.mp4 (234.48 s, sha256 b50b428d…, Tracking timeout in return_home), 켬 gcbOn_random_1_s24/run/view_quarter.mp4 (217.17 s, sha256 2d214273…, 206.74 s 띠 발동 · 207.93 s 정체 재계획 성공 · 완주); 받은 뒤 sha256 대조 일치: ws1 /home/projects/forklift/test_runs/render12_f7566ed4/ (isaac_array 19683, 스냅숏 r12_f7566ed4 = main f7566ed4, 결정 모드, 시뮬-물성 세션 렌더)
-복귀 끝 옆 8.100 mm(허용 8 mm), 199.95 s 부터 시간 초과까지 약 34.5 s 정지: lightminn/forklift main f7566ed4 docs/validation/2026-11-17-return-home-timeout.md
-두 영상의 시뮬 195 s 부터 crop=700:420:300:40, 끔은 234.48 s 까지 · 켬은 217.17 s 뒤 마지막 프레임 유지, 좌우로 붙여 2배속; 각 칸 왼쪽 위 시뮬 시각(끝에서 멈춤)과 끝 모서리 라벨(끔 39.3 s 뒤, 켬 22.1 s 뒤)을 ffmpeg drawtext 로 넣음 — 라벨 문구는 agy: 편집
-src/forklift_core/mission/core.py show_path: 복귀 (0.55, 0.2, 0.85), 접근 (0.05, 0.45, 1.0), 관측 (0.2, 0.8, 0.8): 겹침선 색
+영상: Isaac Sim 탑뷰(4배속), 그래프: 시뮬 정지 하중(빈차)
+3.3 · 4 절: 덱 목록 13 짝 조향 포화 구간 달성 곡률 비 12 짝(s12 제외) 0.851–0.955 → 0.918–0.964, 12 짝 모두 개선, 켬 중앙 0.960, 켬에서 0.95 미만 3 짝(s9 · s19 · s23); 고속 층(0.4 m/s 이상) 노출 0 s — 저속 포화 구간 한정(assets/f2i-reregistration/mechanism_deckset.json.gz md5 27feb5f2… 로 재계산): lightminn/forklift main docs/validation/2026-11-18-f2-i-reregistration.md (#575, main 460b3578, 문서 커밋 ec888ef1)
+이전 모형 정지 하중 D0: 앞왼 115.3 · 앞오 33.0 · 뒤왼 30.6 · 뒤오 76.1 N (빈차, 평평한 바닥, 구동 정지 · 조향 고정, 1 s 평균, 합 약 255 N = 26 kg): lightminn/forklift main docs/validation/2026-11-17-model-symmetry-check.md (#573) 3 절
+4 절 탐침: 순응 타이어 74.4 · 73.9 · 53.2 · 53.5 N, 반복 같음; 타이어 강성 140 kN/m 는 추정값: lightminn/forklift main docs/validation/2026-11-18-f2-i-reregistration.md (#575, main 460b3578, 문서 커밋 ec888ef1)
+video/f2iw_O_random_1_s8/run/transport.mp4 (111.3 s, sha256 8cb8c30eedc098240b288e2e621efb0e2d2bedb22d82719570ef85e08ca2aa34, 운반 중 경로 이탈) · video/f2iw_F2_random_1_s8/run/transport.mp4 (165.3 s, sha256 3d276fd13363e3051d9cf0a26926abbe8496dc61f1d8d41f808d2afaa86aa5ac, 완주), 결정 모드 · VIDEO=off 짝과 궤적 같음; 시뮬 40 s 부터 잘라 좌우로 붙여 4 배속, 시뮬 시각과 끝 라벨(agy 문구) 겹침: ws1 /home/projects/forklift/test_runs/f2i/batch_f2i_22fe89be/ (스냅숏 f2i_22fe89be, 결정 모드, 시뮬-물성 세션)
+사용자 결정 시뮬 전체 기본 켬, 런처 PR · Isaac smoke 진행 중(원고에만); 운영(실시간) 모드 비용 측정 관찰: 이전 모형 3 번 중 1 번 S 자 이탈, 순응 타이어 3/3 완주 — 판정 아님: 총괄 (2026-11-18)
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="08  사례 3 전후 화면"><div class="slide-body">
-<h2 class="headline">복귀 끝 정지를 감지해 다시 계획 후 물러섰다 들어가 234초 실패를 217초 완주로</h2>
-<div class="stall12 grow">
-<figure class="shot vw12b"><video class="media" src="assets/s07_stall.mp4" poster="assets/s07_stall_poster.jpg" autoplay loop muted playsinline aria-label="복귀 마지막 구간을 위에서 비스듬히 본 두 영상. 왼쪽은 지게차가 목표 옆에서 멈춘 채 234초에 시간 초과 실패, 오른쪽은 같은 자리에서 조금 물러섰다가 다시 들어가 217초에 도착"></video></figure>
-<div class="stcap12"><span>고치기 전, 목표 옆 정지 후 234초 실패</span><span>고친 뒤, 경로 재계획으로 217초 완주</span></div>
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="05  순응 타이어 차체 모형"><div class="slide-body">
+<h2 class="headline">순응 타이어 모형으로 네 바퀴 무게를 고르게 해 S자 경로 이탈 해결</h2>
+<div class="ty5 grow">
+<figure class="shot vw12b"><video class="media" src="assets/s05_tyre.mp4" poster="assets/s05_tyre_poster.jpg" autoplay loop muted playsinline aria-label="위에서 본 두 영상. 팔레트를 실은 지게차가 주황 운반 경로를 따라 S자로 휘어 오른쪽 위 하역 칸으로 감. 왼쪽 이전 모형은 마지막 굽이에서 경로 바깥으로 밀려나 111초에 멈춤, 오른쪽 순응 타이어 모형은 경로대로 돌아 하역 칸에 도착"></video></figure>
+<div class="stcap12 ty5c"><span>이전 모형, 111초에 경로 벗어남</span><span>순응 타이어, 118초쯤 하역 도착</span></div>
+<div class="ty5b">
+<div class="stack ty5chart"><p class="panel-h">빈차 정지 때 네 바퀴가 받는 힘 (N)</p><svg class="diagram ldc12" viewBox="0 0 560 230" role="img" aria-label="네 바퀴가 받는 힘 막대그래프. 이전 모형: 앞왼 115, 앞오 33, 뒤왼 31, 뒤오 76 N. 순응 타이어: 앞왼 74, 앞오 74, 뒤왼 53, 뒤오 54 N"><g font-family="var(--uos-font)"><line x1="20" y1="170" x2="550" y2="170" stroke="#8c97a3" stroke-width="2"/><rect x="40" y="31.6" width="44" height="138.4" rx="3" fill="#9aa3ad"/><text x="62.0" y="24.6" text-anchor="middle" font-size="17" font-weight="700" fill="#1b1f24">115</text><text x="62.0" y="190" text-anchor="middle" font-size="15" fill="#3c4650">앞왼</text><rect x="96" y="130.4" width="44" height="39.6" rx="3" fill="#9aa3ad"/><text x="118.0" y="123.4" text-anchor="middle" font-size="17" font-weight="700" fill="#1b1f24">33</text><text x="118.0" y="190" text-anchor="middle" font-size="15" fill="#3c4650">앞오</text><rect x="152" y="133.3" width="44" height="36.7" rx="3" fill="#9aa3ad"/><text x="174.0" y="126.3" text-anchor="middle" font-size="17" font-weight="700" fill="#1b1f24">31</text><text x="174.0" y="190" text-anchor="middle" font-size="15" fill="#3c4650">뒤왼</text><rect x="208" y="78.7" width="44" height="91.3" rx="3" fill="#9aa3ad"/><text x="230.0" y="71.7" text-anchor="middle" font-size="17" font-weight="700" fill="#1b1f24">76</text><text x="230.0" y="190" text-anchor="middle" font-size="15" fill="#3c4650">뒤오</text><text x="146.0" y="216" text-anchor="middle" font-size="19" font-weight="700" fill="#9aa3ad">이전 모형</text><rect x="310" y="80.7" width="44" height="89.3" rx="3" fill="#2f74c0"/><text x="332.0" y="73.7" text-anchor="middle" font-size="17" font-weight="700" fill="#1b1f24">74</text><text x="332.0" y="190" text-anchor="middle" font-size="15" fill="#3c4650">앞왼</text><rect x="366" y="81.3" width="44" height="88.7" rx="3" fill="#2f74c0"/><text x="388.0" y="74.3" text-anchor="middle" font-size="17" font-weight="700" fill="#1b1f24">74</text><text x="388.0" y="190" text-anchor="middle" font-size="15" fill="#3c4650">앞오</text><rect x="422" y="106.2" width="44" height="63.8" rx="3" fill="#2f74c0"/><text x="444.0" y="99.2" text-anchor="middle" font-size="17" font-weight="700" fill="#1b1f24">53</text><text x="444.0" y="190" text-anchor="middle" font-size="15" fill="#3c4650">뒤왼</text><rect x="478" y="105.8" width="44" height="64.2" rx="3" fill="#2f74c0"/><text x="500.0" y="98.8" text-anchor="middle" font-size="17" font-weight="700" fill="#1b1f24">54</text><text x="500.0" y="190" text-anchor="middle" font-size="15" fill="#3c4650">뒤오</text><text x="416.0" y="216" text-anchor="middle" font-size="19" font-weight="700" fill="#2f74c0">순응 타이어</text></g></svg></div>
+<div class="stack ty5n"><p>이전은 대각선으로 쏠렸고 순응 타이어는 좌우 고름</p><p>최대 조향 비교 가능한 12가지 모두 명령에 더 가까워짐</p>
+<div class="lgd7"><span class="lg"><span class="sw ln" style="background:#ffa60a"></span>운반 경로</span><span class="lg"><span class="sw ln" style="background:#0d73ff"></span>접근 경로</span><span class="lg"><span class="sw ln" style="background:#33cccc"></span>팔레트 관측 경로</span><span class="lg"><span class="sw ring" style="border-color:#22e022"></span>하역 위치</span></div></div>
 </div>
-<div class="lgd7"><span class="lg"><span class="sw ln" style="background:#8c33d9"></span>복귀 경로</span><span class="lg"><span class="sw ln" style="background:#0d73ff"></span>접근 경로</span><span class="lg"><span class="sw ln" style="background:#33cccc"></span>팔레트 관측 경로</span></div>
+</div>
+<div class="takeaway">순응 타이어를 기본 설정으로 쓰기로 결정했으며, 눌림 정도는 11월 20일 실제 차량 측정으로 확인합니다.</div>
 </div></x-import>
 </section>
 
-<section data-label="시뮬레이터 차체 모형 수정" data-screen-label="10" data-duration="60" data-speaker-notes="권장 60초
+<section data-label="시작 위치 찾기 시험" data-screen-label="07" data-duration="60" data-speaker-notes="권장 60초
 
-앞에서 고친 실패들은 지게차 소프트웨어의 문제였습니다. 이번에는 시뮬레이터 쪽 문제입니다. 시뮬레이터 속 지게차 차체는 단단한 몸체가 네 바퀴의 한 점씩으로만 바닥에 닿는 모형이었습니다. 그런데 이 모형에서는 차를 세워 두었을 때 무게가 한 대각선으로 쏠렸습니다. 왼쪽 그래프의 회색 막대처럼 왼쪽 앞바퀴가 115뉴턴, 오른쪽 뒷바퀴가 76뉴턴을 받고, 나머지 두 바퀴는 30뉴턴 남짓만 받았습니다. 그래서 조향을 끝까지 꺾어도 차가 명령보다 덜 돌았고, 운반 중 S자 구간에서 경로를 벗어나거나 좁은 통로 전환점에 방향이 어긋난 채 도착하는 실패가 생겼습니다. 그래서 타이어가 무게를 받아 조금 눌리는 순응 타이어 모형을 넣었고, 파란 막대처럼 무게가 좌우로 고르게 나뉘었습니다. 예전에 조향 문제로 실패했던 사례를 포함해 같은 장면, 같은 조건 13가지를 두 모형으로 돌렸더니, 완주가 10가지에서 13가지 모두로 늘었고, 하역 오차 중앙값은 16밀리미터에서 4.5밀리미터로 줄었습니다. 조향을 끝까지 꺾었을 때 실제로 돈 정도도 비교할 수 있는 12가지 모두 명령에 더 가까워졌습니다. 다만 이 조향 비교는 시험 중 조향을 끝까지 꺾은 구간이 모두 초속 0.4미터보다 느린 구간이어서, 저속에서만 확인한 결과입니다. 또 비교한 12가지 가운데 3가지는 순응 타이어에서도 실제로 돈 정도가 명령의 0.95배에 못 미쳐, 좌우 차이가 아직 남아 있습니다. 늘어난 완주 셋 중 하나는 팔레트를 관측하는 단계의 시간 초과였는데, 이것이 같은 원인인지는 확인하지 못했습니다. 이 모형은 아직 기본 설정이 아니고, 미리 정한 기준으로 판정하는 중입니다. 타이어가 얼마나 눌리는지는 추정값이라, 11월 20일 실제 차량 측정으로 확인하겠습니다. (전환)
+두 번째 피드백인 SLAM 자기 위치 찾기입니다. 지게차는 SLAM으로 미리 만든 지도 위에서, LiDAR로 본 주변 모양을 지도와 맞춰 자기 위치를 찾습니다. 공장 배치 A와 B는 같은 공장 건물에 팔레트 더미와 짐을 다르게 놓은 두 장면이고, 둘 다 개발에 쓰지 않은 새 배치입니다. 공장 배치 A에서는 출발점 84곳의 스캔을 미리 찍어 두고 위치를 찾는 프로그램만 따로 돌려 69곳을 확정했습니다. 공장 배치 B에서는 위치를 알려 주지 않은 채 시스템 전체를 켜서 실제 차를 켤 때와 같은 순서로 출발까지 해 봤고 68곳을 확정했습니다. 이번 주에는 여기에 제자리에서 못 찾으면 앞뒤로 0.3미터 움직여 다시 보는 동작을 더해 두 곳을 더 찾았습니다. 둘째와 셋째 시험은 그 사이 다른 설정이 바뀌어서 68과 67을 서로 비교하지는 않습니다. 세 시험 모두 틀린 위치를 맞다고 확정한 경우는 없었습니다. 왼쪽 지도에서 빨간 점, 즉 끝내 위치를 정하지 못한 곳은 모두 비슷한 짐 더미와 선반이 반복되는 아래쪽에 모여 있습니다. 그래서 실차는 바닥에 시작 자리를 표시하고 그 좌표와 방향을 지도에 등록해 둔 뒤, 그 자리에서 출발하도록 정했습니다. (전환)
 
 [Sources]
-그래프: 시뮬 정지 하중(빈차), 표: 같은 장면 · 조건 13 짝 비교 (Isaac 시뮬레이션)
-덱 목록 13 짝(random_1 s0 · 5 · 7 · 8 · 9 · 12 · 19 · 23, aisle_rack s1 · 2 · 4 · 17 · 18), 끔 = main(O) · 켬 = 순응 타이어(F2): 완주 10/13 → 13/13(끔 실패 s8 운반 경로 이탈 · s4 좁은 통로 전환점 · s12 관측 시간 초과 — s12 는 같은 짝에서 켬이 완주, 원인 미확인), 하역 오차 중앙값(두 팔 모두 완주 10 짝) 16.0 → 4.5 mm, 조향 포화 구간 달성 곡률 비 12 짝(s12 는 끔이 운반 전에 끝나 제외) 0.851–0.955 → 0.918–0.964 · 12 짝 모두 개선 · 켬 중앙값 0.960 · 켬에서 0.95 미만 3 짝(s9 0.918, s19 0.949, s23 0.929) — 결과 문서 브랜치 results/f2i-reregistration a8baec89 의 assets/f2i-reregistration/mechanism_deckset.json.gz(md5 27feb5f2…)에서 재계산; 등록 집합(13 짝)의 범위 0.851–0.955 → 0.918–0.966 · 6/13 짝 R &lt; 0.95 와는 다른 집합; 고속 층(0.4 m/s 이상) 노출은 덱 목록 13 실행도 0 s 라 저속 포화 구간에 한정; C1 random_1 s0 · 5 · 7 · 9 · 19 · 23 과 C2 aisle_rack s1 · 2 · 17 · 18 은 끔에서도 완주(지금 main 에서 재현 안 됨); F2 는 기본값 아님(등록 판정 진행 중), 결과 문서 docs/validation/2026-11-18-f2-i-reregistration.md 는 PR 예정: ws1 /home/projects/forklift/test_runs/f2i/batch_f2i_22fe89be/ (스냅숏 f2i_22fe89be, 결정 모드, 시뮬-물성 세션)
-끔 정지 하중 D0: 앞왼 115.3 · 앞오 33.0 · 뒤왼 30.6 · 뒤오 76.1 N (빈차, 평평한 바닥, 구동 정지 · 조향 고정, 1 s = 120 스텝 평균, 합 약 255 N = 차체 26 kg), Isaac 결정 모드 random_1 seed 1 출발 자리 조향 탐침의 첫 정지 창: lightminn/forklift main f7566ed4 docs/validation/2026-11-17-model-symmetry-check.md (PR #573) 3 절
-켬 정지 하중: probe/f2ip_F2_random_1_s1/run/steering_probe_model.json settled.floor_fz_n = 74.4 · 73.9 · 53.2 · 53.5 N, 같은 조건 반복 실행 값 일치; 순응 타이어 강성 140 kN/m 는 실측이 아닌 추정값: ws1 /home/projects/forklift/test_runs/f2i/batch_f2i_22fe89be/ (스냅숏 f2i_22fe89be, 결정 모드, 시뮬-물성 세션)
-왼쪽 조향 부족: 모형 · 명령 · 구동 설정에서 좌우 차이 없음, 시뮬 plant 산물 가능성(이번 진단: 강체 네 점 접촉 해 문제, 모형 결함 아님 — 시뮬-물성 · 총괄 2026-11-18): lightminn/forklift main f7566ed4 docs/validation/2026-11-14-left-steer-shortfall.md
+그림: SLAM 지도 위 출발점별 결과(이동 시험), 표: 시작 위치 찾기 세 시험 (Isaac 시뮬레이션)
+공장 배치 seed 4 새 조사 지도, 유효 84 곳, 성공 69 (82 %), 틀린 확정 0 · 부정확 0 — 기록 스캔으로 정합기 평가(차 움직이지 않음): lightminn/forklift main docs/validation/2026-10-29-b-p1b-search-budget.md
+공장 배치 seed 5, Isaac 출발 재위치: 유효 84, 성공 68 (81.0 %), 틀림 0, 위치 오차 중앙값 2.0 cm: lightminn/forklift main docs/validation/2026-10-29-b-p2d-start-relocalization.md
+같은 지도 · 출발 목록, 유효 84: 제자리 67 → 이동 69, 틀린 확정 0, 이동 비용 중앙값 20.9 s, 승격 안 함 · 실차는 정해 둔 시작 자리(known start); B-P2d 와 설정 차이(1 절)로 68 과 67 을 비교하지 않음: lightminn/forklift main docs/validation/2026-11-16-reloc-observe-move.md
+B-P2d 조사 지도 hall_s5b_G0 (map 3edf24b0, Drive ws1-cleanup-20261110-an/an_f1.tar.zst 에서 grid.npz · manifest.json 만 꺼냄) 위에 val_s5.json 출발 자세와 reloc-observe-move/compare.json 결과(make_map.py): 제자리 67, 이동 뒤 2, 미확정 14, val4_092 제외: 지도 그림
+「정해 둔 시작 자리」 = 바닥에 시작 자리를 표시하고 좌표 · 방향을 지도에 등록, 재위치 탐색 없이 시작: 총괄 (2026-11-17)
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="09  시뮬레이터 차체 모형 수정"><div class="slide-body">
-<h2 class="headline">조금 눌리는 순응 타이어로 바꿔 바퀴 무게 쏠림을 없애고 13가지 모두 완주</h2>
-<div class="ty12 grow">
-<div class="stack"><p class="panel-h">빈차 정지 때 바닥이 바퀴를 받치는 힘 (N)</p><svg class="diagram ldc12" viewBox="0 0 560 300" role="img" aria-label="네 바퀴가 받는 힘 막대그래프. 지금 모형: 왼앞 115, 오른앞 33, 왼뒤 31, 오른뒤 76 N. 순응 타이어: 왼앞 74, 오른앞 74, 왼뒤 53, 오른뒤 54 N"><g font-family="var(--uos-font)"><line x1="20" y1="236" x2="550" y2="236" stroke="#8c97a3" stroke-width="2"/><rect x="40" y="43.8" width="44" height="192.2" rx="3" fill="#9aa3ad"/><text x="62.0" y="35.8" text-anchor="middle" font-size="17" font-weight="700" fill="#1b1f24">115</text><text x="62.0" y="258" text-anchor="middle" font-size="15" fill="#3c4650">왼앞</text><rect x="96" y="181.0" width="44" height="55.0" rx="3" fill="#9aa3ad"/><text x="118.0" y="173.0" text-anchor="middle" font-size="17" font-weight="700" fill="#1b1f24">33</text><text x="118.0" y="258" text-anchor="middle" font-size="15" fill="#3c4650">오른앞</text><rect x="152" y="185.0" width="44" height="51.0" rx="3" fill="#9aa3ad"/><text x="174.0" y="177.0" text-anchor="middle" font-size="17" font-weight="700" fill="#1b1f24">31</text><text x="174.0" y="258" text-anchor="middle" font-size="15" fill="#3c4650">왼뒤</text><rect x="208" y="109.2" width="44" height="126.8" rx="3" fill="#9aa3ad"/><text x="230.0" y="101.2" text-anchor="middle" font-size="17" font-weight="700" fill="#1b1f24">76</text><text x="230.0" y="258" text-anchor="middle" font-size="15" fill="#3c4650">오른뒤</text><text x="146.0" y="286" text-anchor="middle" font-size="19" font-weight="700" fill="#9aa3ad">지금 모형</text><rect x="310" y="112.0" width="44" height="124.0" rx="3" fill="#2f74c0"/><text x="332.0" y="104.0" text-anchor="middle" font-size="17" font-weight="700" fill="#1b1f24">74</text><text x="332.0" y="258" text-anchor="middle" font-size="15" fill="#3c4650">왼앞</text><rect x="366" y="112.8" width="44" height="123.2" rx="3" fill="#2f74c0"/><text x="388.0" y="104.8" text-anchor="middle" font-size="17" font-weight="700" fill="#1b1f24">74</text><text x="388.0" y="258" text-anchor="middle" font-size="15" fill="#3c4650">오른앞</text><rect x="422" y="147.3" width="44" height="88.7" rx="3" fill="#2f74c0"/><text x="444.0" y="139.3" text-anchor="middle" font-size="17" font-weight="700" fill="#1b1f24">53</text><text x="444.0" y="258" text-anchor="middle" font-size="15" fill="#3c4650">왼뒤</text><rect x="478" y="146.8" width="44" height="89.2" rx="3" fill="#2f74c0"/><text x="500.0" y="138.8" text-anchor="middle" font-size="17" font-weight="700" fill="#1b1f24">54</text><text x="500.0" y="258" text-anchor="middle" font-size="15" fill="#3c4650">오른뒤</text><text x="416.0" y="286" text-anchor="middle" font-size="19" font-weight="700" fill="#2f74c0">순응 타이어</text></g></svg></div>
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="06  시작 위치 찾기 시험"><div class="slide-body">
+<h2 class="headline">미리 만든 지도로 시작 위치를 찾으면 약 82 % 확정, 틀린 확정 0곳</h2>
+<div class="rel12 rel6 grow">
+<div class="map12">
+<figure class="shot mapf12"><img class="media" src="assets/s06_map.png" alt="SLAM으로 만든 홀 지도. 검은 벽과 회색 네모 짐 더미 사이에 출발점이 색 점으로 찍혀 있음. 초록 점이 대부분이고, 파란 점 두 개, 빨간 점 14개는 모두 지도 아래쪽 절반에 있음"></figure>
+<div class="maplg12"><p>이동 재확인 결과, 미확정은 아래쪽 반복 구역</p>
+<div class="lgd7"><span class="lg"><span class="sw dt" style="background:#22a050"></span>제자리 확정 67곳</span><span class="lg"><span class="sw dt" style="background:#2f74c0"></span>앞뒤 이동 확정 2곳</span><span class="lg"><span class="sw dt" style="background:#d64541"></span>운용자 선택 14곳</span></div></div>
+</div>
 <div class="stack">
-<table class="comparison h7 tyt12"><tr><th>시험 항목</th><th>지금 모형</th><th>순응 타이어</th></tr><tr><td>임무 완주<br>(같은 조건 13가지)</td><td>13가지 중 10가지</td><td>13가지 모두 완주</td></tr><tr><td>하역 오차 중앙값<br>(둘 다 완주한 10가지)</td><td>16.0 mm</td><td>4.5 mm</td></tr><tr><td>끝까지 꺾었을 때<br>실제로 돈 정도 ÷ 명령</td><td>명령의 0.85–0.96배<br>(비교 가능한 12가지)</td><td>명령의 0.92–0.96배<br>(12가지 모두 좋아짐)</td></tr></table>
-<p class="note12">이 문제로 실패했던 S자 운반 이탈과 좁은 통로 방향 어긋남 2가지가 완주</p>
+<table class="comparison h7 rl12 rl6"><tr><th>공장 배치와 시험 방식</th><th>스스로 확정</th><th>틀린 확정</th></tr><tr><td>공장 배치 A, 미리 찍은<br>스캔만으로 지도와 맞춰 계산</td><td>84곳 중 69곳<br>(82 %)</td><td>0곳</td></tr><tr><td>공장 배치 B, 위치 없이 켜서<br>스스로 찾고 출발까지</td><td>68/84 (81 %)<br>중앙 오차 2&nbsp;cm</td><td>0곳</td></tr><tr><td>공장 배치 B, 못 찾으면<br>앞뒤 0.3 m 다시 보기<br>(+20초, 기본 꺼둠)</td><td>67 → 69곳<br>(+2곳 확정)</td><td>0곳</td></tr></table>
 </div>
 </div>
-<div class="takeaway">순응 타이어 모형은 기준에 따라 기본 적용을 판정 중이며, 추정한 타이어 강성은 11월 20일 실제 차량 측정으로 확인합니다.</div>
+<div class="takeaway">실제 차량은 좌표와 방향을 지도에 미리 등록한 정해 둔 시작 자리에서 출발합니다.</div>
 </div></x-import>
 </section>
 
-<section data-label="S자 운반 전후 비교" data-screen-label="11" data-duration="40" data-speaker-notes="권장 40초
+<section data-label="좁은 통로 경로 개선" data-screen-label="08" data-duration="50" data-speaker-notes="권장 50초
 
-그중 운반 중 S자 구간 사례를 영상으로 보겠습니다. 위에서 본 같은 장면을 같은 조건으로 돌린 두 영상이고, 왼쪽이 지금 모형, 오른쪽이 순응 타이어 모형입니다. 팔레트를 실은 지게차가 주황색 운반 경로를 따라 S자로 휘어 오른쪽 위 하역 칸으로 갑니다. 왼쪽은 마지막 왼쪽 굽이에서 차가 경로 바깥으로 밀려나, 111초에 경로 이탈로 실패합니다. 오른쪽은 같은 굽이를 경로대로 돌아 118초쯤 하역 칸에 도착하고, 이후 출발점까지 돌아와 임무를 마쳤습니다. (전환)
-
-[Sources]
-영상: Isaac Sim 탑뷰, 왼쪽 지금 모형 · 오른쪽 순응 타이어 모형 (같은 시각 맞춤, 4배속)
-video/f2iw_O_random_1_s8/run/transport.mp4 (111.3 s, sha256 8cb8c30eedc098240b288e2e621efb0e2d2bedb22d82719570ef85e08ca2aa34, 운반 중 경로 이탈 pos=2.9726 · yaw=0.9957) 와 video/f2iw_F2_random_1_s8/run/transport.mp4 (165.3 s, sha256 3d276fd13363e3051d9cf0a26926abbe8496dc61f1d8d41f808d2afaa86aa5ac, 완주) — 결정 모드, VIDEO=off 실행과 궤적 같음; 받은 뒤 sha256 대조 일치: ws1 /home/projects/forklift/test_runs/f2i/batch_f2i_22fe89be/ (스냅숏 f2i_22fe89be, 결정 모드, 시뮬-물성 세션)
-두 영상의 시뮬 40 s 부터 crop=1180:600:80:20 → 900 px, 끔은 111.3 s 뒤 마지막 프레임 유지, 켬은 128 s 까지; 좌우로 붙여 4배속; 칸마다 왼쪽 위 시뮬 시각과 끝 모서리 라벨(끔 111.2 s · 켬 118 s 부터, 문구 agy)을 drawtext 로 넣음: 편집
-src/forklift_core/mission/core.py show_path: 운반 (1.0, 0.65, 0.04), 접근 (0.05, 0.45, 1.0), 관측 (0.2, 0.8, 0.8); 초록 원은 하역 칸: 겹침선 색
-[/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="10  S자 운반 전후 비교"><div class="slide-body">
-<h2 class="headline">지금 모형은 111초 마지막 굽이에서 이탈, 순응 타이어는 118초쯤 하역 칸 도착</h2>
-<div class="stall12 grow">
-<figure class="shot vw12b"><video class="media" src="assets/s10_tyre.mp4" poster="assets/s10_tyre_poster.jpg" autoplay loop muted playsinline aria-label="위에서 본 두 영상. 팔레트를 실은 지게차가 주황 운반 경로를 따라 S자로 휘어 오른쪽 위 하역 칸으로 감. 왼쪽 지금 모형은 마지막 굽이에서 경로 바깥으로 밀려나 111초에 멈춤, 오른쪽 순응 타이어 모형은 경로대로 돌아 하역 칸에 도착"></video></figure>
-<div class="stcap12 tyc12"><span>지금 모형은 마지막 왼쪽 굽이에서 이탈</span><span>순응 타이어는 경로대로 돌아 하역 칸 도착</span></div>
-</div>
-<div class="lgd7"><span class="lg"><span class="sw ln" style="background:#ffa60a"></span>운반 경로</span><span class="lg"><span class="sw ln" style="background:#0d73ff"></span>접근 경로</span><span class="lg"><span class="sw ln" style="background:#33cccc"></span>팔레트 관측 경로</span><span class="lg"><span class="sw ring" style="border-color:#22e022"></span>하역 위치</span></div>
-</div></x-import>
-</section>
-
-<section data-label="좁은 통로 경로 개선" data-screen-label="12" data-duration="65" data-speaker-notes="권장 65초
-
-다음은 좁은 통로에서 방향을 바꾸는 경로를 고친 사례입니다. 지금까지는 방향 전환점에 어긋난 채 도착하면 그 자리에서 경로를 다시 계획해 이어 갔는데, 이번에는 어긋나는 원인 자체를 줄였습니다. 리보틱스 좁은 통로 장면에서는 팔레트를 꺼낸 뒤 후진과 전진을 바꾸는 전환점을 지나야 합니다. 그런데 경로 계획기가 전환점 바로 앞에 아주 짧은 곡선 구간을 자주 넣었고, 지게차는 그 짧은 구간 안에서 방향을 다 맞추지 못해 전환점에 어긋난 채 도착했습니다. 그러면 멈추고 경로를 다시 계획해야 했습니다. 그래서 0.6미터보다 짧은 곡선 구간에 비용을 더해, 계획기가 가능하면 더 긴 곡선을 고르게 했습니다. 영상은 같은 장면을 같은 조건으로 돌린 두 실행이고, 위가 기존, 아래가 개선한 경우입니다. 위에서는 팔레트를 꺼낸 직후 짧은 곡선에서 앞뒤로 여러 번 움직이며 두 번 다시 계획하고, 아래에서는 한 번에 빠져나와 운반합니다. 같은 장면의 무작위 배치 10가지로 비교했을 때 운반 경로의 짧은 곡선은 90개에서 18개로, 운반 중 다시 계획한 횟수는 16번에서 8번으로 줄었고, 완주는 양쪽 모두 10번 중 9번으로 같았습니다. 다른 장면에서는 아직 확인하지 않았기 때문에, 이 설정은 좁은 통로 장면에서만 기본으로 켰습니다. 남은 실패 한 번은 앞에서 말씀드린 순응 타이어 모형으로 같은 조건을 다시 돌렸을 때 완주했습니다. 다만 그 결과는 다른 코드 판에서 따로 돌린 것이라 이 표의 수치와 섞지 않았습니다. (전환)
+리보틱스가 보낸 좁은 통로 장면에서는 팔레트를 꺼낸 뒤 후진과 전진을 바꾸는 방향 전환점을 지나야 합니다. 경로 계획기가 전환점 바로 앞에 0.6미터보다 짧은 곡선을 자주 넣었고, 지게차는 그 짧은 구간에서 방향을 다 맞추지 못해 멈추고 다시 계획해야 했습니다. 그래서 짧은 곡선에 벌점을 더해 더 긴 곡선을 고르게 했습니다. 영상은 같은 장면을 같은 조건으로 돌린 것으로, 위의 기존은 짧은 곡선에서 앞뒤로 여러 번 움직이며 두 번 다시 계획하고, 아래의 개선은 한 번에 빠져나옵니다. 무작위 배치 10가지로 비교하니 짧은 곡선이 90개에서 18개로, 운반 중 다시 계획한 횟수가 16번에서 8번으로 줄었고, 완주는 9번으로 같았습니다. 남은 실패 한 번도 앞의 순응 타이어 모형으로 같은 조건을 다시 돌렸을 때 완주했는데, 이것은 다른 코드 판에서 따로 돌린 결과라 표의 수치와 섞지 않았습니다. (전환)
 
 [Sources]
-영상: Isaac Sim 탑뷰 (8배속), 위 기존 · 아래 개선
-2 절 판정: aisle_rack seed 0–9 × 끔 / 켬(--short-cusp-arc 0.6,1.0), 결정 모드; 운반 cusp 실패 뒤 재계획 합 16 → 8, 완주 9 = 9, 최종 실패 1 = 1, 계획 벽시계 최대 710 → 687 s; 짧은 곡선 cusp 다리(0.6 m 미만) 운반 90 → 18; 총괄 결정: riib 런처 aisle_rack 장면 한정 기본 켬(#566): lightminn/forklift main f7566ed4 docs/validation/2026-11-16-aisle-short-cusp-arc.md
-0.6 m 미만 곡선 다리가 cusp 바로 앞에 오면 비용을 더함(--short-cusp-arc 길이 0.6 m, 비용 1.0): lightminn/forklift main f7566ed4 docs/plans/2026-11-16-aisle-short-cusp-arc.md
-ws1 test_runs/acs/render_acs_d45bb1e1/acsAv_aisle_rack_s1/run/transport.mp4 (끔, sha256 9b3bc418…, 시뮬 297 s, 운반 cusp 재계획 2 회 101 · 113 s) 와 acsBv_aisle_rack_s1 (켬, sha256 e53ef020…, 277 s, 재계획 0) — 결정 모드 렌더로 비교 실행과 같은 궤적, 둘 다 완주; 두 영상을 같은 시뮬 시각 40–245 s 로 잘라 위아래로 붙이고 8배속: 영상
-sim/isaac/run_transport.py add_path_display: 접근 (0.05, 0.45, 1.0), 운반 (1.0, 0.65, 0.04), 복귀 (0.55, 0.2, 0.85); 초록 원은 하역 칸: 겹침선 색
+영상: Isaac Sim 탑뷰(8배속), 위 기존 · 아래 개선
+2 절: aisle_rack seed 0–9 × 끔 / 켬(--short-cusp-arc 0.6,1.0), 결정 모드; 운반 cusp 실패 뒤 재계획 16 → 8, 완주 9 = 9, 운반 짧은 곡선 cusp 다리(0.6 m 미만) 90 → 18; aisle_rack 한정 기본 켬(#566): lightminn/forklift main docs/validation/2026-11-16-aisle-short-cusp-arc.md
+0.6 m 미만 곡선 다리가 cusp 바로 앞에 오면 비용을 더함: lightminn/forklift main docs/plans/2026-11-16-aisle-short-cusp-arc.md
+남은 실패 aisle_rack s4: 이전 모형 실패(운반 전환점, 재계획 2 회 뒤) → 순응 타이어 완주 5.7 mm — 다른 스냅숏(f2i_22fe89be)이라 표의 짝(acs_d45bb1e1)과 섞지 않음: lightminn/forklift main docs/validation/2026-11-18-f2-i-reregistration.md (#575, main 460b3578, 문서 커밋 ec888ef1)
+ws1 test_runs/acs/render_acs_d45bb1e1/acsAv_aisle_rack_s1 · acsBv_aisle_rack_s1/run/transport.mp4 (sha256 9b3bc418… · e53ef020…), 시뮬 40–245 s, 위아래로 붙여 8 배속: 영상
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="11  좁은 통로 경로 개선"><div class="slide-body">
-<h2 class="headline">방향 전환점 앞 짧은 곡선에 벌점을 줘 운반 중 경로 재계획을 16회에서 8회로 줄임</h2>
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="07  좁은 통로 경로 개선"><div class="slide-body">
+<h2 class="headline">방향 전환점 앞 짧은 곡선에 벌점을 더해 운반 중 다시 계획을 절반으로</h2>
 <div class="cu12 grow">
-<figure class="shot vw12"><div class="vbox12"><video class="media" src="assets/s05_cusp.mp4" poster="assets/s05_cusp_poster.jpg" autoplay loop muted playsinline aria-label="좁은 통로 장면을 위에서 본 두 영상. 위는 기존 계획으로, 팔레트를 꺼낸 직후 전환점 앞 짧은 곡선에서 앞뒤로 여러 번 움직이며 다시 계획함. 아래는 개선한 계획으로, 더 긴 곡선으로 빠져나와 한 번에 운반함"></video>
-<span class="vl12 top">기존</span><span class="vl12 bot">개선</span></div>
-<figcaption>기존은 2회 재계획 후 통과, 개선은 한 번에 운반</figcaption></figure>
+<figure class="shot vw12"><div class="vbox12"><video class="media" src="assets/s07_cusp.mp4" poster="assets/s07_cusp_poster.jpg" autoplay loop muted playsinline aria-label="좁은 통로 장면을 위에서 본 두 영상. 위는 기존 계획으로 팔레트를 꺼낸 직후 짧은 곡선에서 앞뒤로 여러 번 움직이며 다시 계획함. 아래는 개선한 계획으로 더 긴 곡선으로 빠져나와 한 번에 운반함"></video>
+<span class="vl12 top">기존 경로</span><span class="vl12 bot">개선 경로</span></div>
+<figcaption>기존은 두 번 다시 계획, 개선은 한 번 통과</figcaption></figure>
 <div class="stack cu12r">
-<table class="comparison h7 ct12"><tr><th>항목</th><th>기존</th><th>개선</th></tr><tr><td>전환점 앞 짧은 곡선<br>(0.6 m 미만)</td><td>90개</td><td>18개</td></tr><tr><td>운반 중 경로를<br>다시 계획한 횟수</td><td>16회</td><td>8회</td></tr><tr><td>무작위 배치 10가지<br>임무 완주</td><td>9 / 10회</td><td>9 / 10회</td></tr></table>
-<p class="note12">이 개선은 검증을 마친 좁은 통로 장면에서만 기본으로 적용</p>
-<p class="note12">남은 실패 1회도 순응 타이어(기본 설정 아님)로 같은 조건을 다시 돌려 완주</p>
+<table class="comparison h7 ct12"><tr><th>항목</th><th>기존</th><th>개선</th></tr><tr><td>전환점 앞 0.6 m 미만 곡선</td><td>90개</td><td>18개</td></tr><tr><td>운반 중 경로 다시 계획</td><td>16회</td><td>8회</td></tr><tr><td>무작위 배치 10가지 완주</td><td>9회</td><td>9회</td></tr></table>
+<p class="note12">이 벌점 설정은 검증한 좁은 통로 장면에서만 기본으로 켬</p>
+<p class="note12">남은 실패 1회도 앞의 순응 타이어 모형으로 다시 돌리니 완주</p>
 <div class="lgd7"><span class="lg"><span class="sw ln" style="background:#0d73ff"></span>접근 경로</span><span class="lg"><span class="sw ln" style="background:#ffa60a"></span>운반 경로</span><span class="lg"><span class="sw ln" style="background:#8c33d9"></span>복귀 경로</span><span class="lg"><span class="sw ring" style="border-color:#22e022"></span>하역 위치</span></div>
 </div>
 </div>
 </div></x-import>
 </section>
 
-<section data-label="다음 주 계획" data-screen-label="13" data-duration="45" data-speaker-notes="권장 45초
+<section data-label="다음 주 계획" data-screen-label="09" data-duration="35" data-speaker-notes="권장 35초
 
-다음 주 계획입니다. 11월 20일에 실제 차량으로 세 가지를 잽니다. 똑바로 가라고 했을 때 방향이 얼마나 틀어지는지, 조향 명령에 비해 실제로 얼마나 도는지, 그리고 멈췄다가 다시 출발할 때 어떻게 반응하는지를 차에 달린 센서와 줄자로 측정합니다. LiDAR가 도착하면 이번 주와 같은 방식으로 노트북과 Jetson에 연결해 확인하겠습니다. 측정한 값은 시뮬레이션에 넣어, 지금 시뮬레이션에서 남아 있는 운반 중 경로 이탈과 팔레트 앞 접근 문제를 실제 차량 기준으로 다시 다루겠습니다. 그리고 지난주 피드백대로, 사전 지도에서 시작 위치를 찾는 방법과 좁은 통로에서 방향을 바꾸는 경로 계획에 관한 논문을 찾아 지금 방식과 비교해 보겠습니다. 이상으로 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.
+다음 주 계획입니다. 11월 20일에 실제 차량으로 직진할 때 방향이 얼마나 틀어지는지, 조향 명령에 비해 얼마나 도는지, 멈췄다 다시 출발할 때 어떻게 반응하는지를 차의 센서와 줄자로 재고, 그 값으로 시뮬레이션의 타이어 모형도 맞춰 보겠습니다. LiDAR가 오면 노트북과 Jetson에 연결해 확인하고, 메인보드와 부품이 오면 모터와 엔코더를 하위 제어 보드로 실제로 돌려 보겠습니다. 그리고 지난주 피드백대로 시작 위치 찾기와 좁은 통로 경로 계획에 관한 논문을 찾아 지금 방식과 비교하겠습니다. 이상으로 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.
 
 [Sources]
 표: 다음 주 할 일
-다음 계획: 11-20 실차 측정(직진 방향 드리프트, 조향 대 실제 곡률, 재출발 응답), A2M12 연결, 실측 뒤 운반 이탈 · 근접 개선; 논문은 이번 주 없음: 총괄 (2026-11-17)
+11-20 실차 측정(직진 방향 드리프트, 조향 대 실제 곡률, 재출발 응답), A2M12 연결, 타이어 강성 확인; 논문은 이번 주 없음: 총괄 (2026-11-17 · 18)
 측정은 차의 센서와 줄자로 cm · 도 단위, 시행 수 적게: 사용자 (2026-11-16, 총괄 전달)
-A2M12 전 단계(노트북 10 분 + Jetson 3 분)는 장비가 오면 함: lightminn/forklift main f7566ed4 docs/validation/2026-11-17-hw-day.md
 [/Sources]" style="background:#fff">
-<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="12  다음 주 계획"><div class="slide-body">
-<h2 class="headline">11월 20일 실제 차량 측정과 LiDAR 연결 뒤 시뮬레이션 보완과 논문 조사</h2>
-<table class="comparison h7 endt12"><tr><th>구분</th><th>할 일</th></tr><tr><td>실제 차량 측정</td><td>11월 20일 직진 틀어짐, 조향 회전량, 재출발 반응을 센서와 줄자로 측정</td></tr><tr><td>센서 연결</td><td>2D LiDAR 도착 후 노트북과 Jetson에 연결해 스캔 수신 확인</td></tr><tr><td>시뮬레이션 보완</td><td>측정값을 시뮬레이션 차량 모형에 넣어 이탈과 팔레트 접근 개선</td></tr><tr><td>논문 조사</td><td>미리 만든 지도에서 시작 위치 찾는 법과 좁은 통로 방향 전환 경로 계획 조사</td></tr></table>
+<x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="08  다음 주 계획"><div class="slide-body">
+<h2 class="headline">11월 20일 실제 차량 측정과 부품 연결, 두 주제 논문 조사를 진행</h2>
+<table class="comparison h7 endt12"><tr><th>구분</th><th>할 일</th></tr><tr><td>실제 차량 측정</td><td>직진 틀어짐, 조향량, 재출발을 센서와 줄자로 재어 타이어 모형 맞춤</td></tr><tr><td>2D LiDAR 연결</td><td>RPLIDAR A2M12 오면 노트북과 Jetson에 연결해 스캔 확인</td></tr><tr><td>모터 구동 시험</td><td>메인보드와 부품 도착 후 모터, 엔코더를 하위 제어 보드로 구동</td></tr><tr><td>논문 조사</td><td>지도에서 시작 위치 찾기와 좁은 통로 방향 전환 경로 계획 조사</td></tr></table>
 </div></x-import>
 </section>
 </x-import></x-dc></body></html>

@@ -1041,3 +1041,40 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .comparison.h7.tyt12 td, .comparison.h7.tyt12 th { padding:14px 10px; vertical-align:middle; }
 .comparison.h7.tyt12 td:not(:first-child), .comparison.h7.tyt12 th:not(:first-child) { text-align:center; }
 .tyc12 { max-width:1200px; }
+
+/* 12주차 발표용 재구성 (2026-11-18) */
+.devs12.dev4 { grid-template-columns:repeat(4,minmax(0,1fr)); gap:22px; }
+.dev4 .dev12 > figure.shot { height:210px; flex:0 0 210px; }
+.dev4 .dev12 h3 { font-size:21px; }
+.dev4 .dev12 p { font-size:18px; }
+.comparison.h7.fx12.fx4 { font-size:18px; line-height:1.35; margin-top:8px; }
+.comparison.h7.fx12.fx4 td, .comparison.h7.fx12.fx4 th { padding:13px 10px; }
+.ty5 { display:flex; flex-direction:column; gap:6px; min-height:0; }
+.ty5 > .vw12b { flex:0 0 auto; height:auto; width:100%; }
+.ty5 > .vw12b .media { width:100%; height:auto; max-height:290px; object-fit:contain; }
+.ty5c { max-width:none; font-size:18px; }
+.ty5b { flex:1; min-height:0; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:24px; align-items:center; }
+.ty5b .ldc12 { height:auto; max-height:170px; }
+.ty5n { gap:8px; justify-content:center; }
+.ty5n p { margin:0; font-size:18px; line-height:1.45; padding-left:12px; border-left:3px solid var(--uos-blue); }
+.ty5n .lgd7 { justify-content:flex-start; font-size:15px; margin-top:4px; }
+.rel12.rel6.grow { grid-template-columns:minmax(0,0.78fr) minmax(0,1.22fr); gap:28px; }
+.comparison.h7.rl12.rl6 { font-size:20px; table-layout:fixed; width:100%; }
+.comparison.h7.rl12.rl6 td, .comparison.h7.rl12.rl6 th { padding:18px 10px; white-space:normal; }
+.comparison.h7.rl12.rl6 th:nth-child(1) { width:52%; } .comparison.h7.rl12.rl6 th:nth-child(2) { width:30%; } .comparison.h7.rl12.rl6 th:nth-child(3) { width:18%; }
+.comparison.h7.rl12.rl6 td:nth-child(2), .comparison.h7.rl12.rl6 td:nth-child(3), .comparison.h7.rl12.rl6 th:nth-child(2), .comparison.h7.rl12.rl6 th:nth-child(3) { text-align:center; }
+.comparison.h7.fb12 th, .comparison.h7.fb12 td { padding:20px 16px; }
+.comparison.h7.fb12 { margin-top:6px; }
+.note12.fbn12 { margin-top:10px; }
+.comparison.h7.fx12.fx4 { font-size:20px; line-height:1.4; margin-top:12px; }
+.comparison.h7.fx12.fx4 td, .comparison.h7.fx12.fx4 th { padding:17px 10px; }
+.ty5 > .vw12b { flex:0 0 238px; height:238px; display:flex; align-items:center; justify-content:center; }
+.ty5 > .vw12b .media { height:100%; width:auto; max-width:100%; max-height:none; }
+.ty5c { flex:0 0 auto; }
+.ty5b { flex:1 1 0; align-items:start; overflow:hidden; }
+.ty5b .ldc12 { max-height:150px; width:auto; max-width:100%; }
+.ty5b .panel-h { font-size:17px; }
+.ty5chart { gap:4px; }
+.dev4 .dev12 > figure.shot { height:240px; flex:0 0 240px; }
+.dev4 .dev12 p { font-size:19px; }
+.ty5c { width:942px; max-width:100%; margin:0 auto; }
