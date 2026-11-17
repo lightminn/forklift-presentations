@@ -5,6 +5,7 @@
 - `build_deck.py`: 본문 · 원고 · 출처. 화면 문구와 원고는 직접 썼다(프로젝트 메모리 script-md-no-agy).
 - 02 · 03 장은 2026-11-17 실제 장비 측정이고, 모터 · 엔코더는 아직 연결하지 않았다(메인보드 · 부품 11월 20일 발송). 04–06 장은 Isaac 시뮬레이션 결과다.
 - 03 장 막대 그래프는 `build_deck.py` 의 `cycle_chart()` 가 그리는 SVG 다.
+- 04 장 지도 그림 `assets/s04_map.png` 는 `make_map.py` 가 만든다: `/home/light/anaconda3/bin/python -I make_map.py <grid.npz> <val_s5.json> <compare.json> s04_map.png`. `grid.npz` 는 Drive `gdrive:forklift-archive/ws1-cleanup-20261110-an/an_f1.tar.zst` 의 `test_runs/live/bp2d_survey/hall_s5b_G0/bundle/grid.npz` (`rclone cat … | zstd -dc | tar -xf - <경로>`), 나머지 둘은 로봇 저장소 `docs/validation/assets/{b-p2d,reloc-observe-move}/`.
 - 사진의 출처 · 라이선스 · 편집은 SOURCES.md 「사진 · 그림」.
 
 ## 영상
