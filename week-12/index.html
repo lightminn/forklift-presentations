@@ -120,9 +120,9 @@ random_1 seed 24: 복귀 경로 끝 옆 8.100 mm(허용 8 mm), 앞뒤 −0.15 mm
 결정 모드 짝: s24 끔 = 시간 초과(기준선 재현), --goal-creep-band on = 완주(띠 고정 → 정체 재계획 0.89 m); 총괄 결정 riib 런처 기본 켬(#571), 근거 seed 1 개; Isaac smoke 3 실행 완주: lightminn/forklift main f7566ed4 docs/validation/2026-11-17-goal-band-cusp-retry.md
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="05  지난 발표 이후 고친 실패"><div class="slide-body">
-<h2 class="headline">지난 발표 이후 실패 세 가지 수정, 같은 장면 · seed 전후 비교로 효과 확인</h2>
-<p class="panel-h">Isaac 시뮬레이션, 고치기 전과 후를 같은 장면 · 같은 seed로 짝지어 비교</p>
-<table class="comparison h7 fx12"><tr><th>지난번 실패</th><th>원인</th><th>고친 것</th><th>같은 조건 전후</th></tr><tr><td>좁은 통로 팔레트 앞에서 인식 실패</td><td>화면용 계획 경로 표시선이 인식 카메라 영상에도 찍힘</td><td>표시선을 카메라 영상에서 제외</td><td>완주 34 → <b>36회</b> (40회 중)<br>인식 실패 1 → <b>0회</b></td></tr><tr><td>팔레트 앞에 옆으로 어긋난 채 접근</td><td>다시 보는 자리에 5–6 cm 어긋나도 도착으로 인정</td><td>도착 허용치를 <span class="nw">5 cm · 0.05 rad</span>로 좁힘</td><td>8 cm 넘는 어긋남 4 → <b>0회</b><br>완주 36 = 36회 (40회 중)</td></tr><tr><td>복귀 끝에서 멈춰 시간 초과</td><td>목표 옆 8.1 mm(허용 8 mm)에 선 경우를 받아 주는 규칙이 없음</td><td>이런 정지를 감지해 경로를 다시 계획</td><td>같은 장면 · seed에서<br>시간 초과 → <b>완주</b></td></tr></table>
+<h2 class="headline">실패 3건을 고쳐 인식 실패와 큰 어긋남은 0회로, 복귀 멈춤도 완주로 바꿈</h2>
+<p class="panel-h">Isaac Sim에서 같은 장면과 seed로 전후를 짝지어 비교한 결과</p>
+<table class="comparison h7 fx12"><tr><th>지난번 실패</th><th>원인</th><th>고친 것</th><th>같은 조건 전후</th></tr><tr><td>좁은 통로에서<br>팔레트 바로 앞 인식 실패</td><td>계획 경로 표시선과 고리가<br>인식 카메라 영상에 찍힘</td><td>경로 표시선은 운용 화면에만<br>그리고 인식 카메라에서 뺌</td><td>인식 실패 1회 → 0회<br>40회 중 완주 34회 → 36회</td></tr><tr><td>다시 관측 뒤 포크 넣기 직전<br>옆 어긋남 허용 한도 초과</td><td>다시 관측 자리 도착 허용이<br>느슨해 5.6, 6.2 cm도 인정</td><td>다시 관측 자리 도착 허용을<br>5 cm · 0.05 rad로 좁힘</td><td>옆 어긋남 8 cm 초과 4회 → 0회<br>40회 중 완주 36회 = 36회</td></tr><tr><td>복귀 끝 목표 바로 옆에 멈춰<br>도착 못 하고 시간 초과 실패</td><td>허용 8 mm를 0.1 mm 넘어 미도착<br>정지 대응 규칙이 없었음</td><td>정지를 감지해 그 자리에서<br>경로를 다시 계획하게 함</td><td>34초 정지로 시간 초과 실패<br>→ 고친 뒤 완주</td></tr></table>
 </div></x-import>
 </section>
 
