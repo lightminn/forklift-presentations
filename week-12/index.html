@@ -3,7 +3,7 @@
 <link rel="icon" href="data:,">
 <script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="./support.js"></script></head>
 <body><x-dc><helmet><meta name="viewport" content="width=device-width, initial-scale=1"><title>12주차 자율 지게차 개발</title>
-<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=2bf4351a70c5"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
+<link rel="stylesheet" href="vendor/uos-slide-template/fonts/fonts.css"><link rel="stylesheet" href="vendor/uos-slide-template/_ds_bundle.css"><link rel="stylesheet" href="vendor/uos-slide-template/styles.css"><link rel="stylesheet" href="deck.css?v=212e6331b02a"><script src="vendor/uos-slide-template/_ds_bundle.js"></script></helmet>
 <x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1280" height="720" hint-size="100%,100%">
 <section class="title-section" data-label="개발 진행 보고" data-screen-label="01" data-duration="15" data-speaker-notes="권장 15초
 
@@ -126,7 +126,7 @@ riib · 라이브 런처 기본 켬, smoke riib 3 장면 완주 · 라이브 3/3
 
 <section data-label="시작 위치 찾기 시험" data-screen-label="07" data-duration="60" data-speaker-notes="권장 60초
 
-두 번째 피드백인 SLAM 자기 위치 찾기입니다. 지게차는 SLAM으로 미리 만든 지도 위에서, LiDAR로 본 주변 모양을 지도와 맞춰 자기 위치를 찾습니다. 공장 배치 A와 B는 같은 공장 건물에 팔레트 더미와 짐을 다르게 놓은 두 장면이고, 둘 다 개발에 쓰지 않은 새 배치입니다. 공장 배치 A에서는 출발점 84곳의 스캔을 미리 찍어 두고 위치를 찾는 프로그램만 따로 돌려 69곳을 확정했습니다. 공장 배치 B에서는 위치를 알려 주지 않은 채 시스템 전체를 켜서 실제 차를 켤 때와 같은 순서로 출발까지 해 봤고 68곳을 확정했습니다. 이번 주에는 여기에 제자리에서 못 찾으면 앞뒤로 0.3미터 움직여 다시 보는 동작을 더해 두 곳을 더 찾았습니다. 둘째와 셋째 시험은 그 사이 다른 설정이 바뀌어서 68과 67을 서로 비교하지는 않습니다. 세 시험 모두 틀린 위치를 맞다고 확정한 경우는 없었습니다. 왼쪽 지도에서 빨간 점, 즉 끝내 위치를 정하지 못한 곳은 모두 비슷한 짐 더미와 선반이 반복되는 아래쪽에 모여 있습니다. 그래서 실차는 바닥에 시작 자리를 표시하고 그 좌표와 방향을 지도에 등록해 둔 뒤, 그 자리에서 출발하도록 정했습니다. (전환)
+두 번째 피드백인 SLAM 자기 위치 찾기입니다. 지게차는 SLAM으로 미리 만든 지도 위에서, LiDAR로 본 주변 모양을 지도와 맞춰 자기 위치를 찾습니다. 공장 배치 A와 B는 같은 공장 건물에 팔레트 더미와 짐을 다르게 놓은 두 장면이고, 둘 다 개발에 쓰지 않은 새 배치입니다. 공장 배치 A에서는 지게차를 움직이지 않고, 출발점 84곳에서 라이다가 볼 주변 모습을 미리 찍어 두었다가 그 모습만 지도와 비교해 위치를 맞히는지 계산만 따로 시험했습니다. 69곳에서 스스로 위치를 정했습니다. 공장 배치 B에서는 지게차를 출발점에 놓고 어디인지 알려 주지 않은 채 켰습니다. 지게차가 스스로 위치를 찾고 맞는지 확인한 뒤 출발까지, 실제로 켜서 출발하는 순서 그대로 해 봤고 68곳에서 위치를 정했습니다. 이번 주에는 여기에 제자리에서 못 찾으면 앞뒤로 30센티미터 움직여 주변을 다시 보는 동작을 더했는데, 제자리에서 못 찾은 16곳 중 2곳만 더 찾았고 20초가 더 걸려 기본으로는 쓰지 않습니다. 지도의 파란 점이 이 두 곳입니다. 둘째와 셋째 시험은 그 사이 다른 설정이 바뀌어서 68과 67을 서로 비교하지는 않습니다. 세 시험 모두 틀린 위치를 맞다고 정한 경우는 없었습니다. 왼쪽 지도에서 빨간 점, 즉 끝내 위치를 정하지 못한 곳은 모두 비슷한 짐 더미와 선반이 반복되는 아래쪽에 모여 있습니다. 그래서 실차는 바닥에 시작 자리를 표시하고 그 좌표와 방향을 지도에 등록해 둔 뒤, 그 자리에서 출발하도록 정했습니다. (전환)
 
 [Sources]
 그림: SLAM 지도 위 출발점별 결과(이동 시험), 표: 시작 위치 찾기 세 시험 (Isaac 시뮬레이션)
@@ -137,15 +137,16 @@ B-P2d 조사 지도 hall_s5b_G0 (map 3edf24b0, Drive ws1-cleanup-20261110-an/an_
 「정해 둔 시작 자리」 = 바닥에 시작 자리를 표시하고 좌표 · 방향을 지도에 등록, 재위치 탐색 없이 시작: 총괄 (2026-11-17)
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="06  시작 위치 찾기 시험"><div class="slide-body">
-<h2 class="headline">미리 만든 지도로 시작 위치를 찾으면 약 82 % 확정, 틀린 확정 0곳</h2>
+<h2 class="headline">라이다로 공장 지도에서 시작 위치를 스스로 찾으면 약 82 % 성공, 잘못 찾은 곳 0곳</h2>
 <div class="rel12 rel6 grow">
 <div class="map12">
 <figure class="shot mapf12"><img class="media" src="assets/s06_map.png" alt="SLAM으로 만든 홀 지도. 검은 벽과 회색 네모 짐 더미 사이에 출발점이 색 점으로 찍혀 있음. 초록 점이 대부분이고, 파란 점 두 개, 빨간 점 14개는 모두 지도 아래쪽 절반에 있음"></figure>
-<div class="maplg12"><p>새 공장 배치 이동 재확인 결과, 미확정은 아래쪽 반복 구역</p>
-<div class="lgd7"><span class="lg"><span class="sw dt" style="background:#22a050"></span>제자리 확정 67곳</span><span class="lg"><span class="sw dt" style="background:#2f74c0"></span>앞뒤 이동 확정 2곳</span><span class="lg"><span class="sw dt" style="background:#d64541"></span>운용자 선택 14곳</span></div></div>
+<div class="maplg12"><p>공장 배치 B 앞뒤 이동 시험, 못 찾은 곳은 짐이 반복되는 아래쪽</p>
+<div class="lgd7"><span class="lg"><span class="sw dt" style="background:#22a050"></span>제자리에서 스스로 찾음 67곳</span><span class="lg"><span class="sw dt" style="background:#2f74c0"></span>앞뒤로 움직여 찾음 2곳</span><span class="lg"><span class="sw dt" style="background:#d64541"></span>못 찾아 사람이 골라 줌 14곳</span></div></div>
 </div>
 <div class="stack">
-<table class="comparison h7 rl12 rl6"><tr><th>공장 배치와 시험 방식</th><th>스스로 확정</th><th>틀린 확정</th></tr><tr><td>공장 배치 A, 미리 찍은<br>스캔만으로 지도와 맞춰 계산</td><td>84곳 중 69곳<br>(82 %)</td><td>0곳</td></tr><tr><td>공장 배치 B, 위치 없이 켜서<br>스스로 찾고 출발까지</td><td>68/84 (81 %)<br>중앙 오차 2&nbsp;cm</td><td>0곳</td></tr><tr><td>공장 배치 B, 못 찾으면<br>앞뒤 0.3 m 다시 보기<br>(+20초, 기본 꺼둠)</td><td>67 → 69곳<br>(+2곳 확정)</td><td>0곳</td></tr></table>
+<p class="rlin12">지게차를 켰을 때 라이다로 주변을 보고 지도에서 자기 위치를 찾는 시험 (배치 A·B는 같은 건물에 팔레트와 짐을 다르게 놓은 두 장면)</p>
+<table class="comparison h7 rl12 rl6"><tr><th>시험 장면</th><th>어떻게 시험했나</th><th>스스로 위치 찾음</th><th>잘못 찾음</th></tr><tr><td>공장 배치 A</td><td>지게차는 세워 두고 84곳에서<br>라이다로 본 주변 모습만 미리 찍어<br>지도에서 맞는 자리를 찾는지 계산</td><td>84곳 중 69곳<br>(82 %)</td><td>0곳</td></tr><tr><td>공장 배치 B</td><td>어디인지 알려 주지 않고 켠 뒤<br>라이다로 스스로 위치를 찾고<br>맞는지 확인한 뒤 출발까지 진행</td><td>84곳 중 68곳 (81 %)<br>오차 중앙값 2&nbsp;cm</td><td>0곳</td></tr><tr><td>공장 배치 B<br>+ 앞뒤 이동</td><td>제자리에서 못 찾으면 앞뒤로<br>30 cm 움직여 주변을 다시 봄<br>(20초 더 걸려 기본으로는 안 씀)</td><td>16곳 중 2곳 더 찾음<br>(67곳 → 69곳)</td><td>0곳</td></tr></table>
 </div>
 </div>
 <div class="takeaway">실제 차량은 좌표와 방향을 지도에 미리 등록한 정해 둔 시작 자리에서 출발합니다.</div>
