@@ -205,12 +205,8 @@
         "남은 실패 aisle_rack s4: 이전 모형 실패(운반 전환점, 재계획 2 회 뒤) → 순응 타이어 완주 5.7 mm — 다른 스냅숏(f2i_22fe89be)이라 표의 짝(acs_d45bb1e1)과 섞지 않음"
       ],
       [
-        "시뮬-물성 (2026-11-18, 잡 19892)",
-        "지금 기본 설정 재확인: riib aisle_rack s3 · s5–s9, main 09448ca2(#576 뒤), --deterministic 만, 런처 기본(riib_defaults.txt 에 TYRE_CONTACT=f2 · SHORT_CUSP_ARC=0.6,1.0), 6/6 완주 — ws1 test_runs/deck12/aisle9_main_09448ca2/d12_aisle_rack_s<N>"
-      ],
-      [
-        "lightminn/forklift main docs/validation/2026-11-18-f2-i-reregistration.md (#575, main 460b3578, 문서 커밋 ec888ef1)",
-        "s0 · s1 · s2 · s4 는 F2 팔 완주(회귀 s0, 11주차 사례 s1 · s2, 사례 s4 5.7 mm) — 스냅숏 f2i_22fe89be(main 9afb115b, #566 의 aisle_rack 짧은 곡선 기본 포함, 순응 타이어는 settings 로). 두 코드 판을 합친 10/10 이며, 시뮬-물성이 넷을 09448ca2 로 다시 돌리는 중(결과가 오면 한 판으로 바꾸고, 실패가 나오면 화면을 되돌림)"
+        "시뮬-물성 (2026-11-18, 잡 19892 · 19898)",
+        "지금 기본 설정 재확인: riib aisle_rack s0–s9, 한 코드 판 main 09448ca2(#576 뒤), --deterministic 만, 런처 기본(열 실행 모두 riib_defaults.txt 에 TYRE_CONTACT=f2 · SHORT_CUSP_ARC=0.6,1.0), VIDEO=off, 10/10 완주 — ws1 test_runs/deck12/aisle9_main_09448ca2/d12_aisle_rack_s<N>(s3 · s5–s9, 19892) · aisle4_main_09448ca2/d12_aisle_rack_s<N>(s0 · s1 · s2 · s4, 19898)"
       ],
       [
         "영상",
