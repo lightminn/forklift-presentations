@@ -1084,7 +1084,7 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .rel12.rel6 .rlin12 { margin:0 0 6px; font-size:20px; line-height:1.45; color:#1b1f24; }
 .comparison.h7.rl12.rl6 { font-size:19px; table-layout:fixed; width:100%; }
 .comparison.h7.rl12.rl6 td, .comparison.h7.rl12.rl6 th { padding:14px 10px; white-space:nowrap; vertical-align:middle; }
-.comparison.h7.rl12.rl6 th:nth-child(1) { width:16%; } .comparison.h7.rl12.rl6 th:nth-child(2) { width:45%; }
+.comparison.h7.rl12.rl6 th:nth-child(1) { width:18%; } .comparison.h7.rl12.rl6 th:nth-child(2) { width:43%; }
 .comparison.h7.rl12.rl6 th:nth-child(3) { width:27%; } .comparison.h7.rl12.rl6 th:nth-child(4) { width:12%; }
 .comparison.h7.rl12.rl6 td:nth-child(1), .comparison.h7.rl12.rl6 td:nth-child(2), .comparison.h7.rl12.rl6 th:nth-child(1), .comparison.h7.rl12.rl6 th:nth-child(2) { text-align:left; }
 .comparison.h7.rl12.rl6 td:nth-child(3), .comparison.h7.rl12.rl6 td:nth-child(4), .comparison.h7.rl12.rl6 th:nth-child(3), .comparison.h7.rl12.rl6 th:nth-child(4) { text-align:center; }
