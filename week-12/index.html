@@ -160,13 +160,15 @@ B-P2d 조사 지도 hall_s5b_G0 (map 3edf24b0, Drive ws1-cleanup-20261110-an/an_
 
 <section data-label="좁은 통로 경로 개선" data-screen-label="08" data-duration="50" data-speaker-notes="권장 50초
 
-리보틱스가 보낸 좁은 통로 장면에서는 팔레트를 꺼낸 뒤 후진과 전진을 바꾸는 방향 전환점을 지나야 합니다. 경로 계획기가 전환점 바로 앞에 0.6미터보다 짧은 곡선을 자주 넣었고, 지게차는 그 짧은 구간에서 방향을 다 맞추지 못해 멈추고 다시 계획해야 했습니다. 그래서 계획할 때 방향을 바꾸기 직전에 짧은 곡선이 생기는 경로를 덜 좋게 쳐서, 계획기가 그런 경로를 되도록 피하게 했습니다. 영상은 같은 장면을 같은 조건으로 돌린 것으로, 위의 기존은 짧은 곡선에서 앞뒤로 여러 번 움직이며 두 번 다시 계획하고, 아래의 개선은 한 번에 빠져나옵니다. 무작위 배치 10가지로 비교하니 짧은 곡선이 90개에서 18개로, 운반 중 다시 계획한 횟수가 16번에서 8번으로 줄었고, 완주는 9번으로 같았습니다. (전환)
+리보틱스가 보낸 좁은 통로 장면에서는 팔레트를 꺼낸 뒤 후진과 전진을 바꾸는 방향 전환점을 지나야 합니다. 경로 계획기가 전환점 바로 앞에 0.6미터보다 짧은 곡선을 자주 넣었고, 지게차는 그 짧은 구간에서 방향을 다 맞추지 못해 멈추고 다시 계획해야 했습니다. 그래서 계획할 때 방향을 바꾸기 직전에 짧은 곡선이 생기는 경로를 덜 좋게 쳐서, 계획기가 그런 경로를 되도록 피하게 했습니다. 영상은 같은 장면을 같은 조건으로 돌린 것으로, 위의 기존은 짧은 곡선에서 앞뒤로 여러 번 움직이며 두 번 다시 계획하고, 아래의 개선은 한 번에 빠져나옵니다. 무작위 배치 10가지로 비교하니 짧은 곡선이 90개에서 18개로, 운반 중 다시 계획한 횟수가 16번에서 8번으로 줄었고, 완주는 9번으로 같았습니다. 이 비교는 순응 타이어를 쓰기 전 차체 모형으로 돌린 것입니다. 순응 타이어를 적용한 지금 기본 설정으로 같은 10가지를 다시 돌려 보니 10가지 모두 완주했습니다. (전환)
 
 [Sources]
 영상: Isaac Sim 탑뷰(8배속), 위 기존 · 아래 개선
 2 절: aisle_rack seed 0–9 × 끔 / 켬(--short-cusp-arc 0.6,1.0), 결정 모드; 운반 cusp 실패 뒤 재계획 16 → 8, 완주 9 = 9, 운반 짧은 곡선 cusp 다리(0.6 m 미만) 90 → 18; aisle_rack 한정 기본 켬(#566): lightminn/forklift main docs/validation/2026-11-16-aisle-short-cusp-arc.md
 0.6 m 미만 곡선 다리가 cusp 바로 앞에 오면 비용을 더함: lightminn/forklift main docs/plans/2026-11-16-aisle-short-cusp-arc.md
 남은 실패 aisle_rack s4: 이전 모형 실패(운반 전환점, 재계획 2 회 뒤) → 순응 타이어 완주 5.7 mm — 다른 스냅숏(f2i_22fe89be)이라 표의 짝(acs_d45bb1e1)과 섞지 않음: lightminn/forklift main docs/validation/2026-11-18-f2-i-reregistration.md (#575, main 460b3578, 문서 커밋 ec888ef1)
+지금 기본 설정 재확인: riib aisle_rack s3 · s5–s9, main 09448ca2(#576 뒤), --deterministic 만, 런처 기본(riib_defaults.txt 에 TYRE_CONTACT=f2 · SHORT_CUSP_ARC=0.6,1.0), 6/6 완주 — ws1 test_runs/deck12/aisle9_main_09448ca2/d12_aisle_rack_s&lt;N&gt;: 시뮬-물성 (2026-11-18, 잡 19892)
+s0 · s1 · s2 · s4 는 F2 팔 완주(회귀 s0, 11주차 사례 s1 · s2, 사례 s4 5.7 mm) — 스냅숏 f2i_22fe89be(main 9afb115b, #566 의 aisle_rack 짧은 곡선 기본 포함, 순응 타이어는 settings 로). 두 코드 판을 합친 10/10 이며, 시뮬-물성이 넷을 09448ca2 로 다시 돌리는 중(결과가 오면 한 판으로 바꾸고, 실패가 나오면 화면을 되돌림): lightminn/forklift main docs/validation/2026-11-18-f2-i-reregistration.md (#575, main 460b3578, 문서 커밋 ec888ef1)
 ws1 test_runs/acs/render_acs_d45bb1e1/acsAv_aisle_rack_s1 · acsBv_aisle_rack_s1/run/transport.mp4 (sha256 9b3bc418… · e53ef020…), 시뮬 40–245 s, 위아래로 붙여 8 배속: 영상
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="07  좁은 통로 경로 개선"><div class="slide-body">
@@ -178,6 +180,7 @@ ws1 test_runs/acs/render_acs_d45bb1e1/acsAv_aisle_rack_s1 · acsBv_aisle_rack_s1
 <div class="stack cu12r">
 <table class="comparison h7 ct12"><tr><th>항목</th><th>기존</th><th>개선</th></tr><tr><td>전환점 앞 0.6 m 미만 곡선</td><td>90개</td><td>18개</td></tr><tr><td>운반 중 경로 다시 계획</td><td>16회</td><td>8회</td></tr><tr><td>무작위 배치 10가지 완주</td><td>9회</td><td>9회</td></tr></table>
 <p class="note12">짧은 곡선을 피하는 설정은 검증한 좁은 통로 장면에서만 기본으로 켬</p>
+<p class="note12">순응 타이어를 적용한 지금 기본 설정으로 다시 돌려 10가지 모두 완주</p>
 <div class="lgd7"><span class="lg"><span class="sw ln" style="background:#0d73ff"></span>접근 경로</span><span class="lg"><span class="sw ln" style="background:#ffa60a"></span>운반 경로</span><span class="lg"><span class="sw ln" style="background:#8c33d9"></span>복귀 경로</span><span class="lg"><span class="sw ring" style="border-color:#22e022"></span>하역 위치</span></div>
 </div>
 </div>
