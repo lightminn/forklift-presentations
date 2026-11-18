@@ -1098,3 +1098,5 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .comparison.h7.fl12 { font-size:19px; width:100%; table-layout:fixed; }
 .comparison.h7.fl12 th:nth-child(1) { width:60%; }
 .comparison.h7.fl12 td, .comparison.h7.fl12 th { padding:4px 10px; white-space:nowrap; }
+/* 07 (2026-11-18): what changed, above the table */
+.ctin12 { margin:0 0 6px; font-size:20px; line-height:1.5; color:#1b1f24; }
