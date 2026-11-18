@@ -90,8 +90,8 @@
   {
     "label": "인식 카메라 전후 비교",
     "title": "04  인식 카메라 전후 비교",
-    "seconds": 30,
-    "notes": "첫 번째 사례를 화면으로 보면 이렇습니다. 왼쪽이 고치기 전, 오른쪽이 고친 뒤의 인식 카메라 화면입니다. 고치기 전에는 빨간 동그라미 안에 계획 경로 표시선이 찍혀 있고, 이 선이 팔레트 앞에 걸리면 팔레트 입구 폭을 잘못 읽어 인식을 거부한 경우가 있었습니다. 고친 뒤에는 선이 보이지 않습니다. (전환)",
+    "seconds": 45,
+    "notes": "첫 번째 사례를 화면으로 보면 이렇습니다. 왼쪽이 고치기 전, 오른쪽이 고친 뒤의 인식 카메라 화면입니다. 고치기 전에는 빨간 동그라미 안에 계획 경로 표시선이 찍혀 있고, 이 선이 팔레트 앞에 걸리면 팔레트 입구 폭을 잘못 읽어 인식을 거부한 경우가 있었습니다. 고친 뒤에는 선이 보이지 않습니다. 고친 뒤에도 40번 중 4번은 실패했고, 넷 다 무작위로 물건을 놓은 장면이었습니다. 첫째는 S자로 운반하다 경로를 벗어난 경우로, 차체 모형이 덜 돌았기 때문이고 뒤에서 볼 순응 타이어로 바꾼 뒤 완주했습니다. 둘째는 팔레트를 가까이서 다시 보러 가다 시간이 다 된 경우인데, 원인은 아직 확인하지 못했습니다. 순응 타이어로 다시 돌리니 완주했지만 그것이 원인이라는 근거는 없습니다. 셋째는 앞 표 둘째 행의 복귀 끝 정지로, 정지를 감지해 다시 계획하게 고쳤습니다. 넷째는 운반 중 방향을 바꿀 자리가 장애물 칸과 겹쳐 경로를 다시 짜지 못한 경우로, 아직 고치지 못했습니다. (전환)",
     "sources": [
       [
         "ws1 /home/projects/forklift/test_runs/render12_f7566ed4/ (isaac_array 19683, 스냅숏 r12_f7566ed4, 결정 모드, 시뮬-물성 세션 렌더)",
@@ -104,6 +104,18 @@
       [
         "편집",
         "(160, 140)–(560, 330) 을 잘라 2 배 확대, 고치기 전 그림에 빨간 동그라미(선 자리)"
+      ],
+      [
+        "lightminn/forklift main docs/validation/2026-11-15-post-fix-baseline.md",
+        "남은 실패 표: 40 짝 집합 R 36/40, 실패 분류 planning 1 · tracking 3, 모두 random_1(30/30 중 26) — 짝 차이 표의 random_1 s11 scene_replan_refused:cusp_pose:blocked:occupied(운반), s24 Tracking timeout in return_home"
+      ],
+      [
+        "lightminn/forklift main docs/plans/2026-11-18-f2-i-reregistration.md 1 절",
+        "#539 R 의 나머지 실패: s8 Tracking failed in transport(cross_track), s12 Tracking timeout in observe, s11 · s49 cusp_pose:blocked:occupied, s24 return_home 시간 초과(목표 크리프, #571) — s49 는 40 짝 밖"
+      ],
+      [
+        "lightminn/forklift main docs/validation/2026-11-18-f2-i-reregistration.md (#575, main 460b3578, 문서 커밋 ec888ef1)",
+        "이후: s8 O 실패 · F2 완주 1.8 mm, s12 O 실패(같은 사유) · F2 완주 3.4 mm 원인 미확인(조향 S 자 아님), s24 는 RHT · GBC 의 정지 감지 재계획(--goal-creep-band, riib 기본 #571); s11 은 고친 기록 없음"
       ]
     ],
     "foot": "그림: Isaac Sim 인식 카메라 근접 캡처, 왼쪽 고치기 전 · 오른쪽 고친 뒤"

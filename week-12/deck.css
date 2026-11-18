@@ -1088,3 +1088,13 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .comparison.h7.rl12.rl6 th:nth-child(3) { width:27%; } .comparison.h7.rl12.rl6 th:nth-child(4) { width:12%; }
 .comparison.h7.rl12.rl6 td:nth-child(1), .comparison.h7.rl12.rl6 td:nth-child(2), .comparison.h7.rl12.rl6 th:nth-child(1), .comparison.h7.rl12.rl6 th:nth-child(2) { text-align:left; }
 .comparison.h7.rl12.rl6 td:nth-child(3), .comparison.h7.rl12.rl6 td:nth-child(4), .comparison.h7.rl12.rl6 th:nth-child(3), .comparison.h7.rl12.rl6 th:nth-child(4) { text-align:center; }
+/* 04 (2026-11-18): smaller camera pair, then the four remaining failures */
+.cam12.cam4 { grid-template-columns:repeat(2, 410px); justify-content:center; gap:30px; height:auto; flex:0 0 auto; }
+.cam12.cam4 > .camf12 { height:auto; }
+.cam12.cam4 > .camf12 .media { width:410px; height:auto; }
+.cam12.cam4 .camf12 figcaption { margin-top:6px; font-size:19px; }
+.fail12 { margin-top:4px; }
+.fail12 > p { margin:0 0 2px; font-size:20px; font-weight:700; color:#1b1f24; }
+.comparison.h7.fl12 { font-size:19px; width:100%; table-layout:fixed; }
+.comparison.h7.fl12 th:nth-child(1) { width:60%; }
+.comparison.h7.fl12 td, .comparison.h7.fl12 th { padding:4px 10px; white-space:nowrap; }
