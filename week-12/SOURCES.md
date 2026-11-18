@@ -59,3 +59,14 @@
 - 2026-11-17 사용자(총괄 전달): "5페이지 사진이 뭘 의미하는건지 잘 안보임" — 04 장 그림을 11주차 후보 화면에서 SLAM 지도 위 출발점별 결과로 바꿈(지도 원자료는 Drive 보관본에서 꺼냄, CSS · SVG 도식 아님).
 - 2026-11-17 사용자(총괄 전달): "6페이지에도 비교 영상 넣어서 어떤 점이 달라진건지 시각적으로" — 05 장 사례 ① · ③ 의 고치기 전후 화면을 06 · 07 장으로 넣음(② 는 화면 차이가 작아 표만, 총괄 합의). 렌더는 시뮬-물성 세션.
 - 11주차가 남긴 연속 이송 랜덤 배치 1 회 실패(random_m s0 두 번째 임무 근접 캡처 「예상 후보 없음」)는 화면에 넣지 않았다. 시뮬-물성 세션이 지금 main · 같은 설정(학습 인식 + 당시 운영 기본)의 라이브 1 세션으로 다시 돌려 세 임무가 모두 완료됐다(하역 26.7 · 12.8 · 34.2 mm, 두 번째 임무 근접 캡처는 2 번째 시도에서 통과). 비결정 1 회라 「지금 main 에서 재현 안 됨(1 회)」으로만 적는다 — 고쳤다는 근거가 아니고, 순응 타이어와 무관한 인식 쪽 사례. 출처: 로봇 저장소 docs/validation/2026-11-18-f2-i-reregistration.md 3.3 절(PR #575).
+
+## ws1 원본 보관 위치 (2026-11-18, 덱 확정 뒤 ws1 에서 지움)
+
+위 표의 ws1 경로는 덱 확정(71af632) 뒤 Google Drive 로 옮겼다. 묶음 안의 경로는 저장소 상대 경로 그대로다. 모두 Drive md5 일치를 확인한 뒤 ws1 에서 지웠다.
+
+| 원래 ws1 경로 | 보관 위치 | md5 |
+|---|---|---|
+| `test_runs/acs/render_acs_d45bb1e1` + `snapshots/acs_d45bb1e1` | `gdrive:ws1-cleanup-20261118-d/d_acs.tar.zst` | 4902aec7143d2415992962c42b62d35d |
+| `test_runs/render12_f7566ed4` + `snapshots/r12_f7566ed4` | `gdrive:ws1-cleanup-20261118-d/d_r12.tar.zst` | 7ea9dec645698edd241215088830e220 |
+| `test_runs/deck12/aisle9_main_09448ca2` · `aisle4_main_09448ca2` + `snapshots/main_09448ca2` | `gdrive:ws1-cleanup-20261118-d/d_deck.tar.zst` | bc31dfc2a2b8b836524d02ef966d549a |
+| `test_runs/f2i/batch_f2i_22fe89be/video/` mp4 두 개 (O sha256 8cb8c30e…, F2 sha256 3d276fd1…) | `gdrive:ws1-cleanup-20261118-a/a_f2i.tar.zst` | a24b0304a85e94ebaf04ff0aaeeed131 |
