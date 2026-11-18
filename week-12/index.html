@@ -28,7 +28,7 @@
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="01  지난주 피드백과 진행"><div class="slide-body">
 <h2 class="headline">장비 첫 연결과 시작 위치 찾기를 시험하고 논문 조사는 다음 주에 진행</h2>
-<table class="comparison h7 fb12"><tr><th>피드백</th><th>이번 주 진행</th><th>쪽</th></tr><tr><td>모터 등 실제 장비를 사서<br>직접 연결해 볼 것</td><td>하위 제어 보드, 컴퓨터, 카메라 연결<br>모터와 2D LiDAR는 도착 뒤 연결</td><td>02</td></tr><tr><td>SLAM 자기 위치 찾기를<br>다양한 조건으로 정확히 시험</td><td>물건 배치가 다른 두 공장 장면에서<br>세 방식으로 시작 위치 찾기 시험</td><td>06</td></tr><tr><td>관련 논문을 더 찾아볼 것</td><td>이번 주는 찾지 못해<br>다음 주 조사 계획에 포함</td><td>08</td></tr></table>
+<table class="comparison h7 fb12"><tr><th>피드백</th><th>이번 주 진행</th><th>쪽</th></tr><tr><td>모터 등 실제 장비를 사서<br>직접 연결해 볼 것</td><td>하위 제어 보드, Jetson, 카메라 연결<br>모터와 2D LiDAR는 도착 뒤 연결</td><td>02</td></tr><tr><td>SLAM 자기 위치 찾기를<br>다양한 조건으로 정확히 시험</td><td>물건 배치가 다른 두 공장 장면에서<br>세 방식으로 시작 위치 찾기 시험</td><td>06</td></tr><tr><td>관련 논문을 더 찾아볼 것</td><td>이번 주는 찾지 못해<br>다음 주 조사 계획에 포함</td><td>08</td></tr></table>
 <p class="note12 fbn12">피드백 외에 03–05쪽은 시뮬레이션 실패 해결, 07쪽은 좁은 통로 개선입니다</p>
 </div></x-import>
 </section>
@@ -47,8 +47,8 @@ hw_h743.jpg 사용자 촬영(EXIF 지움), hw_jetson.jpg NVIDIA 제품 페이지
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="02  실제 장비 첫 연결"><div class="slide-body">
 <h2 class="headline">하위 제어 보드, Jetson, 카메라를 처음 연결해 통신과 응답 기준 통과</h2>
 <div class="devs12 dev4 grow">
-<div class="dev12"><figure class="shot"><img class="media" src="assets/hw_h743.jpg" alt="WeAct STM32H743 코어 보드 윗면. 가운데 STM32H743 칩, 아래쪽에 USB-C 단자, 양옆에 핀 헤더"></figure><h3>하위 MCU STM32H743</h3><p>모터 제어 펌웨어 첫 탑재 (잠금)</p><p>노트북, Jetson 10분 연결 누락 0</p><p>명령 왕복 시간 최대 약 10 ms</p></div>
-<div class="dev12"><figure class="shot"><img class="media" src="assets/hw_jetson.jpg" alt="NVIDIA Jetson Orin Nano 개발 키트 보드. 검은 방열판과 팬"></figure><h3>Jetson Orin Nano Super</h3><p>팔레트 인식과 경로 계획용 컴퓨터</p><p>CPU 최대 부하 5분 명령 간격</p><p>최대 29.6 ms (기준 80 ms 미만)</p></div>
+<div class="dev12"><figure class="shot"><img class="media" src="assets/hw_h743.jpg" alt="WeAct STM32H743 코어 보드 윗면. 가운데 STM32H743 칩, 아래쪽에 USB-C 단자, 양옆에 핀 헤더"></figure><h3>하위 MCU STM32H743</h3><p>모터 4개 제어 펌웨어 첫 탑재 (잠금)</p><p>노트북, Jetson 10분 연결 누락 0</p><p>명령 왕복 시간 최대 약 10 ms</p></div>
+<div class="dev12"><figure class="shot"><img class="media" src="assets/hw_jetson.jpg" alt="NVIDIA Jetson Orin Nano 개발 키트 보드. 검은 방열판과 팬"></figure><h3>Jetson Orin Nano Super</h3><p>팔레트 인식과 경로 계획용 컴퓨터</p><p>6코어 최대 부하 5분, 20 ms 명령 간격</p><p>최대 29.6 ms (기준 80 ms 미만)</p></div>
 <div class="dev12"><figure class="shot"><img class="media" src="assets/hw_d435.jpg" alt="Intel RealSense 깊이 카메라를 작은 삼각대에 올린 사진"></figure><h3>RealSense D435i</h3><p>팔레트 찾는 카메라와 관성 센서</p><p>Jetson에 연결해 2분간 기록</p><p>자이로 400, 가속도 200 Hz 수신</p></div>
 <div class="dev12 off12"><figure class="shot"><img class="media" src="assets/hw_lidar.jpg" alt="SLAMTEC RPLIDAR A2 2D 라이다"></figure><h3>RPLIDAR A2M12</h3><p>주변 모양 읽는 2D LiDAR 센서</p><p>장비 미도착으로 아직 연결 못 함</p><p>도착하면 노트북과 Jetson에 연결</p></div>
 </div>
@@ -75,7 +75,7 @@ random_1 s24 복귀 끝 옆 8.100 mm(허용 8 mm)에서 약 34.5 s 정지 → �
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="03  시뮬레이션 실패 해결"><div class="slide-body">
 <h2 class="headline">시뮬레이션 실패 네 가지의 원인을 찾아 고치고 같은 조건에서 개선 확인</h2>
 <p class="panel-h">네 사례 모두 수정 전후를 같은 장면과 조건으로 다시 돌려 비교</p>
-<table class="comparison h7 fx12 fx4"><tr><th>지난번 실패</th><th>원인</th><th>고친 것</th><th>같은 조건 전후</th></tr><tr><td>팔레트 바로 앞에서<br>다시 볼 때 인식 실패</td><td>계획 경로 표시선이<br>카메라 영상에 찍힘</td><td>표시선을 운용 화면에만<br>그려 카메라에서 제외</td><td>40회 중 완주 34→36회<br>인식 실패 1→0회</td></tr><tr><td>포크 넣기 직전 팔레트와<br>옆 어긋남 허용치 초과</td><td>다시 보는 자리 5~6 cm<br>옆 어긋남을 도착 인정</td><td>그 자리 도착 허용치를<br>5 cm·0.05 rad로 좁힘</td><td>40회 중 8 cm 초과 4→0<br>완주는 36회 유지</td></tr><tr><td>복귀 목표 8.1 mm 옆에서<br>34초 넘게 서다 시간 초과</td><td>허용치 8 mm를 0.1 mm 넘어<br>멈췄는데 대처 규칙 없음</td><td>이런 정지를 감지해<br>그 자리서 경로 다시 계획</td><td>같은 조건에서 시간 초과<br>실패에서 완주로 바뀜</td></tr><tr><td>S자 운반 중 경로 이탈<br>방향 전환 시 각도 어긋남</td><td>네 바퀴 한 점 접촉 모형이라<br>무게 쏠리고 덜 돎</td><td>무게에 눌리는 순응 타이어<br>모형으로 바꿔 기본 적용 결정</td><td>13가지 중 완주 10→13<br>하역 오차 16.0→4.5 mm</td></tr></table>
+<table class="comparison h7 fx12 fx4"><tr><th>지난번 실패</th><th>원인</th><th>고친 것</th><th>같은 조건 전후</th></tr><tr><td>팔레트 바로 앞에서<br>다시 볼 때 인식 실패</td><td>계획 경로 표시선이<br>카메라 영상에 찍힘</td><td>표시선을 운용 화면에만<br>그려 카메라에서 제외</td><td>40회 중 완주 34→36회<br>인식 실패 1→0회</td></tr><tr><td>포크 넣기 직전 팔레트와<br>옆 어긋남 허용치 초과</td><td>다시 보는 자리 5~6 cm<br>옆 어긋남을 도착 인정</td><td>그 자리 도착 허용치를<br>5 cm·0.05 rad로 좁힘</td><td>40회 중 8 cm 초과 4→0<br>완주는 36회 유지</td></tr><tr><td>복귀 목표 8.1 mm 옆에서<br>34초 넘게 서다 시간 초과</td><td>허용치 8 mm를 0.1 mm 넘어<br>멈췄는데 대처 규칙 없음</td><td>이런 정지를 감지해<br>그 자리서 경로 다시 계획</td><td>확인한 장면 1곳에서<br>시간 초과가 완주로 바뀜</td></tr><tr><td>S자 운반 중 경로 이탈<br>방향 전환 시 각도 어긋남</td><td>네 바퀴 한 점 접촉 모형이라<br>무게 쏠리고 덜 돎</td><td>무게에 눌리는 순응 타이어<br>모형으로 바꿔 기본 적용 결정</td><td>13가지 중 완주 10→13<br>하역 오차 16.0→4.5 mm</td></tr></table>
 </div></x-import>
 </section>
 
@@ -92,7 +92,7 @@ pdBefore_aisle_rack_s2(표시선이 카메라에 보이는 진단 설정) · pdA
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="04  인식 카메라 전후 비교"><div class="slide-body">
 <h2 class="headline">카메라 영상에 찍히던 경로 표시선을 빼 팔레트 인식 방해를 없앰</h2>
 <div class="cam12 grow">
-<figure class="shot camf12"><img class="media" src="assets/s04_cam_before.png" alt="고치기 전 인식 카메라 화면. 노란 벽 앞 바닥에 팔레트, 화면 아래 가운데에 파란 짧은 선이 찍혀 있고 빨간 동그라미로 표시됨"><figcaption>고치기 전, 아래에 파란 선이 찍힘</figcaption></figure>
+<figure class="shot camf12"><img class="media" src="assets/s04_cam_before.png" alt="고치기 전 인식 카메라 화면. 노란 벽 앞 바닥에 팔레트, 화면 아래 가운데에 파란 짧은 선이 찍혀 있고 빨간 동그라미로 표시됨"><figcaption>고치기 전, 선이 찍혀 입구 폭 오인</figcaption></figure>
 <figure class="shot camf12"><img class="media" src="assets/s04_cam_after.png" alt="고친 뒤 인식 카메라 화면. 같은 장면, 파란 선이 없음"><figcaption>고친 뒤, 선이 빠져 팔레트만 보임</figcaption></figure>
 </div>
 <div class="lgd7"><span class="lg"><span class="sw ring" style="border-color:#d64541"></span>찍힌 계획 경로 표시선</span></div>
@@ -118,11 +118,11 @@ video/f2iw_O_random_1_s8/run/transport.mp4 (111.3 s, sha256 8cb8c30eedc098240b28
 <div class="stcap12 ty5c"><span>이전 모형, 111초에 경로 벗어남</span><span>순응 타이어, 118초쯤 하역 도착</span></div>
 <div class="ty5b">
 <div class="stack ty5chart"><p class="panel-h">빈차 정지 때 네 바퀴가 받는 힘 (N)</p><svg class="diagram ldc12" viewBox="0 0 560 230" role="img" aria-label="네 바퀴가 받는 힘 막대그래프. 이전 모형: 앞왼 115, 앞오 33, 뒤왼 31, 뒤오 76 N. 순응 타이어: 앞왼 74, 앞오 74, 뒤왼 53, 뒤오 54 N"><g font-family="var(--uos-font)"><line x1="20" y1="170" x2="550" y2="170" stroke="#8c97a3" stroke-width="2"/><rect x="40" y="31.6" width="44" height="138.4" rx="3" fill="#9aa3ad"/><text x="62.0" y="24.6" text-anchor="middle" font-size="17" font-weight="700" fill="#1b1f24">115</text><text x="62.0" y="190" text-anchor="middle" font-size="15" fill="#3c4650">앞왼</text><rect x="96" y="130.4" width="44" height="39.6" rx="3" fill="#9aa3ad"/><text x="118.0" y="123.4" text-anchor="middle" font-size="17" font-weight="700" fill="#1b1f24">33</text><text x="118.0" y="190" text-anchor="middle" font-size="15" fill="#3c4650">앞오</text><rect x="152" y="133.3" width="44" height="36.7" rx="3" fill="#9aa3ad"/><text x="174.0" y="126.3" text-anchor="middle" font-size="17" font-weight="700" fill="#1b1f24">31</text><text x="174.0" y="190" text-anchor="middle" font-size="15" fill="#3c4650">뒤왼</text><rect x="208" y="78.7" width="44" height="91.3" rx="3" fill="#9aa3ad"/><text x="230.0" y="71.7" text-anchor="middle" font-size="17" font-weight="700" fill="#1b1f24">76</text><text x="230.0" y="190" text-anchor="middle" font-size="15" fill="#3c4650">뒤오</text><text x="146.0" y="216" text-anchor="middle" font-size="19" font-weight="700" fill="#9aa3ad">이전 모형</text><rect x="310" y="80.7" width="44" height="89.3" rx="3" fill="#2f74c0"/><text x="332.0" y="73.7" text-anchor="middle" font-size="17" font-weight="700" fill="#1b1f24">74</text><text x="332.0" y="190" text-anchor="middle" font-size="15" fill="#3c4650">앞왼</text><rect x="366" y="81.3" width="44" height="88.7" rx="3" fill="#2f74c0"/><text x="388.0" y="74.3" text-anchor="middle" font-size="17" font-weight="700" fill="#1b1f24">74</text><text x="388.0" y="190" text-anchor="middle" font-size="15" fill="#3c4650">앞오</text><rect x="422" y="106.2" width="44" height="63.8" rx="3" fill="#2f74c0"/><text x="444.0" y="99.2" text-anchor="middle" font-size="17" font-weight="700" fill="#1b1f24">53</text><text x="444.0" y="190" text-anchor="middle" font-size="15" fill="#3c4650">뒤왼</text><rect x="478" y="105.8" width="44" height="64.2" rx="3" fill="#2f74c0"/><text x="500.0" y="98.8" text-anchor="middle" font-size="17" font-weight="700" fill="#1b1f24">54</text><text x="500.0" y="190" text-anchor="middle" font-size="15" fill="#3c4650">뒤오</text><text x="416.0" y="216" text-anchor="middle" font-size="19" font-weight="700" fill="#2f74c0">순응 타이어</text></g></svg></div>
-<div class="stack ty5n"><p>이전은 대각선으로 쏠렸고 순응 타이어는 좌우 고름</p><p>최대 조향 비교 가능한 12가지 모두 명령에 더 가까워짐</p>
+<div class="stack ty5n"><p>이전은 대각선으로 쏠렸고 순응 타이어는 좌우 고름</p><p>0.4 m/s 미만 구간 조향 비교 12가지 모두 명령에 더 가까워짐</p><p>12가지 중 3가지는 명령의 0.95배 미만</p>
 <div class="lgd7"><span class="lg"><span class="sw ln" style="background:#ffa60a"></span>운반 경로</span><span class="lg"><span class="sw ln" style="background:#0d73ff"></span>접근 경로</span><span class="lg"><span class="sw ln" style="background:#33cccc"></span>팔레트 관측 경로</span><span class="lg"><span class="sw ring" style="border-color:#22e022"></span>하역 위치</span></div></div>
 </div>
 </div>
-<div class="takeaway">순응 타이어를 기본 설정으로 쓰기로 결정했으며, 눌림 정도는 11월 20일 실제 차량 측정으로 확인합니다.</div>
+<div class="takeaway">순응 타이어는 기본 적용을 결정해 지금 적용을 확인하는 중이며, 눌림 정도는 11월 20일 실제 차량 측정으로 확인합니다.</div>
 </div></x-import>
 </section>
 
@@ -143,7 +143,7 @@ B-P2d 조사 지도 hall_s5b_G0 (map 3edf24b0, Drive ws1-cleanup-20261110-an/an_
 <div class="rel12 rel6 grow">
 <div class="map12">
 <figure class="shot mapf12"><img class="media" src="assets/s06_map.png" alt="SLAM으로 만든 홀 지도. 검은 벽과 회색 네모 짐 더미 사이에 출발점이 색 점으로 찍혀 있음. 초록 점이 대부분이고, 파란 점 두 개, 빨간 점 14개는 모두 지도 아래쪽 절반에 있음"></figure>
-<div class="maplg12"><p>이동 재확인 결과, 미확정은 아래쪽 반복 구역</p>
+<div class="maplg12"><p>새 공장 배치 이동 재확인 결과, 미확정은 아래쪽 반복 구역</p>
 <div class="lgd7"><span class="lg"><span class="sw dt" style="background:#22a050"></span>제자리 확정 67곳</span><span class="lg"><span class="sw dt" style="background:#2f74c0"></span>앞뒤 이동 확정 2곳</span><span class="lg"><span class="sw dt" style="background:#d64541"></span>운용자 선택 14곳</span></div></div>
 </div>
 <div class="stack">
@@ -170,11 +170,11 @@ ws1 test_runs/acs/render_acs_d45bb1e1/acsAv_aisle_rack_s1 · acsBv_aisle_rack_s1
 <div class="cu12 grow">
 <figure class="shot vw12"><div class="vbox12"><video class="media" src="assets/s07_cusp.mp4" poster="assets/s07_cusp_poster.jpg" autoplay loop muted playsinline aria-label="좁은 통로 장면을 위에서 본 두 영상. 위는 기존 계획으로 팔레트를 꺼낸 직후 짧은 곡선에서 앞뒤로 여러 번 움직이며 다시 계획함. 아래는 개선한 계획으로 더 긴 곡선으로 빠져나와 한 번에 운반함"></video>
 <span class="vl12 top">기존 경로</span><span class="vl12 bot">개선 경로</span></div>
-<figcaption>기존은 두 번 다시 계획, 개선은 한 번 통과</figcaption></figure>
+<figcaption>기존은 짧은 곡선에서 두 번 다시 계획, 개선은 한 번 통과</figcaption></figure>
 <div class="stack cu12r">
 <table class="comparison h7 ct12"><tr><th>항목</th><th>기존</th><th>개선</th></tr><tr><td>전환점 앞 0.6 m 미만 곡선</td><td>90개</td><td>18개</td></tr><tr><td>운반 중 경로 다시 계획</td><td>16회</td><td>8회</td></tr><tr><td>무작위 배치 10가지 완주</td><td>9회</td><td>9회</td></tr></table>
 <p class="note12">이 벌점 설정은 검증한 좁은 통로 장면에서만 기본으로 켬</p>
-<p class="note12">남은 실패 1회도 앞의 순응 타이어 모형으로 다시 돌리니 완주</p>
+<p class="note12">남은 실패 1회도 순응 타이어로 따로 돌리니 완주 (표와 별도)</p>
 <div class="lgd7"><span class="lg"><span class="sw ln" style="background:#0d73ff"></span>접근 경로</span><span class="lg"><span class="sw ln" style="background:#ffa60a"></span>운반 경로</span><span class="lg"><span class="sw ln" style="background:#8c33d9"></span>복귀 경로</span><span class="lg"><span class="sw ring" style="border-color:#22e022"></span>하역 위치</span></div>
 </div>
 </div>
@@ -192,7 +192,7 @@ ws1 test_runs/acs/render_acs_d45bb1e1/acsAv_aisle_rack_s1 · acsBv_aisle_rack_s1
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="08  다음 주 계획"><div class="slide-body">
 <h2 class="headline">11월 20일 실제 차량 측정과 부품 연결, 두 주제 논문 조사를 진행</h2>
-<table class="comparison h7 endt12"><tr><th>구분</th><th>할 일</th></tr><tr><td>실제 차량 측정</td><td>직진 틀어짐, 조향량, 재출발을 센서와 줄자로 재어 타이어 모형 맞춤</td></tr><tr><td>2D LiDAR 연결</td><td>RPLIDAR A2M12 오면 노트북과 Jetson에 연결해 스캔 확인</td></tr><tr><td>모터 구동 시험</td><td>메인보드와 부품 도착 후 모터, 엔코더를 하위 제어 보드로 구동</td></tr><tr><td>논문 조사</td><td>지도에서 시작 위치 찾기와 좁은 통로 방향 전환 경로 계획 조사</td></tr></table>
+<table class="comparison h7 endt12"><tr><th>구분</th><th>할 일</th></tr><tr><td>실제 차량 측정</td><td>직진 틀어짐, 조향량, 재출발을 센서와 줄자로 재어 타이어 모형 맞춤</td></tr><tr><td>2D LiDAR 연결</td><td>RPLIDAR A2M12 오면 노트북과 Jetson에 연결해 스캔 확인</td></tr><tr><td>모터 구동 시험</td><td>메인보드와 부품 도착 후 모터, 엔코더를 하위 제어 보드로 구동</td></tr><tr><td>논문 조사</td><td>시작 위치 찾기와 좁은 통로 방향 전환 논문을 찾아 지금 방식과 비교</td></tr></table>
 </div></x-import>
 </section>
 </x-import></x-dc></body></html>
