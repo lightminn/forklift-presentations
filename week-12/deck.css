@@ -1100,3 +1100,6 @@ video::-webkit-media-controls, video::-webkit-media-controls-enclosure { display
 .comparison.h7.fl12 td, .comparison.h7.fl12 th { padding:4px 10px; white-space:nowrap; }
 /* 07 (2026-11-18): what changed, above the table */
 .ctin12 { margin:0 0 6px; font-size:20px; line-height:1.5; color:#1b1f24; }
+/* 06 (2026-11-18, one row): long cells wrap inside their column */
+.comparison.h7.rl12.rl6 td:nth-child(1), .comparison.h7.rl12.rl6 td:nth-child(2) { white-space:normal; }
+.comparison.h7.rl12.rl6 td:nth-child(3) { white-space:normal; }
