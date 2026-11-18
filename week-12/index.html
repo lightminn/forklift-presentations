@@ -17,18 +17,17 @@
 자율 지게차 개발" subtitle="팔레트 핸들링 경로 생성 및 제어"></x-import><img class="partner-mark" src="assets/riibotics-logo.png" alt="Riibotics">
 </section>
 
-<section data-label="지난주 피드백과 진행" data-screen-label="02" data-duration="35" data-speaker-notes="권장 35초
+<section data-label="지난주 피드백과 진행" data-screen-label="02" data-duration="30" data-speaker-notes="권장 30초
 
-지난주 발표 뒤 세 가지 피드백을 받았습니다. 장비를 실제로 사서 써 볼 것, SLAM으로 자기 위치를 찾는 기능을 더 다양하게 시험할 것, 논문을 더 찾아볼 것입니다. 첫째는 하위 제어 보드와 Jetson, 카메라를 실제로 연결한 결과로 2쪽에서, 둘째는 시작 위치 찾기를 조건을 바꿔 시험한 결과로 6쪽에서 말씀드립니다. 논문은 이번 주에 새로 찾지 못해 다음 주 계획에 넣었습니다. 그 사이 3쪽부터 5쪽은 시뮬레이션에서 실패한 사례를 고친 내용입니다. (전환)
+지난주 발표 뒤 받은 피드백 가운데 두 가지를 이번 주에 진행했습니다. 장비를 실제로 사서 써 볼 것, 그리고 SLAM으로 자기 위치를 찾는 기능을 더 다양하게 시험할 것입니다. 첫째는 하위 제어 보드와 Jetson, 카메라를 실제로 연결한 결과로 2쪽에서, 둘째는 시작 위치 찾기를 조건을 바꿔 시험한 결과로 6쪽에서 말씀드립니다. 그 사이 3쪽부터 5쪽은 시뮬레이션에서 실패한 사례를 고친 내용입니다. (전환)
 
 [Sources]
 표: 피드백별 이번 주 진행과 해당 장
-「각종 장비들(ex, 모터) 실제로 사서 뚜다해보고 써볼것 / SLAM을 통한 자기 위치 판정 정확하게등등 다양하게 더 정확하게 테스트 하기 / 논문 더 찾아보기」: lightminn/forklift main docs/references/week11_feedback.md (로컬 전용, 저장소 밖 미추적 파일)
-이번 주 새로 찾은 논문 없음 — 다음 주 계획으로 돌림: 총괄 (2026-11-17)
+「각종 장비들(ex, 모터) 실제로 사서 뚜다해보고 써볼것 / SLAM을 통한 자기 위치 판정 정확하게등등 다양하게 더 정확하게 테스트 하기」 (나머지 한 항목은 이번 주 진행이 없어 덱에서 뺌 — 사용자 2026-11-18): lightminn/forklift main docs/references/week11_feedback.md (로컬 전용, 저장소 밖 미추적 파일)
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="01  지난주 피드백과 진행"><div class="slide-body">
-<h2 class="headline">장비 첫 연결과 시작 위치 찾기를 시험하고 논문 조사는 다음 주에 진행</h2>
-<table class="comparison h7 fb12"><tr><th>피드백</th><th>이번 주 진행</th><th>쪽</th></tr><tr><td>모터 등 실제 장비를 사서<br>직접 연결해 볼 것</td><td>하위 제어 보드, Jetson, 카메라 연결<br>모터와 2D LiDAR는 도착 뒤 연결</td><td>02</td></tr><tr><td>SLAM 자기 위치 찾기를<br>다양한 조건으로 정확히 시험</td><td>물건 배치가 다른 두 공장 장면에서<br>세 방식으로 시작 위치 찾기 시험</td><td>06</td></tr><tr><td>관련 논문을 더 찾아볼 것</td><td>이번 주는 찾지 못해<br>다음 주 조사 계획에 포함</td><td>08</td></tr></table>
+<h2 class="headline">실제 장비 첫 연결을 진행하고 두 공장 장면에서 시작 위치 찾기 시험</h2>
+<table class="comparison h7 fb12"><tr><th>피드백</th><th>이번 주 진행</th><th>쪽</th></tr><tr><td>모터 등 실제 장비를 사서<br>직접 연결해 볼 것</td><td>하위 제어 보드, Jetson, 카메라 연결<br>모터와 2D LiDAR는 도착 뒤 연결</td><td>02</td></tr><tr><td>SLAM 자기 위치 찾기를<br>다양한 조건으로 정확히 시험</td><td>물건 배치가 다른 두 공장 장면에서<br>세 방식으로 시작 위치 찾기 시험</td><td>06</td></tr></table>
 <p class="note12 fbn12">피드백 외에 03–05쪽은 시뮬레이션 실패 해결, 07쪽은 좁은 통로 개선입니다</p>
 </div></x-import>
 </section>
@@ -181,18 +180,18 @@ ws1 test_runs/acs/render_acs_d45bb1e1/acsAv_aisle_rack_s1 · acsBv_aisle_rack_s1
 </div></x-import>
 </section>
 
-<section data-label="다음 주 계획" data-screen-label="09" data-duration="35" data-speaker-notes="권장 35초
+<section data-label="다음 주 계획" data-screen-label="09" data-duration="30" data-speaker-notes="권장 30초
 
-다음 주 계획입니다. 11월 20일에 실제 차량으로 직진할 때 방향이 얼마나 틀어지는지, 조향 명령에 비해 얼마나 도는지, 멈췄다 다시 출발할 때 어떻게 반응하는지를 차의 센서와 줄자로 재고, 그 값으로 시뮬레이션의 타이어 모형도 맞춰 보겠습니다. LiDAR가 오면 노트북과 Jetson에 연결해 확인하고, 메인보드와 부품이 오면 모터와 엔코더를 하위 제어 보드로 실제로 돌려 보겠습니다. 그리고 지난주 피드백대로 시작 위치 찾기와 좁은 통로 경로 계획에 관한 논문을 찾아 지금 방식과 비교하겠습니다. 이상으로 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.
+다음 주 계획입니다. 11월 20일에 실제 차량으로 직진할 때 방향이 얼마나 틀어지는지, 조향 명령에 비해 얼마나 도는지, 멈췄다 다시 출발할 때 어떻게 반응하는지를 차의 센서와 줄자로 재고, 그 값으로 시뮬레이션의 타이어 모형도 맞춰 보겠습니다. LiDAR가 오면 노트북과 Jetson에 연결해 확인하고, 메인보드와 부품이 오면 모터와 엔코더를 하위 제어 보드로 실제로 돌려 보겠습니다. 이상으로 발표를 마치겠습니다. 질문 있으시면 해 주시기 바랍니다.
 
 [Sources]
 표: 다음 주 할 일
-11-20 실차 측정(직진 방향 드리프트, 조향 대 실제 곡률, 재출발 응답), A2M12 연결, 타이어 강성 확인; 논문은 이번 주 없음: 총괄 (2026-11-17 · 18)
+11-20 실차 측정(직진 방향 드리프트, 조향 대 실제 곡률, 재출발 응답), A2M12 연결, 타이어 강성 확인: 총괄 (2026-11-17 · 18)
 측정은 차의 센서와 줄자로 cm · 도 단위, 시행 수 적게: 사용자 (2026-11-16, 총괄 전달)
 [/Sources]" style="background:#fff">
 <x-import component-from-global-scope="UOSSlideDS.ContentSlide" hint-size="100%,100%" title="08  다음 주 계획"><div class="slide-body">
-<h2 class="headline">11월 20일 실제 차량 측정과 부품 연결, 두 주제 논문 조사를 진행</h2>
-<table class="comparison h7 endt12"><tr><th>구분</th><th>할 일</th></tr><tr><td>실제 차량 측정</td><td>직진 틀어짐, 조향량, 재출발을 센서와 줄자로 재어 타이어 모형 맞춤</td></tr><tr><td>2D LiDAR 연결</td><td>RPLIDAR A2M12 오면 노트북과 Jetson에 연결해 스캔 확인</td></tr><tr><td>모터 구동 시험</td><td>메인보드와 부품 도착 후 모터, 엔코더를 하위 제어 보드로 구동</td></tr><tr><td>논문 조사</td><td>시작 위치 찾기와 좁은 통로 방향 전환 논문을 찾아 지금 방식과 비교</td></tr></table>
+<h2 class="headline">11월 20일 실제 차량을 측정하고 LiDAR 연결과 모터 구동을 시험</h2>
+<table class="comparison h7 endt12"><tr><th>구분</th><th>할 일</th></tr><tr><td>실제 차량 측정</td><td>직진 틀어짐, 조향량, 재출발을 센서와 줄자로 재어 타이어 모형 맞춤</td></tr><tr><td>2D LiDAR 연결</td><td>RPLIDAR A2M12 오면 노트북과 Jetson에 연결해 스캔 확인</td></tr><tr><td>모터 구동 시험</td><td>메인보드와 부품 도착 후 모터, 엔코더를 하위 제어 보드로 구동</td></tr></table>
 </div></x-import>
 </section>
 </x-import></x-dc></body></html>
